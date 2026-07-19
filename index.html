@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="Controle Coleção iamT — catálogo pessoal de jogos PS4 e PS3 com preços, capas e raridade.">
+<meta name="theme-color" content="#0b0b0c">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230b0b0c'/%3E%3Ctext x='50' y='66' font-size='55' font-family='Arial' font-weight='900' fill='white' text-anchor='middle'%3EiT%3C/text%3E%3C/svg%3E">
+<title>Controle Coleção iamT</title>
+<style>
+  :root{
+    --bg: #0b0b0c;
+    --bg-panel: #131314;
+    --bg-card: #17181a;
+    --line: #2a2a2d;
+    --line-soft: #1f1f21;
+    --ink: #f5f5f5;
+    --ink-dim: #9a9a9e;
+    --white: #ffffff;
+    --accent: #ffffff;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:
+      radial-gradient(circle at 15% -10%, rgba(255,255,255,0.06) 0%, transparent 40%),
+      radial-gradient(circle at 100% 30%, rgba(255,255,255,0.04) 0%, transparent 45%),
+      radial-gradient(circle at 30% 100%, rgba(255,255,255,0.03) 0%, transparent 50%),
+      var(--bg);
+    background-attachment: fixed;
+    color: var(--ink);
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    padding: 28px clamp(20px, 8vw, 96px) 80px clamp(16px, 4vw, 32px);
+    position: relative;
+  }
+  body::before{
+    content:"";
+    position: fixed; inset:0; z-index:0; pointer-events:none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.025'/%3E%3C/svg%3E");
+    opacity: 0.5;
+  }
+  .wrap{max-width:1200px;margin:0 auto; position:relative; z-index:1;}
+
+  /* HEADER ENXUTO */
+  .topbar{
+    display:flex; align-items:center; justify-content:space-between;
+    flex-wrap:wrap; gap:20px; margin-bottom:28px;
+  }
+  .topbar h1{
+    font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color:var(--white);
+  }
+  .stat-row{
+    display:flex; gap: 10px; flex-wrap: wrap;
+  }
+  .stat{
+    background: rgba(23,24,26,0.5); backdrop-filter: blur(12px);
+    border:1px solid rgba(255,255,255,0.08); border-radius: 14px;
+    padding: 10px 18px; min-width: 120px;
+  }
+  .stat .n{font-size:19px; font-weight:800; color:var(--white);}
+  .stat .l{font-size:10.5px; color:var(--ink-dim); margin-top:2px; text-transform:uppercase; letter-spacing:.4px;}
+
+  /* TOOLS */
+  .tools{
+    display:flex; gap:12px; margin: 0 0 14px; flex-wrap:wrap; align-items:center;
+  }
+  .search-box{flex:1; min-width:220px; position:relative;}
+  .search-box input{
+    width:100%; padding:12px 18px 12px 40px; border-radius:14px;
+    border:1px solid rgba(255,255,255,0.08); background: rgba(23,24,26,0.5); backdrop-filter: blur(12px);
+    color:var(--ink); font-size:14px; outline:none; transition:.2s;
+  }
+  .search-box input:focus{border-color:var(--white); box-shadow:0 0 0 3px rgba(255,255,255,0.08);}
+  .search-box .ico{position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--ink-dim); font-size:13px;}
+  .filters{display:flex; gap:6px; flex-wrap:wrap;}
+  .filters button{
+    padding:9px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.08);
+    background: rgba(23,24,26,0.5); backdrop-filter: blur(12px);
+    color: var(--ink-dim); font-size:12.5px; cursor:pointer; font-weight:600;
+    transition:.15s;
+  }
+  .filters button:hover{color:var(--ink); border-color:var(--ink-dim);}
+  .filters button.active{background:var(--white); color:#0b0b0c; border-color:var(--white);}
+
+  /* GRID DE JOGOS */
+  .grid{
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
+    gap: 18px;
+  }
+  .card{
+    background: rgba(23,24,26,0.55);
+    backdrop-filter: blur(18px) saturate(140%);
+    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.08); border-radius: 18px;
+    overflow: hidden; display:flex; flex-direction:column; transition: border-color .2s, transform .2s, box-shadow .2s;
+    box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+  }
+  .card:hover{border-color: rgba(255,255,255,0.4); transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.5);}
+
+  .cover-wrap{
+    position: relative; width:100%; aspect-ratio: 3/4; overflow: hidden;
+    background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
+    cursor: zoom-in;
+    border-radius: 18px 18px 0 0;
+  }
+  .cover-wrap::after{
+    content:"";
+    position:absolute; inset:0; z-index:4; pointer-events:none;
+    background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%);
+  }
+  .cover-wrap img, .cover-fallback{
+    width:100%; height:100%; object-fit: cover;
+    transition: transform .35s ease;
+  }
+  .cover-wrap:hover img, .cover-wrap:hover .cover-fallback{
+    transform: scale(1.3);
+    z-index: 5;
+  }
+  .cover-fallback{
+    display:flex; align-items:center; justify-content:center; flex-direction:column; gap:6px;
+    font-weight:800; color: rgba(255,255,255,0.85); text-align:center; padding: 10px;
+  }
+  .cover-fallback .ini{font-size: 30px;}
+  .cover-fallback .tag{font-size: 10px; letter-spacing:1px; text-transform:uppercase; color: rgba(255,255,255,0.55);}
+
+  .plat-chip{
+    position:absolute; top:10px; left:10px; z-index:6;
+    font-size:10px; font-weight:800; letter-spacing:.5px;
+    background: rgba(0,0,0,0.7); color: var(--white);
+    border:1px solid rgba(255,255,255,0.35); padding:3px 9px; border-radius:20px;
+    backdrop-filter: blur(6px);
+  }
+  .fav-btn{
+    position:absolute; top:10px; right:10px; z-index:6;
+    background: rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.25); border-radius:50%;
+    width:28px; height:28px; cursor:pointer; font-size:13px; color: rgba(255,255,255,0.6);
+    display:flex; align-items:center; justify-content:center;
+    backdrop-filter: blur(6px);
+  }
+  .fav-btn.active{color: var(--white); border-color: var(--white);}
+
+  .card-body{padding: 13px 15px 15px; display:flex; flex-direction:column; gap:8px; flex:1;}
+  .card-body h3{font-size: 15px; font-weight:700; line-height:1.3; min-height: 39px; color:var(--white);}
+  .badges{display:flex; gap:5px; flex-wrap:wrap;}
+  .badge{font-size:9.5px; padding:3px 9px; border-radius:20px; font-weight:700; border:1px solid var(--line);}
+  .b-comum{background:transparent; color:var(--ink-dim);}
+  .b-pouco{background:transparent; color:var(--ink);}
+  .b-raro{background:var(--white); color:#0b0b0c; border-color:var(--white);}
+  .b-muito{background:var(--white); color:#0b0b0c; border-color:var(--white);}
+
+  .prices{
+    display:grid; grid-template-columns: 1fr 1fr; gap:6px; margin-top:auto; padding-top:9px;
+    border-top: 1px solid var(--line-soft); font-size:11px;
+  }
+  .prices div{display:flex; flex-direction:column;}
+  .prices .v{font-size:14px; font-weight:800; color:var(--white);}
+  .prices .l{color:var(--ink-dim);}
+
+  .card-foot{display:flex; justify-content:space-between; align-items:center; margin-top:4px;}
+  .card-foot a{
+    font-size:11.5px; color: #ffa733; text-decoration:none; font-weight:700;
+    border-bottom: 1px solid transparent;
+  }
+  .card-foot a:hover{color:#ffc266; border-bottom-color: #ffc266;}
+
+  .result-count{color:var(--ink-dim); font-size:12.5px; margin-top:18px;}
+
+  .footer{margin-top:50px; text-align:center; color:var(--ink-dim); font-size:12px; border-top:1px solid var(--line); padding-top:20px;}
+
+  /* BARRA LATERAL FLUTUANTE */
+  .side-dock{
+    position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
+    display:flex; flex-direction:column; align-items:center; gap:14px;
+    background: rgba(19,19,20,0.75);
+    backdrop-filter: blur(14px);
+    border: 1px solid var(--line);
+    border-radius: 24px;
+    padding: 18px 12px;
+    z-index: 50;
+  }
+  .side-dock a{
+    width:40px; height:40px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--bg-card); border:1px solid var(--line);
+    color: var(--ink); text-decoration:none; font-size:17px;
+    transition: .2s;
+  }
+  .side-dock a:hover{background:var(--white); color:#0b0b0c; border-color:var(--white); transform: scale(1.08);}
+  .side-dock .divider{width:26px; height:1px; background:var(--line); margin: 2px 0;}
+  .side-dock .sell{
+    width:auto; height:auto; border-radius:14px; padding: 10px 8px;
+    display:flex; flex-direction:column; align-items:center; gap:3px;
+    font-size:9.5px; font-weight:700; letter-spacing:.3px; text-align:center; line-height:1.2;
+    background: #8f12e0; color:#ffffff; border-color:#8f12e0;
+  }
+  .side-dock .sell:hover{background:#a233f0; border-color:#a233f0;}
+  .side-dock .sell .ico{font-size:16px;}
+
+  @media (max-width: 860px){
+    body{padding: 22px 16px 100px;}
+    .topbar{flex-direction:column; align-items:flex-start; gap:14px;}
+    .stat-row{width:100%; gap:8px;}
+    .stat{flex:1; min-width: 0; padding:9px 12px;}
+    .stat .n{font-size:16px;}
+    .stat .l{font-size:9px;}
+    .grid{grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap:14px;}
+    .card-body h3{font-size:12.5px; min-height:32px;}
+    .prices .v{font-size:12.5px;}
+    .side-dock{
+      right: 50%; top:auto; bottom:14px; transform: translateX(50%);
+      flex-direction:row; border-radius:20px; padding:8px 12px;
+    }
+    .side-dock .divider{width:1px; height:22px; margin:0 4px;}
+    .side-dock a{width:36px; height:36px; font-size:15px;}
+  }
+  @media (max-width: 480px){
+    .topbar h1{font-size:18px;}
+    .stat-row{flex-wrap:wrap;}
+    .stat{min-width: 45%;}
+    .grid{grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap:10px;}
+    .filters button{padding:7px 12px; font-size:11px;}
+    .search-box input{font-size:13px; padding:10px 14px 10px 36px;}
+  }
+</style>
+</head>
+<body>
+<div class="side-dock">
+  <a href="https://www.instagram.com/marioturbino/" target="_blank" title="Instagram pessoal">👤</a>
+  <a href="https://www.instagram.com/iamtgames/" target="_blank" title="Instagram da coleção">📸</a>
+  <div class="divider"></div>
+  <a class="sell" href="https://www.olx.com.br/perfil/mario-t-34b3680f" target="_blank" title="Perfil de vendas OLX">
+    <span class="ico">🏷️</span>
+    <span>OLX</span>
+  </a>
+</div>
+
+<div class="wrap">
+
+  <div class="topbar">
+    <h1>Controle Coleção iamT</h1>
+    <div class="stat-row">
+      <div class="stat"><div class="n" id="statTotal">0</div><div class="l">Jogos</div></div>
+      <div class="stat"><div class="n" id="statValor">R$ 0</div><div class="l">Colecionador</div></div>
+      <div class="stat"><div class="n" id="statUsado">R$ 0</div><div class="l">Usado</div></div>
+      <div class="stat"><div class="n" id="statFav">0</div><div class="l">Favoritos ⭐</div></div>
+    </div>
+  </div>
+
+  <div class="tools">
+    <div class="search-box">
+      <span class="ico">🔍</span>
+      <input type="text" id="searchInput" placeholder="Buscar jogo...">
+    </div>
+    <div class="filters" id="filterContainer">
+      <button class="active" data-filter="all">Todos</button>
+      <button data-filter="exclusivo">Exclusivos</button>
+      <button data-filter="aaa">AAA</button>
+      <button data-filter="fps">FPS</button>
+      <button data-filter="survival">Survival</button>
+      <button data-filter="esporte">Esporte</button>
+      <button data-filter="infantil">Infantil</button>
+      <button data-filter="raro">Raro</button>
+    </div>
+  </div>
+
+  <div class="tools">
+    <div class="filters" id="platContainer">
+      <button class="active" data-plat="all">Todas plataformas</button>
+      <button data-plat="PS4">PS4</button>
+      <button data-plat="PS3">PS3</button>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+  <div class="result-count" id="resultCount"></div>
+
+  <div class="footer">Controle Coleção iamT</div>
+</div>
+
+<script>
+const jogos = [
+  { id:124, n:"Balan WonderWorld", cat:"infantil", col:30, loj:20, bar:15, caro:40, rar:"comum", v:false, plat:"PS4" },
+  { id:215, n:"Battlefield V", cat:"fps", col:100, loj:90, bar:70, caro:140, rar:"pouco", v:true, plat:"PS4" },
+  { id:125, n:"Beyond Two Souls/Heavy Rain Pack", cat:"exclusivo", col:120, loj:100, bar:80, caro:180, rar:"pouco", v:true, plat:"PS4" },
+  { id:126, n:"Borderlands 3", cat:"fps", col:75, loj:60, bar:45, caro:90, rar:"comum", v:true, plat:"PS4" },
+  { id:127, n:"Call of Duty Black Ops 4", cat:"fps", col:150, loj:125, bar:100, caro:195, rar:"pouco", v:true, plat:"PS4" },
+  { id:209, n:"Control", cat:"aaa", col:90, loj:77, bar:60, caro:130, rar:"pouco", v:true, plat:"PS4" },
+  { id:128, n:"Cyber Punk 2077", cat:"raro", col:130, loj:100, bar:75, caro:190, rar:"pouco", v:true, plat:"PS4" },
+  { id:129, n:"Dark Souls III: The Fire Fades Edition", cat:"aaa", col:159, loj:140, bar:110, caro:200, rar:"pouco", v:true, plat:"PS4" },
+  { id:130, n:"Death Stranding", cat:"exclusivo", col:90, loj:75, bar:60, caro:110, rar:"comum", v:true, plat:"PS4" },
+  { id:131, n:"Detroit: Become Human", cat:"exclusivo", col:95, loj:80, bar:65, caro:130, rar:"comum", v:true, plat:"PS4" },
+  { id:132, n:"Diablo III: Reaper of Souls – Ultimate Evil Edition", cat:"raro", col:90, loj:75, bar:60, caro:130, rar:"comum", v:true, plat:"PS4" },
+  { id:133, n:"Farcry 5", cat:"fps", col:80, loj:65, bar:50, caro:110, rar:"comum", v:false, plat:"PS4" },
+  { id:134, n:"Farcry 6", cat:"fps", col:90, loj:75, bar:55, caro:120, rar:"comum", v:false, plat:"PS4" },
+  { id:214, n:"Farcry: New Dawn", cat:"fps", col:80, loj:72, bar:55, caro:110, rar:"comum", v:true, plat:"PS4" },
+  { id:218, n:"Fifa 14", cat:"esporte", col:35, loj:27, bar:20, caro:55, rar:"comum", v:true, plat:"PS4" },
+  { id:135, n:"Fifa 16", cat:"esporte", col:90, loj:70, bar:50, caro:130, rar:"pouco", v:true, plat:"PS4" },
+  { id:136, n:"Fifa 17", cat:"esporte", col:80, loj:65, bar:45, caro:110, rar:"pouco", v:true, plat:"PS4" },
+  { id:217, n:"Fifa 18", cat:"esporte", col:65, loj:54, bar:40, caro:95, rar:"comum", v:true, plat:"PS4" },
+  { id:137, n:"Fifa 19", cat:"esporte", col:76, loj:60, bar:42, caro:105, rar:"pouco", v:true, plat:"PS4" },
+  { id:138, n:"Fifa 20", cat:"esporte", col:105, loj:85, bar:65, caro:145, rar:"pouco", v:true, plat:"PS4" },
+  { id:139, n:"Fifa 21", cat:"esporte", col:100, loj:80, bar:60, caro:140, rar:"pouco", v:true, plat:"PS4" },
+  { id:140, n:"Fifa 23", cat:"esporte", col:170, loj:140, bar:110, caro:220, rar:"pouco", v:true, plat:"PS4" },
+  { id:141, n:"Ghost of Tsushima", cat:"exclusivo", col:95, loj:80, bar:65, caro:130, rar:"pouco", v:true, plat:"PS4" },
+  { id:222, n:"God of War (2018)", cat:"exclusivo", col:110, loj:90, bar:70, caro:150, rar:"pouco", v:true, plat:"PS4" },
+  { id:142, n:"God of War: Ragnarok", cat:"exclusivo", col:114, loj:95, bar:75, caro:150, rar:"pouco", v:true, plat:"PS4" },
+  { id:143, n:"Gravity Rush 2", cat:"exclusivo", col:110, loj:90, bar:70, caro:150, rar:"pouco", v:true, plat:"PS4" },
+  { id:144, n:"Hades", cat:"raro", col:150, loj:120, bar:90, caro:250, rar:"raro", v:true, plat:"PS4" },
+  { id:145, n:"Heavy Rain", cat:"exclusivo", col:40, loj:25, bar:15, caro:55, rar:"comum", v:false, plat:"PS4" },
+  { id:146, n:"Homefront: The Revolution", cat:"fps", col:130, loj:110, bar:85, caro:180, rar:"pouco", v:true, plat:"PS4" },
+  { id:147, n:"Immortals Fenyx Rising", cat:"aaa", col:65, loj:50, bar:35, caro:85, rar:"comum", v:true, plat:"PS4" },
+  { id:148, n:"Last Of Us Part II", cat:"exclusivo", col:100, loj:85, bar:70, caro:150, rar:"pouco", v:true, plat:"PS4" },
+  { id:223, n:"Metal Gear Solid V: Definitive Experience", cat:"fps", col:120, loj:95, bar:75, caro:170, rar:"pouco", v:false, plat:"PS4" },
+  { id:149, n:"Metal Gear Solid V: Ground Zeroes", cat:"fps", col:190, loj:160, bar:130, caro:250, rar:"raro", v:true, plat:"PS4" },
+  { id:150, n:"Mighty No. 9", cat:"raro", col:70, loj:55, bar:40, caro:100, rar:"pouco", v:false, plat:"PS4" },
+  { id:221, n:"Mortal Kombat 11", cat:"aaa", col:100, loj:90, bar:70, caro:140, rar:"comum", v:true, plat:"PS4" },
+  { id:219, n:"Motorcycle Club", cat:"esporte", col:150, loj:120, bar:90, caro:220, rar:"raro", v:true, plat:"PS4" },
+  { id:210, n:"Naruto Boruto: Shinobi Striker", cat:"infantil", col:60, loj:54, bar:40, caro:90, rar:"comum", v:true, plat:"PS4" },
+  { id:151, n:"Naruto Shippuden Ultimate Ninja Storm 4 Road to Boruto", cat:"infantil", col:80, loj:65, bar:50, caro:120, rar:"comum", v:true, plat:"PS4" },
+  { id:152, n:"Nioh 2", cat:"aaa", col:110, loj:90, bar:70, caro:150, rar:"pouco", v:true, plat:"PS4" },
+  { id:216, n:"Pacman Museum", cat:"infantil", col:130, loj:105, bar:80, caro:190, rar:"pouco", v:true, plat:"PS4" },
+  { id:153, n:"Prince of Persia: The Lost Crown", cat:"aaa", col:75, loj:60, bar:45, caro:110, rar:"pouco", v:true, plat:"PS4" },
+  { id:154, n:"Rage 2", cat:"fps", col:90, loj:75, bar:60, caro:120, rar:"comum", v:true, plat:"PS4" },
+  { id:208, n:"Raid: World War II", cat:"fps", col:60, loj:54, bar:40, caro:90, rar:"comum", v:true, plat:"PS4" },
+  { id:155, n:"Red Dead Redemption II", cat:"aaa", col:165, loj:145, bar:120, caro:210, rar:"pouco", v:true, plat:"PS4" },
+  { id:156, n:"Resident Evil 7 Biohazard Gold Edition", cat:"survival", col:110, loj:90, bar:70, caro:160, rar:"pouco", v:true, plat:"PS4" },
+  { id:157, n:"Skater XL", cat:"esporte", col:60, loj:45, bar:30, caro:85, rar:"comum", v:false, plat:"PS4" },
+  { id:158, n:"Song of The Deep", cat:"infantil", col:65, loj:50, bar:35, caro:85, rar:"comum", v:true, plat:"PS4" },
+  { id:159, n:"South Park: A Fenda que Abunda Força", cat:"infantil", col:60, loj:48, bar:38, caro:80, rar:"comum", v:true, plat:"PS4" },
+  { id:160, n:"Spider-Man", cat:"exclusivo", col:130, loj:110, bar:90, caro:170, rar:"comum", v:true, plat:"PS4" },
+  { id:161, n:"Spider-Man Miles Morales", cat:"exclusivo", col:90, loj:75, bar:60, caro:95, rar:"comum", v:true, plat:"PS4" },
+  { id:162, n:"Star Wars Jedi: Fallen Order", cat:"infantil", col:130, loj:105, bar:80, caro:190, rar:"pouco", v:true, plat:"PS4" },
+  { id:163, n:"Star Wars: Battlefront", cat:"infantil", col:70, loj:55, bar:40, caro:120, rar:"comum", v:true, plat:"PS4" },
+  { id:164, n:"Stray", cat:"raro", col:80, loj:65, bar:50, caro:100, rar:"pouco", v:true, plat:"PS4" },
+  { id:165, n:"Terra-média: Sombras da Guerra", cat:"aaa", col:85, loj:65, bar:50, caro:120, rar:"comum", v:false, plat:"PS4" },
+  { id:166, n:"The Dark Pictures Anthology: House of Ashes", cat:"survival", col:120, loj:95, bar:75, caro:160, rar:"pouco", v:false, plat:"PS4" },
+  { id:167, n:"The Dark Pictures Anthology: Little Hope", cat:"survival", col:130, loj:105, bar:80, caro:170, rar:"pouco", v:true, plat:"PS4" },
+  { id:168, n:"The Evil Within", cat:"survival", col:110, loj:90, bar:70, caro:170, rar:"pouco", v:true, plat:"PS4" },
+  { id:207, n:"The Evil Within 2", cat:"survival", col:99, loj:89, bar:65, caro:140, rar:"pouco", v:true, plat:"PS4" },
+  { id:169, n:"The Last Guardian", cat:"exclusivo", col:110, loj:90, bar:70, caro:180, rar:"pouco", v:true, plat:"PS4" },
+  { id:170, n:"The Last of Us Part II (Cópia 2)", cat:"exclusivo", col:100, loj:85, bar:70, caro:150, rar:"pouco", v:true, plat:"PS4" },
+  { id:171, n:"The Walking Dead: A New Frontier", cat:"exclusivo", col:100, loj:85, bar:65, caro:145, rar:"pouco", v:true, plat:"PS4" },
+  { id:172, n:"Tony Hawk's Pro Skater 5", cat:"esporte", col:180, loj:150, bar:120, caro:250, rar:"raro", v:true, plat:"PS4" },
+  { id:220, n:"Tropico 5", cat:"aaa", col:75, loj:63, bar:48, caro:105, rar:"pouco", v:true, plat:"PS4" },
+  { id:211, n:"Uncharted 2: Among Thieves REMASTERED", cat:"exclusivo", col:65, loj:54, bar:42, caro:95, rar:"comum", v:true, plat:"PS4" },
+  { id:173, n:"Uncharted 3: Drake's Deception REMASTERED", cat:"exclusivo", col:80, loj:65, bar:50, caro:110, rar:"comum", v:false, plat:"PS4" },
+  { id:174, n:"Uncharted 4: A Thief's End", cat:"exclusivo", col:90, loj:75, bar:60, caro:120, rar:"comum", v:true, plat:"PS4" },
+  { id:212, n:"Uncharted: Drake's Fortune REMASTERED", cat:"exclusivo", col:65, loj:54, bar:42, caro:95, rar:"comum", v:true, plat:"PS4" },
+  { id:213, n:"Uncharted: The Lost Legacy", cat:"exclusivo", col:100, loj:90, bar:70, caro:140, rar:"pouco", v:true, plat:"PS4" },
+  { id:200, n:"Bayonetta", cat:"aaa", col:150, loj:120, bar:90, caro:220, rar:"pouco", v:true, plat:"PS3" },
+  { id:201, n:"Catherine", cat:"raro", col:170, loj:135, bar:100, caro:280, rar:"raro", v:false, plat:"PS3" },
+  { id:202, n:"End of Eternity (Japonês)", cat:"raro", col:200, loj:160, bar:120, caro:350, rar:"muito", v:false, plat:"PS3" },
+  { id:203, n:"Golden Axe: Beast Rider", cat:"aaa", col:120, loj:95, bar:70, caro:190, rar:"pouco", v:false, plat:"PS3" },
+  { id:204, n:"Tales of Xillia", cat:"raro", col:240, loj:190, bar:145, caro:380, rar:"raro", v:true, plat:"PS3" },
+  { id:205, n:"White Knight Chronicles", cat:"aaa", col:140, loj:110, bar:80, caro:210, rar:"pouco", v:true, plat:"PS3" },
+  { id:206, n:"Yakuza: Dead Souls", cat:"survival", col:220, loj:175, bar:130, caro:350, rar:"raro", v:false, plat:"PS3" }
+
+];
+
+// Espaço para capas reais: preencha { id: "URL_DA_CAPA" } conforme for pesquisando
+const capas = {
+  141: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/Ghost-Of-Tsushima-Ps4-1343012995.jpg",
+  142: "https://lojaarenagames.com.br/wp-content/uploads/2026/03/God-Of-War-Ragnarok-Ps4-Usado-Capa-Com-Detalhe-1620964288.jpg",
+  131: "https://lojaarenagames.com.br/wp-content/uploads/2023/01/Detroit-Become-Human-Ps4-1490276224.jpg",
+  155: "https://lojaarenagames.com.br/wp-content/uploads/2022/08/Red-Dead-Redemption-2-Ps4-86120192.jpg",
+  130: "https://lojaarenagames.com.br/wp-content/uploads/2021/10/Death_Stranding___Ps4_271957-1.jpg",
+  129: "https://lojaarenagames.com.br/wp-content/uploads/2021/10/Dark_Souls_3_The_Fire_Fades_Edition___Ps4_54104-1.jpg",
+  172: "https://cdn.awsli.com.br/800x800/138/138431/produto/8740623/33260468e3bc3d63c6-3mk0h7n5k8.jpg",
+  140: "https://cdn.awsli.com.br/800x800/138/138431/produto/210430666/mp4-1677-g-rdirqh.jpg",
+  158: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/Song-Of-The-Deep-Ps4-347584668.jpg",
+  132: "https://lojaarenagames.com.br/wp-content/uploads/2023/01/Diablo-Iii-Reaper-Of-Souls-Ps4-Ingls-1983202678.jpg",
+  149: "https://dcdn-us.mitiendanube.com/stores/004/334/292/products/81wlxykztcl-3be539043dc3ba11c317201983275241-640-0.webp",
+  126: "https://cdn.awsli.com.br/800x800/1258/1258259/produto/54563746/e31623bdae.jpg",
+  147: "https://lojaarenagames.com.br/wp-content/uploads/2023/01/Immortals-Fenyx-Rising-Ps4-2004999380.jpg",
+  152: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/Nioh-2-Ps4-230492842.jpg",
+  154: "https://lojaarenagames.com.br/wp-content/uploads/2023/07/Rage-2-Ps4-907673487.jpg",
+  124: "https://lojaarenagames.com.br/wp-content/uploads/2022/11/Balan-Wonderworld-Ps4-1014817992.jpg",
+  125: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/The-Heavy-Rain-And-Beyond-Two-Souls-Collection-Ps4-1-2053324346.jpg",
+  127: "https://lojaarenagames.com.br/wp-content/uploads/2021/12/Call_Of_Duty_Black_Ops_4___Ps4_785724-1.jpg",
+  128: "https://m.media-amazon.com/images/I/81YptknEr3L.jpg",
+  133: "https://lojaarenagames.com.br/wp-content/uploads/2021/10/Far_Cry_5___Ps4_300855-1.jpg",
+  134: "https://lojaarenagames.com.br/wp-content/uploads/2022/11/Far-Cry-6-Ps4-1938857699.jpg",
+  135: "https://lojaarenagames.com.br/wp-content/uploads/2024/04/Fifa-16-Ps4-2-1036383243.jpg",
+  136: "https://lojaarenagames.com.br/wp-content/uploads/2022/11/Fifa-17-Ps4-1-314260431.jpg",
+  137: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/Fifa-19-Ps4-1-801109656.jpg",
+  138: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/Fifa-20-Ps4-1-535438553.jpg",
+  139: "https://lojaarenagames.com.br/wp-content/uploads/2023/05/Fifa-21-Ps4-2-1834048125.jpg",
+  143: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/Gravity-Rush-2-Ps4-761184504.jpg",
+  144: "https://lojaarenagames.com.br/wp-content/uploads/2022/11/Hades-Ps4-1989048019.jpg",
+  160: "https://lojaarenagames.com.br/wp-content/uploads/2024/04/Marvel-Spider-Man-Ps4-1-1227270714.jpg",
+  161: "https://lojaarenagames.com.br/wp-content/uploads/2024/07/Marvel-Spider-Man-Miles-Morales-Ps4-1-807420340.jpg",
+  174: "https://lojaarenagames.com.br/wp-content/uploads/2025/06/Uncharted-4-A-Thiefs-End-Ps4-Seminovo-1741492230.jpg",
+  156: "https://lojaarenagames.com.br/wp-content/uploads/2025/07/Resident-Evil-7-Biohazard-Gold-Edition-Ps4-478214062.jpg",
+  153: "https://lojaarenagames.com.br/wp-content/uploads/2025/03/Prince-Of-Persia-The-Lost-Crown-Ps4-308984553.jpg",
+  163: "https://lojaarenagames.com.br/wp-content/uploads/2022/08/Star-Wars-Battlefront-Ps4-282696451.jpg",
+  148: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/The-Last-Of-Us-Parte-Ii-Ps4-1242349643.jpg",
+  170: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/The-Last-Of-Us-Parte-Ii-Ps4-1242349643.jpg",
+  151: "https://lojaarenagames.com.br/wp-content/uploads/2023/05/Naruto-Shippuden-Ultimate-Ninja-Storm-4-Road-To-Boruto-Ps4-514197039.jpg",
+  146: "https://cdn.awsli.com.br/800x800/138/138431/produto/15036191/94baaf2c30.jpg",
+  150: "https://lojaarenagames.com.br/wp-content/uploads/2023/07/Mighty-No-9-Ps4-1859806679.jpg",
+  157: "https://cdn.awsli.com.br/800x800/1224/1224482/produto/170805882/b443856ecb.jpg",
+  159: "https://lojaarenagames.com.br/wp-content/uploads/2022/08/South-Park-A-Fenda-Que-Abunda-Fora-Ps4-1093513870.jpg",
+  165: "https://lojaarenagames.com.br/wp-content/uploads/2023/04/Trra-Mdia-Sombras-Da-Guerra-Ps4-Com-Mapa-710920984.jpg",
+  166: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/The-Dark-Pictures-Anthology-House-Of-Ashes-Ps4-1827984377.jpg",
+  168: "https://cdn.awsli.com.br/800x800/138/138431/produto/7988141/cc29f2acfd.jpg",
+  169: "https://lojaarenagames.com.br/wp-content/uploads/2022/08/The-Last-Guardian-Ps4-Jogo-Mdia-Fsica-2015738308.jpg",
+  162: "https://lojaarenagames.com.br/wp-content/uploads/2022/08/Star-Wars-Jedi-Fallen-Order-Ps4-1837831188.jpg",
+  173: "https://m.media-amazon.com/images/I/91hbm8TZGlL._AC_UF1000,1000_QL80_.jpg",
+  164: "https://cdn.awsli.com.br/800x800/53/53761/produto/183968398/5785a2367f.jpg",
+  167: "https://cdn.awsli.com.br/600x450/138/138431/produto/85290106936be67c60.jpg",
+  171: "https://cdn.awsli.com.br/800x800/138/138431/produto/27133285/27024b4d89.jpg",
+  145: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/The-Heavy-Rain-And-Beyond-Two-Souls-Collection-Ps4-1-2053324346.jpg",
+  200: "https://cdn.awsli.com.br/800x800/138/138431/produto/7988528/cffc3cf1c6.jpg",
+  201: "https://cdn.awsli.com.br/800x800/138/138431/produto/7988700/e0df475478.jpg",
+  202: "http://st.cdjapan.co.jp/pictures/l/09/44/BLJM-60298.jpg",
+  203: "https://cdn.awsli.com.br/800x800/138/138431/produto/15345802/18974f473c.jpg",
+  204: "https://cdn.awsli.com.br/800x800/138/138431/produto/8937681/3d7347f165.jpg",
+  205: "https://cdn.awsli.com.br/800x800/138/138431/produto/7988454/d533752f71.jpg",
+  206: "https://cdn.awsli.com.br/800x800/138/138431/produto/13526968/06afc748b6.jpg",
+  207: "https://lojaarenagames.com.br/wp-content/uploads/2023/01/The-Evil-Within-2-Ps4-2-223310990.jpg",
+  208: "https://lojaarenagames.com.br/wp-content/uploads/2024/04/Raid-World-War-Ii-Ps4-1681989127.jpg",
+  209: "https://lojaarenagames.com.br/wp-content/uploads/2021/12/Control___Ps4_909477-1.jpg",
+  210: "https://lojaarenagames.com.br/wp-content/uploads/2025/12/Naruto-To-Boruto-Shinobi-Striker-Ps4-Usado-1929146747.jpg",
+  211: "https://s.pacn.ws/1/p/1af/uncharted-2-among-thieves-remastered-german-cover-835997.6.jpg",
+  212: "https://static.fnac-static.com/multimedia/Images/FR/NR/47/52/80/8409671/1520-1/tsp20250116220645/Uncharted-Drake-s-Fortune-Edition-Remasterisee-PS4.jpg",
+  213: "https://cdn.awsli.com.br/800x800/138/138431/produto/21494330/d0d260e3be.jpg",
+  215: "https://lojaarenagames.com.br/wp-content/uploads/2021/10/Battlefield_V_Bf5___Ps4_265721-1.jpg",
+  222: "https://lojaarenagames.com.br/wp-content/uploads/2021/07/God_Of_War___Ps4_724203-1.jpg",
+  214: "https://lojaarenagames.com.br/wp-content/uploads/2024/10/Far-Cry-New-Dawn-Ps4-774840384.jpg",
+  221: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/Mortal-Kombat-11-Ps4-194822752.jpg",
+  223: "https://cdn.awsli.com.br/800x800/2443/2443989/produto/351729953/408a9bbec92aa3ca11f1f7598cb2056f-tpzyctx8lt.jpg",
+  217: "https://lojaarenagames.com.br/wp-content/uploads/2024/01/Fifa-18-Ps4-1-1335917052.jpg",
+  220: "https://lojaarenagames.com.br/wp-content/uploads/2023/08/Tropico-5-Ps4-636287166.jpg",
+  218: "https://lojaarenagames.com.br/wp-content/uploads/2021/10/Fifa_14___Ps4_152279-1.jpg",
+  219: "https://lojaarenagames.com.br/wp-content/uploads/2025/01/Motorcycle-Club-Ps4-176812324.jpg",
+  216: "https://images0.kabum.com.br/produtos/fotos/magalu/391310/xlarge/Pac-Man-Museum-para-PS4-Bandai-Namco_1763600572.jpg"
+};
+
+let favoritos = JSON.parse(localStorage.getItem('favoritos_ps4')) || [];
+let filtroAtivo = 'all';
+let plataformaAtiva = 'all';
+let termoBusca = '';
+
+const catLabel = { exclusivo:"Exclusivo", aaa:"AAA", fps:"FPS", survival:"Survival", esporte:"Esporte", infantil:"Infantil", raro:"Raro" };
+const rarClass = { comum:"b-comum", pouco:"b-pouco", raro:"b-raro", muito:"b-muito" };
+const rarLabel = { comum:"Comum", pouco:"Pouco comum", raro:"Raro", muito:"Muito raro" };
+
+function gerarLink(nome, plat){
+  return `https://lista.mercadolivre.com.br/${encodeURIComponent(nome)}+${plat}`;
+}
+
+function render(){
+  const grid = document.getElementById('grid');
+  const termo = termoBusca.toLowerCase().trim();
+  let html = '';
+  let visiveis = 0, soma = 0;
+
+  for(const j of jogos){
+    if(!j.n.toLowerCase().includes(termo)) continue;
+    if(filtroAtivo !== 'all' && j.cat !== filtroAtivo) continue;
+    if(plataformaAtiva !== 'all' && j.plat !== plataformaAtiva) continue;
+    visiveis++; soma += j.col;
+
+    const isFav = favoritos.includes(j.id) ? 'active' : '';
+    const capaUrl = capas[j.id];
+    const inicial = j.n.charAt(0).toUpperCase();
+    const coverInner = capaUrl
+      ? `<img src="${capaUrl}" alt="${j.n}">`
+      : `<div class="cover-fallback"><span class="ini">${inicial}</span><span class="tag">sem capa ainda</span></div>`;
+
+    html += `
+      <div class="card">
+        <div class="cover-wrap">
+          <span class="plat-chip">${j.plat}</span>
+          <button class="fav-btn ${isFav}" data-id="${j.id}">⭐</button>
+          ${coverInner}
+        </div>
+        <div class="card-body">
+          <h3>${j.n}</h3>
+          <div class="badges">
+            <span class="badge ${rarClass[j.rar]}">${rarLabel[j.rar]}</span>
+            <span class="badge b-pouco">${catLabel[j.cat]}</span>
+            ${j.v ? '<span class="badge" style="background:rgba(79,178,134,.2);color:#4fb286;">✓ preço verificado</span>' : '<span class="badge" style="background:rgba(255,255,255,.06);color:var(--ink-dim);">preço a confirmar</span>'}
+          </div>
+          <div class="prices">
+            <div><span class="v">R$ ${j.col}</span><span class="l">Colecionador</span></div>
+            <div><span class="v">R$ ${j.bar}</span><span class="l">Venda rápida</span></div>
+          </div>
+          <div class="card-foot">
+            <a href="${gerarLink(j.n, j.plat)}" target="_blank">Ver no Mercado Livre →</a>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  grid.innerHTML = html;
+  document.getElementById('resultCount').textContent = `${visiveis} jogos exibidos`;
+  document.getElementById('statTotal').textContent = jogos.length;
+  document.getElementById('statValor').textContent = `R$ ${jogos.reduce((s,j)=>s+j.col,0)}`;
+  document.getElementById('statUsado').textContent = `R$ ${jogos.reduce((s,j)=>s+j.loj,0)}`;
+  document.getElementById('statFav').textContent = favoritos.length;
+
+  document.querySelectorAll('.fav-btn').forEach(btn=>{
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      const id = parseInt(this.dataset.id);
+      const idx = favoritos.indexOf(id);
+      if(idx>-1) favoritos.splice(idx,1); else favoritos.push(id);
+      localStorage.setItem('favoritos_ps4', JSON.stringify(favoritos));
+      render();
+    });
+  });
+}
+
+document.getElementById('searchInput').addEventListener('input', function(){
+  termoBusca = this.value; render();
+});
+document.querySelectorAll('#filterContainer button').forEach(btn=>{
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('#filterContainer button').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    filtroAtivo = this.dataset.filter;
+    render();
+  });
+});
+document.querySelectorAll('#platContainer button').forEach(btn=>{
+  btn.addEventListener('click', function(){
+    document.querySelectorAll('#platContainer button').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+    plataformaAtiva = this.dataset.plat;
+    render();
+  });
+});
+
+render();
+</script>
+</body>
+</html>
