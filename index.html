@@ -4,9 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Controle Coleção iamT — catálogo pessoal de jogos PS4 e PS3 com preços, capas e raridade.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Controle Coleção iamT">
+<meta property="og:description" content="Catálogo pessoal de jogos PS4 e PS3 com preços, capas, sinopses e raridade.">
+<meta property="og:image" content="https://iamtgames.github.io/colecao/og-image.png">
+<meta property="og:url" content="https://iamtgames.github.io/colecao/">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Controle Coleção iamT">
+<meta name="twitter:description" content="Catálogo pessoal de jogos PS4 e PS3 com preços, capas, sinopses e raridade.">
+<meta name="twitter:image" content="https://iamtgames.github.io/colecao/og-image.png">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230b0b0c'/%3E%3Ctext x='50' y='66' font-size='55' font-family='Arial' font-weight='900' fill='white' text-anchor='middle'%3EiT%3C/text%3E%3C/svg%3E">
 <title>Controle Coleção iamT</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #0b0b0c;
@@ -18,6 +30,23 @@
     --ink-dim: #9a9a9e;
     --white: #ffffff;
     --accent: #ffffff;
+    --card-glass: rgba(23,24,26,0.55);
+    --overlay-glass: rgba(23,24,26,0.5);
+    --bg-inverse: #0b0b0c;
+  }
+  body.tema-claro{
+    --bg-inverse: #ffffff;
+    --bg: #f4f4f5;
+    --bg-panel: #ffffff;
+    --bg-card: #ffffff;
+    --line: #e0e0e2;
+    --line-soft: #ececee;
+    --ink: #17181a;
+    --ink-dim: #6b6b70;
+    --white: #17181a;
+    --accent: #17181a;
+    --card-glass: rgba(255,255,255,0.7);
+    --overlay-glass: rgba(255,255,255,0.7);
   }
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
@@ -46,13 +75,14 @@
     flex-wrap:wrap; gap:20px; margin-bottom:28px;
   }
   .topbar h1{
-    font-size: 22px; font-weight: 800; letter-spacing: -0.5px; color:var(--white);
+    font-size: 24px; font-weight: 800; letter-spacing: -0.5px; color:var(--white);
+    font-family: 'Space Grotesk', 'Segoe UI', sans-serif;
   }
   .stat-row{
     display:flex; gap: 10px; flex-wrap: wrap;
   }
   .stat{
-    background: rgba(23,24,26,0.5); backdrop-filter: blur(12px);
+    background: var(--overlay-glass); backdrop-filter: blur(12px);
     border:1px solid rgba(255,255,255,0.08); border-radius: 14px;
     padding: 10px 18px; min-width: 120px;
   }
@@ -66,7 +96,7 @@
   .search-box{flex:1; min-width:220px; position:relative;}
   .search-box input{
     width:100%; padding:12px 18px 12px 40px; border-radius:14px;
-    border:1px solid rgba(255,255,255,0.08); background: rgba(23,24,26,0.5); backdrop-filter: blur(12px);
+    border:1px solid rgba(255,255,255,0.08); background: var(--overlay-glass); backdrop-filter: blur(12px);
     color:var(--ink); font-size:14px; outline:none; transition:.2s;
   }
   .search-box input:focus{border-color:var(--white); box-shadow:0 0 0 3px rgba(255,255,255,0.08);}
@@ -74,12 +104,12 @@
   .filters{display:flex; gap:6px; flex-wrap:wrap;}
   .filters button{
     padding:9px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.08);
-    background: rgba(23,24,26,0.5); backdrop-filter: blur(12px);
+    background: var(--overlay-glass); backdrop-filter: blur(12px);
     color: var(--ink-dim); font-size:12.5px; cursor:pointer; font-weight:600;
     transition:.15s;
   }
   .filters button:hover{color:var(--ink); border-color:var(--ink-dim);}
-  .filters button.active{background:var(--white); color:#0b0b0c; border-color:var(--white);}
+  .filters button.active{background:var(--white); color:var(--bg-inverse); border-color:var(--white);}
 
   /* GRID DE JOGOS */
   .grid{
@@ -87,7 +117,7 @@
     gap: 18px;
   }
   .card{
-    background: rgba(23,24,26,0.55);
+    background: var(--card-glass);
     backdrop-filter: blur(18px) saturate(140%);
     -webkit-backdrop-filter: blur(18px) saturate(140%);
     border:1px solid rgba(255,255,255,0.08); border-radius: 18px;
@@ -144,16 +174,14 @@
   .badge{font-size:9.5px; padding:3px 9px; border-radius:20px; font-weight:700; border:1px solid var(--line);}
   .b-comum{background:transparent; color:var(--ink-dim);}
   .b-pouco{background:transparent; color:var(--ink);}
-  .b-raro{background:var(--white); color:#0b0b0c; border-color:var(--white);}
-  .b-muito{background:var(--white); color:#0b0b0c; border-color:var(--white);}
+  .b-raro{background:var(--white); color:var(--bg-inverse); border-color:var(--white);}
+  .b-muito{background:var(--white); color:var(--bg-inverse); border-color:var(--white);}
 
   .prices{
-    display:grid; grid-template-columns: 1fr 1fr; gap:6px; margin-top:auto; padding-top:9px;
+    margin-top:auto; padding-top:9px;
     border-top: 1px solid var(--line-soft); font-size:11px;
   }
-  .prices div{display:flex; flex-direction:column;}
-  .prices .v{font-size:14px; font-weight:800; color:var(--white);}
-  .prices .l{color:var(--ink-dim);}
+  .prices .v, .prices .l{font-size:14px; font-weight:800; color:var(--white);}
 
   .card-foot{display:flex; justify-content:space-between; align-items:center; margin-top:4px;}
   .card-foot a{
@@ -163,6 +191,58 @@
   .card-foot a:hover{color:#ffc266; border-bottom-color: #ffc266;}
 
   .result-count{color:var(--ink-dim); font-size:12.5px; margin-top:18px;}
+  .section-title{font-size:18px; font-weight:800; color:var(--white); letter-spacing:-.3px;}
+
+  .canal-card{
+    background: var(--card-glass); backdrop-filter: blur(18px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.08); border-radius: 18px;
+    overflow:hidden; display:flex; flex-direction:column; cursor:pointer;
+    transition: border-color .2s, transform .2s, box-shadow .2s;
+  }
+  .canal-card:hover{border-color: rgba(255,255,255,0.4); transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.5);}
+  .canal-top{
+    aspect-ratio: 16/8; position:relative; display:flex; align-items:center; justify-content:center;
+    background: linear-gradient(160deg, rgba(255,255,255,0.06), rgba(255,255,255,0.01));
+  }
+  .canal-top .ini{font-size:34px; font-weight:900; color:rgba(255,255,255,0.85);}
+  .canal-top img{width:88px; height:88px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.25);}
+  .canal-plat-badge{
+    position:absolute; top:10px; left:10px; font-size:10px; font-weight:800; letter-spacing:.5px;
+    padding:3px 9px; border-radius:20px; color:#fff;
+  }
+  .canal-plat-badge.youtube{background:#ff0000;}
+  .canal-plat-badge.instagram{background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
+  .canal-plat-badge.loja{background:#ffa733; color:#0b0b0c;}
+  .canal-dia-badge{
+    position:absolute; top:10px; right:10px; z-index:6;
+    font-size:9.5px; font-weight:800; background: rgba(0,0,0,0.7); color:#fff;
+    border:1px solid rgba(255,255,255,0.3); padding:3px 8px; border-radius:20px;
+    backdrop-filter: blur(6px);
+  }
+  .canal-insta-link{font-size:10.5px; color:var(--ink-dim); text-decoration:none; font-weight:600;}
+  .canal-insta-link:hover{color:var(--white);}
+  .canal-body{padding:14px 16px 16px; display:flex; flex-direction:column; gap:8px;}
+  .canal-body h3{font-size:15px; font-weight:800; color:var(--white);}
+  .canal-info{font-size:11.5px; color:var(--ink-dim); line-height:1.5;}
+  .canal-info b{color:var(--ink);}
+  .canal-cta{
+    margin-top:4px; font-size:11.5px; font-weight:700; color:#ffa733;
+  }
+
+  .canais-toggle-card{
+    background: var(--card-glass); backdrop-filter: blur(18px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.08); border-radius: 18px;
+    padding: 16px 20px; margin-bottom: 20px;
+    display:flex; align-items:center; justify-content:space-between;
+    cursor:pointer; transition: border-color .2s, transform .15s;
+  }
+  .canais-toggle-card:hover{border-color: rgba(255,255,255,0.35);}
+  .canais-toggle-left{display:flex; align-items:center; gap:14px;}
+  .canais-toggle-icon{font-size:28px;}
+  .canais-toggle-left h3{font-size:15px; font-weight:800; color:var(--white);}
+  .canais-toggle-left p{font-size:11.5px; color:var(--ink-dim); margin-top:2px;}
+  .canais-toggle-arrow{font-size:18px; color:var(--ink-dim); transition: transform .25s;}
+  .canais-toggle-arrow.open{transform: rotate(180deg);}
 
   .footer{margin-top:50px; text-align:center; color:var(--ink-dim); font-size:12px; border-top:1px solid var(--line); padding-top:20px;}
 
@@ -177,14 +257,14 @@
     padding: 18px 12px;
     z-index: 50;
   }
-  .side-dock a{
+  .side-dock a, .side-dock button{
     width:40px; height:40px; border-radius:50%;
     display:flex; align-items:center; justify-content:center;
     background: var(--bg-card); border:1px solid var(--line);
     color: var(--ink); text-decoration:none; font-size:17px;
-    transition: .2s;
+    transition: .2s; cursor:pointer;
   }
-  .side-dock a:hover{background:var(--white); color:#0b0b0c; border-color:var(--white); transform: scale(1.08);}
+  .side-dock a:hover, .side-dock button:hover{background:var(--white); color:var(--bg-inverse); border-color:var(--white); transform: scale(1.08);}
   .side-dock .divider{width:26px; height:1px; background:var(--line); margin: 2px 0;}
   .side-dock .sell{
     width:auto; height:auto; border-radius:14px; padding: 10px 8px;
@@ -195,7 +275,227 @@
   .side-dock .sell:hover{background:#a233f0; border-color:#a233f0;}
   .side-dock .sell .ico{font-size:16px;}
 
+  /* MODAL FRENTE/VERSO */
+  .modal-overlay{
+    position: fixed; inset:0; z-index:100;
+    background: rgba(0,0,0,0.75);
+    backdrop-filter: blur(10px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition: opacity .25s ease;
+    padding: 24px;
+  }
+  .modal-overlay.active{opacity:1; pointer-events:auto;}
+  .modal-box{
+    background: var(--card-glass);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 22px;
+    max-width: 380px; width:100%;
+    padding: 20px;
+    position: relative;
+    transform: scale(0.92) translateY(10px);
+    transition: transform .25s ease;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.6);
+  }
+  .modal-overlay.active .modal-box{transform: scale(1) translateY(0);}
+  .modal-close{
+    position:absolute; top:14px; right:14px; z-index:5;
+    background: rgba(0,0,0,0.5); border:1px solid rgba(255,255,255,0.2); border-radius:50%;
+    width:32px; height:32px; color:var(--white); cursor:pointer; font-size:14px;
+  }
+  .modal-img-wrap{
+    width:100%; aspect-ratio: 3/4; border-radius:16px; overflow:hidden;
+    background: rgba(255,255,255,0.03);
+  }
+  .modal-img-wrap img{width:100%; height:100%; object-fit:cover;}
+  .modal-info{margin-top:16px; display:flex; flex-direction:column; align-items:center; gap:10px; text-align:center;}
+  .modal-info h3{font-size:17px; font-weight:800; color:var(--white);}
+  .modal-toggle-btn{
+    padding:9px 20px; border-radius:20px; border:1px solid rgba(255,255,255,0.18);
+    background: rgba(255,255,255,0.06); color:var(--white); font-size:12.5px; font-weight:700;
+    cursor:pointer; transition:.15s; display:inline-flex; align-items:center; gap:6px;
+  }
+  .modal-toggle-btn:hover{background: rgba(255,255,255,0.14);}
+  .modal-nav-hint{font-size:10.5px; color:var(--ink-dim); text-align:center; margin-top:8px;}
+
+  /* ORDENAÇÃO E TOGGLE VENDA */
+  .sort-select{
+    padding:9px 14px; border-radius:20px; border:1px solid rgba(255,255,255,0.08);
+    background: var(--overlay-glass); backdrop-filter: blur(12px);
+    color: var(--ink); font-size:12.5px; cursor:pointer; font-weight:600; outline:none;
+  }
+  .toggle-venda{
+    padding:9px 16px; border-radius:20px; border:1px solid rgba(255,255,255,0.08);
+    background: var(--overlay-glass); backdrop-filter: blur(12px);
+    color: var(--ink-dim); font-size:12.5px; cursor:pointer; font-weight:600;
+  }
+  .toggle-venda.active{background:var(--white); color:var(--bg-inverse); border-color:var(--white);}
+
+  /* MARCAR COMO VENDIDO */
+  /* (marcação de vendido removida) */
+
+  /* GRAFICO DE RARIDADE */
+  .rarity-chart{
+    display:flex; flex-direction:column; gap:6px; margin: 4px 0 18px;
+    background: var(--overlay-glass); backdrop-filter: blur(10px);
+    border:1px solid rgba(255,255,255,0.06); border-radius:14px; padding:14px 16px;
+  }
+  .rarity-chart .rc-title{font-size:11px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.5px; margin-bottom:4px; font-weight:700;}
+  .rc-row{display:flex; align-items:center; gap:10px; font-size:11.5px;}
+  .rc-row .rc-label{min-width:100px; color:var(--ink-dim);}
+  .rc-row .rc-bar-bg{flex:1; height:8px; background:rgba(255,255,255,0.06); border-radius:6px; overflow:hidden;}
+  .rc-row .rc-bar-fill{height:100%; background:var(--white); border-radius:6px; transition: width .4s ease;}
+  .rc-row .rc-count{min-width:24px; text-align:right; color:var(--white); font-weight:700;}
+
+  /* PLATAFORMA BREAKDOWN */
+  .plat-breakdown{display:flex; gap:8px; margin-top:6px;}
+  .plat-breakdown span{font-size:10px; color:var(--ink-dim);}
+  .plat-breakdown b{color:var(--white);}
+
+  /* MODAL - EXTRAS */
+  .modal-flip-wrap{perspective: 1200px;}
+  .modal-flip-inner{
+    position:relative; width:100%; height:100%; transition: transform .6s;
+    transform-style: preserve-3d;
+  }
+  .modal-flip-inner.flipped{transform: rotateY(180deg);}
+  .modal-flip-inner .face{
+    position:absolute; inset:0; backface-visibility:hidden; border-radius:16px; overflow:hidden;
+  }
+  .modal-flip-inner .face img{width:100%; height:100%; object-fit:cover;}
+  .modal-flip-inner .back{transform: rotateY(180deg);}
+  .modal-extra{font-size:12px; color:var(--ink-dim); margin-top:4px; line-height:1.5;}
+  .modal-actions{display:flex; gap:8px; flex-wrap:wrap; justify-content:center;}
+  .modal-share-btn{
+    padding:9px 20px; border-radius:20px; border:1px solid rgba(255,255,255,0.18);
+    background: rgba(255,167,51,0.15); color:#ffa733; font-size:12.5px; font-weight:700;
+    cursor:pointer; transition:.15s;
+  }
+  .modal-share-btn:hover{background: rgba(255,167,51,0.28);}
+
+  /* IMPRESSAO / PDF */
+  #printArea{display:none;}
+
+  @media print{
+    body::before, .side-dock, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay{
+      display:none !important;
+    }
+    body{background:#fff !important; padding:0; color:#111;}
+    #printArea{
+      display:block !important;
+      font-family: Georgia, 'Times New Roman', serif;
+      color:#111;
+      max-width: 100%;
+    }
+    .print-header{
+      text-align:center; border-bottom: 3px double #111; padding-bottom:14px; margin-bottom:22px;
+    }
+    .print-header h1{font-size:26px; letter-spacing:1px; font-weight:900;}
+    .print-header p{font-size:11px; color:#555; margin-top:4px; font-family: Arial, sans-serif;}
+    .print-summary{
+      display:flex; justify-content:center; gap:30px; margin-bottom:26px;
+      font-family: Arial, sans-serif; font-size:11px; color:#333;
+    }
+    .print-summary b{font-size:15px; display:block; color:#111;}
+    .print-plat-title{
+      font-size:15px; font-weight:900; letter-spacing:2px; text-transform:uppercase;
+      margin: 26px 0 10px; padding-bottom:6px; border-bottom: 1.5px solid #111;
+      font-family: Arial, sans-serif;
+    }
+    table.print-table{width:100%; border-collapse:collapse; font-family: Arial, sans-serif; font-size:11px;}
+    table.print-table th{
+      text-align:left; padding:6px 8px; border-bottom:1.5px solid #111; font-size:9.5px;
+      text-transform:uppercase; letter-spacing:.5px; color:#333;
+    }
+    table.print-table td{padding:6px 8px; border-bottom:0.5px solid #ccc;}
+    table.print-table tr:nth-child(even){background:#f7f7f7;}
+    .print-rar{font-size:9.5px; padding:2px 7px; border:1px solid #999; border-radius:10px; color:#333;}
+    .print-footer{
+      margin-top:40px; text-align:center; font-size:10px; color:#777;
+      border-top:1px solid #ccc; padding-top:12px; font-family: Arial, sans-serif;
+    }
+    @page{ margin: 18mm 14mm; }
+  }
+
+  /* MODAL AMPLIADO - IMAGEM + SINOPSE LADO A LADO */
+  .modal-box-wide{max-width: 640px;}
+  .modal-split{display:flex; gap:24px; align-items:flex-start;}
+  .modal-img-col{width: 220px; flex-shrink:0; display:flex; flex-direction:column; gap:12px;}
+  .modal-img-col .modal-img-wrap{aspect-ratio: 3/4;}
+  .modal-info-col{flex:1; display:flex; flex-direction:column; gap:8px; text-align:left; padding-top:6px;}
+  .modal-info-col h3{font-size:19px; font-weight:800; color:var(--white);}
+  .modal-sinopse-title{font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink-dim); font-weight:700; margin-top:6px;}
+  .modal-rating{display:flex; gap:3px; font-size:16px;}
+  .modal-rating .star{cursor:pointer; color: rgba(255,255,255,0.2); transition:.15s;}
+  .modal-rating .star.filled{color:#ffa733;}
+
+  /* COMPARADOR */
+  .compare-btn{
+    position:absolute; bottom:10px; right:10px; z-index:6;
+    background: rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.25); border-radius:50%;
+    width:28px; height:28px; cursor:pointer; font-size:12px; color: rgba(255,255,255,0.7);
+    display:flex; align-items:center; justify-content:center; backdrop-filter: blur(6px);
+  }
+  .compare-btn.active{background:#ffa733; color:#0b0b0c; border-color:#ffa733;}
+  .compare-table{width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;}
+  .compare-table th, .compare-table td{padding:8px; border-bottom:1px solid var(--line-soft); text-align:left;}
+  .compare-table th{color:var(--ink-dim); font-weight:700; font-size:10.5px; text-transform:uppercase;}
+
+  /* FORMULARIO DE CONTATO */
+  .contato-input{
+    padding:10px 14px; border-radius:12px; border:1px solid var(--line);
+    background: var(--bg-panel); color:var(--ink); font-size:13px; font-family:inherit; outline:none;
+  }
+  .contato-input:focus{border-color:var(--white);}
+
+  /* DESTAQUE MAIS/MENOS VALIOSO */
+  .highlight-card{
+    background: var(--card-glass); backdrop-filter: blur(12px);
+    border:1px solid rgba(255,255,255,0.08); border-radius: 14px;
+    padding: 10px 18px; min-width: 160px;
+  }
+  .highlight-card .n{font-size:14px; font-weight:800; color:var(--white);}
+  .highlight-card .l{font-size:10.5px; color:var(--ink-dim); text-transform:uppercase; letter-spacing:.4px;}
+
+  .views-count{color:var(--ink-dim); font-size:11px; margin-top:6px; text-align:right;}
+
+  /* ANIMACAO DE ENTRADA */
+  .card{animation: fadeInUp .45s ease both;}
+  @keyframes fadeInUp{
+    from{opacity:0; transform: translateY(14px);}
+    to{opacity:1; transform: translateY(0);}
+  }
+
+  /* VISTA EM LISTA */
+  .grid.list-view{
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .grid.list-view .card{
+    flex-direction:row; align-items:center;
+  }
+  .grid.list-view .cover-wrap{width:70px; height:90px; flex-shrink:0; aspect-ratio:unset; border-radius:12px;}
+  .grid.list-view .card-body{flex-direction:row; align-items:center; gap:16px; padding:10px 16px; flex-wrap:wrap;}
+  .grid.list-view .card-body h3{min-height:unset; flex:1; min-width:180px;}
+  .grid.list-view .badges{flex-shrink:0;}
+  .grid.list-view .prices{border-top:none; padding-top:0; margin-top:0;}
+  .grid.list-view .card-foot{margin-top:0;}
+
+  #topBtn{
+    position: fixed; bottom: 24px; left: 24px; z-index: 45;
+    width:44px; height:44px; border-radius:50%;
+    background: var(--bg-card); border:1px solid var(--line); color:var(--ink);
+    font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition: opacity .25s, transform .2s;
+    backdrop-filter: blur(10px);
+  }
+  #topBtn.show{opacity:1; pointer-events:auto;}
+  #topBtn:hover{background:var(--white); color:var(--bg-inverse); transform: translateY(-3px);}
+
   @media (max-width: 860px){
+    .modal-split{flex-direction:column;}
+    .modal-img-col{width:100%;}
+    .grid.list-view .card{flex-direction:column; align-items:stretch;}
+    .grid.list-view .cover-wrap{width:100%; height:auto; aspect-ratio:3/4;}
     body{padding: 22px 16px 100px;}
     .topbar{flex-direction:column; align-items:flex-start; gap:14px;}
     .stat-row{width:100%; gap:8px;}
@@ -210,7 +510,7 @@
       flex-direction:row; border-radius:20px; padding:8px 12px;
     }
     .side-dock .divider{width:1px; height:22px; margin:0 4px;}
-    .side-dock a{width:36px; height:36px; font-size:15px;}
+    .side-dock a, .side-dock button{width:36px; height:36px; font-size:15px;}
   }
   @media (max-width: 480px){
     .topbar h1{font-size:18px;}
@@ -224,9 +524,12 @@
 </head>
 <body>
 <div class="side-dock">
+  <button id="temaBtn" title="Alternar tema claro/escuro">🌙</button>
   <a href="https://www.instagram.com/marioturbino/" target="_blank" title="Instagram pessoal">👤</a>
   <a href="https://www.instagram.com/iamtgames/" target="_blank" title="Instagram da coleção">📸</a>
   <div class="divider"></div>
+  <button id="contatoBtn" title="Enviar sugestão / parceria">✉️</button>
+  <button id="adminBtn" title="Painel de admin" style="display:none;">🛠️</button>
   <a class="sell" href="https://www.olx.com.br/perfil/mario-t-34b3680f" target="_blank" title="Perfil de vendas OLX">
     <span class="ico">🏷️</span>
     <span>OLX</span>
@@ -239,17 +542,43 @@
     <h1>Controle Coleção iamT</h1>
     <div class="stat-row">
       <div class="stat"><div class="n" id="statTotal">0</div><div class="l">Jogos</div></div>
-      <div class="stat"><div class="n" id="statValor">R$ 0</div><div class="l">Colecionador</div></div>
-      <div class="stat"><div class="n" id="statUsado">R$ 0</div><div class="l">Usado</div></div>
+      <div class="stat"><div class="n" id="statValor">R$ 0</div><div class="l">Valor pago (total)</div>
+        <div class="plat-breakdown"><span>PS4: <b id="statValorPS4">R$0</b></span><span>PS3: <b id="statValorPS3">R$0</b></span></div>
+      </div>
       <div class="stat"><div class="n" id="statFav">0</div><div class="l">Favoritos ⭐</div></div>
     </div>
   </div>
+
+  <div class="canais-toggle-card" id="canaisToggleCard">
+    <div class="canais-toggle-left">
+      <span class="canais-toggle-icon">📺</span>
+      <div>
+        <h3>Vendedores, Lives e Leilões</h3>
+        <p>11 canais indicados — clique pra ver</p>
+      </div>
+    </div>
+    <span class="canais-toggle-arrow" id="canaisToggleArrow">▾</span>
+  </div>
+  <div id="canaisSortWrap" style="display:none; margin: 0 0 14px;">
+    <button class="toggle-venda" id="ordenarDiaBtn">📅 Ordenar por dia da semana</button>
+  </div>
+  <div class="grid" id="gridCanais" style="display:none; margin-bottom:30px;"></div>
 
   <div class="tools">
     <div class="search-box">
       <span class="ico">🔍</span>
       <input type="text" id="searchInput" placeholder="Buscar jogo...">
     </div>
+    <select class="sort-select" id="sortSelect">
+      <option value="none">Ordenar por...</option>
+      <option value="nome-az">Nome (A-Z)</option>
+      <option value="nome-za">Nome (Z-A)</option>
+      <option value="valor-desc">Valor (maior primeiro)</option>
+      <option value="valor-asc">Valor (menor primeiro)</option>
+      <option value="raridade">Raridade</option>
+    </select>
+    <button class="toggle-venda" id="viewToggle">📋 Ver em lista</button>
+    <button class="toggle-venda" id="compararToggle">⚖️ Comparar</button>
     <div class="filters" id="filterContainer">
       <button class="active" data-filter="all">Todos</button>
       <button data-filter="exclusivo">Exclusivos</button>
@@ -272,8 +601,128 @@
 
   <div class="grid" id="grid"></div>
   <div class="result-count" id="resultCount"></div>
+  <div class="views-count" id="viewsCount"></div>
+
+  <div class="tools" style="margin-top:18px;">
+    <button class="toggle-venda" id="exportarBtn">⬇️ Exportar lista (.txt)</button>
+    <button class="toggle-venda" id="imprimirBtn">🖨️ Imprimir / Gerar PDF</button>
+    <button class="toggle-venda" id="qrBtn">📱 QR Code do site</button>
+  </div>
+
+
+  <div class="stat-row" id="highlightRow" style="margin: 30px 0 16px;"></div>
+
+  <div class="rarity-chart" id="rarityChart">
+    <div class="rc-title">Distribuição por raridade</div>
+  </div>
 
   <div class="footer">Controle Coleção iamT</div>
+</div>
+
+<button id="topBtn" title="Voltar ao topo">↑</button>
+
+<div id="printArea"></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box modal-box-wide">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="modal-split">
+      <div class="modal-img-col">
+        <div class="modal-img-wrap modal-flip-wrap">
+          <div class="modal-flip-inner" id="modalFlipInner">
+            <div class="face front"><img id="modalImgFront" src="" alt="" loading="eager"></div>
+            <div class="face back"><img id="modalImgBack" src="" alt="" loading="eager"></div>
+          </div>
+        </div>
+        <div class="modal-actions">
+          <button class="modal-toggle-btn" id="modalToggleBtn" style="display:none;"></button>
+          <button class="modal-share-btn" id="modalShareBtn">🔗 Compartilhar</button>
+        </div>
+        <p class="modal-nav-hint">← → para navegar entre jogos</p>
+      </div>
+      <div class="modal-info-col">
+        <span class="plat-chip" id="modalPlat" style="position:static; align-self:flex-start;"></span>
+        <h3 id="modalTitle"></h3>
+        <div class="modal-rating" id="modalRating"></div>
+        <div class="modal-extra" id="modalAnoDev" style="font-weight:700;"></div>
+        <div class="modal-sinopse-title">Sinopse</div>
+        <p class="modal-extra" id="modalSinopse">Sinopse não disponível ainda.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="qrOverlay">
+  <div class="modal-box" style="text-align:center;">
+    <button class="modal-close" id="qrClose">✕</button>
+    <h3 style="margin-bottom:14px;">Escaneie para acessar o site</h3>
+    <img id="qrImg" src="" alt="QR Code" style="width:220px; height:220px; border-radius:14px; background:#fff; padding:10px;">
+    <p class="modal-extra" style="margin-top:12px;">Cole esse código numa etiqueta física na estante!</p>
+  </div>
+</div>
+
+<div class="modal-overlay" id="compareOverlay">
+  <div class="modal-box modal-box-wide" style="max-width:600px;">
+    <button class="modal-close" id="compareClose">✕</button>
+    <h3 style="margin-bottom:14px;">Comparar jogos</h3>
+    <div id="compareContent" class="modal-extra">Selecione até 3 jogos usando o botão "⚖️" nos cards.</div>
+  </div>
+</div>
+
+<div class="modal-overlay" id="contatoOverlay">
+  <div class="modal-box" style="max-width:420px;">
+    <button class="modal-close" id="contatoClose">✕</button>
+    <h3 style="margin-bottom:14px;">Sugestão, parceria ou contato</h3>
+    <form id="contatoForm" style="display:flex; flex-direction:column; gap:10px;">
+      <input type="text" id="contatoNome" name="name" placeholder="Seu nome" required class="contato-input">
+      <input type="email" id="contatoEmail" name="email" placeholder="Seu e-mail" required class="contato-input">
+      <textarea id="contatoMsg" name="message" placeholder="Sua mensagem..." required class="contato-input" rows="4"></textarea>
+      <button type="submit" class="modal-share-btn" style="align-self:center;">Enviar</button>
+    </form>
+  </div>
+</div>
+
+<div class="modal-overlay" id="adminOverlay">
+  <div class="modal-box modal-box-wide" style="max-width:520px; max-height:85vh; overflow-y:auto;">
+    <button class="modal-close" id="adminClose">✕</button>
+    <h3 style="margin-bottom:6px;">Painel de Admin — Adicionar jogo</h3>
+    <p class="modal-extra" style="margin-bottom:14px;">Fica salvo só neste navegador. Use "Gerar código" pra tornar permanente pra todo mundo.</p>
+    <form id="adminForm" style="display:flex; flex-direction:column; gap:10px;">
+      <input type="text" id="admNome" placeholder="Nome do jogo" required class="contato-input">
+      <select id="admPlat" class="contato-input">
+        <option value="PS4">PS4</option>
+        <option value="PS3">PS3</option>
+      </select>
+      <select id="admCat" class="contato-input">
+        <option value="exclusivo">Exclusivo</option>
+        <option value="aaa">AAA</option>
+        <option value="fps">FPS</option>
+        <option value="survival">Survival</option>
+        <option value="esporte">Esporte</option>
+        <option value="infantil">Infantil</option>
+        <option value="raro">Raro</option>
+      </select>
+      <select id="admRar" class="contato-input">
+        <option value="comum">Comum</option>
+        <option value="pouco">Pouco comum</option>
+        <option value="raro">Raro</option>
+        <option value="muito">Muito raro</option>
+      </select>
+      <input type="number" id="admCol" placeholder="Valor colecionador (R$)" required class="contato-input">
+      <input type="number" id="admBar" placeholder="Valor venda rápida (R$)" required class="contato-input">
+      <input type="url" id="admCapa" placeholder="URL da capa (opcional)" class="contato-input">
+      <input type="url" id="admVerso" placeholder="URL do verso (opcional)" class="contato-input">
+      <input type="number" id="admAno" placeholder="Ano de lançamento (opcional)" class="contato-input">
+      <input type="text" id="admDev" placeholder="Desenvolvedora (opcional)" class="contato-input">
+      <textarea id="admSinopse" placeholder="Sinopse (opcional)" rows="3" class="contato-input"></textarea>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button type="submit" class="modal-share-btn">💾 Salvar neste navegador</button>
+        <button type="button" id="admGerarCodigo" class="toggle-venda">📋 Gerar código</button>
+      </div>
+    </form>
+    <div id="adminLista" style="margin-top:16px;"></div>
+    <textarea id="admCodigoGerado" readonly style="display:none; width:100%; margin-top:10px; height:140px; background:var(--bg-panel); color:var(--ink); border:1px solid var(--line); border-radius:10px; padding:10px; font-family:monospace; font-size:11px;"></textarea>
+  </div>
 </div>
 
 <script>
@@ -358,87 +807,286 @@ const jogos = [
 
 // Espaço para capas reais: preencha { id: "URL_DA_CAPA" } conforme for pesquisando
 const capas = {
-  141: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/Ghost-Of-Tsushima-Ps4-1343012995.jpg",
-  142: "https://lojaarenagames.com.br/wp-content/uploads/2026/03/God-Of-War-Ragnarok-Ps4-Usado-Capa-Com-Detalhe-1620964288.jpg",
-  131: "https://lojaarenagames.com.br/wp-content/uploads/2023/01/Detroit-Become-Human-Ps4-1490276224.jpg",
-  155: "https://lojaarenagames.com.br/wp-content/uploads/2022/08/Red-Dead-Redemption-2-Ps4-86120192.jpg",
-  130: "https://lojaarenagames.com.br/wp-content/uploads/2021/10/Death_Stranding___Ps4_271957-1.jpg",
-  129: "https://lojaarenagames.com.br/wp-content/uploads/2021/10/Dark_Souls_3_The_Fire_Fades_Edition___Ps4_54104-1.jpg",
-  172: "https://cdn.awsli.com.br/800x800/138/138431/produto/8740623/33260468e3bc3d63c6-3mk0h7n5k8.jpg",
-  140: "https://cdn.awsli.com.br/800x800/138/138431/produto/210430666/mp4-1677-g-rdirqh.jpg",
-  158: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/Song-Of-The-Deep-Ps4-347584668.jpg",
-  132: "https://lojaarenagames.com.br/wp-content/uploads/2023/01/Diablo-Iii-Reaper-Of-Souls-Ps4-Ingls-1983202678.jpg",
-  149: "https://dcdn-us.mitiendanube.com/stores/004/334/292/products/81wlxykztcl-3be539043dc3ba11c317201983275241-640-0.webp",
-  126: "https://cdn.awsli.com.br/800x800/1258/1258259/produto/54563746/e31623bdae.jpg",
-  147: "https://lojaarenagames.com.br/wp-content/uploads/2023/01/Immortals-Fenyx-Rising-Ps4-2004999380.jpg",
-  152: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/Nioh-2-Ps4-230492842.jpg",
-  154: "https://lojaarenagames.com.br/wp-content/uploads/2023/07/Rage-2-Ps4-907673487.jpg",
-  124: "https://lojaarenagames.com.br/wp-content/uploads/2022/11/Balan-Wonderworld-Ps4-1014817992.jpg",
-  125: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/The-Heavy-Rain-And-Beyond-Two-Souls-Collection-Ps4-1-2053324346.jpg",
-  127: "https://lojaarenagames.com.br/wp-content/uploads/2021/12/Call_Of_Duty_Black_Ops_4___Ps4_785724-1.jpg",
-  128: "https://m.media-amazon.com/images/I/81YptknEr3L.jpg",
-  133: "https://lojaarenagames.com.br/wp-content/uploads/2021/10/Far_Cry_5___Ps4_300855-1.jpg",
-  134: "https://lojaarenagames.com.br/wp-content/uploads/2022/11/Far-Cry-6-Ps4-1938857699.jpg",
-  135: "https://lojaarenagames.com.br/wp-content/uploads/2024/04/Fifa-16-Ps4-2-1036383243.jpg",
-  136: "https://lojaarenagames.com.br/wp-content/uploads/2022/11/Fifa-17-Ps4-1-314260431.jpg",
-  137: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/Fifa-19-Ps4-1-801109656.jpg",
-  138: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/Fifa-20-Ps4-1-535438553.jpg",
-  139: "https://lojaarenagames.com.br/wp-content/uploads/2023/05/Fifa-21-Ps4-2-1834048125.jpg",
-  143: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/Gravity-Rush-2-Ps4-761184504.jpg",
+  124: "https://cdn.thegamesdb.net/images/original/boxart/front/84146-1.jpg",
+  125: "https://cdn.thegamesdb.net/images/original/boxart/front/35042-1.jpg",
+  126: "https://cdn.thegamesdb.net/images/original/boxart/front/69213-1.jpg",
+  127: "https://cdn.thegamesdb.net/images/original/boxart/front/29237-1.jpg",
+  128: "https://cdn.thegamesdb.net/images/original/boxart/front/22722-1.jpg",
+  129: "https://cdn.thegamesdb.net/images/original/boxart/front/103252-1.jpg",
+  130: "https://cdn.thegamesdb.net/images/original/boxart/front/131054-1.jpg",
+  131: "https://cdn.thegamesdb.net/images/original/boxart/front/87924-1.jpg",
+  132: "https://cdn.thegamesdb.net/images/original/boxart/front/98756-1.jpg",
+  133: "https://cdn.thegamesdb.net/images/original/boxart/front/68242-1.jpg",
+  134: "https://cdn.thegamesdb.net/images/original/boxart/front/114902-1.jpg",
+  135: "https://cdn.thegamesdb.net/images/original/boxart/front/29277-1.jpg",
+  136: "https://cdn.thegamesdb.net/images/original/boxart/front/75308-1.jpg",
+  137: "https://cdn.thegamesdb.net/images/original/boxart/front/75954-1.jpg",
+  138: "https://cdn.thegamesdb.net/images/original/boxart/front/77060-1.jpg",
+  139: "https://cdn.thegamesdb.net/images/original/boxart/front/79674-1.jpg",
+  140: "https://cdn.thegamesdb.net/images/original/boxart/front/86078-1.jpg",
+  141: "https://cdn.thegamesdb.net/images/original/boxart/front/55760-1.jpg",
+  142: "https://cdn.thegamesdb.net/images/original/boxart/front/107164-1.jpg",
+  143: "https://cdn.thegamesdb.net/images/original/boxart/front/42385-1.jpg",
   144: "https://lojaarenagames.com.br/wp-content/uploads/2022/11/Hades-Ps4-1989048019.jpg",
-  160: "https://lojaarenagames.com.br/wp-content/uploads/2024/04/Marvel-Spider-Man-Ps4-1-1227270714.jpg",
-  161: "https://lojaarenagames.com.br/wp-content/uploads/2024/07/Marvel-Spider-Man-Miles-Morales-Ps4-1-807420340.jpg",
-  174: "https://lojaarenagames.com.br/wp-content/uploads/2025/06/Uncharted-4-A-Thiefs-End-Ps4-Seminovo-1741492230.jpg",
-  156: "https://lojaarenagames.com.br/wp-content/uploads/2025/07/Resident-Evil-7-Biohazard-Gold-Edition-Ps4-478214062.jpg",
+  145: "https://cdn.thegamesdb.net/images/original/boxart/front/35042-1.jpg",
+  146: "https://cdn.thegamesdb.net/images/original/boxart/front/20847-1.jpg",
+  147: "https://cdn.thegamesdb.net/images/original/boxart/front/79965-1.jpg",
+  148: "https://cdn.thegamesdb.net/images/original/boxart/front/73838-1.jpg",
+  149: "https://cdn.thegamesdb.net/images/original/boxart/front/79032-1.jpg",
+  150: "https://cdn.thegamesdb.net/images/original/boxart/front/35161-1.jpg",
+  151: "https://cdn.thegamesdb.net/images/original/boxart/front/43902-1.jpg",
+  152: "https://cdn.thegamesdb.net/images/original/boxart/front/60158-1.jpg",
   153: "https://lojaarenagames.com.br/wp-content/uploads/2025/03/Prince-Of-Persia-The-Lost-Crown-Ps4-308984553.jpg",
-  163: "https://lojaarenagames.com.br/wp-content/uploads/2022/08/Star-Wars-Battlefront-Ps4-282696451.jpg",
-  148: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/The-Last-Of-Us-Parte-Ii-Ps4-1242349643.jpg",
-  170: "https://lojaarenagames.com.br/wp-content/uploads/2022/10/The-Last-Of-Us-Parte-Ii-Ps4-1242349643.jpg",
-  151: "https://lojaarenagames.com.br/wp-content/uploads/2023/05/Naruto-Shippuden-Ultimate-Ninja-Storm-4-Road-To-Boruto-Ps4-514197039.jpg",
-  146: "https://cdn.awsli.com.br/800x800/138/138431/produto/15036191/94baaf2c30.jpg",
-  150: "https://lojaarenagames.com.br/wp-content/uploads/2023/07/Mighty-No-9-Ps4-1859806679.jpg",
-  157: "https://cdn.awsli.com.br/800x800/1224/1224482/produto/170805882/b443856ecb.jpg",
-  159: "https://lojaarenagames.com.br/wp-content/uploads/2022/08/South-Park-A-Fenda-Que-Abunda-Fora-Ps4-1093513870.jpg",
-  165: "https://lojaarenagames.com.br/wp-content/uploads/2023/04/Trra-Mdia-Sombras-Da-Guerra-Ps4-Com-Mapa-710920984.jpg",
-  166: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/The-Dark-Pictures-Anthology-House-Of-Ashes-Ps4-1827984377.jpg",
-  168: "https://cdn.awsli.com.br/800x800/138/138431/produto/7988141/cc29f2acfd.jpg",
-  169: "https://lojaarenagames.com.br/wp-content/uploads/2022/08/The-Last-Guardian-Ps4-Jogo-Mdia-Fsica-2015738308.jpg",
-  162: "https://lojaarenagames.com.br/wp-content/uploads/2022/08/Star-Wars-Jedi-Fallen-Order-Ps4-1837831188.jpg",
-  173: "https://m.media-amazon.com/images/I/91hbm8TZGlL._AC_UF1000,1000_QL80_.jpg",
+  154: "https://cdn.thegamesdb.net/images/original/boxart/front/55462-1.jpg",
+  155: "https://cdn.thegamesdb.net/images/original/boxart/front/111651-1.jpg",
+  156: "https://cdn.thegamesdb.net/images/original/boxart/front/52435-1.jpg",
+  157: "https://cdn.thegamesdb.net/images/original/boxart/front/75619-1.jpg",
+  158: "https://cdn.thegamesdb.net/images/original/boxart/front/37516-1.jpg",
+  159: "https://cdn.thegamesdb.net/images/original/boxart/front/112420-1.jpg",
+  160: "https://lojaarenagames.com.br/wp-content/uploads/2024/04/Marvel-Spider-Man-Ps4-1-1227270714.jpg",
+  161: "https://cdn.thegamesdb.net/images/original/boxart/front/92660-1.jpg",
+  162: "https://cdn.thegamesdb.net/images/original/boxart/front/64909-1.jpg",
+  163: "https://cdn.thegamesdb.net/images/original/boxart/front/27208-1.jpg",
   164: "https://cdn.awsli.com.br/800x800/53/53761/produto/183968398/5785a2367f.jpg",
-  167: "https://cdn.awsli.com.br/600x450/138/138431/produto/85290106936be67c60.jpg",
+  165: "https://cdn.thegamesdb.net/images/original/boxart/front/50155-1.jpg",
+  166: "https://cdn.thegamesdb.net/images/original/boxart/front/94171-1.jpg",
+  167: "https://cdn.thegamesdb.net/images/original/boxart/front/73288-1.jpg",
+  168: "https://cdn.thegamesdb.net/images/original/boxart/front/69186-1.jpg",
+  169: "https://cdn.thegamesdb.net/images/original/boxart/front/34990-1.jpg",
+  170: "https://cdn.thegamesdb.net/images/original/boxart/front/113238-1.jpg",
   171: "https://cdn.awsli.com.br/800x800/138/138431/produto/27133285/27024b4d89.jpg",
-  145: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/The-Heavy-Rain-And-Beyond-Two-Souls-Collection-Ps4-1-2053324346.jpg",
+  172: "https://cdn.thegamesdb.net/images/original/boxart/front/76868-1.jpg",
+  173: "https://cdn.thegamesdb.net/images/original/boxart/front/41080-1.jpg",
+  174: "https://cdn.thegamesdb.net/images/original/boxart/front/21416-1.jpg",
   200: "https://cdn.awsli.com.br/800x800/138/138431/produto/7988528/cffc3cf1c6.jpg",
-  201: "https://cdn.awsli.com.br/800x800/138/138431/produto/7988700/e0df475478.jpg",
-  202: "http://st.cdjapan.co.jp/pictures/l/09/44/BLJM-60298.jpg",
-  203: "https://cdn.awsli.com.br/800x800/138/138431/produto/15345802/18974f473c.jpg",
+  201: "https://cdn.thegamesdb.net/images/original/boxart/front/11988-1.jpg",
+  202: "https://cdn.thegamesdb.net/images/original/boxart/front/886-1.jpg",
+  203: "https://cdn.thegamesdb.net/images/original/boxart/front/6606-1.jpg",
   204: "https://cdn.awsli.com.br/800x800/138/138431/produto/8937681/3d7347f165.jpg",
   205: "https://cdn.awsli.com.br/800x800/138/138431/produto/7988454/d533752f71.jpg",
   206: "https://cdn.awsli.com.br/800x800/138/138431/produto/13526968/06afc748b6.jpg",
-  207: "https://lojaarenagames.com.br/wp-content/uploads/2023/01/The-Evil-Within-2-Ps4-2-223310990.jpg",
-  208: "https://lojaarenagames.com.br/wp-content/uploads/2024/04/Raid-World-War-Ii-Ps4-1681989127.jpg",
-  209: "https://lojaarenagames.com.br/wp-content/uploads/2021/12/Control___Ps4_909477-1.jpg",
-  210: "https://lojaarenagames.com.br/wp-content/uploads/2025/12/Naruto-To-Boruto-Shinobi-Striker-Ps4-Usado-1929146747.jpg",
-  211: "https://s.pacn.ws/1/p/1af/uncharted-2-among-thieves-remastered-german-cover-835997.6.jpg",
-  212: "https://static.fnac-static.com/multimedia/Images/FR/NR/47/52/80/8409671/1520-1/tsp20250116220645/Uncharted-Drake-s-Fortune-Edition-Remasterisee-PS4.jpg",
+  207: "https://cdn.thegamesdb.net/images/original/boxart/front/70304-1.jpg",
+  208: "https://cdn.thegamesdb.net/images/original/boxart/front/61642-1.jpg",
+  209: "https://cdn.thegamesdb.net/images/original/boxart/front/69257-1.jpg",
+  210: "https://cdn.thegamesdb.net/images/original/boxart/front/60934-1.jpg",
+  211: "https://cdn.thegamesdb.net/images/original/boxart/front/41079-1.jpg",
+  212: "https://cdn.thegamesdb.net/images/original/boxart/front/41078-1.png",
   213: "https://cdn.awsli.com.br/800x800/138/138431/produto/21494330/d0d260e3be.jpg",
-  215: "https://lojaarenagames.com.br/wp-content/uploads/2021/10/Battlefield_V_Bf5___Ps4_265721-1.jpg",
-  222: "https://lojaarenagames.com.br/wp-content/uploads/2021/07/God_Of_War___Ps4_724203-1.jpg",
-  214: "https://lojaarenagames.com.br/wp-content/uploads/2024/10/Far-Cry-New-Dawn-Ps4-774840384.jpg",
-  221: "https://lojaarenagames.com.br/wp-content/uploads/2022/09/Mortal-Kombat-11-Ps4-194822752.jpg",
-  223: "https://cdn.awsli.com.br/800x800/2443/2443989/produto/351729953/408a9bbec92aa3ca11f1f7598cb2056f-tpzyctx8lt.jpg",
-  217: "https://lojaarenagames.com.br/wp-content/uploads/2024/01/Fifa-18-Ps4-1-1335917052.jpg",
-  220: "https://lojaarenagames.com.br/wp-content/uploads/2023/08/Tropico-5-Ps4-636287166.jpg",
-  218: "https://lojaarenagames.com.br/wp-content/uploads/2021/10/Fifa_14___Ps4_152279-1.jpg",
-  219: "https://lojaarenagames.com.br/wp-content/uploads/2025/01/Motorcycle-Club-Ps4-176812324.jpg",
-  216: "https://images0.kabum.com.br/produtos/fotos/magalu/391310/xlarge/Pac-Man-Museum-para-PS4-Bandai-Namco_1763600572.jpg"
+  214: "https://cdn.thegamesdb.net/images/original/boxart/front/62516-1.jpg",
+  215: "https://cdn.thegamesdb.net/images/original/boxart/front/55757-1.jpg",
+  216: "https://cdn.thegamesdb.net/images/original/boxart/front/100856-1.jpg",
+  217: "https://cdn.thegamesdb.net/images/original/boxart/front/75952-1.jpg",
+  218: "https://cdn.thegamesdb.net/images/original/boxart/front/18865-1.jpg",
+  219: "https://cdn.thegamesdb.net/images/original/boxart/front/52841-1.jpg",
+  220: "https://cdn.thegamesdb.net/images/original/boxart/front/43929-1.jpg",
+  221: "https://cdn.thegamesdb.net/images/original/boxart/front/62524-1.jpg",
+  222: "https://cdn.thegamesdb.net/images/original/boxart/front/109035-1.jpg",
+  223: "https://cdn.thegamesdb.net/images/original/boxart/front/40202-1.jpg"
 };
 
+const capasVerso = {
+  124: "https://cdn.thegamesdb.net/images/original/boxart/back/84146-1.jpg",
+  127: "https://cdn.thegamesdb.net/images/original/boxart/back/29237-1.jpg",
+  128: "https://cdn.thegamesdb.net/images/original/boxart/back/22722-1.jpg",
+  143: "https://cdn.thegamesdb.net/images/original/boxart/back/42385-1.jpg",
+  150: "https://cdn.thegamesdb.net/images/original/boxart/back/35161-1.jpg",
+  152: "https://cdn.thegamesdb.net/images/original/boxart/back/60158-1.jpg",
+  158: "https://cdn.thegamesdb.net/images/original/boxart/back/37516-1.jpg",
+  161: "https://cdn.thegamesdb.net/images/original/boxart/back/92660-1.jpg",
+  162: "https://cdn.thegamesdb.net/images/original/boxart/back/64909-1.jpg",
+  169: "https://cdn.thegamesdb.net/images/original/boxart/back/34990-1.jpg",
+  170: "https://cdn.thegamesdb.net/images/original/boxart/back/113238-1.jpg",
+  174: "https://cdn.thegamesdb.net/images/original/boxart/back/21416-1.jpg",
+  202: "https://cdn.thegamesdb.net/images/original/boxart/back/886-1.jpg",
+  203: "https://cdn.thegamesdb.net/images/original/boxart/back/6606-1.jpg",
+  215: "https://cdn.thegamesdb.net/images/original/boxart/back/55757-1.jpg",
+  218: "https://cdn.thegamesdb.net/images/original/boxart/back/18865-1.jpg"
+};
+
+// Sinopses dos jogos (preenchido via busca na API do TheGamesDB)
+const sinopses = {
+  124: `Um platformer de ação e aventura ambientado no misterioso Mundo Maravilhoso de Balan, onde o jogador assume trajes especiais para explorar cenários coloridos e ajudar personagens perdidos a superarem seus medos internos.`,
+  125: `Pacote reunindo dois dramas interativos da Quantic Dream: Heavy Rain, sobre a investigação de um serial killer que ameaça a família do protagonista, e Beyond: Two Souls, sobre uma jovem ligada a uma entidade sobrenatural desde a infância. Ambos usam escolhas do jogador para moldar o rumo da história.`,
+  126: `Um looter shooter caótico e cheio de humor, onde o jogador assume o papel de um Vault Hunter em busca de um tesouro lendário escondido em Pandora. Combina tiroteios frenéticos, personagens excêntricos e um sistema de armas geradas aleatoriamente aos milhões.`,
+  127: `Campanha de ficção científica que se passa em um futuro onde soldados aumentados por tecnologia enfrentam uma inteligência artificial renegada. Traz também os modos multiplayer competitivo e Zumbis, marcas registradas da franquia Call of Duty.`,
+  128: `Em Night City, uma megalópole dominada por corporações no ano de 2077, o jogador controla V, um mercenário em busca de um implante capaz de conceder vida eterna. RPG de ação em mundo aberto, ambientado no universo criado por Mike Pondsmith.`,
+  129: `Ação e RPG sombrio ambientado no reino em decadência de Lothric, onde as chamas que sustentam o mundo estão se apagando. Combates táticos e punitivos, com esta edição reunindo o jogo base e todas as suas expansões.`,
+  130: `Sam Bridges atravessa uma América pós-apocalíptica dividida por fenômenos sobrenaturais, entregando cargas essenciais e reconectando comunidades isoladas. Um jogo de ação e exploração que mistura elementos de terror e uma jogabilidade centrada em logística e conexão social.`,
+  131: `Um thriller narrativo ambientado em Detroit numa era onde androides quase indistinguíveis de humanos convivem com a sociedade. O jogador controla três androides diferentes cujas decisões moldam múltiplos finais possíveis para a história.`,
+  132: `Edição definitiva do clássico RPG de ação Diablo III, reunindo o jogo base e a expansão Reaper of Souls, com a caça implacável à Morte encarnada e caçadas por itens em masmorras geradas aleatoriamente.`,
+  133: `Ambientado no fictício condado rural de Hope County, Montana, o jogo coloca o jogador contra um culto apocalíptico liderado por um carismático líder religioso. Mundo aberto com armas, veículos e aliados para recrutar na luta para libertar a região.`,
+  134: `Na ilha fictícia de Yara, o jogador se junta a um movimento de guerrilha contra um ditador que governa com mão de ferro. Traz mundo aberto expandido, veículos variados e a possibilidade de criar armas customizadas.`,
+  135: `Simulador de futebol da EA Sports com licenciamento oficial de times, jogadores e competições, trazendo atualizações no motor de física de jogadas e no modo Ultimate Team daquela temporada.`,
+  136: `Simulador de futebol da EA Sports com elenco de times e ligas licenciadas ao redor do mundo, trazendo o modo carreira 'A Jornada' em sua segunda temporada, além dos modos Ultimate Team e carreira de treinador.`,
+  137: `Simulador de futebol que passou a incluir oficialmente a UEFA Champions League e Europa League, com melhorias na inteligência artificial e no modo Ultimate Team.`,
+  138: `Edição da série de futebol da EA Sports que introduziu o sistema de movimentação 'Decisive Moments', priorizando jogadas realistas em momentos decisivos das partidas, além do modo Volta Football em campos de várzea.`,
+  139: `Simulador de futebol da EA Sports com ajustes na inteligência artificial defensiva, novidades no modo carreira e continuidade do futebol de rua no modo Volta.`,
+  140: `Última edição da franquia antes da mudança de nome para EA Sports FC, trazendo tecnologia de captura de movimento em partidas femininas e masculinas simultaneamente (HyperMotion2) e atualizações no Ultimate Team.`,
+  141: `No Japão feudal do século XIII, o samurai Jin Sakai precisa abandonar o código tradicional de combate para expulsar os invasores mongóis da ilha de Tsushima. Ação em mundo aberto com forte inspiração em filmes de samurai clássicos.`,
+  142: `Kratos e seu filho Atreus enfrentam o Fimbulwinter, o inverno que antecede o Ragnarök, em uma jornada pelos nove reinos da mitologia nórdica. Sequência direta de God of War (2018), aprofunda a relação entre pai e filho em meio a profecias, deuses e batalhas contra Odin e Thor.`,
+  143: `Kat retorna com seus poderes de manipular a gravidade para explorar a flutuante cidade de Jirga Para Lhao, enfrentando novas ameaças em combates aéreos e enigmas que aproveitam a queda livre controlada.`,
+  144: `Roguelike aclamado onde o jogador controla Zagreus, príncipe do submundo grego, em tentativas repetidas de escapar do reino de seu pai, Hades. Cada fuga traz novas armas, poderes concedidos por deuses do Olimpo e diálogos que evoluem a cada morte.`,
+  145: `Drama interativo policial em que o jogador acompanha quatro personagens investigando o caso do Assassino do Origami, um serial killer que afoga suas vítimas em água da chuva. As escolhas feitas alteram permanentemente o destino da história.`,
+  146: `Ambientado numa Filadélfia ocupada por uma megacorporação após uma guerra, o jogo coloca o jogador como parte de uma resistência guerrilheira que luta em confrontos urbanos improvisados contra forças de ocupação tecnologicamente superiores.`,
+  147: `Ação e aventura em mundo aberto inspirada na mitologia grega, onde o jogador assume o papel de um semideus recém-criado que precisa restaurar deuses petrificados e derrotar o titã Tifão, que amaldiçoou as Ilhas Douradas.`,
+  148: `Anos após os eventos do primeiro jogo, Ellie parte em uma jornada violenta de vingança que a leva a confrontar as consequências de suas próprias escolhas. Uma narrativa pós-apocalíptica intensa que explora ciclos de violência, perda e redenção.`,
+  149: `Prólogo da saga Metal Gear Solid V, ambientado em 1975, onde Big Boss invade um campo de prisioneiros na baía de Cuba para resgatar aliados capturados, introduzindo a jogabilidade furtiva em mundo aberto que definiria o jogo seguinte.`,
+  150: `Platformer de ação em 2.5D inspirado nos clássicos jogos de robôs dos anos 90, seguindo Beck, um robô que precisa deter seus 'irmãos' corrompidos por um vírus misterioso.`,
+  151: `Jogo de luta com elenco extenso de personagens do universo Naruto, cobrindo os arcos finais da série original e adicionando conteúdo ambientado na era de Boruto, filho do protagonista.`,
+  152: `Ação e RPG ambientado no Japão da era Sengoku, onde o jogador controla um caçador de yokai meio-humano meio-espírito, enfrentando criaturas sobrenaturais em combates punitivos que exigem paciência e domínio de estilos de luta.`,
+  153: `Um metroidvania de ação e plataforma onde Sargon, um dos Imortais da Pérsia, precisa resgatar o príncipe Ghassan sequestrado e adentrar o amaldiçoado Monte Qaf, enfrentando criaturas mitológicas e desvendando um tempo que se distorce.`,
+  154: `Em um planeta devastado por uma praga criada por uma corporação genocida, o jogador enfrenta hordas de inimigos com armas exageradas e habilidades caóticas, numa mistura de humor ácido e ação em primeira pessoa.`,
+  155: `No fim da era do velho oeste americano, Arthur Morgan e a gangue Van der Linde tentam sobreviver enquanto o mundo civilizado avança sobre o território selvagem. Mundo aberto vasto com forte ênfase em narrativa, moral e consequências das ações.`,
+  156: `Edição definitiva do retorno da franquia ao terror de sobrevivência em primeira pessoa, acompanhando Ethan Winters em busca da esposa desaparecida numa fazenda isolada na Louisiana, dominada por uma família peculiar e infectada.`,
+  157: `Simulador realista de skate em mundo aberto, com física detalhada de movimentos e cenários urbanos inspirados em spots reais, voltado para quem busca uma experiência mais técnica que os jogos arcade da modalidade.`,
+  158: `Aventura subaquática em 2D contada através de sombras e silhuetas, seguindo uma jovem e seu cão em uma jornada emocional por um mundo submerso repleto de quebra-cabeças ambientais e criaturas marinhas.`,
+  159: `RPG de super-heróis em turnos que satiriza o gênero, com o jogador criando seu próprio herói e se juntando às crianças de South Park em uma guerra de facções pelo controle do bairro, cheia do humor irreverente característico da série.`,
+  160: `Peter Parker, um Homem-Aranha experiente, enfrenta uma ameaça que toma conta de Nova York enquanto equilibra sua vida pessoal com o peso da responsabilidade heroica. Ação em mundo aberto com deslocamento fluido pelos arranha-céus da cidade.`,
+  161: `Spin-off que coloca Miles Morales no centro da história como o novo Homem-Aranha de Nova York durante o inverno, equilibrando a vida pessoal com a ameaça de uma guerra entre uma corporação de energia e um grupo criminoso conhecido como Underground.`,
+  162: `Cal Kestis, um jovem Padawan sobrevivente da Ordem 66, foge do Império enquanto tenta completar seu treinamento Jedi. Ação e aventura em terceira pessoa ambientada logo após a Guerra dos Clones, com exploração, combate de sabre de luz e quebra-cabeças.`,
+  163: `Jogo de tiro em primeira pessoa multiplayer ambientado no universo Star Wars, recriando grandes batalhas entre o Império e a Aliança Rebelde em cenários icônicos da trilogia clássica.`,
+  164: `Um gato sem nome se vê separado de sua colônia e precisa navegar por uma cidade subterrânea habitada por robôs, explorando o que resta de uma civilização humana desaparecida. Aventura atmosférica que mistura plataforma e exploração de mundo fechado.`,
+  165: `Sequência de Sombras de Mordor, expande o sistema Nêmesis que torna cada inimigo orc único e memorável, enquanto o protagonista Talion constrói um exército para desafiar os Senhores de Sauron na Terra-média.`,
+  166: `Segundo capítulo da antologia de terror interativo, seguindo um grupo de fuzileiros americanos e civis iraquianos presos em um templo antigo durante a Guerra do Golfo, enquanto uma ameaça sobrenatural os cerca. As escolhas do jogador determinam quem sobrevive.`,
+  167: `Terceiro capítulo da antologia de terror interativo, acompanhando um grupo de estudantes universitários perdidos numa cidade abandonada de Massachusetts, assombrada por segredos ligados a julgamentos de bruxaria. Decisões do jogador afetam o destino de cada personagem.`,
+  168: `Sebastian Castellanos investiga uma cena de crime brutal que o transporta para uma realidade distorcida e pesadelesca, criada pela mente de um vilão perturbado. Survival horror clássico com ambientes que se reconfiguram e inimigos grotescos.`,
+  169: `Um garoto forma um vínculo com Trico, uma enorme criatura alada meio ave meio mamífero, enquanto ambos tentam escapar de ruínas misteriosas. Aventura emocional focada na relação de confiança entre os dois personagens, com pouca orientação textual.`,
+  170: `Anos após os eventos do primeiro jogo, Ellie parte em uma jornada violenta de vingança que a leva a confrontar as consequências de suas próprias escolhas. Uma narrativa pós-apocalíptica intensa que explora ciclos de violência, perda e redenção.`,
+  171: `Aventura narrativa da Telltale Games ambientada no universo de The Walking Dead, seguindo Javier García e sua família enquanto tentam sobreviver ao apocalipse zumbi, com decisões do jogador moldando o rumo da história.`,
+  172: `Remake dos dois primeiros jogos da franquia clássica de skate, trazendo de volta os icônicos parques e desafios de combo com física e controles modernizados, mantendo a essência arcade que consagrou a série nos anos 2000.`,
+  173: `Versão remasterizada da aventura em que Nathan Drake busca o tesouro perdido do pirata Henry Avery na ilha fictícia de Cape Verde, enfrentando mercenários e armadilhas antigas em cenários exuberantes.`,
+  174: `Nathan Drake sai da aposentadoria para uma última grande caçada ao tesouro, envolvendo seu irmão desaparecido há muito tempo e o antigo esconderijo do pirata Henry Avery. Encerramento da trilogia principal com forte foco cinematográfico e emocional.`,
+  200: `Uma bruxa de cabelos longos e poderes sobrenaturais luta contra anjos e criaturas celestiais enquanto busca respostas sobre seu passado esquecido. Jogo de ação estilizado e extravagante, conhecido pelos combos vertiginosos e humor irreverente.`,
+  201: `Vincent Brooks, um homem preso entre relacionamentos e decisões de vida, começa a ter pesadelos onde precisa escalar torres de blocos para sobreviver antes do amanhecer. Mistura puzzle desafiador com uma narrativa adulta sobre relacionamentos e ansiedade existencial.`,
+  202: `RPG de fantasia sombria em que dois soldados amaldiçoados por uma substância misteriosa lutam para sobreviver em uma cidade isolada por uma névoa mortal, enquanto tentam desvendar a origem de sua condição. Combates em tempo real com sistema de armas de fogo e melee combinados.`,
+  203: `Reboque da clássica série de beat 'em up, seguindo a guerreira Tyris Flare em uma jornada de ação em terceira pessoa montada em criaturas selvagens, enfrentando hordas de inimigos em um mundo de fantasia brutal.`,
+  204: `RPG japonês onde dois protagonistas com histórias entrelaçadas exploram o continente de Rieze Maxia, ameaçado pelo esgotamento do maná que sustenta toda a vida. Sistema de combate em tempo real com trocas dinâmicas entre membros do grupo.`,
+  205: `RPG de fantasia que acompanha um jovem plebeu que se torna guardião de uma armadura lendária capaz de se transformar em um cavaleiro gigante, em meio a uma guerra entre reinos rivais.`,
+  206: `Spin-off da série Yakuza que transforma a habitual ação urbana em um jogo de sobrevivência contra zumbis nas ruas de Kamurocho, reunindo protagonistas de jogos anteriores da franquia para enfrentar um surto inesperado.`,
+  207: `Sebastian Castellanos retorna em busca da filha que acreditava morta, mergulhando novamente no mundo distorcido de STEM. Survival horror que equilibra tensão claustrofóbica com áreas mais abertas de exploração.`,
+  208: `Jogo de tiro tático cooperativo ambientado na Segunda Guerra Mundial, colocando o jogador em uma unidade especial que executa operações secretas nos bastidores dos grandes conflitos históricos.`,
+  209: `Jesse Faden assume o controle de uma agência governamental secreta após um fenômeno sobrenatural tomar conta de seu prédio-sede. Um jogo de ação em terceira pessoa que mistura poderes psiônicos, ambientes que se transformam e uma atmosfera de mistério burocrático-paranormal.`,
+  210: `Jogo de luta em equipes de 4 contra 4 ambientado no universo de Naruto, com combates dinâmicos em arenas 3D e habilidades ninja características de dezenas de personagens da série.`,
+  211: `Versão remasterizada da aventura em que Nathan Drake, junto de seu mentor, busca o tesouro perdido de Marco Polo em meio a uma corrida contra mercenários rivais pelas montanhas do Nepal e ruínas asiáticas.`,
+  212: `Versão remasterizada da aventura que introduziu Nathan Drake ao mundo, em busca do tesouro perdido do explorador Sir Francis Drake em uma ilha desconhecida repleta de armadilhas e segredos.`,
+  213: `Chloe Frazer lidera sua própria expedição em busca de um artefato lendário perdido nas montanhas ocidentais da Índia, unindo forças com a mercenária Nadine Ross em uma aventura paralela à trilogia principal de Nathan Drake.`,
+  214: `Retorno a Hope County após os eventos do jogo anterior, agora numa versão devastada por um conflito nuclear, onde o jogador enfrenta uma nova facção liderada pelas filhas do antigo líder do culto.`,
+  215: `Jogo de tiro em primeira pessoa ambientado na Segunda Guerra Mundial, contando histórias pouco exploradas do conflito através de diferentes campanhas e nações, além do já tradicional multiplayer em larga escala da franquia.`,
+  216: `Coletânea que reúne diversos jogos clássicos do icônico comedor de pontos amarelo, permitindo revisitar diferentes eras e variações do personagem em uma única compilação.`,
+  217: `Edição da franquia de futebol da EA Sports que aprimora o motor de física de bola e traz o capítulo final da história 'A Jornada', além de atualizações nos modos de carreira e Ultimate Team.`,
+  218: `Simulador de futebol da EA Sports com atualização de elencos e ligas licenciadas da temporada, mantendo os modos tradicionais de carreira e partidas rápidas da franquia.`,
+  219: `Jogo de corrida de motocicletas com física realista e customização de motos, colocando o jogador em circuitos e desafios variados voltados a entusiastas do motociclismo.`,
+  220: `Simulador de construção e gestão em que o jogador governa uma nação insular fictícia ao longo de diferentes eras políticas, equilibrando economia, relações internacionais e a satisfação da população em um regime que pode ser tanto benevolente quanto ditatorial.`,
+  221: `Jogo de luta com elenco brutal de personagens icônicos da franquia, trazendo fatalidades extremamente detalhadas, um sistema de customização de golpes e uma extensa campanha narrativa sobre viagens no tempo.`,
+  222: `Kratos deixa para trás a mitologia grega e se estabelece na Midgard nórdica ao lado do filho Atreus, aprendendo a ser pai enquanto os dois enfrentam deuses, monstros e as próprias sombras do passado do protagonista.`,
+  223: `Coletânea reunindo os capítulos que antecedem o clímax da saga Metal Gear Solid V, incluindo o prólogo Ground Zeroes e a vasta aventura de mundo aberto Phantom Pain, acompanhando a lendária figura de Big Boss.`
+};
+
+// Ano de lançamento e desenvolvedora (preenchido via busca na API)
+const anoDev = {
+  124: { ano: "2021", dev: "Square Enix / Arzest" },
+  125: { ano: "2016", dev: "Quantic Dream" },
+  126: { ano: "2019", dev: "Gearbox Software" },
+  127: { ano: "2015", dev: "Treyarch" },
+  128: { ano: "2020", dev: "CD Projekt Red" },
+  129: { ano: "2017", dev: "FromSoftware" },
+  130: { ano: "2019", dev: "Kojima Productions" },
+  131: { ano: "2018", dev: "Quantic Dream" },
+  132: { ano: "2014", dev: "Blizzard Entertainment" },
+  133: { ano: "2018", dev: "Ubisoft Montreal" },
+  134: { ano: "2021", dev: "Ubisoft Toronto" },
+  135: { ano: "2015", dev: "EA Vancouver" },
+  136: { ano: "2016", dev: "EA Vancouver" },
+  137: { ano: "2018", dev: "EA Vancouver" },
+  138: { ano: "2019", dev: "EA Vancouver" },
+  139: { ano: "2020", dev: "EA Vancouver" },
+  140: { ano: "2022", dev: "EA Vancouver" },
+  141: { ano: "2020", dev: "Sucker Punch Productions" },
+  142: { ano: "2022", dev: "Santa Monica Studio" },
+  143: { ano: "2017", dev: "SIE Japan Studio" },
+  144: { ano: "2020", dev: "Supergiant Games" },
+  145: { ano: "2013", dev: "Quantic Dream" },
+  146: { ano: "2016", dev: "Dambuster Studios" },
+  147: { ano: "2020", dev: "Ubisoft Quebec" },
+  148: { ano: "2020", dev: "Naughty Dog" },
+  149: { ano: "2014", dev: "Kojima Productions" },
+  150: { ano: "2016", dev: "Comcept" },
+  151: { ano: "2016", dev: "CyberConnect2" },
+  152: { ano: "2020", dev: "Team Ninja" },
+  153: { ano: "2024", dev: "Ubisoft Montpellier" },
+  154: { ano: "2019", dev: "Avalanche Studios / id Software" },
+  155: { ano: "2018", dev: "Rockstar Games" },
+  156: { ano: "2017", dev: "Capcom" },
+  157: { ano: "2020", dev: "Easy Day Studios" },
+  158: { ano: "2016", dev: "Insomniac Games" },
+  159: { ano: "2017", dev: "Ubisoft San Francisco" },
+  160: { ano: "2018", dev: "Insomniac Games" },
+  161: { ano: "2020", dev: "Insomniac Games" },
+  162: { ano: "2019", dev: "Respawn Entertainment" },
+  163: { ano: "2015", dev: "DICE" },
+  164: { ano: "2022", dev: "BlueTwelve Studio" },
+  165: { ano: "2017", dev: "Monolith Productions" },
+  166: { ano: "2021", dev: "Supermassive Games" },
+  167: { ano: "2020", dev: "Supermassive Games" },
+  168: { ano: "2014", dev: "Tango Gameworks" },
+  169: { ano: "2016", dev: "genDesign / SIE Japan Studio" },
+  170: { ano: "2020", dev: "Naughty Dog" },
+  171: { ano: "2016", dev: "Telltale Games" },
+  172: { ano: "2020", dev: "Vicarious Visions" },
+  173: { ano: "2016", dev: "Naughty Dog" },
+  174: { ano: "2016", dev: "Naughty Dog" },
+  200: { ano: "2017", dev: "PlatinumGames" },
+  201: { ano: "2011", dev: "Atlus" },
+  202: { ano: "2010", dev: "tri-Ace" },
+  203: { ano: "2008", dev: "Sega" },
+  204: { ano: "2013", dev: "Bandai Namco Studios" },
+  205: { ano: "2010", dev: "Level-5" },
+  206: { ano: "2012", dev: "Ryu Ga Gotoku Studio" },
+  207: { ano: "2017", dev: "Tango Gameworks" },
+  208: { ano: "2017", dev: "Lion Game Lion" },
+  209: { ano: "2019", dev: "Remedy Entertainment" },
+  210: { ano: "2018", dev: "Soleil Ltd." },
+  211: { ano: "2015", dev: "Naughty Dog" },
+  212: { ano: "2015", dev: "Naughty Dog" },
+  213: { ano: "2017", dev: "Naughty Dog" },
+  214: { ano: "2019", dev: "Ubisoft Montreal" },
+  215: { ano: "2018", dev: "DICE" },
+  216: { ano: "2022", dev: "Bandai Namco Entertainment" },
+  217: { ano: "2017", dev: "EA Vancouver" },
+  218: { ano: "2013", dev: "EA Canada" },
+  219: { ano: "2016", dev: "Team6 Game Studios" },
+  220: { ano: "2014", dev: "Haemimont Games" },
+  221: { ano: "2019", dev: "NetherRealm Studios" },
+  222: { ano: "2018", dev: "Santa Monica Studio" },
+  223: { ano: "2015", dev: "Kojima Productions" }
+};
+
+const canais = [
+  { id:1, n:"Diego Sheth", plat:"youtube", link:"https://www.youtube.com/live/KcYAtGqUbog", avatarHandle:"DiegoSheth", avatarUrlOverride:"https://yt3.googleusercontent.com/bMa8L3IRHCbcr3i6wNBRWp4gRoFwk4W9I-CUPRF4ikQMw8pZ07cLGbXtWFGPJ7Vf4lO9JxEJ4A=s160-c-k-c0x00ffffff-no-rj", horario:"📅 Live toda sexta-feira", dias:[5], nota:"Foco: variedade geral. Preço bom. Já comprei." },
+  { id:2, n:"Antec.r", plat:"youtube", link:"https://www.youtube.com/@antec.r", horario:"📅 Lives quinta e domingo", dias:[4,7], nota:"Foco: variedade geral. Preço bom. Já comprei." },
+  { id:3, n:"Garimpo dos Games", plat:"youtube", link:"https://www.youtube.com/@Garimpodosgames", horario:"📅 Lives às segundas-feiras", dias:[1], nota:"Foco: consoles usados. Preços bons. Já comprei." },
+  { id:4, n:"Cara de Barata", plat:"youtube", link:"https://www.youtube.com/@caradebarata", horario:"🌐 Vendas online", dias:[], nota:"Foco: vendas online gerais. Preços bons. Já comprei." },
+  { id:5, n:"DJ Games Retro", plat:"youtube", link:"https://www.youtube.com/@djgamesretro", horario:"📅 Lives às terças-feiras", dias:[2], nota:"Foco: variedade de jogos. Preços bons. Já comprei." },
+  { id:6, n:"Jotape Arcade", plat:"youtube", link:"https://www.youtube.com/@JotapeArcade", horario:"📅 Live aos domingos", dias:[7], nota:"Foco: jogos retro. Bons preços. Já comprei." },
+  { id:7, n:"Sigchap", plat:"youtube", link:"https://www.youtube.com/@sigchap", horario:"📅 Lives, leilões e vendas", dias:[], nota:"Foco: raridades e itens exclusivos. Já comprei." },
+  { id:8, n:"D Games Brasil", plat:"instagram", link:"https://www.instagram.com/dgames_brasil/", avatarUrlOverride:"https://yt3.googleusercontent.com/iDwuVPfYmdQPI18ub68Ukq75T-tQawSnN2N96UjXUsgLhLNsNgJlx87bFCp80F_na8dAyYdOGQ=s900-c-k-c0x00ffffff-no-rj", horario:"📅 Lives todas as quintas", dias:[4], nota:"Foco: games repro. Já comprei." },
+  { id:9, n:"Rodrigo Retro Games", plat:"youtube", link:"https://www.youtube.com/@RodrigoRetroGames", horario:"📅 Lives às terças-feiras", dias:[2], nota:"Foco: variedade de jogos. Preços bons, com lives especiais de R$30. Já comprei." },
+  { id:10, n:"Maicon Games", plat:"loja", link:"https://www.maicongames.com.br/", instagram:"https://www.instagram.com/loja_maicon_games/", avatarUrlOverride:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnVqWl7Qh2y9WnWSHo0SPuCNoRJBlGWWwmA_UjRdB2JuZmhMtC", horario:"🌐 Loja online", dias:[], nota:"Foco: loja de jogos e consoles diversos." },
+  { id:11, n:"Silvio Play Games", plat:"loja", link:"https://silvioplay-games.lojaintegrada.com.br/ps4", instagram:"https://www.instagram.com/silvioinnocenzi/", avatarUrlOverride:"https://yt3.googleusercontent.com/ytc/AIdro_mfsadq9lN0bbGoU8nrCuJNiQjeZ3OSEArw_HahY2XYgA=s900-c-k-c0x00ffffff-no-rj", horario:"🌐 Loja online", dias:[], nota:"Foco: loja especializada em jogos de PS4." },
+];
+
+let jogosExtra = JSON.parse(localStorage.getItem('jogosExtra_ps4')) || [];
 let favoritos = JSON.parse(localStorage.getItem('favoritos_ps4')) || [];
+let notas = JSON.parse(localStorage.getItem('notas_ps4')) || {};
+let comparando = JSON.parse(sessionStorage.getItem('comparando_ps4')) || [];
+let vistaAtual = localStorage.getItem('vista_ps4') || 'grid';
 let filtroAtivo = 'all';
 let plataformaAtiva = 'all';
 let termoBusca = '';
+let ordemAtiva = 'none';
+let listaAtual = [];
+
+const rarOrder = { muito:0, raro:1, pouco:2, comum:3 };
 
 const catLabel = { exclusivo:"Exclusivo", aaa:"AAA", fps:"FPS", survival:"Survival", esporte:"Esporte", infantil:"Infantil", raro:"Raro" };
 const rarClass = { comum:"b-comum", pouco:"b-pouco", raro:"b-raro", muito:"b-muito" };
@@ -448,30 +1096,50 @@ function gerarLink(nome, plat){
   return `https://lista.mercadolivre.com.br/${encodeURIComponent(nome)}+${plat}`;
 }
 
+function todosJogos(){
+  return jogos.concat(jogosExtra);
+}
+
 function render(){
   const grid = document.getElementById('grid');
   const termo = termoBusca.toLowerCase().trim();
   let html = '';
-  let visiveis = 0, soma = 0;
+  let visiveis = 0;
 
-  for(const j of jogos){
-    if(!j.n.toLowerCase().includes(termo)) continue;
-    if(filtroAtivo !== 'all' && j.cat !== filtroAtivo) continue;
-    if(plataformaAtiva !== 'all' && j.plat !== plataformaAtiva) continue;
-    visiveis++; soma += j.col;
+  let lista = todosJogos().filter(j => {
+    if(!j.n.toLowerCase().includes(termo)) return false;
+    if(filtroAtivo !== 'all' && j.cat !== filtroAtivo) return false;
+    if(plataformaAtiva !== 'all' && j.plat !== plataformaAtiva) return false;
+    return true;
+  });
+
+  // ordenação
+  if(ordemAtiva === 'nome-az') lista.sort((a,b)=>a.n.localeCompare(b.n));
+  else if(ordemAtiva === 'nome-za') lista.sort((a,b)=>b.n.localeCompare(a.n));
+  else if(ordemAtiva === 'valor-desc') lista.sort((a,b)=> Math.round((b.col+b.bar)/2) - Math.round((a.col+a.bar)/2));
+  else if(ordemAtiva === 'valor-asc') lista.sort((a,b)=> Math.round((a.col+a.bar)/2) - Math.round((b.col+b.bar)/2));
+  else if(ordemAtiva === 'raridade') lista.sort((a,b)=> rarOrder[a.rar] - rarOrder[b.rar]);
+
+  listaAtual = lista;
+
+  for(const j of lista){
+    visiveis++;
 
     const isFav = favoritos.includes(j.id) ? 'active' : '';
+    const isComparando = comparando.includes(j.id) ? 'active' : '';
     const capaUrl = capas[j.id];
     const inicial = j.n.charAt(0).toUpperCase();
     const coverInner = capaUrl
-      ? `<img src="${capaUrl}" alt="${j.n}">`
+      ? `<img src="${capaUrl}" alt="${j.n}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'cover-fallback\\'><span class=\\'ini\\'>${inicial}</span><span class=\\'tag\\'>capa indisponível</span></div>'">`
       : `<div class="cover-fallback"><span class="ini">${inicial}</span><span class="tag">sem capa ainda</span></div>`;
+    const valorPago = Math.round((j.col + j.bar) / 2);
 
     html += `
       <div class="card">
-        <div class="cover-wrap">
+        <div class="cover-wrap" data-open-id="${j.id}">
           <span class="plat-chip">${j.plat}</span>
           <button class="fav-btn ${isFav}" data-id="${j.id}">⭐</button>
+          <button class="compare-btn ${isComparando}" data-id="${j.id}" title="Comparar">⚖️</button>
           ${coverInner}
         </div>
         <div class="card-body">
@@ -482,8 +1150,7 @@ function render(){
             ${j.v ? '<span class="badge" style="background:rgba(79,178,134,.2);color:#4fb286;">✓ preço verificado</span>' : '<span class="badge" style="background:rgba(255,255,255,.06);color:var(--ink-dim);">preço a confirmar</span>'}
           </div>
           <div class="prices">
-            <div><span class="v">R$ ${j.col}</span><span class="l">Colecionador</span></div>
-            <div><span class="v">R$ ${j.bar}</span><span class="l">Venda rápida</span></div>
+            <div><span class="l">Valor pago: </span><span class="v">R$ ${valorPago}</span></div>
           </div>
           <div class="card-foot">
             <a href="${gerarLink(j.n, j.plat)}" target="_blank">Ver no Mercado Livre →</a>
@@ -494,11 +1161,20 @@ function render(){
   }
 
   grid.innerHTML = html;
+  grid.className = 'grid' + (vistaAtual === 'list' ? ' list-view' : '');
   document.getElementById('resultCount').textContent = `${visiveis} jogos exibidos`;
-  document.getElementById('statTotal').textContent = jogos.length;
-  document.getElementById('statValor').textContent = `R$ ${jogos.reduce((s,j)=>s+j.col,0)}`;
-  document.getElementById('statUsado').textContent = `R$ ${jogos.reduce((s,j)=>s+j.loj,0)}`;
+  document.getElementById('statTotal').textContent = todosJogos().length;
+
+  const totalPago = todosJogos().reduce((s,j)=>s+Math.round((j.col+j.bar)/2),0);
+  const totalPS4 = todosJogos().filter(j=>j.plat==='PS4').reduce((s,j)=>s+Math.round((j.col+j.bar)/2),0);
+  const totalPS3 = todosJogos().filter(j=>j.plat==='PS3').reduce((s,j)=>s+Math.round((j.col+j.bar)/2),0);
+  document.getElementById('statValor').textContent = `R$ ${totalPago}`;
+  document.getElementById('statValorPS4').textContent = `R$${totalPS4}`;
+  document.getElementById('statValorPS3').textContent = `R$${totalPS3}`;
   document.getElementById('statFav').textContent = favoritos.length;
+
+  renderRarityChart();
+  renderHighlights();
 
   document.querySelectorAll('.fav-btn').forEach(btn=>{
     btn.addEventListener('click', function(e){
@@ -510,6 +1186,218 @@ function render(){
       render();
     });
   });
+
+  document.querySelectorAll('.compare-btn').forEach(btn=>{
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      const id = parseInt(this.dataset.id);
+      const idx = comparando.indexOf(id);
+      if(idx>-1){
+        comparando.splice(idx,1);
+      } else {
+        if(comparando.length >= 3){
+          alert('Você pode comparar no máximo 3 jogos por vez.');
+          return;
+        }
+        comparando.push(id);
+      }
+      sessionStorage.setItem('comparando_ps4', JSON.stringify(comparando));
+      render();
+    });
+  });
+
+  document.querySelectorAll('.cover-wrap').forEach(cw=>{
+    cw.addEventListener('click', function(){
+      const id = parseInt(this.dataset.openId);
+      abrirModal(id);
+    });
+  });
+}
+
+function avatarUrl(c){
+  if(c.avatarUrlOverride) return c.avatarUrlOverride;
+  const plat = c.avatarPlat || c.plat;
+  if(plat === 'youtube'){
+    const handle = c.avatarHandle || c.link.split('@')[1]?.replace(/\/$/, '');
+    return `https://unavatar.io/youtube/${handle}`;
+  }
+  if(plat === 'instagram'){
+    const handle = c.avatarHandle || c.link.split('instagram.com/')[1]?.replace(/\/$/, '');
+    return `https://unavatar.io/instagram/${handle}`;
+  }
+  return '';
+}
+
+let ordenarPorDia = false;
+
+function renderCanais(){
+  const grid = document.getElementById('gridCanais');
+  if(!grid) return;
+  let html = '';
+  const platLabels = { youtube:"YouTube", instagram:"Instagram", loja:"Loja Online" };
+  const nomesDias = ["", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+
+  let lista = [...canais];
+  if(ordenarPorDia){
+    lista.sort((a,b)=>{
+      const diaA = a.dias.length ? Math.min(...a.dias) : 8;
+      const diaB = b.dias.length ? Math.min(...b.dias) : 8;
+      return diaA - diaB;
+    });
+  }
+
+  for(const c of lista){
+    const inicial = c.n.charAt(0).toUpperCase();
+    const platLabel = platLabels[c.plat] || c.plat;
+    const avatar = avatarUrl(c);
+    const instaLink = c.instagram
+      ? `<a href="${c.instagram}" target="_blank" class="canal-insta-link" onclick="event.stopPropagation()">📸 Instagram</a>`
+      : '';
+    const diaBadge = (ordenarPorDia && c.dias.length)
+      ? `<span class="canal-dia-badge">${c.dias.map(d=>nomesDias[d]).join(' e ')}</span>`
+      : '';
+    html += `
+      <div class="canal-card" data-link="${c.link}">
+        <div class="canal-top">
+          <span class="canal-plat-badge ${c.plat}">${platLabel}</span>
+          ${diaBadge}
+          <img src="${avatar}" alt="${c.n}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ini',textContent:'${inicial}'}))">
+        </div>
+        <div class="canal-body">
+          <h3>${c.n}</h3>
+          <div class="canal-info"><b>${c.horario}</b></div>
+          <div class="canal-info">${c.nota}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+            <div class="canal-cta">Abrir →</div>
+            ${instaLink}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  grid.innerHTML = html;
+  grid.querySelectorAll('.canal-card').forEach(card=>{
+    card.addEventListener('click', function(){
+      window.open(this.dataset.link, '_blank');
+    });
+  });
+}
+
+function renderHighlights(){
+  const el = document.getElementById('highlightRow');
+  if(!todosJogos().length){ el.innerHTML = ''; return; }
+  const ordenados = [...jogos].sort((a,b)=> Math.round((b.col+b.bar)/2) - Math.round((a.col+a.bar)/2));
+  const maisValioso = ordenados[0];
+  const menosValioso = ordenados[ordenados.length-1];
+  el.innerHTML = `
+    <div class="highlight-card"><div class="n">👑 ${maisValioso.n}</div><div class="l">Mais valioso — R$ ${Math.round((maisValioso.col+maisValioso.bar)/2)}</div></div>
+    <div class="highlight-card"><div class="n">💸 ${menosValioso.n}</div><div class="l">Mais em conta — R$ ${Math.round((menosValioso.col+menosValioso.bar)/2)}</div></div>
+  `;
+}
+
+function renderRarityChart(){
+  const el = document.getElementById('rarityChart');
+  const ordem = ['muito','raro','pouco','comum'];
+  const total = todosJogos().length;
+  let html = '<div class="rc-title">Distribuição por raridade</div>';
+  for(const r of ordem){
+    const count = todosJogos().filter(j=>j.rar===r).length;
+    const pct = total ? Math.round((count/total)*100) : 0;
+    html += `
+      <div class="rc-row">
+        <span class="rc-label">${rarLabel[r]}</span>
+        <div class="rc-bar-bg"><div class="rc-bar-fill" style="width:${pct}%"></div></div>
+        <span class="rc-count">${count}</span>
+      </div>
+    `;
+  }
+  el.innerHTML = html;
+}
+
+function abrirModal(id){
+  const j = todosJogos().find(x => x.id === id);
+  if(!j) return;
+  const frente = capas[id];
+  const verso = capasVerso[id];
+
+  const overlay = document.getElementById('modalOverlay');
+  overlay.dataset.currentId = id;
+  const imgFront = document.getElementById('modalImgFront');
+  const imgBack = document.getElementById('modalImgBack');
+  const flipInner = document.getElementById('modalFlipInner');
+  const titleEl = document.getElementById('modalTitle');
+  const platEl = document.getElementById('modalPlat');
+  const toggleBtn = document.getElementById('modalToggleBtn');
+  const shareBtn = document.getElementById('modalShareBtn');
+
+  imgFront.src = frente || '';
+  imgBack.src = verso || frente || '';
+  flipInner.classList.remove('flipped');
+  titleEl.textContent = j.n;
+  platEl.textContent = j.plat;
+
+  if(verso){
+    toggleBtn.style.display = 'inline-flex';
+    toggleBtn.textContent = '🔄 Ver verso';
+    toggleBtn.onclick = function(){
+      flipInner.classList.toggle('flipped');
+      this.textContent = flipInner.classList.contains('flipped') ? '🔄 Ver frente' : '🔄 Ver verso';
+    };
+  } else {
+    toggleBtn.style.display = 'none';
+  }
+
+  shareBtn.onclick = function(){
+    const url = `${location.origin}${location.pathname}#jogo-${id}`;
+    if(navigator.share){
+      navigator.share({ title: j.n, text: `${j.n} — Controle Coleção iamT`, url });
+    } else {
+      navigator.clipboard.writeText(url).then(()=>{
+        const original = this.textContent;
+        this.textContent = '✓ Link copiado!';
+        setTimeout(()=>{ this.textContent = original; }, 1800);
+      });
+    }
+  };
+
+  // Sinopse
+  const sinopseEl = document.getElementById('modalSinopse');
+  sinopseEl.textContent = sinopses[id] || j.sinopse || 'Sinopse não disponível ainda.';
+
+  // Ano de lançamento e desenvolvedora
+  const anoDevEl = document.getElementById('modalAnoDev');
+  const info = anoDev[id] || {};
+  const ano = info.ano || j.ano;
+  const dev = info.dev || j.dev;
+  const partes = [];
+  if(ano) partes.push(ano);
+  if(dev) partes.push(dev);
+  anoDevEl.textContent = partes.length ? partes.join(' · ') : '';
+
+  // Nota (estrelas clicáveis, salvas localmente)
+  const ratingEl = document.getElementById('modalRating');
+  const notaAtual = notas[id] || 0;
+  function desenharEstrelas(nota){
+    ratingEl.innerHTML = '';
+    for(let i=1; i<=5; i++){
+      const s = document.createElement('span');
+      s.className = 'star' + (i <= nota ? ' filled' : '');
+      s.textContent = '★';
+      s.onclick = function(){
+        notas[id] = (notas[id] === i) ? 0 : i; // clicar na mesma estrela zera
+        localStorage.setItem('notas_ps4', JSON.stringify(notas));
+        desenharEstrelas(notas[id]);
+      };
+      ratingEl.appendChild(s);
+    }
+  }
+  desenharEstrelas(notaAtual);
+
+  overlay.classList.add('active');
+}
+
+function fecharModal(){
+  document.getElementById('modalOverlay').classList.remove('active');
 }
 
 document.getElementById('searchInput').addEventListener('input', function(){
@@ -532,7 +1420,319 @@ document.querySelectorAll('#platContainer button').forEach(btn=>{
   });
 });
 
+document.getElementById('sortSelect').addEventListener('change', function(){
+  ordemAtiva = this.value; render();
+});
+
+document.getElementById('imprimirBtn').addEventListener('click', function(){
+  const disponiveis = todosJogos();
+  const dataHoje = new Date().toLocaleDateString('pt-BR');
+  const totalValor = disponiveis.reduce((s,j)=>s+Math.round((j.col+j.bar)/2),0);
+
+  let html = `
+    <div class="print-header">
+      <h1>Controle Coleção iamT</h1>
+      <p>Catálogo de jogos — gerado em ${dataHoje}</p>
+    </div>
+    <div class="print-summary">
+      <div><b>${disponiveis.length}</b>Jogos no catálogo</div>
+      <div><b>R$ ${totalValor}</b>Valor total pago</div>
+      <div><b>${disponiveis.filter(j=>j.plat==='PS4').length}</b>PS4</div>
+      <div><b>${disponiveis.filter(j=>j.plat==='PS3').length}</b>PS3</div>
+    </div>
+  `;
+
+  for(const plat of ['PS4','PS3']){
+    const lista = disponiveis.filter(j=>j.plat===plat).sort((a,b)=>a.n.localeCompare(b.n));
+    if(!lista.length) continue;
+    html += `<div class="print-plat-title">${plat} — ${lista.length} jogos</div>`;
+    html += `<table class="print-table"><thead><tr>
+      <th>Jogo</th><th>Categoria</th><th>Raridade</th><th>Valor pago</th>
+    </tr></thead><tbody>`;
+    for(const j of lista){
+      const valorPago = Math.round((j.col + j.bar) / 2);
+      html += `<tr>
+        <td>${j.n}</td>
+        <td>${catLabel[j.cat]}</td>
+        <td><span class="print-rar">${rarLabel[j.rar]}</span></td>
+        <td>R$ ${valorPago}</td>
+      </tr>`;
+    }
+    html += `</tbody></table>`;
+  }
+
+  html += `<div class="print-footer">Controle Coleção iamT — instagram.com/iamtgames</div>`;
+
+  document.getElementById('printArea').innerHTML = html;
+  window.print();
+});
+
+document.getElementById('exportarBtn').addEventListener('click', function(){
+  let texto = "CONTROLE COLEÇÃO iamT\n";
+  texto += "========================\n\n";
+  const disponiveis = todosJogos();
+  for(const plat of ['PS4','PS3']){
+    const lista = disponiveis.filter(j=>j.plat===plat).sort((a,b)=>a.n.localeCompare(b.n));
+    if(!lista.length) continue;
+    texto += `--- ${plat} ---\n`;
+    for(const j of lista){
+      const valorPago = Math.round((j.col + j.bar) / 2);
+      texto += `${j.n} — R$ ${valorPago} (${rarLabel[j.rar]})\n`;
+    }
+    texto += "\n";
+  }
+  texto += `Total de jogos à venda: ${disponiveis.length}\n`;
+  texto += `Valor total: R$ ${disponiveis.reduce((s,j)=>s+Math.round((j.col+j.bar)/2),0)}\n`;
+
+  const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'colecao_iamt.txt';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+// TEMA CLARO/ESCURO
+const temaBtn = document.getElementById('temaBtn');
+if(localStorage.getItem('tema_ps4') === 'claro'){
+  document.body.classList.add('tema-claro');
+  temaBtn.textContent = '☀️';
+}
+temaBtn.addEventListener('click', function(){
+  document.body.classList.toggle('tema-claro');
+  const claro = document.body.classList.contains('tema-claro');
+  localStorage.setItem('tema_ps4', claro ? 'claro' : 'escuro');
+  this.textContent = claro ? '☀️' : '🌙';
+});
+
+// VISTA GRADE/LISTA
+document.getElementById('viewToggle').addEventListener('click', function(){
+  vistaAtual = vistaAtual === 'grid' ? 'list' : 'grid';
+  localStorage.setItem('vista_ps4', vistaAtual);
+  this.textContent = vistaAtual === 'list' ? '🔲 Ver em grade' : '📋 Ver em lista';
+  render();
+});
+
+// COMPARADOR
+document.getElementById('compararToggle').addEventListener('click', function(){
+  const overlay = document.getElementById('compareOverlay');
+  const content = document.getElementById('compareContent');
+  if(!comparando.length){
+    content.innerHTML = 'Selecione até 3 jogos usando o botão "⚖️" nos cards.';
+  } else {
+    const selecionados = todosJogos().filter(j => comparando.includes(j.id));
+    let html = '<table class="compare-table"><thead><tr><th>Jogo</th><th>Plataforma</th><th>Raridade</th><th>Valor pago</th></tr></thead><tbody>';
+    for(const j of selecionados){
+      html += `<tr><td>${j.n}</td><td>${j.plat}</td><td>${rarLabel[j.rar]}</td><td>R$ ${Math.round((j.col+j.bar)/2)}</td></tr>`;
+    }
+    html += '</tbody></table>';
+    content.innerHTML = html;
+  }
+  overlay.classList.add('active');
+});
+document.getElementById('compareClose').addEventListener('click', function(){
+  document.getElementById('compareOverlay').classList.remove('active');
+});
+
+// QR CODE
+document.getElementById('qrBtn').addEventListener('click', function(){
+  const url = location.href.split('#')[0];
+  document.getElementById('qrImg').src = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(url)}`;
+  document.getElementById('qrOverlay').classList.add('active');
+});
+document.getElementById('qrClose').addEventListener('click', function(){
+  document.getElementById('qrOverlay').classList.remove('active');
+});
+
+// FORMULARIO DE CONTATO (abre o cliente de e-mail do usuário, pré-preenchido)
+document.getElementById('contatoBtn').addEventListener('click', function(){
+  document.getElementById('contatoOverlay').classList.add('active');
+});
+document.getElementById('contatoClose').addEventListener('click', function(){
+  document.getElementById('contatoOverlay').classList.remove('active');
+});
+document.getElementById('contatoForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const form = this;
+  const nome = document.getElementById('contatoNome').value;
+  const email = document.getElementById('contatoEmail').value;
+  const msg = document.getElementById('contatoMsg').value;
+  const submitBtn = form.querySelector('button[type="submit"]');
+  const textoOriginal = submitBtn.textContent;
+  submitBtn.textContent = 'Enviando...';
+  submitBtn.disabled = true;
+
+  fetch('https://formspree.io/f/xzdngekp', {
+    method: 'POST',
+    headers: { 'Accept': 'application/json' },
+    body: new FormData(form)
+  }).then(response => {
+    if(response.ok){
+      submitBtn.textContent = '✓ Enviado com sucesso!';
+      form.reset();
+      setTimeout(()=>{
+        submitBtn.textContent = textoOriginal;
+        submitBtn.disabled = false;
+        document.getElementById('contatoOverlay').classList.remove('active');
+      }, 1800);
+    } else {
+      submitBtn.textContent = '✗ Erro ao enviar, tente novamente';
+      submitBtn.disabled = false;
+      setTimeout(()=>{ submitBtn.textContent = textoOriginal; }, 2500);
+    }
+  }).catch(()=>{
+    submitBtn.textContent = '✗ Erro de conexão';
+    submitBtn.disabled = false;
+    setTimeout(()=>{ submitBtn.textContent = textoOriginal; }, 2500);
+  });
+});
+
+// CONTADOR DE VISUALIZAÇÕES (por navegador, local)
+(function(){
+  let views = parseInt(localStorage.getItem('views_ps4') || '0', 10) + 1;
+  localStorage.setItem('views_ps4', views);
+  document.getElementById('viewsCount').textContent = `${views} visualizações neste navegador`;
+})();
+
+// PAINEL DE ADMIN (acessível via ?admin=true na URL)
+function ehAdmin(){
+  return new URLSearchParams(location.search).get('admin') === 'true';
+}
+
+function renderAdminLista(){
+  const el = document.getElementById('adminLista');
+  if(!jogosExtra.length){ el.innerHTML = '<p class="modal-extra">Nenhum jogo adicionado ainda neste navegador.</p>'; return; }
+  let html = '<p class="modal-extra" style="margin-bottom:8px;">Jogos adicionados neste navegador:</p>';
+  jogosExtra.forEach(j=>{
+    html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--line-soft); font-size:12px;">
+      <span>${j.n} (${j.plat})</span>
+      <button data-remove-id="${j.id}" class="modal-close" style="position:static; width:24px; height:24px; font-size:11px;">✕</button>
+    </div>`;
+  });
+  el.innerHTML = html;
+  el.querySelectorAll('[data-remove-id]').forEach(btn=>{
+    btn.addEventListener('click', function(){
+      const id = parseInt(this.dataset.removeId);
+      jogosExtra = jogosExtra.filter(j=>j.id !== id);
+      localStorage.setItem('jogosExtra_ps4', JSON.stringify(jogosExtra));
+      renderAdminLista();
+      render();
+    });
+  });
+}
+
+if(ehAdmin()){
+  document.getElementById('adminBtn').style.display = 'flex';
+}
+
+document.getElementById('adminBtn')?.addEventListener('click', function(){
+  renderAdminLista();
+  document.getElementById('adminOverlay').classList.add('active');
+});
+document.getElementById('adminClose').addEventListener('click', function(){
+  document.getElementById('adminOverlay').classList.remove('active');
+});
+
+function lerFormAdmin(){
+  const nome = document.getElementById('admNome').value.trim();
+  if(!nome) return null;
+  return {
+    id: Date.now(),
+    n: nome,
+    plat: document.getElementById('admPlat').value,
+    cat: document.getElementById('admCat').value,
+    rar: document.getElementById('admRar').value,
+    col: parseInt(document.getElementById('admCol').value) || 0,
+    bar: parseInt(document.getElementById('admBar').value) || 0,
+    loj: 0, caro: 0, v: false,
+    capa: document.getElementById('admCapa').value.trim(),
+    verso: document.getElementById('admVerso').value.trim(),
+    ano: document.getElementById('admAno').value.trim(),
+    dev: document.getElementById('admDev').value.trim(),
+    sinopse: document.getElementById('admSinopse').value.trim(),
+  };
+}
+
+document.getElementById('adminForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const dados = lerFormAdmin();
+  if(!dados) return;
+  const { capa, verso, ...jogoObj } = dados;
+  jogosExtra.push(jogoObj);
+  localStorage.setItem('jogosExtra_ps4', JSON.stringify(jogosExtra));
+  if(capa) capas[jogoObj.id] = capa;
+  if(verso) capasVerso[jogoObj.id] = verso;
+  if(jogoObj.sinopse) sinopses[jogoObj.id] = jogoObj.sinopse;
+  this.reset();
+  renderAdminLista();
+  render();
+});
+
+document.getElementById('admGerarCodigo').addEventListener('click', function(){
+  const dados = lerFormAdmin();
+  const area = document.getElementById('admCodigoGerado');
+  if(!dados){
+    area.style.display = 'block';
+    area.value = 'Preencha ao menos o nome do jogo antes de gerar o código.';
+    return;
+  }
+  const linhaJogo = `  { id:${dados.id}, n:"${dados.n}", cat:"${dados.cat}", col:${dados.col}, loj:${dados.col}, bar:${dados.bar}, caro:${dados.col}, rar:"${dados.rar}", v:false, plat:"${dados.plat}" },`;
+  let codigo = `// Cole esta linha dentro de "const jogos = [ ... ]":\n${linhaJogo}\n`;
+  if(dados.capa) codigo += `\n// Cole esta linha dentro de "const capas = { ... }":\n  ${dados.id}: "${dados.capa}",\n`;
+  if(dados.verso) codigo += `\n// Cole esta linha dentro de "const capasVerso = { ... }":\n  ${dados.id}: "${dados.verso}",\n`;
+  if(dados.sinopse) codigo += `\n// Cole esta linha dentro de "const sinopses = { ... }":\n  ${dados.id}: \`${dados.sinopse}\`,\n`;
+  if(dados.ano || dados.dev) codigo += `\n// Cole esta linha dentro de "const anoDev = { ... }":\n  ${dados.id}: { ano: "${dados.ano}", dev: "${dados.dev}" },\n`;
+  area.style.display = 'block';
+  area.value = codigo;
+  area.select();
+});
+
+// BOTAO VOLTAR AO TOPO
+const topBtn = document.getElementById('topBtn');
+window.addEventListener('scroll', function(){
+  topBtn.classList.toggle('show', window.scrollY > 500);
+});
+topBtn.addEventListener('click', function(){
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+});
+
 render();
+renderCanais();
+
+document.getElementById('canaisToggleCard').addEventListener('click', function(){
+  const grid = document.getElementById('gridCanais');
+  const sortWrap = document.getElementById('canaisSortWrap');
+  const arrow = document.getElementById('canaisToggleArrow');
+  const aberto = grid.style.display !== 'none';
+  grid.style.display = aberto ? 'none' : 'grid';
+  sortWrap.style.display = aberto ? 'none' : 'block';
+  arrow.classList.toggle('open', !aberto);
+});
+
+document.getElementById('ordenarDiaBtn').addEventListener('click', function(){
+  ordenarPorDia = !ordenarPorDia;
+  this.classList.toggle('active', ordenarPorDia);
+  this.textContent = ordenarPorDia ? '↩️ Ordem original' : '📅 Ordenar por dia da semana';
+  renderCanais();
+});
+
+document.getElementById('modalOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharModal();
+});
+document.getElementById('modalClose').addEventListener('click', fecharModal);
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape') fecharModal();
+  const modalAberto = document.getElementById('modalOverlay').classList.contains('active');
+  if(modalAberto && (e.key === 'ArrowRight' || e.key === 'ArrowLeft')){
+    const idAtual = parseInt(document.getElementById('modalOverlay').dataset.currentId);
+    const idx = listaAtual.findIndex(j => j.id === idAtual);
+    if(idx === -1) return;
+    let novoIdx;
+    if(e.key === 'ArrowRight') novoIdx = (idx + 1) % listaAtual.length;
+    else novoIdx = (idx - 1 + listaAtual.length) % listaAtual.length;
+    abrirModal(listaAtual[novoIdx].id);
+  }
+});
 </script>
 </body>
 </html>
