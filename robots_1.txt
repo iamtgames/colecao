@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://iamtgames.github.io/colecao/sitemap.xml
