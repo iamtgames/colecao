@@ -1,0 +1,16 @@
+{
+  "name": "Controle Coleção iamT",
+  "short_name": "Coleção iamT",
+  "description": "Catálogo pessoal de jogos PS4 e PS3 com preços, capas, sinopses e raridade.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0b0c",
+  "theme_color": "#0b0b0c",
+  "lang": "pt-BR",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512-maskable.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

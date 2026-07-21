@@ -15,6 +15,7 @@
 <meta name="twitter:image" content="https://iamtgames.github.io/colecao/og-image.png">
 <meta name="theme-color" content="#0b0b0c">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230b0b0c'/%3E%3Ctext x='50' y='66' font-size='55' font-family='Arial' font-weight='900' fill='white' text-anchor='middle'%3EiT%3C/text%3E%3C/svg%3E">
+<link rel="manifest" href="manifest.json">
 <title>Controle Coleção iamT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -650,7 +651,9 @@
 
   <div class="grid" id="grid"></div>
   <div class="result-count" id="resultCount"></div>
-  <div class="views-count" id="viewsCount"></div>
+  <div class="views-count" id="viewsCount">
+    <img src="https://visitor-badge.laobi.icu/badge?page_id=iamtgames.colecao&style=flat&color=222327&text=Visitas" alt="Contador de visitas" style="height:20px; vertical-align:middle; border-radius:6px;">
+  </div>
 
   <div class="tools" style="margin-top:18px;">
     <button class="toggle-venda" id="exportarBtn">⬇️ Exportar lista (.txt)</button>
@@ -669,6 +672,10 @@
     <div class="rarity-chart" id="decadaChart"></div>
     <div class="rarity-chart" id="devChart"></div>
   </div>
+
+  <div class="rarity-chart" id="perfilChart" style="margin-bottom:18px;"></div>
+
+  <div id="giscus-comments" style="margin: 10px 0 30px;"></div>
 
   <div class="footer">Controle Coleção iamT</div>
 </div>
@@ -691,6 +698,7 @@
         <div class="modal-actions">
           <button class="modal-toggle-btn" id="modalToggleBtn" style="display:none;"></button>
           <button class="modal-share-btn" id="modalShareBtn">🔗 Compartilhar</button>
+          <button class="modal-toggle-btn" id="modalEtiquetaBtn">🏷️ Gerar etiqueta</button>
         </div>
         <p class="modal-nav-hint">← → para navegar entre jogos</p>
       </div>
@@ -1230,6 +1238,7 @@ function render(){
   renderRarityChart();
   renderHighlights();
   renderRaioX();
+  renderPerfil();
 
   document.querySelectorAll('.fav-btn').forEach(btn=>{
     btn.addEventListener('click', function(e){
@@ -1470,6 +1479,125 @@ function mostrarMarcoToast(marco){
     toast.classList.remove('show');
     setTimeout(() => toast.remove(), 400);
   }, 4500);
+}
+
+function renderPerfil(){
+  const el = document.getElementById('perfilChart');
+  if(!el) return;
+  const lista = todosJogos();
+  if(!lista.length){ el.innerHTML = ''; return; }
+
+  const catCount = {};
+  lista.forEach(j => { catCount[j.cat] = (catCount[j.cat] || 0) + 1; });
+  const topCat = Object.entries(catCount).sort((a,b) => b[1]-a[1])[0];
+
+  const decCount = {};
+  lista.forEach(j => {
+    const info = anoDev[j.id] || {};
+    const ano = info.ano || j.ano;
+    if(!ano) return;
+    const dec = `${Math.floor(parseInt(ano, 10) / 10) * 10}s`;
+    decCount[dec] = (decCount[dec] || 0) + 1;
+  });
+  const topDecEntries = Object.entries(decCount).sort((a,b) => b[1]-a[1]);
+  const topDec = topDecEntries.length ? topDecEntries[0] : null;
+
+  const ps4 = lista.filter(j => j.plat === 'PS4').length;
+  const ps3 = lista.filter(j => j.plat === 'PS3').length;
+  const platDominante = ps4 >= ps3 ? 'PS4' : 'PS3';
+  const platPct = lista.length ? Math.round((Math.max(ps4, ps3) / lista.length) * 100) : 0;
+
+  let html = '<div class="rc-title">Perfil colecionador</div>';
+  html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">Categoria favorita</span><span class="rc-count" style="text-align:left; flex:1;">${catLabel[topCat[0]]} (${topCat[1]} jogos)</span></div>`;
+  if(topDec){
+    html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">Era favorita</span><span class="rc-count" style="text-align:left; flex:1;">${topDec[0]} (${topDec[1]} jogos)</span></div>`;
+  }
+  html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">Plataforma predominante</span><span class="rc-count" style="text-align:left; flex:1;">${platDominante} (${platPct}% da coleção)</span></div>`;
+
+  el.innerHTML = html;
+}
+
+function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight){
+  const words = text.split(' ');
+  let line = '';
+  const lines = [];
+  for(const word of words){
+    const test = line ? line + ' ' + word : word;
+    if(ctx.measureText(test).width > maxWidth && line){
+      lines.push(line);
+      line = word;
+    } else {
+      line = test;
+    }
+  }
+  lines.push(line);
+  const startY = y - ((lines.length - 1) * lineHeight) / 2;
+  lines.forEach((l, i) => ctx.fillText(l, x, startY + i * lineHeight));
+  return lines.length;
+}
+
+function gerarEtiqueta(id){
+  const j = todosJogos().find(x => x.id === id);
+  if(!j) return;
+  const info = anoDev[id] || {};
+  const W = 900, H = 560;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  ctx.fillStyle = '#0b0b0c';
+  ctx.fillRect(0, 0, W, H);
+  ctx.strokeStyle = 'rgba(255,255,255,0.25)';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(24, 24, W - 48, H - 48);
+  ctx.strokeStyle = 'rgba(255,255,255,0.08)';
+  ctx.lineWidth = 1;
+  ctx.strokeRect(38, 38, W - 76, H - 76);
+
+  ctx.textAlign = 'center';
+
+  ctx.fillStyle = '#ffa733';
+  ctx.font = '700 16px Arial';
+  ctx.fillText('CONTROLE COLEÇÃO iamT', W / 2, 90);
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '800 40px Arial';
+  wrapCanvasText(ctx, j.n, W / 2, 165, W - 160, 46);
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.beginPath();
+  ctx.moveTo(W / 2 - 160, 265);
+  ctx.lineTo(W / 2 + 160, 265);
+  ctx.stroke();
+
+  const partes = [];
+  if(info.ano) partes.push(info.ano);
+  if(info.dev) partes.push(info.dev);
+  ctx.fillStyle = '#9a9a9e';
+  ctx.font = '600 18px Arial';
+  ctx.fillText(partes.join('  ·  ') || ' ', W / 2, 305);
+
+  ctx.fillStyle = '#f5f5f5';
+  ctx.font = '700 20px Arial';
+  ctx.fillText(`${j.plat}  ·  ${rarLabel[j.rar]}`, W / 2, 345);
+
+  const idx = todosJogos().findIndex(x => x.id === id);
+  ctx.fillStyle = '#ffa733';
+  ctx.font = '800 22px Arial';
+  ctx.fillText(`PEÇA Nº ${String(idx + 1).padStart(3, '0')}`, W / 2, 425);
+
+  ctx.fillStyle = '#6b6b70';
+  ctx.font = '500 13px Arial';
+  ctx.fillText('instagram.com/iamtgames', W / 2, H - 60);
+
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `etiqueta_${j.n.replace(/[^a-z0-9]+/gi, '_').toLowerCase()}.png`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
 }
 
 function abrirModal(id){
@@ -1749,12 +1877,7 @@ document.getElementById('contatoForm').addEventListener('submit', function(e){
   });
 });
 
-// CONTADOR DE VISUALIZAÇÕES (por navegador, local)
-(function(){
-  let views = parseInt(localStorage.getItem('views_ps4') || '0', 10) + 1;
-  localStorage.setItem('views_ps4', views);
-  document.getElementById('viewsCount').textContent = `${views} visualizações neste navegador`;
-})();
+// Contador de visitas agora é o badge público (visitor-badge), embutido direto no HTML.
 
 // PAINEL DE ADMIN (acessível via ?admin=true na URL)
 function ehAdmin(){
@@ -1862,6 +1985,66 @@ render();
 renderCanais();
 renderDestaque();
 checkMilestones();
+
+// PWA: registra o service worker pra funcionar offline/instalar
+if('serviceWorker' in navigator){
+  window.addEventListener('load', function(){
+    navigator.serviceWorker.register('sw.js').catch(function(){});
+  });
+}
+
+// Botao "Gerar etiqueta" do modal
+document.getElementById('modalEtiquetaBtn').addEventListener('click', function(){
+  const id = parseInt(document.getElementById('modalOverlay').dataset.currentId, 10);
+  gerarEtiqueta(id);
+});
+
+// EASTER EGG: Konami code revela a Sala Secreta
+(function(){
+  const seq = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
+  let pos = 0;
+  document.addEventListener('keydown', function(e){
+    const key = e.key.length === 1 ? e.key.toLowerCase() : e.key;
+    if(key === seq[pos]){
+      pos++;
+      if(pos === seq.length){
+        pos = 0;
+        abrirSalaSecreta();
+      }
+    } else {
+      pos = (key === seq[0]) ? 1 : 0;
+    }
+  });
+})();
+
+function abrirSalaSecreta(){
+  const lista = todosJogos();
+  if(!lista.length) return;
+  const maisCaro = [...lista].sort((a, b) => Math.round((b.col + b.bar) / 2) - Math.round((a.col + a.bar) / 2))[0];
+  const anos = lista.map(j => parseInt((anoDev[j.id] || {}).ano || j.ano, 10)).filter(n => !isNaN(n));
+  const maisAntigoAno = anos.length ? Math.min(...anos) : null;
+  const jogoAntigo = lista.find(j => parseInt((anoDev[j.id] || {}).ano || j.ano, 10) === maisAntigoAno);
+  const totalRaros = lista.filter(j => j.rar === 'raro' || j.rar === 'muito').length;
+
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay active';
+  overlay.style.zIndex = 300;
+  overlay.innerHTML = `
+    <div class="modal-box" style="text-align:center; max-width:420px;">
+      <button class="modal-close" id="salaSecretaClose">✕</button>
+      <div style="font-size:38px;">🕹️</div>
+      <h3 style="margin:10px 0 14px;">Sala Secreta</h3>
+      <p class="modal-extra">Você encontrou o cantinho escondido da coleção.</p>
+      <p class="modal-extra" style="margin-top:10px;">💰 Peça mais valiosa: <b style="color:var(--white);">${maisCaro.n}</b></p>
+      ${jogoAntigo ? `<p class="modal-extra">🕰️ A relíquia mais antiga: <b style="color:var(--white);">${jogoAntigo.n}</b> (${maisAntigoAno})</p>` : ''}
+      <p class="modal-extra">💎 Total de itens raros ou muito raros: <b style="color:var(--white);">${totalRaros}</b></p>
+      <p class="modal-extra" style="margin-top:14px; color:#ffa733; font-weight:700;">Obrigado por colecionar com a gente. 🎮</p>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  overlay.querySelector('#salaSecretaClose').addEventListener('click', function(){ overlay.remove(); });
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) overlay.remove(); });
+}
 
 // Abrir modal automaticamente se a URL apontar direto pra um jogo (link compartilhado)
 (function(){
