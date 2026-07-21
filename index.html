@@ -49,6 +49,27 @@
     --card-glass: rgba(255,255,255,0.7);
     --overlay-glass: rgba(255,255,255,0.7);
   }
+  /* PALETAS DE COR EXTRAS (acento visual por cima do tema claro/escuro) */
+  body[data-paleta="ps4"]{ --tema-accent:#2f8dff; --tema-accent-ink:#ffffff; }
+  body[data-paleta="ps3"]{ --tema-accent:#1e6fd9; --tema-accent-ink:#ffffff; }
+  body[data-paleta="roxo"]{ --tema-accent:#a233f0; --tema-accent-ink:#ffffff; }
+  body[data-paleta]:not([data-paleta="padrao"]) .filters button.active{
+    background: var(--tema-accent); color: var(--tema-accent-ink); border-color: var(--tema-accent);
+  }
+  body[data-paleta]:not([data-paleta="padrao"]) .topbar h1{ color: var(--tema-accent); }
+  body[data-paleta]:not([data-paleta="padrao"]) .side-dock a:hover,
+  body[data-paleta]:not([data-paleta="padrao"]) .side-dock button:hover{
+    background: var(--tema-accent); border-color: var(--tema-accent); color:#fff;
+  }
+  body[data-paleta]:not([data-paleta="padrao"]) .plat-chip{ border-color: var(--tema-accent); }
+  body[data-paleta]:not([data-paleta="padrao"]) #topBtn:hover{ background: var(--tema-accent); border-color: var(--tema-accent); }
+  body[data-paleta]::after{
+    content:''; position:fixed; inset:0; pointer-events:none; z-index:-1;
+  }
+  body[data-paleta="ps4"]::after{ background: radial-gradient(circle at 15% 0%, rgba(47,141,255,0.16), transparent 60%); }
+  body[data-paleta="ps3"]::after{ background: radial-gradient(circle at 85% 100%, rgba(30,111,217,0.14), transparent 60%); }
+  body[data-paleta="roxo"]::after{ background: radial-gradient(circle at 50% 50%, rgba(162,51,240,0.13), transparent 65%); }
+
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
     background:
@@ -132,6 +153,9 @@
     background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
     cursor: zoom-in;
     border-radius: 18px 18px 0 0;
+    transition: transform .3s ease;
+    transform-style: preserve-3d;
+    will-change: transform;
   }
   .cover-wrap::after{
     content:"";
@@ -547,10 +571,16 @@
     .prices .v{font-size:12.5px;}
     .side-dock{
       right: 50%; top:auto; bottom:14px; transform: translateX(50%);
-      flex-direction:row; border-radius:20px; padding:8px 12px;
+      flex-direction:row; border-radius:20px; padding:8px 10px;
+      max-width: calc(100vw - 24px); overflow-x:auto; -webkit-overflow-scrolling:touch;
+      scrollbar-width: none;
     }
-    .side-dock .divider{width:1px; height:22px; margin:0 4px;}
-    .side-dock a, .side-dock button{width:36px; height:36px; font-size:15px;}
+    .side-dock::-webkit-scrollbar{display:none;}
+    .side-dock .divider{width:1px; height:22px; margin:0 4px; flex-shrink:0;}
+    .side-dock a, .side-dock button{width:34px; height:34px; font-size:14px; flex-shrink:0;}
+    .side-dock .sell{flex-shrink:0;}
+    #wishlistPager{flex-wrap:wrap; gap:10px !important;}
+    body{padding-bottom: 116px;}
   }
   @media (max-width: 480px){
     .topbar h1{font-size:18px;}
@@ -559,12 +589,19 @@
     .grid{grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap:10px;}
     .filters button{padding:7px 12px; font-size:11px;}
     .search-box input{font-size:13px; padding:10px 14px 10px 36px;}
+    .side-dock a, .side-dock button{width:32px; height:32px; font-size:13px;}
+    .side-dock .sell span:last-child{display:none;}
+    .side-dock .sell{padding:8px;}
+    .toggle-venda{font-size:11.5px; padding:9px 12px;}
+    #wishlistPageInfo{font-size:11.5px !important;}
   }
 </style>
 </head>
 <body>
 <div class="side-dock">
   <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
+  <button id="paletaBtn" title="Alternar paleta de cores" aria-label="Alternar paleta de cores">🎨</button>
+  <button id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
   <a href="https://www.instagram.com/marioturbino/" target="_blank" title="Instagram pessoal" aria-label="Abrir Instagram pessoal">👤</a>
   <a href="https://www.instagram.com/iamtgames/" target="_blank" title="Instagram da coleção" aria-label="Abrir Instagram da coleção">📸</a>
   <div class="divider"></div>
@@ -581,18 +618,18 @@
   <div class="topbar">
     <h1>Controle Coleção iamT</h1>
     <div class="stat-row">
-      <div class="stat"><div class="n" id="statTotal">0</div><div class="l">Jogos</div></div>
-      <div class="stat"><div class="n" id="statValor">R$ 0</div><div class="l">Valor pago (total)</div>
+      <div class="stat"><div class="n" id="statTotal">0</div><div class="l" id="lblStatJogos">Jogos</div></div>
+      <div class="stat"><div class="n" id="statValor">R$ 0</div><div class="l" id="lblStatValor">Valor pago (total)</div>
         <div class="plat-breakdown"><span>PS4: <b id="statValorPS4">R$0</b></span><span>PS3: <b id="statValorPS3">R$0</b></span></div>
       </div>
-      <div class="stat"><div class="n" id="statFav">0</div><div class="l">Favoritos ⭐</div></div>
+      <div class="stat"><div class="n" id="statFav">0</div><div class="l" id="lblStatFav">Favoritos ⭐</div></div>
     </div>
   </div>
 
   <div class="destaque-card" id="destaqueCard" style="display:none;">
     <div class="destaque-img" id="destaqueImg"></div>
     <div class="destaque-info">
-      <div class="destaque-eyebrow">✨ Destaque da coleção</div>
+      <div class="destaque-eyebrow" id="destaqueEyebrow">✨ Destaque da coleção</div>
       <h2 id="destaqueNome"></h2>
       <p class="modal-extra" id="destaqueDesc" style="margin:0;"></p>
       <div style="display:flex; gap:8px; flex-wrap:wrap;">
@@ -606,8 +643,8 @@
     <div class="canais-toggle-left">
       <span class="canais-toggle-icon">📺</span>
       <div>
-        <h3>Vendedores, Lives e Leilões</h3>
-        <p>11 canais indicados — clique pra ver</p>
+        <h3 id="canaisTituloEl">Vendedores, Lives e Leilões</h3>
+        <p id="canaisSubEl">11 canais indicados — clique pra ver</p>
       </div>
     </div>
     <span class="canais-toggle-arrow" id="canaisToggleArrow">▾</span>
@@ -621,7 +658,7 @@
     <div class="canais-toggle-left">
       <span class="canais-toggle-icon">🎯</span>
       <div>
-        <h3>Radar de Caça</h3>
+        <h3 id="radarTituloEl">Radar de Caça</h3>
         <p id="wishlistSubtitle">Jogos que ainda não tenho, mas estou de olho</p>
       </div>
     </div>
@@ -683,6 +720,7 @@
     <button class="toggle-venda" id="imprimirBtn">🖨️ Imprimir / Gerar PDF</button>
     <button class="toggle-venda" id="qrBtn">📱 QR Code do site</button>
     <button class="toggle-venda" id="vitrineBtn">🖼️ Modo Vitrine (tela cheia)</button>
+    <button class="toggle-venda" id="cartaoResumoBtn">🎁 Cartão resumo (compartilhar)</button>
   </div>
 
 
@@ -701,7 +739,7 @@
   <div class="rarity-chart" id="perfilChart" style="margin-bottom:18px;"></div>
 
   <div id="giscus-comments" style="margin: 10px 0 30px;">
-    <div class="section-title" style="margin-bottom:14px;">💬 Livro de visitas</div>
+    <div class="section-title" id="livroVisitasTitulo" style="margin-bottom:14px;">💬 Livro de visitas</div>
     <div class="giscus"></div>
   </div>
 
@@ -728,14 +766,14 @@
           <button class="modal-share-btn" id="modalShareBtn">🔗 Compartilhar</button>
           <button class="modal-toggle-btn" id="modalEtiquetaBtn">🏷️ Gerar etiqueta</button>
         </div>
-        <p class="modal-nav-hint">← → para navegar entre jogos</p>
+        <p class="modal-nav-hint" id="modalNavHint">← → para navegar entre jogos</p>
       </div>
       <div class="modal-info-col">
         <span class="plat-chip" id="modalPlat" style="position:static; align-self:flex-start;"></span>
         <h3 id="modalTitle"></h3>
         <div class="modal-rating" id="modalRating"></div>
         <div class="modal-extra" id="modalAnoDev" style="font-weight:700;"></div>
-        <div class="modal-sinopse-title">Sinopse</div>
+        <div class="modal-sinopse-title" id="sinopseTituloEl">Sinopse</div>
         <p class="modal-extra" id="modalSinopse">Sinopse não disponível ainda.</p>
       </div>
     </div>
@@ -756,7 +794,7 @@
   <img id="vitrineImg" src="" alt="" style="max-height:62vh; max-width:82vw; object-fit:contain; border-radius:14px; box-shadow:0 30px 80px rgba(0,0,0,.6); opacity:0; transition:opacity .35s ease;">
   <h2 id="vitrineTitle" style="color:#fff; margin-top:26px; font-size:clamp(20px,3.2vw,34px); font-weight:800; letter-spacing:-.3px;"></h2>
   <p id="vitrineSub" style="color:#9a9a9e; font-size:14px; margin-top:8px; letter-spacing:.3px;"></p>
-  <p style="color:#6a6a6e; font-size:11.5px; margin-top:22px;">ESC ou ✕ para sair</p>
+  <p id="vitrineSairTxt" style="color:#6a6a6e; font-size:11.5px; margin-top:22px;">ESC ou ✕ para sair</p>
 </div>
 
 <div class="modal-overlay" id="compareOverlay">
@@ -1296,6 +1334,94 @@ const catLabel = { exclusivo:"Exclusivo", aaa:"AAA", fps:"FPS", survival:"Surviv
 const rarClass = { comum:"b-comum", pouco:"b-pouco", raro:"b-raro", muito:"b-muito" };
 const rarLabel = { comum:"Comum", pouco:"Pouco comum", raro:"Raro", muito:"Muito raro" };
 
+// TRADUÇÃO EN (só a interface — sinopses, motivos do radar e painel de admin continuam em PT)
+const catLabelEN = { exclusivo:"Exclusive", aaa:"AAA", fps:"FPS", survival:"Survival", esporte:"Sports", infantil:"Family", raro:"Rare" };
+const rarLabelEN = { comum:"Common", pouco:"Uncommon", raro:"Rare", muito:"Very rare" };
+function catL(cat){ return idioma === 'en' ? (catLabelEN[cat] || cat) : (catLabel[cat] || cat); }
+function rarL(rar){ return idioma === 'en' ? (rarLabelEN[rar] || rar) : (rarLabel[rar] || rar); }
+
+let idioma = localStorage.getItem('idioma_ps4') || 'pt';
+
+const I18N = {
+  pt: {
+    statJogos: 'Jogos', statValor: 'Valor pago (total)', statFav: 'Favoritos ⭐',
+    destaqueEyebrow: '✨ Destaque da coleção', verDetalhes: 'Ver detalhes',
+    apresentacaoPlay: '▶️ Modo apresentação', apresentacaoStop: '⏸️ Parar apresentação',
+    canaisTitulo: 'Vendedores, Lives e Leilões', canaisSub: (n) => `${n} canais indicados — clique pra ver`,
+    ordenarDia: '📅 Ordenar por dia da semana',
+    radarTitulo: 'Radar de Caça', radarSubDefault: 'Jogos que ainda não tenho, mas estou de olho',
+    buscarPlaceholder: 'Buscar jogo...',
+    ordenarPor: 'Ordenar por...', nomeAZ: 'Nome (A-Z)', nomeZA: 'Nome (Z-A)',
+    valorDesc: 'Valor (maior primeiro)', valorAsc: 'Valor (menor primeiro)', porRaridade: 'Raridade',
+    verLista: '📋 Ver em lista', verGrade: '🔳 Ver em grade',
+    comparar: '⚖️ Comparar', compararTitle: 'Comparar', favoritarTitle: 'Favoritar',
+    roleta: '🎲 O que jogar hoje?',
+    fTodos: 'Todos', fExclusivo: 'Exclusivos', fAAA: 'AAA', fFPS: 'FPS', fSurvival: 'Survival',
+    fEsporte: 'Esporte', fInfantil: 'Infantil', fRaro: 'Raro',
+    todasPlataformas: 'Todas plataformas',
+    exportarTxt: '⬇️ Exportar lista (.txt)', exportarJson: '🗂️ Exportar JSON', exportarCsv: '📊 Exportar CSV',
+    imprimir: '🖨️ Imprimir / Gerar PDF', qrSite: '📱 QR Code do site',
+    vitrineModo: '🖼️ Modo Vitrine (tela cheia)', cartaoResumo: '🎁 Cartão resumo (compartilhar)',
+    precoVerificado: '✓ preço verificado', precoConfirmar: 'preço a confirmar',
+    verMercadoLivre: 'Ver no Mercado Livre →', valorPago: 'Valor pago: ',
+    resultCount: (n) => `${n} jogos exibidos`,
+    desejado: 'Desejado', radarVazio: 'Nenhum jogo na lista ainda.',
+    anterior: '◀ Anterior', proxima: 'Próxima ▶',
+    livroVisitas: '💬 Livro de visitas', footerTxt: 'Controle Coleção iamT',
+    compartilhar: '🔗 Compartilhar', gerarEtiqueta: '🏷️ Gerar etiqueta',
+    navHint: '← → para navegar entre jogos', sinopseTitulo: 'Sinopse',
+    sinopseIndisponivel: 'Sinopse não disponível ainda.',
+    rcRaridade: 'Distribuição por raridade', rcCategoria: 'Distribuição por categoria',
+    rcDecada: 'Distribuição por década de lançamento', rcDev: 'Desenvolvedoras mais presentes',
+    rcPerfil: 'Perfil colecionador',
+    categoriaFavorita: 'Categoria favorita', eraFavorita: 'Era favorita', platPredominante: 'Plataforma predominante',
+    jogosSufixo: 'jogos', daColecao: 'da coleção',
+    vitrineSair: 'ESC ou ✕ para sair',
+    temaToggleTitle: 'Alternar tema claro/escuro', paletaToggleTitle: 'Alternar paleta de cores',
+    idiomaToggleTitle: 'Switch to English',
+  },
+  en: {
+    statJogos: 'Games', statValor: 'Total spent', statFav: 'Favorites ⭐',
+    destaqueEyebrow: '✨ Collection highlight', verDetalhes: 'View details',
+    apresentacaoPlay: '▶️ Slideshow mode', apresentacaoStop: '⏸️ Stop slideshow',
+    canaisTitulo: 'Sellers, Streams & Auctions', canaisSub: (n) => `${n} channels recommended — click to see`,
+    ordenarDia: '📅 Sort by day of week',
+    radarTitulo: 'Wishlist Radar', radarSubDefault: "Games I don't have yet, but I'm watching",
+    buscarPlaceholder: 'Search game...',
+    ordenarPor: 'Sort by...', nomeAZ: 'Name (A-Z)', nomeZA: 'Name (Z-A)',
+    valorDesc: 'Value (highest first)', valorAsc: 'Value (lowest first)', porRaridade: 'Rarity',
+    verLista: '📋 List view', verGrade: '🔳 Grid view',
+    comparar: '⚖️ Compare', compararTitle: 'Compare', favoritarTitle: 'Favorite',
+    roleta: '🎲 What to play today?',
+    fTodos: 'All', fExclusivo: 'Exclusives', fAAA: 'AAA', fFPS: 'FPS', fSurvival: 'Survival',
+    fEsporte: 'Sports', fInfantil: 'Family', fRaro: 'Rare',
+    todasPlataformas: 'All platforms',
+    exportarTxt: '⬇️ Export list (.txt)', exportarJson: '🗂️ Export JSON', exportarCsv: '📊 Export CSV',
+    imprimir: '🖨️ Print / Save PDF', qrSite: '📱 Site QR code',
+    vitrineModo: '🖼️ Showcase mode (fullscreen)', cartaoResumo: '🎁 Summary card (share)',
+    precoVerificado: '✓ price verified', precoConfirmar: 'price to confirm',
+    verMercadoLivre: 'View on Mercado Livre →', valorPago: 'Amount paid: ',
+    resultCount: (n) => `${n} games shown`,
+    desejado: 'Wanted', radarVazio: 'No games on the list yet.',
+    anterior: '◀ Previous', proxima: 'Next ▶',
+    livroVisitas: '💬 Guestbook', footerTxt: 'iamT Collection Tracker',
+    compartilhar: '🔗 Share', gerarEtiqueta: '🏷️ Generate label',
+    navHint: '← → to navigate between games', sinopseTitulo: 'Synopsis',
+    sinopseIndisponivel: 'Synopsis not available yet.',
+    rcRaridade: 'Rarity distribution', rcCategoria: 'Category distribution',
+    rcDecada: 'Release decade distribution', rcDev: 'Most represented developers',
+    rcPerfil: 'Collector profile',
+    categoriaFavorita: 'Favorite category', eraFavorita: 'Favorite era', platPredominante: 'Dominant platform',
+    jogosSufixo: 'games', daColecao: 'of the collection',
+    vitrineSair: 'ESC or ✕ to exit',
+    temaToggleTitle: 'Toggle light/dark theme', paletaToggleTitle: 'Toggle color palette',
+    idiomaToggleTitle: 'Mudar para Português',
+  }
+};
+function t(key){
+  return I18N[idioma][key];
+}
+
 function gerarLink(nome, plat){
   return `https://lista.mercadolivre.com.br/${encodeURIComponent(nome)}+${plat}`;
 }
@@ -1342,22 +1468,22 @@ function render(){
       <div class="card">
         <div class="cover-wrap" data-open-id="${j.id}">
           <span class="plat-chip">${j.plat}</span>
-          <button class="fav-btn ${isFav}" data-id="${j.id}" aria-label="Favoritar ${j.n}">⭐</button>
-          <button class="compare-btn ${isComparando}" data-id="${j.id}" title="Comparar" aria-label="Comparar ${j.n}">⚖️</button>
+          <button class="fav-btn ${isFav}" data-id="${j.id}" aria-label="${t('favoritarTitle')} ${j.n}">⭐</button>
+          <button class="compare-btn ${isComparando}" data-id="${j.id}" title="${t('compararTitle')}" aria-label="${t('compararTitle')} ${j.n}">⚖️</button>
           ${coverInner}
         </div>
         <div class="card-body">
           <h3>${j.n}</h3>
           <div class="badges">
-            <span class="badge ${rarClass[j.rar]}">${rarLabel[j.rar]}</span>
-            <span class="badge b-pouco">${catLabel[j.cat]}</span>
-            ${j.v ? '<span class="badge" style="background:rgba(79,178,134,.2);color:#4fb286;">✓ preço verificado</span>' : '<span class="badge" style="background:rgba(255,255,255,.06);color:var(--ink-dim);">preço a confirmar</span>'}
+            <span class="badge ${rarClass[j.rar]}">${rarL(j.rar)}</span>
+            <span class="badge b-pouco">${catL(j.cat)}</span>
+            ${j.v ? `<span class="badge" style="background:rgba(79,178,134,.2);color:#4fb286;">${t('precoVerificado')}</span>` : `<span class="badge" style="background:rgba(255,255,255,.06);color:var(--ink-dim);">${t('precoConfirmar')}</span>`}
           </div>
           <div class="prices">
-            <div><span class="l">Valor pago: </span><span class="v">R$ ${valorPago}</span></div>
+            <div><span class="l">${t('valorPago')}</span><span class="v">R$ ${valorPago}</span></div>
           </div>
           <div class="card-foot">
-            <a href="${gerarLink(j.n, j.plat)}" target="_blank">Ver no Mercado Livre →</a>
+            <a href="${gerarLink(j.n, j.plat)}" target="_blank">${t('verMercadoLivre')}</a>
           </div>
         </div>
       </div>
@@ -1366,7 +1492,7 @@ function render(){
 
   grid.innerHTML = html;
   grid.className = 'grid' + (vistaAtual === 'list' ? ' list-view' : '');
-  document.getElementById('resultCount').textContent = `${visiveis} jogos exibidos`;
+  document.getElementById('resultCount').textContent = I18N[idioma].resultCount(visiveis);
   document.getElementById('statTotal').textContent = todosJogos().length;
 
   const totalPago = todosJogos().reduce((s,j)=>s+Math.round((j.col+j.bar)/2),0);
@@ -1506,13 +1632,13 @@ function renderRarityChart(){
   const el = document.getElementById('rarityChart');
   const ordem = ['muito','raro','pouco','comum'];
   const total = todosJogos().length;
-  let html = '<div class="rc-title">Distribuição por raridade</div>';
+  let html = `<div class="rc-title">${t('rcRaridade')}</div>`;
   for(const r of ordem){
     const count = todosJogos().filter(j=>j.rar===r).length;
     const pct = total ? Math.round((count/total)*100) : 0;
     html += `
       <div class="rc-row">
-        <span class="rc-label">${rarLabel[r]}</span>
+        <span class="rc-label">${rarL(r)}</span>
         <div class="rc-bar-bg"><div class="rc-bar-fill" style="width:${pct}%"></div></div>
         <span class="rc-count">${count}</span>
       </div>
@@ -1538,7 +1664,7 @@ function renderDestaque(){
   const partes = [];
   if(info.ano) partes.push(info.ano);
   if(info.dev) partes.push(info.dev);
-  partes.push(rarLabel[escolhido.rar]);
+  partes.push(rarL(escolhido.rar));
   document.getElementById('destaqueDesc').textContent = partes.join(' \u00b7 ');
   const btn = document.getElementById('destaqueBtn');
   btn.onclick = function(){ abrirModal(escolhido.id); };
@@ -1562,7 +1688,7 @@ function renderRaioX(){
   });
   const decadaKeys = Object.keys(decadas).sort();
   const totalComAno = decadaKeys.reduce((s, k) => s + decadas[k], 0);
-  let htmlDec = '<div class="rc-title">Distribuição por década de lançamento</div>';
+  let htmlDec = `<div class="rc-title">${t('rcDecada')}</div>`;
   decadaKeys.forEach(k => {
     const count = decadas[k];
     const pct = totalComAno ? Math.round((count / totalComAno) * 100) : 0;
@@ -1586,7 +1712,7 @@ function renderRaioX(){
   });
   const topDevs = Object.entries(devs).sort((a, b) => b[1] - a[1]).slice(0, 5);
   const maxDev = topDevs.length ? topDevs[0][1] : 0;
-  let htmlDev = '<div class="rc-title">Desenvolvedoras mais presentes</div>';
+  let htmlDev = `<div class="rc-title">${t('rcDev')}</div>`;
   topDevs.forEach(([nome, count]) => {
     const pct = maxDev ? Math.round((count / maxDev) * 100) : 0;
     htmlDev += `
@@ -1650,12 +1776,12 @@ function renderPerfil(){
   const platDominante = ps4 >= ps3 ? 'PS4' : 'PS3';
   const platPct = lista.length ? Math.round((Math.max(ps4, ps3) / lista.length) * 100) : 0;
 
-  let html = '<div class="rc-title">Perfil colecionador</div>';
-  html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">Categoria favorita</span><span class="rc-count" style="text-align:left; flex:1;">${catLabel[topCat[0]]} (${topCat[1]} jogos)</span></div>`;
+  let html = `<div class="rc-title">${t('rcPerfil')}</div>`;
+  html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">${t('categoriaFavorita')}</span><span class="rc-count" style="text-align:left; flex:1;">${catL(topCat[0])} (${topCat[1]} ${t('jogosSufixo')})</span></div>`;
   if(topDec){
-    html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">Era favorita</span><span class="rc-count" style="text-align:left; flex:1;">${topDec[0]} (${topDec[1]} jogos)</span></div>`;
+    html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">${t('eraFavorita')}</span><span class="rc-count" style="text-align:left; flex:1;">${topDec[0]} (${topDec[1]} ${t('jogosSufixo')})</span></div>`;
   }
-  html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">Plataforma predominante</span><span class="rc-count" style="text-align:left; flex:1;">${platDominante} (${platPct}% da coleção)</span></div>`;
+  html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">${t('platPredominante')}</span><span class="rc-count" style="text-align:left; flex:1;">${platDominante} (${platPct}% ${t('daColecao')})</span></div>`;
 
   el.innerHTML = html;
 }
@@ -1743,6 +1869,107 @@ function gerarEtiqueta(id){
   });
 }
 
+function gerarCartaoResumo(){
+  const lista = todosJogos();
+  if(!lista.length) return;
+  const W = 1080, H = 1350;
+  const canvas = document.createElement('canvas');
+  canvas.width = W; canvas.height = H;
+  const ctx = canvas.getContext('2d');
+
+  const grad = ctx.createLinearGradient(0, 0, W, H);
+  grad.addColorStop(0, '#0b0b0c');
+  grad.addColorStop(1, '#1a1a1d');
+  ctx.fillStyle = grad;
+  ctx.fillRect(0, 0, W, H);
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.14)';
+  ctx.lineWidth = 3;
+  ctx.strokeRect(36, 36, W - 72, H - 72);
+
+  ctx.textAlign = 'center';
+
+  ctx.fillStyle = '#ffa733';
+  ctx.font = '800 24px Arial';
+  ctx.fillText('CONTROLE COLEÇÃO iamT', W / 2, 130);
+
+  ctx.fillStyle = '#f5f5f5';
+  ctx.font = '900 46px Arial';
+  ctx.fillText(`Resumo da coleção — ${new Date().getFullYear()}`, W / 2, 190);
+
+  const totalValor = lista.reduce((s, j) => s + Math.round((j.col + j.bar) / 2), 0);
+  const ps4 = lista.filter(j => j.plat === 'PS4').length;
+  const ps3 = lista.filter(j => j.plat === 'PS3').length;
+
+  ctx.fillStyle = '#ffffff';
+  ctx.font = '900 180px Arial';
+  ctx.fillText(String(lista.length), W / 2, 470);
+
+  ctx.fillStyle = '#9a9a9e';
+  ctx.font = '700 26px Arial';
+  ctx.fillText('JOGOS NA COLEÇÃO', W / 2, 520);
+
+  ctx.strokeStyle = 'rgba(255,255,255,0.15)';
+  ctx.beginPath();
+  ctx.moveTo(W / 2 - 260, 570);
+  ctx.lineTo(W / 2 + 260, 570);
+  ctx.stroke();
+
+  const stats = [
+    [`${ps4} PS4  ·  ${ps3} PS3`, 'PLATAFORMAS'],
+    [`R$ ${totalValor}`, 'VALOR TOTAL PAGO'],
+  ];
+  let y = 650;
+  stats.forEach(([valor, label]) => {
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '800 44px Arial';
+    ctx.fillText(valor, W / 2, y);
+    ctx.fillStyle = '#9a9a9e';
+    ctx.font = '700 20px Arial';
+    ctx.fillText(label, W / 2, y + 34);
+    y += 110;
+  });
+
+  const rarOrderCartao = { muito: 0, raro: 1, pouco: 2, comum: 3 };
+  const maisRaro = lista.slice().sort((a, b) => (rarOrderCartao[a.rar] - rarOrderCartao[b.rar]) || (b.caro - a.caro))[0];
+  if(maisRaro){
+    ctx.fillStyle = '#ffa733';
+    ctx.font = '700 20px Arial';
+    ctx.fillText('ITEM MAIS RARO DA COLEÇÃO', W / 2, y + 20);
+    ctx.fillStyle = '#f5f5f5';
+    ctx.font = '800 34px Arial';
+    wrapCanvasText(ctx, maisRaro.n, W / 2, y + 70, W - 200, 40);
+  }
+
+  const catCountCartao = {};
+  lista.forEach(j => { catCountCartao[j.cat] = (catCountCartao[j.cat] || 0) + 1; });
+  const catTop = Object.entries(catCountCartao).sort((a, b) => b[1] - a[1])[0];
+  if(catTop){
+    ctx.fillStyle = '#9a9a9e';
+    ctx.font = '600 22px Arial';
+    ctx.fillText(`Categoria favorita: ${catLabel[catTop[0]] || catTop[0]}`, W / 2, y + 150);
+  }
+
+  if(wishlist.length){
+    ctx.fillStyle = '#6b6b70';
+    ctx.font = '600 20px Arial';
+    ctx.fillText(`🎯 ${wishlist.length} jogos no Radar de Caça`, W / 2, y + 190);
+  }
+
+  ctx.fillStyle = '#6b6b70';
+  ctx.font = '500 18px Arial';
+  ctx.fillText('instagram.com/iamtgames  ·  iamtgames.github.io/colecao', W / 2, H - 70);
+
+  canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `resumo_colecao_iamt_${new Date().getFullYear()}.png`;
+    document.body.appendChild(a); a.click(); document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+}
+
 function renderCategorias(){
   const el = document.getElementById('categoriaChart');
   if(!el) return;
@@ -1751,12 +1978,12 @@ function renderCategorias(){
   lista.forEach(j => { catCount[j.cat] = (catCount[j.cat] || 0) + 1; });
   const entries = Object.entries(catCount).sort((a, b) => b[1] - a[1]);
   const total = lista.length;
-  let html = '<div class="rc-title">Distribuição por categoria</div>';
+  let html = `<div class="rc-title">${t('rcCategoria')}</div>`;
   entries.forEach(([cat, count]) => {
     const pct = total ? Math.round((count / total) * 100) : 0;
     html += `
       <div class="rc-row">
-        <span class="rc-label">${catLabel[cat]}</span>
+        <span class="rc-label">${catL(cat)}</span>
         <div class="rc-bar-bg"><div class="rc-bar-fill" style="width:${pct}%"></div></div>
         <span class="rc-count">${count}</span>
       </div>
@@ -1777,8 +2004,8 @@ function renderWishlist(){
   const nextBtn = document.getElementById('wishlistNextBtn');
   if(!grid) return;
   if(!wishlist.length){
-    if(subtitle) subtitle.textContent = 'Em breve — os próximos alvos da caçada vão aparecer aqui';
-    grid.innerHTML = '<div class="modal-extra" style="padding:20px;">Nenhum jogo na lista ainda.</div>';
+    if(subtitle) subtitle.textContent = idioma === 'en' ? 'Coming soon — the next hunt targets will show up here' : 'Em breve — os próximos alvos da caçada vão aparecer aqui';
+    grid.innerHTML = `<div class="modal-extra" style="padding:20px;">${t('radarVazio')}</div>`;
     if(pager) pager.style.display = 'none';
     return;
   }
@@ -1789,7 +2016,9 @@ function renderWishlist(){
   const pageItems = wishlist.slice(start, start + WISHLIST_PAGE_SIZE);
   const ps4Count = wishlist.filter(w => w.plat === 'PS4').length;
   const ps3Count = wishlist.filter(w => w.plat === 'PS3').length;
-  if(subtitle) subtitle.textContent = `${wishlist.length} jogos indicados (${ps4Count} PS4 / ${ps3Count} PS3) — 10 por vez`;
+  if(subtitle) subtitle.textContent = idioma === 'en'
+    ? `${wishlist.length} games listed (${ps4Count} PS4 / ${ps3Count} PS3) — 10 at a time`
+    : `${wishlist.length} jogos indicados (${ps4Count} PS4 / ${ps3Count} PS3) — 10 por vez`;
   let html = '';
   pageItems.forEach(w => {
     const inicial = w.n.charAt(0).toUpperCase();
@@ -1804,10 +2033,10 @@ function renderWishlist(){
         </div>
         <div class="card-body">
           <h3>${w.n}</h3>
-          <div class="badges"><span class="badge b-pouco">Desejado</span></div>
+          <div class="badges"><span class="badge b-pouco">${t('desejado')}</span></div>
           ${w.motivo ? `<p class="modal-extra" style="margin:0;">${w.motivo}</p>` : ''}
           <div class="card-foot">
-            <a href="${gerarLink(w.n, w.plat)}" target="_blank">Ver no Mercado Livre →</a>
+            <a href="${gerarLink(w.n, w.plat)}" target="_blank">${t('verMercadoLivre')}</a>
           </div>
         </div>
       </div>
@@ -1816,7 +2045,9 @@ function renderWishlist(){
   grid.innerHTML = html;
   if(pager){
     pager.style.display = totalPages > 1 ? 'flex' : 'none';
-    if(pageInfo) pageInfo.textContent = `${start+1}–${Math.min(start+WISHLIST_PAGE_SIZE, wishlist.length)} de ${wishlist.length}`;
+    if(pageInfo) pageInfo.textContent = idioma === 'en'
+      ? `${start+1}–${Math.min(start+WISHLIST_PAGE_SIZE, wishlist.length)} of ${wishlist.length}`
+      : `${start+1}–${Math.min(start+WISHLIST_PAGE_SIZE, wishlist.length)} de ${wishlist.length}`;
     if(prevBtn){
       prevBtn.disabled = wishlistPage === 0;
       prevBtn.style.opacity = wishlistPage === 0 ? '0.4' : '1';
@@ -1878,7 +2109,7 @@ function abrirModal(id){
 
   // Sinopse
   const sinopseEl = document.getElementById('modalSinopse');
-  sinopseEl.textContent = sinopses[id] || j.sinopse || 'Sinopse não disponível ainda.';
+  sinopseEl.textContent = sinopses[id] || j.sinopse || t('sinopseIndisponivel');
 
   // Ano de lançamento e desenvolvedora
   const anoDevEl = document.getElementById('modalAnoDev');
@@ -2058,11 +2289,49 @@ temaBtn.addEventListener('click', function(){
   sincronizarTemaGiscus();
 });
 
+// PALETAS DE COR EXTRAS
+const paletas = ['padrao', 'ps4', 'ps3', 'roxo'];
+const paletaEmoji = { padrao: '🎨', ps4: '🟦', ps3: '🔷', roxo: '🟪' };
+const paletaBtn = document.getElementById('paletaBtn');
+function aplicarPaleta(nome){
+  document.body.setAttribute('data-paleta', nome);
+  paletaBtn.textContent = paletaEmoji[nome] || '🎨';
+  paletaBtn.title = `Paleta atual: ${nome === 'padrao' ? 'Padrão' : nome === 'ps4' ? 'PS4 Azul' : nome === 'ps3' ? 'PS3 Retrô' : 'Roxo Colecionador'} — clique para trocar`;
+}
+aplicarPaleta(localStorage.getItem('paleta_ps4') || 'padrao');
+paletaBtn.addEventListener('click', function(){
+  const atual = localStorage.getItem('paleta_ps4') || 'padrao';
+  const prox = paletas[(paletas.indexOf(atual) + 1) % paletas.length];
+  localStorage.setItem('paleta_ps4', prox);
+  aplicarPaleta(prox);
+});
+
+// ESTANTE VIRTUAL 3D (tilt leve nas capas, só em telas com mouse de verdade)
+if(window.matchMedia('(hover: hover) and (pointer: fine)').matches){
+  let capaAtivaTilt = null;
+  document.addEventListener('mousemove', function(e){
+    const el = e.target.closest('.cover-wrap');
+    if(el){
+      if(capaAtivaTilt && capaAtivaTilt !== el) capaAtivaTilt.style.transform = '';
+      capaAtivaTilt = el;
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      const rx = (py - 0.5) * -12;
+      const ry = (px - 0.5) * 12;
+      el.style.transform = `perspective(700px) rotateX(${rx}deg) rotateY(${ry}deg)`;
+    } else if(capaAtivaTilt){
+      capaAtivaTilt.style.transform = '';
+      capaAtivaTilt = null;
+    }
+  }, { passive: true });
+}
+
 // VISTA GRADE/LISTA
 document.getElementById('viewToggle').addEventListener('click', function(){
   vistaAtual = vistaAtual === 'grid' ? 'list' : 'grid';
   localStorage.setItem('vista_ps4', vistaAtual);
-  this.textContent = vistaAtual === 'list' ? '🔲 Ver em grade' : '📋 Ver em lista';
+  this.textContent = vistaAtual === 'list' ? t('verGrade') : t('verLista');
   render();
 });
 
@@ -2112,7 +2381,7 @@ function renderVitrineFrame(){
     img.src = capas[j.id];
     img.alt = j.n;
     document.getElementById('vitrineTitle').textContent = j.n;
-    document.getElementById('vitrineSub').textContent = `${j.plat} — ${catLabel[j.cat] || ''} — ${rarLabel[j.rar] || ''}`;
+    document.getElementById('vitrineSub').textContent = `${j.plat} — ${catL(j.cat) || ''} — ${rarL(j.rar) || ''}`;
     img.style.opacity = 1;
   }, 350);
   vitrineIdx++;
@@ -2134,6 +2403,7 @@ document.getElementById('vitrineBtn').addEventListener('click', async function()
 });
 
 document.getElementById('vitrineExitBtn').addEventListener('click', sairVitrine);
+document.getElementById('cartaoResumoBtn').addEventListener('click', gerarCartaoResumo);
 
 document.addEventListener('fullscreenchange', function(){
   if(!document.fullscreenElement && document.getElementById('vitrineOverlay').style.display === 'flex'){
@@ -2465,10 +2735,10 @@ document.getElementById('apresentacaoBtn').addEventListener('click', function(){
   if(apresentacaoInterval){
     clearInterval(apresentacaoInterval);
     apresentacaoInterval = null;
-    this.textContent = '▶️ Modo apresentação';
+    this.textContent = t('apresentacaoPlay');
   } else {
     apresentacaoInterval = setInterval(renderDestaque, 6000);
-    this.textContent = '⏸️ Parar apresentação';
+    this.textContent = t('apresentacaoStop');
   }
 });
 
@@ -2541,6 +2811,68 @@ fetch('https://api.github.com/repos/iamtgames/colecao/commits?path=index.html&pe
     if(el) el.textContent = `Atualizado em ${formatada}`;
   })
   .catch(function(){});
+
+// IDIOMA PT/EN (interface estática + rótulos dinâmicos; sinopses, motivos do radar e painel de admin ficam em PT)
+function aplicarIdiomaUI(){
+  const byId = (id) => document.getElementById(id);
+  if(byId('lblStatJogos')) byId('lblStatJogos').textContent = t('statJogos');
+  if(byId('lblStatValor')) byId('lblStatValor').textContent = t('statValor');
+  if(byId('lblStatFav')) byId('lblStatFav').textContent = t('statFav');
+  if(byId('destaqueEyebrow')) byId('destaqueEyebrow').textContent = t('destaqueEyebrow');
+  if(byId('destaqueBtn')) byId('destaqueBtn').textContent = t('verDetalhes');
+  if(byId('apresentacaoBtn')) byId('apresentacaoBtn').textContent = apresentacaoInterval ? t('apresentacaoStop') : t('apresentacaoPlay');
+  if(byId('canaisTituloEl')) byId('canaisTituloEl').textContent = t('canaisTitulo');
+  if(byId('canaisSubEl')) byId('canaisSubEl').textContent = I18N[idioma].canaisSub(canais.length);
+  if(byId('ordenarDiaBtn')) byId('ordenarDiaBtn').textContent = t('ordenarDia');
+  if(byId('radarTituloEl')) byId('radarTituloEl').textContent = t('radarTitulo');
+  if(byId('searchInput')) byId('searchInput').placeholder = t('buscarPlaceholder');
+  const sortOpts = { none: 'ordenarPor', 'nome-az': 'nomeAZ', 'nome-za': 'nomeZA', 'valor-desc': 'valorDesc', 'valor-asc': 'valorAsc', raridade: 'porRaridade' };
+  Object.entries(sortOpts).forEach(([val, key]) => {
+    const opt = document.querySelector(`#sortSelect option[value="${val}"]`);
+    if(opt) opt.textContent = t(key);
+  });
+  if(byId('viewToggle')) byId('viewToggle').textContent = vistaAtual === 'list' ? t('verGrade') : t('verLista');
+  if(byId('compararToggle')) byId('compararToggle').textContent = t('comparar');
+  if(byId('roletaBtn')) byId('roletaBtn').textContent = t('roleta');
+  const filterOpts = { all: 'fTodos', exclusivo: 'fExclusivo', aaa: 'fAAA', fps: 'fFPS', survival: 'fSurvival', esporte: 'fEsporte', infantil: 'fInfantil', raro: 'fRaro' };
+  Object.entries(filterOpts).forEach(([val, key]) => {
+    const btn = document.querySelector(`#filterContainer button[data-filter="${val}"]`);
+    if(btn) btn.textContent = t(key);
+  });
+  const platAll = document.querySelector('#platContainer button[data-plat="all"]');
+  if(platAll) platAll.textContent = t('todasPlataformas');
+  if(byId('exportarBtn')) byId('exportarBtn').textContent = t('exportarTxt');
+  if(byId('exportarJsonBtn')) byId('exportarJsonBtn').textContent = t('exportarJson');
+  if(byId('exportarCsvBtn')) byId('exportarCsvBtn').textContent = t('exportarCsv');
+  if(byId('imprimirBtn')) byId('imprimirBtn').textContent = t('imprimir');
+  if(byId('qrBtn')) byId('qrBtn').textContent = t('qrSite');
+  if(byId('vitrineBtn')) byId('vitrineBtn').textContent = t('vitrineModo');
+  if(byId('cartaoResumoBtn')) byId('cartaoResumoBtn').textContent = t('cartaoResumo');
+  if(byId('wishlistPrevBtn')) byId('wishlistPrevBtn').textContent = t('anterior');
+  if(byId('wishlistNextBtn')) byId('wishlistNextBtn').textContent = t('proxima');
+  if(byId('livroVisitasTitulo')) byId('livroVisitasTitulo').textContent = t('livroVisitas');
+  if(byId('modalShareBtn')) byId('modalShareBtn').textContent = t('compartilhar');
+  if(byId('modalEtiquetaBtn')) byId('modalEtiquetaBtn').textContent = t('gerarEtiqueta');
+  if(byId('modalNavHint')) byId('modalNavHint').textContent = t('navHint');
+  if(byId('sinopseTituloEl')) byId('sinopseTituloEl').textContent = t('sinopseTitulo');
+  if(byId('vitrineSairTxt')) byId('vitrineSairTxt').textContent = t('vitrineSair');
+  document.documentElement.lang = idioma === 'en' ? 'en' : 'pt-BR';
+}
+
+const idiomaBtn = document.getElementById('idiomaBtn');
+function aplicarIdiomaCompleto(){
+  aplicarIdiomaUI();
+  idiomaBtn.textContent = idioma === 'en' ? '🇺🇸' : '🇧🇷';
+  idiomaBtn.title = t('idiomaToggleTitle');
+  render();
+  renderWishlist();
+}
+aplicarIdiomaCompleto();
+idiomaBtn.addEventListener('click', function(){
+  idioma = idioma === 'en' ? 'pt' : 'en';
+  localStorage.setItem('idioma_ps4', idioma);
+  aplicarIdiomaCompleto();
+});
 </script>
 <script src="https://giscus.app/client.js"
   data-repo="iamtgames/colecao"
