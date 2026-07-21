@@ -675,7 +675,10 @@
 
   <div class="rarity-chart" id="perfilChart" style="margin-bottom:18px;"></div>
 
-  <div id="giscus-comments" style="margin: 10px 0 30px;"></div>
+  <div id="giscus-comments" style="margin: 10px 0 30px;">
+    <div class="section-title" style="margin-bottom:14px;">💬 Livro de visitas</div>
+    <div class="giscus"></div>
+  </div>
 
   <div class="footer">Controle Coleção iamT</div>
 </div>
@@ -1784,6 +1787,21 @@ document.getElementById('exportarBtn').addEventListener('click', function(){
 
 // TEMA CLARO/ESCURO
 const temaBtn = document.getElementById('temaBtn');
+
+function temaGiscusAtual(){
+  return document.body.classList.contains('tema-claro') ? 'light' : 'dark_dimmed';
+}
+function sincronizarTemaGiscus(){
+  const iframe = document.querySelector('iframe.giscus-frame');
+  if(!iframe) return;
+  iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: temaGiscusAtual() } } }, 'https://giscus.app');
+}
+window.addEventListener('message', function(e){
+  if(e.origin !== 'https://giscus.app') return;
+  if(!(typeof e.data === 'object' && e.data.giscus)) return;
+  sincronizarTemaGiscus();
+});
+
 if(localStorage.getItem('tema_ps4') === 'claro'){
   document.body.classList.add('tema-claro');
   temaBtn.textContent = '☀️';
@@ -1793,6 +1811,7 @@ temaBtn.addEventListener('click', function(){
   const claro = document.body.classList.contains('tema-claro');
   localStorage.setItem('tema_ps4', claro ? 'claro' : 'escuro');
   this.textContent = claro ? '☀️' : '🌙';
+  sincronizarTemaGiscus();
 });
 
 // VISTA GRADE/LISTA
@@ -2089,6 +2108,21 @@ document.addEventListener('keydown', function(e){
     abrirModal(listaAtual[novoIdx].id);
   }
 });
+</script>
+<script src="https://giscus.app/client.js"
+  data-repo="iamtgames/colecao"
+  data-repo-id="R_kgDOTc-Idw"
+  data-category="Announcements"
+  data-category-id="DIC_kwDOTc-Id84DBoAV"
+  data-mapping="pathname"
+  data-strict="0"
+  data-reactions-enabled="1"
+  data-emit-metadata="0"
+  data-input-position="bottom"
+  data-theme="dark_dimmed"
+  data-lang="pt"
+  crossorigin="anonymous"
+  async>
 </script>
 </body>
 </html>
