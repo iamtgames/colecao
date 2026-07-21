@@ -269,6 +269,33 @@
   .canais-toggle-arrow{font-size:18px; color:var(--ink-dim); transition: transform .25s;}
   .canais-toggle-arrow.open{transform: rotate(180deg);}
 
+  /* PAINEL AO VIVO (jogos gratis, noticias, sorteio RAWG) */
+  .aovivo-grid{display:grid; grid-template-columns: repeat(3, 1fr); gap:16px;}
+  @media (max-width: 860px){ .aovivo-grid{grid-template-columns: 1fr;} }
+  .aovivo-col{
+    background: var(--card-glass); backdrop-filter: blur(18px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.08); border-radius: 16px; padding: 16px;
+    display:flex; flex-direction:column; gap:10px; min-height:120px;
+  }
+  .aovivo-col h4{font-size:13.5px; font-weight:800; color:var(--white); display:flex; align-items:center; gap:6px;}
+  .aovivo-list{display:flex; flex-direction:column; gap:10px;}
+  .aovivo-loading{font-size:12px; color:var(--ink-dim);}
+  .aovivo-item{
+    display:flex; gap:10px; align-items:center;
+    border:1px solid var(--line-soft); border-radius:12px; padding:8px; text-decoration:none;
+    transition:.15s;
+  }
+  .aovivo-item:hover{border-color: rgba(255,255,255,0.3);}
+  .aovivo-item img{width:44px; height:44px; border-radius:8px; object-fit:cover; flex-shrink:0; background:var(--line-soft);}
+  .aovivo-item-title{font-size:12px; font-weight:700; color:var(--ink); line-height:1.3;}
+  .aovivo-item-sub{font-size:10.5px; color:var(--ink-dim); margin-top:2px;}
+  .aovivo-empty{font-size:12px; color:var(--ink-dim); font-style:italic;}
+  #randomGameResult{display:flex; flex-direction:column; gap:8px; margin-top:4px;}
+  #randomGameResult img{width:100%; border-radius:12px; aspect-ratio:16/9; object-fit:cover;}
+  #randomGameResult h5{font-size:13px; font-weight:800; color:var(--white);}
+  #randomGameResult p{font-size:11px; color:var(--ink-dim); line-height:1.4;}
+  .aovivo-updated{font-size:10px; color:var(--ink-dim); text-align:right; margin-top:auto;}
+
   .footer{margin-top:50px; text-align:center; color:var(--ink-dim); font-size:12px; border-top:1px solid var(--line); padding-top:20px;}
 
   /* BARRA LATERAL FLUTUANTE */
@@ -669,6 +696,36 @@
     <button class="toggle-venda" id="wishlistPrevBtn" aria-label="Página anterior do radar de caça">◀ Anterior</button>
     <span id="wishlistPageInfo" style="font-size:13px; color:#9a9a9e; font-weight:700;"></span>
     <button class="toggle-venda" id="wishlistNextBtn" aria-label="Próxima página do radar de caça">Próxima ▶</button>
+  </div>
+
+  <div class="canais-toggle-card" id="aovivoToggleCard" style="margin-bottom:14px;">
+    <div class="canais-toggle-left">
+      <span class="canais-toggle-icon">🔴</span>
+      <div>
+        <h3 id="aovivoTituloEl">Painel Ao Vivo</h3>
+        <p id="aovivoSubEl">Jogos grátis, notícias e descobertas — atualiza sozinho</p>
+      </div>
+    </div>
+    <span class="canais-toggle-arrow" id="aovivoToggleArrow">▾</span>
+  </div>
+  <div id="aovivoWrap" style="display:none; margin-bottom:30px;">
+    <div class="aovivo-grid">
+      <div class="aovivo-col">
+        <h4 id="aovivoJogosGratisTitulo">🎮 Jogos grátis agora</h4>
+        <div id="freeGamesList" class="aovivo-list"><p class="aovivo-loading" id="freeGamesLoading">Carregando…</p></div>
+      </div>
+      <div class="aovivo-col">
+        <h4 id="aovivoNoticiasTitulo">📰 Notícias (Flow Games)</h4>
+        <div id="newsList" class="aovivo-list"><p class="aovivo-loading" id="newsLoading">Carregando…</p></div>
+      </div>
+      <div class="aovivo-col">
+        <h4 id="aovivoDescubraTitulo">🎲 Descubra um jogo</h4>
+        <div id="randomGameBox" class="aovivo-list">
+          <button class="toggle-venda" id="randomGameBtn">🔀 Sortear jogo aleatório</button>
+          <div id="randomGameResult"></div>
+        </div>
+      </div>
+    </div>
   </div>
 
   <div class="tools">
@@ -1379,6 +1436,9 @@ const I18N = {
     vitrineSair: 'ESC ou ✕ para sair',
     temaToggleTitle: 'Alternar tema claro/escuro', paletaToggleTitle: 'Alternar paleta de cores',
     idiomaToggleTitle: 'Switch to English',
+    aovivoTitulo: 'Painel Ao Vivo', aovivoSub: 'Jogos grátis, notícias e descobertas — atualiza sozinho',
+    aovivoJogosGratis: '🎮 Jogos grátis agora', aovivoNoticias: '📰 Notícias (Flow Games)',
+    aovivoDescubra: '🎲 Descubra um jogo', sortearBtn: '🔀 Sortear jogo aleatório',
   },
   en: {
     statJogos: 'Games', statValor: 'Total spent', statFav: 'Favorites ⭐',
@@ -1416,6 +1476,9 @@ const I18N = {
     vitrineSair: 'ESC or ✕ to exit',
     temaToggleTitle: 'Toggle light/dark theme', paletaToggleTitle: 'Toggle color palette',
     idiomaToggleTitle: 'Mudar para Português',
+    aovivoTitulo: 'Live Panel', aovivoSub: 'Free games, news and discoveries — updates on its own',
+    aovivoJogosGratis: '🎮 Free games now', aovivoNoticias: '📰 News (Flow Games)',
+    aovivoDescubra: '🎲 Discover a game', sortearBtn: '🔀 Draw random game',
   }
 };
 function t(key){
@@ -2693,6 +2756,100 @@ document.getElementById('wishlistNextBtn').addEventListener('click', function(){
   renderWishlist();
 });
 
+// Painel Ao Vivo: jogos gratis (GamerPower), noticias (Flow Games via news.json) e sorteio (RAWG)
+document.getElementById('aovivoToggleCard').addEventListener('click', function(){
+  const wrap = document.getElementById('aovivoWrap');
+  const arrow = document.getElementById('aovivoToggleArrow');
+  const aberto = wrap.style.display !== 'none';
+  wrap.style.display = aberto ? 'none' : 'block';
+  arrow.classList.toggle('open', !aberto);
+  if(!aberto && !window.__aovivoCarregado){
+    window.__aovivoCarregado = true;
+    carregarJogosGratis();
+    carregarNoticias();
+  }
+});
+
+async function carregarJogosGratis(){
+  const list = document.getElementById('freeGamesList');
+  try{
+    const r = await fetch('https://www.gamerpower.com/api/giveaways?type=game');
+    const data = await r.json();
+    if(!Array.isArray(data) || !data.length){
+      list.innerHTML = `<p class="aovivo-empty">${idioma==='en' ? 'No free games right now.' : 'Nenhum jogo grátis no momento.'}</p>`;
+      return;
+    }
+    const itens = data.slice(0, 6);
+    list.innerHTML = itens.map(g => `
+      <a class="aovivo-item" href="${g.open_giveaway_url || g.gamerpower_url}" target="_blank" rel="noopener">
+        <img src="${g.thumbnail}" alt="" loading="lazy">
+        <div>
+          <div class="aovivo-item-title">${g.title}</div>
+          <div class="aovivo-item-sub">${g.platforms || ''}</div>
+        </div>
+      </a>
+    `).join('') + `<div class="aovivo-updated">${idioma==='en' ? 'Source' : 'Fonte'}: GamerPower</div>`;
+  }catch(e){
+    list.innerHTML = `<p class="aovivo-empty">${idioma==='en' ? 'Could not load free games.' : 'Não consegui carregar os jogos grátis agora.'}</p>`;
+  }
+}
+
+async function carregarNoticias(){
+  const list = document.getElementById('newsList');
+  try{
+    const r = await fetch('./news.json?t=' + Date.now());
+    if(!r.ok) throw new Error('news.json indisponivel');
+    const data = await r.json();
+    const itens = (data.items || []).slice(0, 6);
+    if(!itens.length) throw new Error('sem itens');
+    list.innerHTML = itens.map(n => `
+      <a class="aovivo-item" href="${n.link}" target="_blank" rel="noopener">
+        ${n.image ? `<img src="${n.image}" alt="" loading="lazy">` : ''}
+        <div>
+          <div class="aovivo-item-title">${n.title}</div>
+          <div class="aovivo-item-sub">${n.pubDate ? new Date(n.pubDate).toLocaleDateString('pt-BR') : ''}</div>
+        </div>
+      </a>
+    `).join('') + `<div class="aovivo-updated">${idioma==='en' ? 'Updated' : 'Atualizado'}: ${data.updated ? new Date(data.updated).toLocaleString('pt-BR') : '—'}</div>`;
+  }catch(e){
+    list.innerHTML = `<p class="aovivo-empty">${idioma==='en' ? 'News coming soon — updates automatically.' : 'Notícias chegando em breve — atualiza sozinho.'}</p>`;
+  }
+}
+
+async function sortearJogoAleatorio(){
+  const box = document.getElementById('randomGameResult');
+  const btn = document.getElementById('randomGameBtn');
+  const RAWG_KEY = 'ce46ed1792084f0bb4141f3457a99b9d';
+  btn.disabled = true;
+  box.innerHTML = `<p class="aovivo-loading">${idioma==='en' ? 'Drawing…' : 'Sorteando…'}</p>`;
+  try{
+    const countRes = await fetch(`https://api.rawg.io/api/games?key=${RAWG_KEY}&page_size=1&metacritic=65,100`);
+    const countJson = await countRes.json();
+    const total = Math.min(countJson.count || 1, 9000);
+    const randomPage = Math.floor(Math.random() * total) + 1;
+    const gameRes = await fetch(`https://api.rawg.io/api/games?key=${RAWG_KEY}&page_size=1&page=${randomPage}&metacritic=65,100`);
+    const gameJson = await gameRes.json();
+    const g = gameJson.results && gameJson.results[0];
+    if(!g){
+      box.innerHTML = `<p class="aovivo-empty">${idioma==='en' ? 'Could not find a game, try again.' : 'Não achei um jogo, tenta de novo.'}</p>`;
+      return;
+    }
+    const generos = (g.genres || []).map(x => x.name).join(', ');
+    const nota = g.metacritic ? `⭐ ${g.metacritic}/100` : '';
+    box.innerHTML = `
+      ${g.background_image ? `<img src="${g.background_image}" alt="${g.name}">` : ''}
+      <h5>${g.name}</h5>
+      <p>${g.released ? g.released.slice(0,4) : ''}${nota ? ' · '+nota : ''}${generos ? ' · '+generos : ''}</p>
+      <a class="toggle-venda" href="https://rawg.io/games/${g.slug}" target="_blank" rel="noopener" style="text-align:center;">${idioma==='en' ? 'See more' : 'Ver mais'}</a>
+    `;
+  }catch(e){
+    box.innerHTML = `<p class="aovivo-empty">${idioma==='en' ? 'Error loading game.' : 'Erro ao buscar jogo.'}</p>`;
+  }finally{
+    btn.disabled = false;
+  }
+}
+document.getElementById('randomGameBtn').addEventListener('click', sortearJogoAleatorio);
+
 // Roleta "O que jogar hoje?"
 document.getElementById('roletaBtn').addEventListener('click', function(){
   const lista = todosJogos();
@@ -2856,6 +3013,12 @@ function aplicarIdiomaUI(){
   if(byId('modalNavHint')) byId('modalNavHint').textContent = t('navHint');
   if(byId('sinopseTituloEl')) byId('sinopseTituloEl').textContent = t('sinopseTitulo');
   if(byId('vitrineSairTxt')) byId('vitrineSairTxt').textContent = t('vitrineSair');
+  if(byId('aovivoTituloEl')) byId('aovivoTituloEl').textContent = t('aovivoTitulo');
+  if(byId('aovivoSubEl')) byId('aovivoSubEl').textContent = t('aovivoSub');
+  if(byId('aovivoJogosGratisTitulo')) byId('aovivoJogosGratisTitulo').textContent = t('aovivoJogosGratis');
+  if(byId('aovivoNoticiasTitulo')) byId('aovivoNoticiasTitulo').textContent = t('aovivoNoticias');
+  if(byId('aovivoDescubraTitulo')) byId('aovivoDescubraTitulo').textContent = t('aovivoDescubra');
+  if(byId('randomGameBtn')) byId('randomGameBtn').textContent = t('sortearBtn');
   document.documentElement.lang = idioma === 'en' ? 'en' : 'pt-BR';
 }
 
