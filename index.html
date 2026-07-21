@@ -564,12 +564,12 @@
 </head>
 <body>
 <div class="side-dock">
-  <button id="temaBtn" title="Alternar tema claro/escuro">🌙</button>
-  <a href="https://www.instagram.com/marioturbino/" target="_blank" title="Instagram pessoal">👤</a>
-  <a href="https://www.instagram.com/iamtgames/" target="_blank" title="Instagram da coleção">📸</a>
+  <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
+  <a href="https://www.instagram.com/marioturbino/" target="_blank" title="Instagram pessoal" aria-label="Abrir Instagram pessoal">👤</a>
+  <a href="https://www.instagram.com/iamtgames/" target="_blank" title="Instagram da coleção" aria-label="Abrir Instagram da coleção">📸</a>
   <div class="divider"></div>
-  <button id="contatoBtn" title="Enviar sugestão / parceria">✉️</button>
-  <button id="adminBtn" title="Painel de admin" style="display:none;">🛠️</button>
+  <button id="contatoBtn" title="Enviar sugestão / parceria" aria-label="Enviar sugestão ou parceria">✉️</button>
+  <button id="adminBtn" title="Painel de admin" style="display:none;" aria-label="Abrir painel de admin">🛠️</button>
   <a class="sell" href="https://www.olx.com.br/perfil/mario-t-34b3680f" target="_blank" title="Perfil de vendas OLX">
     <span class="ico">🏷️</span>
     <span>OLX</span>
@@ -595,7 +595,10 @@
       <div class="destaque-eyebrow">✨ Destaque da coleção</div>
       <h2 id="destaqueNome"></h2>
       <p class="modal-extra" id="destaqueDesc" style="margin:0;"></p>
-      <button class="modal-toggle-btn" id="destaqueBtn" style="align-self:flex-start; margin-top:6px;">Ver detalhes</button>
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <button class="modal-toggle-btn" id="destaqueBtn" style="align-self:flex-start; margin-top:6px;">Ver detalhes</button>
+        <button class="modal-toggle-btn" id="apresentacaoBtn" style="align-self:flex-start; margin-top:6px;">▶️ Modo apresentação</button>
+      </div>
     </div>
   </div>
 
@@ -614,6 +617,18 @@
   </div>
   <div class="grid" id="gridCanais" style="display:none; margin-bottom:30px;"></div>
 
+  <div class="canais-toggle-card" id="wishlistToggleCard" style="margin-bottom:14px;">
+    <div class="canais-toggle-left">
+      <span class="canais-toggle-icon">🎯</span>
+      <div>
+        <h3>Radar de Caça</h3>
+        <p id="wishlistSubtitle">Jogos que ainda não tenho, mas estou de olho</p>
+      </div>
+    </div>
+    <span class="canais-toggle-arrow" id="wishlistToggleArrow">▾</span>
+  </div>
+  <div class="grid" id="gridWishlist" style="display:none; margin-bottom:30px;"></div>
+
   <div class="tools">
     <div class="search-box">
       <span class="ico">🔍</span>
@@ -629,6 +644,7 @@
     </select>
     <button class="toggle-venda" id="viewToggle">📋 Ver em lista</button>
     <button class="toggle-venda" id="compararToggle">⚖️ Comparar</button>
+    <button class="toggle-venda" id="roletaBtn">🎲 O que jogar hoje?</button>
     <div class="filters" id="filterContainer">
       <button class="active" data-filter="all">Todos</button>
       <button data-filter="exclusivo">Exclusivos</button>
@@ -657,6 +673,8 @@
 
   <div class="tools" style="margin-top:18px;">
     <button class="toggle-venda" id="exportarBtn">⬇️ Exportar lista (.txt)</button>
+    <button class="toggle-venda" id="exportarJsonBtn">🗂️ Exportar JSON</button>
+    <button class="toggle-venda" id="exportarCsvBtn">📊 Exportar CSV</button>
     <button class="toggle-venda" id="imprimirBtn">🖨️ Imprimir / Gerar PDF</button>
     <button class="toggle-venda" id="qrBtn">📱 QR Code do site</button>
   </div>
@@ -669,6 +687,7 @@
   </div>
 
   <div class="stats-extra-row">
+    <div class="rarity-chart" id="categoriaChart"></div>
     <div class="rarity-chart" id="decadaChart"></div>
     <div class="rarity-chart" id="devChart"></div>
   </div>
@@ -680,16 +699,16 @@
     <div class="giscus"></div>
   </div>
 
-  <div class="footer">Controle Coleção iamT</div>
+  <div class="footer">Controle Coleção iamT<br><span id="atualizadoEm" style="font-size:10.5px; opacity:.7;"></span></div>
 </div>
 
-<button id="topBtn" title="Voltar ao topo">↑</button>
+<button id="topBtn" title="Voltar ao topo" aria-label="Voltar ao topo">↑</button>
 
 <div id="printArea"></div>
 
 <div class="modal-overlay" id="modalOverlay">
   <div class="modal-box modal-box-wide">
-    <button class="modal-close" id="modalClose">✕</button>
+    <button class="modal-close" id="modalClose" aria-label="Fechar">✕</button>
     <div class="modal-split">
       <div class="modal-img-col">
         <div class="modal-img-wrap modal-flip-wrap">
@@ -719,7 +738,7 @@
 
 <div class="modal-overlay" id="qrOverlay">
   <div class="modal-box" style="text-align:center;">
-    <button class="modal-close" id="qrClose">✕</button>
+    <button class="modal-close" id="qrClose" aria-label="Fechar">✕</button>
     <h3 style="margin-bottom:14px;">Escaneie para acessar o site</h3>
     <img id="qrImg" src="" alt="QR Code" style="width:220px; height:220px; border-radius:14px; background:#fff; padding:10px;">
     <p class="modal-extra" style="margin-top:12px;">Cole esse código numa etiqueta física na estante!</p>
@@ -728,7 +747,7 @@
 
 <div class="modal-overlay" id="compareOverlay">
   <div class="modal-box modal-box-wide" style="max-width:600px;">
-    <button class="modal-close" id="compareClose">✕</button>
+    <button class="modal-close" id="compareClose" aria-label="Fechar">✕</button>
     <h3 style="margin-bottom:14px;">Comparar jogos</h3>
     <div id="compareContent" class="modal-extra">Selecione até 3 jogos usando o botão "⚖️" nos cards.</div>
   </div>
@@ -736,7 +755,7 @@
 
 <div class="modal-overlay" id="contatoOverlay">
   <div class="modal-box" style="max-width:420px;">
-    <button class="modal-close" id="contatoClose">✕</button>
+    <button class="modal-close" id="contatoClose" aria-label="Fechar">✕</button>
     <h3 style="margin-bottom:14px;">Sugestão, parceria ou contato</h3>
     <form id="contatoForm" style="display:flex; flex-direction:column; gap:10px;">
       <input type="text" id="contatoNome" name="name" placeholder="Seu nome" required class="contato-input">
@@ -749,7 +768,7 @@
 
 <div class="modal-overlay" id="adminOverlay">
   <div class="modal-box modal-box-wide" style="max-width:520px; max-height:85vh; overflow-y:auto;">
-    <button class="modal-close" id="adminClose">✕</button>
+    <button class="modal-close" id="adminClose" aria-label="Fechar">✕</button>
     <h3 style="margin-bottom:6px;">Painel de Admin — Adicionar jogo</h3>
     <p class="modal-extra" style="margin-bottom:14px;">Fica salvo só neste navegador. Use "Gerar código" pra tornar permanente pra todo mundo.</p>
     <form id="adminForm" style="display:flex; flex-direction:column; gap:10px;">
@@ -1126,6 +1145,12 @@ const anoDev = {
   223: { ano: "2015", dev: "Kojima Productions" }
 };
 
+// Radar de caca: jogos que ainda nao fazem parte da colecao mas estao no radar.
+// Formato: { n: "Nome do jogo", plat: "PS4"/"PS3", motivo: "por que quero (opcional)", capa: "URL opcional" }
+const wishlist = [
+
+];
+
 const canais = [
   { id:1, n:"Diego Sheth", plat:"youtube", link:"https://www.youtube.com/live/KcYAtGqUbog", avatarHandle:"DiegoSheth", avatarUrlOverride:"https://yt3.googleusercontent.com/bMa8L3IRHCbcr3i6wNBRWp4gRoFwk4W9I-CUPRF4ikQMw8pZ07cLGbXtWFGPJ7Vf4lO9JxEJ4A=s160-c-k-c0x00ffffff-no-rj", horario:"📅 Live toda sexta-feira", dias:[5], nota:"Foco: variedade geral. Preço bom. Já comprei." },
   { id:2, n:"Antec.r", plat:"youtube", link:"https://www.youtube.com/@antec.r", horario:"📅 Lives quinta e domingo", dias:[4,7], nota:"Foco: variedade geral. Preço bom. Já comprei." },
@@ -1203,8 +1228,8 @@ function render(){
       <div class="card">
         <div class="cover-wrap" data-open-id="${j.id}">
           <span class="plat-chip">${j.plat}</span>
-          <button class="fav-btn ${isFav}" data-id="${j.id}">⭐</button>
-          <button class="compare-btn ${isComparando}" data-id="${j.id}" title="Comparar">⚖️</button>
+          <button class="fav-btn ${isFav}" data-id="${j.id}" aria-label="Favoritar ${j.n}">⭐</button>
+          <button class="compare-btn ${isComparando}" data-id="${j.id}" title="Comparar" aria-label="Comparar ${j.n}">⚖️</button>
           ${coverInner}
         </div>
         <div class="card-body">
@@ -1242,6 +1267,7 @@ function render(){
   renderHighlights();
   renderRaioX();
   renderPerfil();
+  renderCategorias();
 
   document.querySelectorAll('.fav-btn').forEach(btn=>{
     btn.addEventListener('click', function(e){
@@ -1601,6 +1627,61 @@ function gerarEtiqueta(id){
     document.body.appendChild(a); a.click(); document.body.removeChild(a);
     URL.revokeObjectURL(url);
   });
+}
+
+function renderCategorias(){
+  const el = document.getElementById('categoriaChart');
+  if(!el) return;
+  const lista = todosJogos();
+  const catCount = {};
+  lista.forEach(j => { catCount[j.cat] = (catCount[j.cat] || 0) + 1; });
+  const entries = Object.entries(catCount).sort((a, b) => b[1] - a[1]);
+  const total = lista.length;
+  let html = '<div class="rc-title">Distribuição por categoria</div>';
+  entries.forEach(([cat, count]) => {
+    const pct = total ? Math.round((count / total) * 100) : 0;
+    html += `
+      <div class="rc-row">
+        <span class="rc-label">${catLabel[cat]}</span>
+        <div class="rc-bar-bg"><div class="rc-bar-fill" style="width:${pct}%"></div></div>
+        <span class="rc-count">${count}</span>
+      </div>
+    `;
+  });
+  el.innerHTML = html;
+}
+
+function renderWishlist(){
+  const grid = document.getElementById('gridWishlist');
+  const subtitle = document.getElementById('wishlistSubtitle');
+  if(!grid) return;
+  if(!wishlist.length){
+    if(subtitle) subtitle.textContent = 'Em breve — os próximos alvos da caçada vão aparecer aqui';
+    grid.innerHTML = '<div class="modal-extra" style="padding:20px;">Nenhum jogo na lista ainda.</div>';
+    return;
+  }
+  if(subtitle) subtitle.textContent = `${wishlist.length} jogos indicados — clique pra ver`;
+  let html = '';
+  wishlist.forEach(w => {
+    const inicial = w.n.charAt(0).toUpperCase();
+    const coverInner = w.capa
+      ? `<img src="${w.capa}" alt="${w.n}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'cover-fallback\'><span class=\'ini\'>${inicial}</span><span class=\'tag\'>capa indisponível</span></div>'">`
+      : `<div class="cover-fallback"><span class="ini">${inicial}</span><span class="tag">desejado</span></div>`;
+    html += `
+      <div class="card">
+        <div class="cover-wrap" style="cursor:default;">
+          <span class="plat-chip">${w.plat || '?'}</span>
+          ${coverInner}
+        </div>
+        <div class="card-body">
+          <h3>${w.n}</h3>
+          <div class="badges"><span class="badge b-pouco">Desejado</span></div>
+          ${w.motivo ? `<p class="modal-extra" style="margin:0;">${w.motivo}</p>` : ''}
+        </div>
+      </div>
+    `;
+  });
+  grid.innerHTML = html;
 }
 
 function abrirModal(id){
@@ -2108,6 +2189,135 @@ document.addEventListener('keydown', function(e){
     abrirModal(listaAtual[novoIdx].id);
   }
 });
+
+// "Radar de Caca" (lista de desejos)
+renderWishlist();
+document.getElementById('wishlistToggleCard').addEventListener('click', function(){
+  const grid = document.getElementById('gridWishlist');
+  const arrow = document.getElementById('wishlistToggleArrow');
+  const aberto = grid.style.display !== 'none';
+  grid.style.display = aberto ? 'none' : 'grid';
+  arrow.classList.toggle('open', !aberto);
+});
+
+// Roleta "O que jogar hoje?"
+document.getElementById('roletaBtn').addEventListener('click', function(){
+  const lista = todosJogos();
+  if(!lista.length) return;
+  const overlay = document.createElement('div');
+  overlay.className = 'modal-overlay active';
+  overlay.style.zIndex = 300;
+  overlay.innerHTML = `
+    <div class="modal-box" style="text-align:center; max-width:360px;">
+      <div style="font-size:34px;">🎲</div>
+      <h3 id="rouletteNome" style="margin:14px 0; min-height:26px;">Sorteando...</h3>
+      <p class="modal-extra">Clique fora pra cancelar</p>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+  const nomeEl = overlay.querySelector('#rouletteNome');
+  let ticks = 0;
+  const maxTicks = 18;
+  const timer = setInterval(function(){
+    const aleatorio = lista[Math.floor(Math.random() * lista.length)];
+    nomeEl.textContent = aleatorio.n;
+    ticks++;
+    if(ticks >= maxTicks){
+      clearInterval(timer);
+      const escolhido = lista[Math.floor(Math.random() * lista.length)];
+      setTimeout(function(){
+        overlay.remove();
+        abrirModal(escolhido.id);
+      }, 400);
+    }
+  }, 90);
+  overlay.addEventListener('click', function(e){
+    if(e.target === overlay){ clearInterval(timer); overlay.remove(); }
+  });
+});
+
+// Modo apresentacao: troca o destaque da colecao automaticamente
+let apresentacaoInterval = null;
+document.getElementById('apresentacaoBtn').addEventListener('click', function(){
+  if(apresentacaoInterval){
+    clearInterval(apresentacaoInterval);
+    apresentacaoInterval = null;
+    this.textContent = '▶️ Modo apresentação';
+  } else {
+    apresentacaoInterval = setInterval(renderDestaque, 6000);
+    this.textContent = '⏸️ Parar apresentação';
+  }
+});
+
+// Exportar em JSON e CSV
+document.getElementById('exportarJsonBtn').addEventListener('click', function(){
+  const dados = todosJogos().map(function(j){
+    const info = anoDev[j.id] || {};
+    return {
+      nome: j.n,
+      categoria: catLabel[j.cat],
+      plataforma: j.plat,
+      raridade: rarLabel[j.rar],
+      valor_colecionador: j.col,
+      valor_venda_rapida: j.bar,
+      valor_pago_medio: Math.round((j.col + j.bar) / 2),
+      ano: info.ano || j.ano || '',
+      desenvolvedora: info.dev || j.dev || ''
+    };
+  });
+  const blob = new Blob([JSON.stringify(dados, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'colecao_iamt.json';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+document.getElementById('exportarCsvBtn').addEventListener('click', function(){
+  const linhas = [['Nome','Categoria','Plataforma','Raridade','Valor colecionador','Valor venda rápida','Valor pago (médio)','Ano','Desenvolvedora']];
+  todosJogos().forEach(function(j){
+    const info = anoDev[j.id] || {};
+    linhas.push([
+      j.n, catLabel[j.cat], j.plat, rarLabel[j.rar], j.col, j.bar,
+      Math.round((j.col + j.bar) / 2), info.ano || j.ano || '', info.dev || j.dev || ''
+    ]);
+  });
+  const csv = linhas.map(function(l){
+    return l.map(function(v){ return `"${String(v).replace(/"/g, '""')}"`; }).join(',');
+  }).join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'colecao_iamt.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+});
+
+// Atalhos de teclado: "/" foca a busca, "t" alterna o tema
+document.addEventListener('keydown', function(e){
+  const tag = (e.target.tagName || '').toLowerCase();
+  const digitando = tag === 'input' || tag === 'textarea';
+  if(e.key === '/' && !digitando){
+    e.preventDefault();
+    const campo = document.getElementById('searchInput');
+    if(campo) campo.focus();
+  }
+  if((e.key === 't' || e.key === 'T') && !digitando){
+    document.getElementById('temaBtn').click();
+  }
+});
+
+// "Atualizado em": busca a data do ultimo commit do index.html na API publica do GitHub
+fetch('https://api.github.com/repos/iamtgames/colecao/commits?path=index.html&per_page=1')
+  .then(function(r){ return r.ok ? r.json() : null; })
+  .then(function(data){
+    if(!data || !data[0]) return;
+    const dataCommit = new Date(data[0].commit.committer.date);
+    const formatada = dataCommit.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+    const el = document.getElementById('atualizadoEm');
+    if(el) el.textContent = `Atualizado em ${formatada}`;
+  })
+  .catch(function(){});
 </script>
 <script src="https://giscus.app/client.js"
   data-repo="iamtgames/colecao"
