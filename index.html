@@ -1797,6 +1797,9 @@ function renderWishlist(){
           <h3>${w.n}</h3>
           <div class="badges"><span class="badge b-pouco">Desejado</span></div>
           ${w.motivo ? `<p class="modal-extra" style="margin:0;">${w.motivo}</p>` : ''}
+          <div class="card-foot">
+            <a href="${gerarLink(w.n, w.plat)}" target="_blank">Ver no Mercado Livre →</a>
+          </div>
         </div>
       </div>
     `;
