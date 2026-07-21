@@ -627,7 +627,12 @@
     </div>
     <span class="canais-toggle-arrow" id="wishlistToggleArrow">▾</span>
   </div>
-  <div class="grid" id="gridWishlist" style="display:none; margin-bottom:30px;"></div>
+  <div class="grid" id="gridWishlist" style="display:none; margin-bottom:14px;"></div>
+  <div id="wishlistPager" style="display:none; align-items:center; justify-content:center; gap:16px; margin-bottom:30px;">
+    <button class="toggle-venda" id="wishlistPrevBtn" aria-label="Página anterior do radar de caça">◀ Anterior</button>
+    <span id="wishlistPageInfo" style="font-size:13px; color:#9a9a9e; font-weight:700;"></span>
+    <button class="toggle-venda" id="wishlistNextBtn" aria-label="Próxima página do radar de caça">Próxima ▶</button>
+  </div>
 
   <div class="tools">
     <div class="search-box">
@@ -1154,11 +1159,101 @@ const wishlist = [
   { n:"Titanfall 2 — Collector's Edition", plat:"PS4", motivo:"Vendeu pouco na época por causa da concorrência, o que tornou o capacete réplica dessa edição raro e caro.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/76537-1.jpg" },
   { n:"1001 Spikes", plat:"PS4", motivo:"Nunca teve lançamento físico oficial — as poucas cópias que circulam vieram de promo enviada à Sony.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/26736-1.jpg" },
   { n:"Tamashii", plat:"PS4", motivo:"Um dos jogos de tiragem mais limitada do catálogo físico de PS4, bem acima da média da Limited Run Games.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/86120-1.jpg" },
+  { n:"Elden Ring — Premium Collector's Edition", plat:"PS4", motivo:"Veio com estátua grande, mapa de tecido e artbook; tiragem mundial limitada esgotou em minutos e hoje vale bem mais que o preço de lançamento.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/94978-1.jpg" },
+  { n:"Reydllom — Exorcized Edition", plat:"PS4", motivo:"Título indie de tiragem física extremamente limitada, praticamente desconhecido fora do círculo de colecionadores hardcore.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/128918-1.jpg" },
+  { n:"The Walking Dead — Signature Pack", plat:"PS4", motivo:"Compilação física especial das temporadas da Telltale em tiragem reduzida; ficou ainda mais rara após o fechamento do estúdio.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/24139-1.jpg" },
+  { n:"Poop Slinger", plat:"PS4", motivo:"Jogo de nicho com tiragem física minúscula, um dos itens mais difíceis de encontrar à venda no mercado colecionador.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/67536-1.jpg" },
+  { n:"Inside — Collector's Edition", plat:"PS4", motivo:"Veio com estatueta do Menino, vinil da trilha sonora e steelbook pela iam8bit; tiragem pequena tornou o item um dos mais cobiçados entre colecionáveis indie premium.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/72333-1.jpg" },
+  { n:"NBA 2K19 — Travis Scott Edition", plat:"PS4", motivo:"Edição especial com arte assinada pelo rapper Travis Scott, vendida em quantidade limitada; disputada tanto por fãs de basquete quanto de música.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/65164-1.jpg" },
+  { n:"Assassin's Creed Origins — Legendary Edition", plat:"PS4", motivo:"Veio com Season Pass, artbook e conteúdos extras em tiragem reduzida da Ubisoft; ficou rara após sair de linha nas lojas físicas.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/104576-1.jpg" },
+  { n:"Rez Infinite (Limited Run)", plat:"PS4", motivo:"Publicada pela Limited Run Games em tiragem numerada; suporte a PS VR e produção pequena tornam essa cópia física item de caça constante.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/43133-1.jpg" },
+  { n:"STRAFE", plat:"PS4", motivo:"Publicado pela iam8bit/Devolver em tiragem física reduzida com estética retrô de FPS; item de nicho bastante raro no catálogo do PS4.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/46686-1.jpg" },
+  { n:"Tokyo 42", plat:"PS4", motivo:"Tiragem física pequena pela SOLD OUT Software; um dos jogos isométricos indie mais difíceis de achar em mídia física.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/100278-1.jpg" },
+  { n:"Retro City Rampage DX", plat:"PS4", motivo:"Relançamento físico em tiragem limitada da Limited Run Games; item cult para fãs de jogos retrô paródicos.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/44239-1.jpg" },
+  { n:"Futuridium EP Deluxe", plat:"PS4", motivo:"Tiragem física minúscula via Limited Run Games; um dos shoot 'em ups indie mais raros do catálogo PS4.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/53631-1.jpg" },
+  { n:"The Coma: Recut — Limited Edition", plat:"PS4", motivo:"Publicado pela Limited Run Games em quantidade reduzida com extras de colecionador; item de nicho bem difícil de achar hoje.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/53783-1.jpg" },
+  { n:"Saturday Morning RPG", plat:"PS4", motivo:"Tiragem física pequena via Limited Run Games, com estética nostálgica de desenho animado dos anos 80; item raro entre colecionadores.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/41352-1.jpg" },
+  { n:"Gryphon Knight Epic", plat:"PS4", motivo:"Tiragem física reduzida via Limited Run Games; um dos shoot 'em ups menos conhecidos e mais raros do catálogo físico do PS4.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/55587-1.jpg" },
+  { n:"Final Fantasy XIV: Shadowbringers — Collector's Edition", plat:"PS4", motivo:"Veio com estatueta, artbook e trilha sonora numa tiragem mundial limitada da Square Enix; esgotou rápido e hoje vale bem mais que o preço de lançamento.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/64087-1.jpg" },
+  { n:"Rock Band 4 — Rivals Band Kit", plat:"PS4", motivo:"Pacote físico com jogo e periféricos de guitarra/bateria em tiragem reduzida; a descontinuação da linha de instrumentos torna o kit lacrado bastante raro.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/62769-1.jpg" },
+  { n:"Call of Duty: Black Ops III — Juggernog Edition", plat:"PS4", motivo:"Veio com réplica da máquina Juggernog do modo Zumbi em tiragem mundial limitada da Activision; um dos itens de merchandising mais cobiçados da franquia.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/29237-1.jpg" },
+  { n:"Bloodborne — Collector's Edition", plat:"PS4", motivo:"Veio com estatueta de Iosefka's Doll, artbook e trilha sonora numa tiragem inicial pequena da From Software; hoje ultrapassa facilmente US$300 lacrada.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/86749-1.jpg" },
+  { n:"Horizon Zero Dawn — Collector's Edition", plat:"PS4", motivo:"Trouxe estatueta de um Watcher e steelbook; produção limitada tornou essa caixa uma das mais cobiçadas da primeira leva de exclusivos do PS4.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/114959-1.jpg" },
+  { n:"Days Gone — Collector's Edition", plat:"PS4", motivo:"Inclui máscara de Deacon e miniatura da moto Drifter; tiragem reduzida fez o preço disparar depois que a caixa saiu de linha nas lojas físicas.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/64737-1.jpg" },
+  { n:"Sekiro: Shadows Die Twice — Collector's Edition", plat:"PS4", motivo:"Traz a estátua do Lobo com a prótese, exclusiva de pré-venda; hoje é uma das collector's editions da From Software mais caras do mercado.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/65026-1.jpg" },
+  { n:"Persona 5 Royal — Phantom Thieves Edition", plat:"PS4", motivo:"Saiu em quantidade limitada com artbook, CD e pôster; esgotou em minutos no lançamento e hoje custa várias vezes o preço de capa.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/67930-1.jpg" },
+  { n:"NieR Replicant ver.1.22... — White Snow Edition", plat:"PS4", motivo:"Traz estatueta do Emil e trilha sonora remasterizada; produção curta tornou essa versão física uma das mais raras da linha NieR no PS4.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/89770-1.jpg" },
+  { n:"Catherine: Full Body — Heart's Desire Premium Edition", plat:"PS4", motivo:"Veio com a Rin em resina, artbook e trilha sonora; tiragem pequena da Atlus/NIS America tornou a caixa um item de prateleira raro.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/66197-1.jpg" },
+  { n:"Trials of Mana — Collector's Edition", plat:"PS4", motivo:"Exclusiva do mercado japonês, com estatueta e artbook; importação e baixa tiragem elevam bastante o valor no mercado colecionador.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/90184-1.jpg" },
+  { n:"Dragon Quest XI — Edition of Light", plat:"PS4", motivo:"Caixa de metal com conteúdo de história extra e trilha orquestrada; saiu de linha rapidamente e hoje é disputada por fãs da série.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/121439-1.jpg" },
+  { n:"Kingdom Hearts III — Deluxe Edition", plat:"PS4", motivo:"Trouxe steelbook, artbook e trilha sonora em CD; tiragem limitada fez a versão física valorizar bastante após o fim da produção.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/63353-1.jpg" },
+  { n:"Kingdom Hearts — All-in-One Package", plat:"PS4", motivo:"Reúne praticamente toda a saga numa única mídia física de tiragem curta; um dos itens mais procurados por completistas da franquia.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/67897-1.jpg" },
+  { n:"Ys VIII: Lacrimosa of Dana — Limited Edition", plat:"PS4", motivo:"Veio com steelbook, artbook e trilha sonora numa tiragem pequena da NIS America; item de prateleira raro entre fãs de JRPG.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/68123-1.jpg" },
+  { n:"Shenmue III — Collector's Edition", plat:"PS4", motivo:"Financiado via Kickstarter, veio com a estátua de Ryo Hazuki; produção limitada e forte demanda de apoiadores tornam essa caixa muito valorizada.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/86092-1.jpg" },
+  { n:"Yakuza 6: The Song of Life — Essence of Art Edition", plat:"PS4", motivo:"Trouxe artbook enorme e trilha sonora em caixa de luxo, com tiragem curta da Sega; disputada por colecionadores da saga Yakuza.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/55489-1.jpg" },
+  { n:"Yakuza 6: The Song of Life — Promo Copy", plat:"PS4", motivo:"Cópia promocional distribuída apenas para imprensa e lojistas antes do lançamento; nunca foi vendida ao público, o que a torna extremamente rara.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/82921-1.jpg" },
+  { n:"Judgment (Day One Edition)", plat:"PS4", motivo:"A Sega tirou o jogo de todas as lojas digitais em 2023 por expiração dos direitos de imagem do elenco japonês; a cópia física virou a única forma de possuí-lo.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/63153-1.jpg" },
+  { n:"Nights of Azure — Limited Edition", plat:"PS4", motivo:"Traz artbook e trilha sonora numa tiragem pequena da Koei Tecmo; procurada por fãs de RPG de nicho.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/64869-1.jpg" },
+  { n:"Nights of Azure 2: Bride of the New Moon — Limited Edition", plat:"PS4", motivo:"Sequência com tiragem física ainda menor que a do primeiro jogo; item de nicho bastante disputado por colecionadores de JRPG.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/68122-1.jpg" },
+  { n:"Disgaea 5: Alliance of Vengeance — Limited Edition", plat:"PS4", motivo:"Veio com artbook, trilha sonora e caixa especial em tiragem reduzida da NIS America; muito cobiçada por fãs de tática JRPG.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/68163-1.jpg" },
+  { n:"Tales of Berseria", plat:"PS4", motivo:"Primeira tiragem física ficou esgotada rapidamente no Ocidente; hoje é um dos jogos da série Tales mais buscados em mídia física completa.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/40979-1.jpg" },
+  { n:"Tales of Vesperia: Definitive Edition — Anniversary Bundle", plat:"PS4", motivo:"Edição de aniversário com brindes extras vendida em quantidade limitada; rara entre colecionadores da franquia Tales.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/91696-1.jpg" },
+  { n:"Dragon's Crown Pro — Battle-Hardened Edition", plat:"PS4", motivo:"Veio com steelbook, artbook e trilha sonora numa tiragem pequena da Atlus/NIS America; item raro do catálogo de beat 'em up do PS4.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/114877-1.jpg" },
+  { n:"Odin Sphere Leifthrasir — Storybook Edition", plat:"PS4", motivo:"Caixa ilustrada com artbook e trilha sonora em tiragem limitada; uma das edições mais bonitas e raras de RPG 2D do PS4.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/82349-1.jpg" },
+  { n:"Journey — Collector's Edition", plat:"PS4", motivo:"Trouxe trilha sonora em vinil e artbook numa tiragem pequena da Sony; item de vitrine bastante disputado por fãs de jogos indie premiados.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/97156-1.jpg" },
+  { n:"RiME — Collector's Edition", plat:"PS4", motivo:"Veio com estatueta do protagonista e da raposa, artbook e trilha sonora em caixa numerada; tiragem curta tornou o item raro no mercado secundário.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/74857-1.jpg" },
+  { n:"Dragon Ball FighterZ — Collector's Edition", plat:"PS4", motivo:"Trouxe busto de Goku Black em resina e steelbook; tiragem limitada fez a caixa completa valorizar bastante entre fãs de luta.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/52981-1.jpg" },
+  { n:"Code Vein — Bloodthirst Edition", plat:"PS4", motivo:"Edição limitada japonesa com artbook, trilha sonora e itens extras; tiragem reduzida e exclusividade regional a tornam rara no Ocidente.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/117249-1.jpg" },
+  { n:"Resident Evil 2 (Remake) — 1ª tiragem", plat:"PS4", motivo:"Cópias de primeira tiragem traziam brindes impressos hoje ausentes das reimpressões em massa; exemplares completos de primeira leva são disputados.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/56094-1.jpg" },
+  { n:"Devil May Cry 5 — Collector's Edition", plat:"PS4", motivo:"Veio com estatueta de Nero e Dante, artbook e steelbook numa tiragem curta da Capcom; um dos itens mais valorizados de ação do PS4.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/66938-1.jpg" },
+  { n:"Final Fantasy VII Remake — 1st Class Edition", plat:"PS4", motivo:"Trouxe estatueta do Cloud, artbook grande e caixa numerada; produção limitada fez o preço disparar após esgotar nas lojas oficiais.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/70661-1.jpg" },
+  { n:"Onimusha: Warlords — Collector's Pack", plat:"PS4", motivo:"Edição japonesa com máscara réplica e artbook em tiragem pequena da Capcom; item raro para fãs do remaster.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/93234-1.jpg" },
+  { n:"Kingdom Come: Deliverance — 1ª tiragem", plat:"PS4", motivo:"Primeira tiragem física saiu antes de qualquer patch e DLC; cópias originais sem reimpressão são bem procuradas por fãs de RPG medieval.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/53447-1.jpg" },
+  { n:"We Happy Few", plat:"PS4", motivo:"Jogo nascido de campanha no Kickstarter com tiragem física relativamente pequena; procurado por colecionadores de survival narrativo.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/60424-1.jpg" },
+  { n:"Outlast Trinity", plat:"PS4", motivo:"Compilação física com os dois jogos e a DLC Whistleblower saiu em tiragem limitada; ficou difícil de achar lacrada após sair de linha.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/43916-1.jpg" },
+  { n:"Night Trap — 25th Anniversary Edition", plat:"PS4", motivo:"Relançamento físico do clássico de terror interativo, produzido em tiragem pequena pela Limited Run Games; item cult bastante disputado.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/48429-1.jpg" },
+  { n:"Night Trap — Collector's Edition (Limited Run)", plat:"PS4", motivo:"Reedição posterior ainda mais limitada, vendida só na loja da Limited Run Games; esgotou rápido e virou item de nicho para colecionadores.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/119703-1.jpg" },
+  { n:"Hotline Miami", plat:"PS4", motivo:"Tiragem física original pequena pela Devolver Digital; procurada por fãs de indies violentos em pixel art.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/23788-1.jpg" },
+  { n:"Hotline Miami 2: Wrong Number — Special Reserve Games", plat:"PS4", motivo:"Reimpressão física feita pela Special Reserve Games em tiragem numerada e limitada; item de nicho bastante valorizado.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/88610-1.jpg" },
+  { n:"Hotline Miami & Hotline Miami 2 — Combo Pack", plat:"PS4", motivo:"Pacote físico duplo vendido por tempo limitado; hoje é raro encontrar as duas mídias lacradas juntas.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/89643-1.jpg" },
+  { n:"Downwell — Special Reserve Edition", plat:"PS4", motivo:"Cópia física produzida pela Special Reserve Games em tiragem numerada pequena; um dos itens mais raros de jogos indie roguelite no PS4.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/72771-1.jpg" },
+  { n:"Shovel Knight: Treasure Trove", plat:"PS4", motivo:"Coletânea física completa da saga Shovel Knight, com tiragem relativamente pequena pela Yacht Club Games; disputada por fãs de plataforma retrô.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/61907-1.jpg" },
+  { n:"Bloodstained: Ritual of the Night — Kickstarter Signed Edition", plat:"PS4", motivo:"Cópia assinada exclusiva para apoiadores da campanha de financiamento coletivo; nunca foi vendida ao público em geral.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/80031-1.jpg" },
+  { n:"Yooka-Laylee", plat:"PS4", motivo:"Sucessor espiritual de Banjo-Kazooie financiado via Kickstarter; a tiragem física inicial esgotou rápido entre os apoiadores da campanha.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/44282-1.jpg" },
+  { n:"Yooka-Laylee and the Impossible Lair", plat:"PS4", motivo:"Sequência de tiragem física reduzida e pouco reimpressa; item de nicho cada vez mais raro nas prateleiras físicas.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/66680-1.jpg" },
+  { n:"Shantae: Half-Genie Hero", plat:"PS4", motivo:"Financiado via Kickstarter, teve tiragem física pequena pela XSEED/Marvelous; item cult bastante procurado por fãs de plataforma 2D.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/42296-1.jpg" },
+  { n:"Owlboy — Limited Edition", plat:"PS4", motivo:"Edição física limitada com steelbook e artbook, vendida em quantidade reduzida quase dez anos após o anúncio do jogo; item raro para fãs de indies aclamados pela crítica.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/61687-1.jpg" },
+  { n:"Lost Judgment", plat:"PS4", motivo:"Assim como o primeiro jogo, foi retirado das lojas digitais da Sega em 2023 por questões de licenciamento de imagem do elenco japonês; hoje só existe pela mídia física.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/96500-1.jpg" },
   { n:"The Last of Us — Post-Pandemic Edition", plat:"PS3", motivo:"Edição exclusiva de loja nos EUA com estátua de Joel e Ellie — altíssima demanda entre colecionadores.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/10392-1.jpg" },
   { n:"Tales of Graces F", plat:"PS3", motivo:"Exclusivo de PS3 no Ocidente, um dos JRPGs mais disputados da plataforma no mercado de colecionador.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/12452-1.jpg" },
   { n:"Under Defeat HD: Deluxe Edition", plat:"PS3", motivo:"Shoot 'em up com distribuição europeia extremamente limitada — item cobiçado por fãs do gênero.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/23330-1.jpg" },
   { n:"Aquanaut's Holiday: Hidden Memories", plat:"PS3", motivo:"Exclusivo japonês que nunca foi localizado pro Ocidente — raridade clássica de importado.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/21181-1.jpg" },
-  { n:"NBA Elite 11", plat:"PS3", motivo:"O 'santo graal': jogo cancelado com pouquíssimas cópias conhecidas no mundo — praticamente impossível de achar.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/63896-1.jpg" }
+  { n:"NBA Elite 11", plat:"PS3", motivo:"O 'santo graal': jogo cancelado com pouquíssimas cópias conhecidas no mundo — praticamente impossível de achar.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/63896-1.jpg" },
+  { n:"Armored Core: For Answer", plat:"PS3", motivo:"Mecha game da FromSoftware com tiragem baixa nos EUA; hoje uma das entradas mais caras da franquia para colecionadores.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/5925-1.jpg" },
+  { n:"Dead Nation", plat:"PS3", motivo:"Shooter de zumbis da Housemarque com impressão física limitada, tornando cópias completas cada vez mais raras no mercado.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/18886-1.jpg" },
+  { n:"BlazBlue: Central Fiction", plat:"PS3", motivo:"Único jogo da série sem dublagem em inglês; edição de PS3 é escassa e disputada por fãs de jogos de luta.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/44413-1.jpg" },
+  { n:"Painkiller: Hell & Damnation", plat:"PS3", motivo:"FPS pouco divulgado com tiragem pequena; encontrar uma cópia completa em bom estado é incomum.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/14612-1.jpg" },
+  { n:"The Last Guy", plat:"PS3", motivo:"Exclusivo de PSN vendido quase só digitalmente; as raríssimas cópias físicas valem centenas de dólares entre colecionadores.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/30411-1.jpg" },
+  { n:"Syberia — Complete Collection", plat:"PS3", motivo:"Compilado de aventura com tiragem física limitada para PS3; a versão sem o logo THQ Nordic é especialmente cobiçada.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/34216-1.jpg" },
+  { n:"Afrika", plat:"PS3", motivo:"Simulador de fotografia de safári com tiragem norte-americana muito baixa, hoje um item de nicho valorizado por colecionadores.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/13461-1.jpg" },
+  { n:"Rocksmith (Guitar Bundle)", plat:"PS3", motivo:"Pacote com guitarra real incluída; a versão completa com o cabo e instrumento é rara de achar intacta.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/106255-1.jpg" },
+  { n:"Ni no Kuni: Wrath of the White Witch — Wizard's Edition", plat:"PS3", motivo:"Edição especial com livro de 300 páginas e pelúcia do Drippy; uma das collector's editions mais valorizadas do PS3.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/14536-1.jpg" },
+  { n:"Grand Theft Auto IV — Special Edition", plat:"PS3", motivo:"Traz cofre funcional, chaveiro e artbook de capa dura; edição especial de um dos maiores fenômenos da geração.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/64981-1.jpg" },
+  { n:"Band Hero — Superbundle", plat:"PS3", motivo:"Bundle completo com guitarra, baixo, microfone e bateria; peças de jogos de ritmo se tornaram raras após o fim da produção.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/14406-1.jpg" },
+  { n:"Armored Core: Verdict Day — Collector's Edition", plat:"PS3", motivo:"Edição de colecionador com action figure de mecha detalhada, artbook e trilha sonora; uma das mais caras da franquia no PS3.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/23998-1.jpg" },
+  { n:"Dead Space 3 — Greatest Hits", plat:"PS3", motivo:"Reimpressão 'Greatest Hits' surpreendentemente incomum, cobiçada por quem coleciona a linha completa de Greatest Hits do PS3.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/120568-1.jpg" },
+  { n:"Rain", plat:"PS3", motivo:"Jogo digital do PlayStation Network com impressão física limitadíssima, majoritariamente distribuída no Japão e Hong Kong.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/123862-1.jpg" },
+  { n:"Uncharted 2: Among Thieves — Fortune Hunter Edition", plat:"PS3", motivo:"Apenas 200 unidades produzidas, com adaga réplica, artbook e case autografado; um dos itens mais raros da série.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/201-1.jpg" },
+  { n:"Assassin's Creed IV: Black Flag — Black Chest Edition", plat:"PS3", motivo:"Edição limitada com estátua do Edward Kenway, mapa de pirata e bandeira; valorizada por ter saído no fim de vida do PS3.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/18148-1.jpg" },
+  { n:"Demon's Souls — Deluxe Edition", plat:"PS3", motivo:"Exclusivo de PS3 que deu origem ao gênero soulslike; a Deluxe Edition com guia de estratégia é hoje item de coleção.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/854-1.jpg" },
+  { n:"Kingdom Hearts HD 2.5 ReMIX — Limited Edition", plat:"PS3", motivo:"Traz pin colecionável exclusivo da Disney nunca lançado em outro lugar, além de artbook e pelúcia Shadow Heartless.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/94606-1.jpg" },
+  { n:"Lightning Returns: Final Fantasy XIII — Collector's Edition", plat:"PS3", motivo:"Edição com artbook em capa dura e réplica do relógio de bolso; disputada por fãs da trilogia Fabula Nova Crystallis.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/15767-1.jpg" },
+  { n:"Assassin's Creed: Brotherhood — Codex Edition", plat:"PS3", motivo:"Lançada apenas em regiões selecionadas, com baú temático e mapa da Roma antiga; uma das edições mais raras da série.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/8170-1.jpg" },
+  { n:"BioShock Infinite — Ultimate Songbird Edition", plat:"PS3", motivo:"Vem com estátua do Songbird e réplica do vigor Murder of Crows; peça de destaque para colecionadores da franquia.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/13488-1.jpg" },
+  { n:"The Beatles: Rock Band — Limited Edition", plat:"PS3", motivo:"Pacote temático dos Beatles descontinuado, com instrumentos exclusivos hoje difíceis de achar completos.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/13390-1.jpg" },
+  { n:"Call of Duty: Modern Warfare 2 — Prestige Edition", plat:"PS3", motivo:"Vem com óculos de visão noturna funcionais e busto do soldado; uma das edições de colecionador mais extravagantes do PS3.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/6591-1.jpg" },
+  { n:"The Elder Scrolls V: Skyrim — Collector's Edition", plat:"PS3", motivo:"Traz estátua de 30cm do dragão Alduin, artbook de 200 páginas e mapa de tecido; item de destaque para RPGs ocidentais.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/69612-1.jpg" },
+  { n:"SOCOM 4: U.S. Navy SEALs — Full Deployment Edition", plat:"PS3", motivo:"Bundle com controle de arma para PlayStation Move e câmera; combo de hardware que encareceu muito a edição completa.", capa:"https://cdn.thegamesdb.net/images/original/boxart/front/12562-1.jpg" }
 ];
 
 const canais = [
@@ -1661,18 +1756,33 @@ function renderCategorias(){
   el.innerHTML = html;
 }
 
+let wishlistPage = 0;
+const WISHLIST_PAGE_SIZE = 10;
+
 function renderWishlist(){
   const grid = document.getElementById('gridWishlist');
   const subtitle = document.getElementById('wishlistSubtitle');
+  const pager = document.getElementById('wishlistPager');
+  const pageInfo = document.getElementById('wishlistPageInfo');
+  const prevBtn = document.getElementById('wishlistPrevBtn');
+  const nextBtn = document.getElementById('wishlistNextBtn');
   if(!grid) return;
   if(!wishlist.length){
     if(subtitle) subtitle.textContent = 'Em breve — os próximos alvos da caçada vão aparecer aqui';
     grid.innerHTML = '<div class="modal-extra" style="padding:20px;">Nenhum jogo na lista ainda.</div>';
+    if(pager) pager.style.display = 'none';
     return;
   }
-  if(subtitle) subtitle.textContent = `${wishlist.length} jogos indicados — clique pra ver`;
+  const totalPages = Math.ceil(wishlist.length / WISHLIST_PAGE_SIZE);
+  if(wishlistPage >= totalPages) wishlistPage = totalPages - 1;
+  if(wishlistPage < 0) wishlistPage = 0;
+  const start = wishlistPage * WISHLIST_PAGE_SIZE;
+  const pageItems = wishlist.slice(start, start + WISHLIST_PAGE_SIZE);
+  const ps4Count = wishlist.filter(w => w.plat === 'PS4').length;
+  const ps3Count = wishlist.filter(w => w.plat === 'PS3').length;
+  if(subtitle) subtitle.textContent = `${wishlist.length} jogos indicados (${ps4Count} PS4 / ${ps3Count} PS3) — 10 por vez`;
   let html = '';
-  wishlist.forEach(w => {
+  pageItems.forEach(w => {
     const inicial = w.n.charAt(0).toUpperCase();
     const coverInner = w.capa
       ? `<img src="${w.capa}" alt="${w.n}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'cover-fallback\'><span class=\'ini\'>${inicial}</span><span class=\'tag\'>capa indisponível</span></div>'">`
@@ -1692,6 +1802,20 @@ function renderWishlist(){
     `;
   });
   grid.innerHTML = html;
+  if(pager){
+    pager.style.display = totalPages > 1 ? 'flex' : 'none';
+    if(pageInfo) pageInfo.textContent = `${start+1}–${Math.min(start+WISHLIST_PAGE_SIZE, wishlist.length)} de ${wishlist.length}`;
+    if(prevBtn){
+      prevBtn.disabled = wishlistPage === 0;
+      prevBtn.style.opacity = wishlistPage === 0 ? '0.4' : '1';
+      prevBtn.style.pointerEvents = wishlistPage === 0 ? 'none' : 'auto';
+    }
+    if(nextBtn){
+      nextBtn.disabled = wishlistPage >= totalPages - 1;
+      nextBtn.style.opacity = wishlistPage >= totalPages - 1 ? '0.4' : '1';
+      nextBtn.style.pointerEvents = wishlistPage >= totalPages - 1 ? 'none' : 'auto';
+    }
+  }
 }
 
 function abrirModal(id){
@@ -2204,10 +2328,20 @@ document.addEventListener('keydown', function(e){
 renderWishlist();
 document.getElementById('wishlistToggleCard').addEventListener('click', function(){
   const grid = document.getElementById('gridWishlist');
+  const pager = document.getElementById('wishlistPager');
   const arrow = document.getElementById('wishlistToggleArrow');
   const aberto = grid.style.display !== 'none';
   grid.style.display = aberto ? 'none' : 'grid';
+  if(pager) pager.style.display = aberto ? 'none' : (Math.ceil(wishlist.length / WISHLIST_PAGE_SIZE) > 1 ? 'flex' : 'none');
   arrow.classList.toggle('open', !aberto);
+});
+document.getElementById('wishlistPrevBtn').addEventListener('click', function(){
+  wishlistPage--;
+  renderWishlist();
+});
+document.getElementById('wishlistNextBtn').addEventListener('click', function(){
+  wishlistPage++;
+  renderWishlist();
 });
 
 // Roleta "O que jogar hoje?"
