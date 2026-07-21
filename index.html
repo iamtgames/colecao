@@ -347,6 +347,45 @@
   .rc-row .rc-bar-fill{height:100%; background:var(--white); border-radius:6px; transition: width .4s ease;}
   .rc-row .rc-count{min-width:24px; text-align:right; color:var(--white); font-weight:700;}
 
+  /* GRAFICOS SECUNDARIOS (decadas / devs) lado a lado no desktop */
+  .stats-extra-row{display:flex; gap:14px; flex-wrap:wrap; margin: 4px 0 18px;}
+  .stats-extra-row .rarity-chart{flex:1; min-width:260px; margin:0;}
+
+  /* DESTAQUE DA COLECAO */
+  .destaque-card{
+    display:flex; gap:22px; align-items:stretch;
+    background: var(--card-glass); backdrop-filter: blur(18px) saturate(140%);
+    border:1px solid rgba(255,255,255,0.08); border-radius: 20px;
+    padding: 18px; margin-bottom: 22px; overflow:hidden;
+  }
+  .destaque-img{
+    width: 140px; flex-shrink:0; border-radius:14px; overflow:hidden;
+    aspect-ratio: 3/4; background: rgba(255,255,255,0.04);
+  }
+  .destaque-img img{width:100%; height:100%; object-fit:cover;}
+  .destaque-info{display:flex; flex-direction:column; justify-content:center; gap:6px;}
+  .destaque-eyebrow{font-size:10.5px; font-weight:800; letter-spacing:1px; text-transform:uppercase; color:#ffa733;}
+  .destaque-info h2{font-size:20px; font-weight:800; color:var(--white); letter-spacing:-.3px;}
+  @media (max-width:600px){
+    .destaque-card{flex-direction:column;}
+    .destaque-img{width:100%; height:auto;}
+  }
+
+  /* TOAST DE MARCO DA COLECAO */
+  .marco-toast{
+    position: fixed; bottom: 24px; right: 24px; z-index: 200;
+    background: var(--bg-card); border:1px solid rgba(255,255,255,0.15);
+    padding: 14px 20px; border-radius: 16px; color: var(--ink);
+    font-size: 13px; font-weight:700; box-shadow: 0 12px 30px rgba(0,0,0,0.4);
+    opacity:0; transform: translateY(12px); transition: opacity .3s ease, transform .3s ease;
+    max-width: 260px;
+  }
+  .marco-toast.show{opacity:1; transform: translateY(0);}
+  .marco-toast b{color:#ffa733;}
+  @media (max-width:600px){
+    .marco-toast{left:16px; right:16px; bottom:80px; max-width:none;}
+  }
+
   /* PLATAFORMA BREAKDOWN */
   .plat-breakdown{display:flex; gap:8px; margin-top:6px;}
   .plat-breakdown span{font-size:10px; color:var(--ink-dim);}
@@ -549,6 +588,16 @@
     </div>
   </div>
 
+  <div class="destaque-card" id="destaqueCard" style="display:none;">
+    <div class="destaque-img" id="destaqueImg"></div>
+    <div class="destaque-info">
+      <div class="destaque-eyebrow">✨ Destaque da coleção</div>
+      <h2 id="destaqueNome"></h2>
+      <p class="modal-extra" id="destaqueDesc" style="margin:0;"></p>
+      <button class="modal-toggle-btn" id="destaqueBtn" style="align-self:flex-start; margin-top:6px;">Ver detalhes</button>
+    </div>
+  </div>
+
   <div class="canais-toggle-card" id="canaisToggleCard">
     <div class="canais-toggle-left">
       <span class="canais-toggle-icon">📺</span>
@@ -614,6 +663,11 @@
 
   <div class="rarity-chart" id="rarityChart">
     <div class="rc-title">Distribuição por raridade</div>
+  </div>
+
+  <div class="stats-extra-row">
+    <div class="rarity-chart" id="decadaChart"></div>
+    <div class="rarity-chart" id="devChart"></div>
   </div>
 
   <div class="footer">Controle Coleção iamT</div>
@@ -1175,6 +1229,7 @@ function render(){
 
   renderRarityChart();
   renderHighlights();
+  renderRaioX();
 
   document.querySelectorAll('.fav-btn').forEach(btn=>{
     btn.addEventListener('click', function(e){
@@ -1314,6 +1369,109 @@ function renderRarityChart(){
   el.innerHTML = html;
 }
 
+function renderDestaque(){
+  const card = document.getElementById('destaqueCard');
+  if(!card) return;
+  const pool = todosJogos().filter(j => j.rar === 'raro' || j.rar === 'muito');
+  const lista = pool.length ? pool : todosJogos();
+  if(!lista.length){ card.style.display = 'none'; return; }
+  const escolhido = lista[Math.floor(Math.random() * lista.length)];
+  const capaUrl = capas[escolhido.id];
+  const imgEl = document.getElementById('destaqueImg');
+  imgEl.innerHTML = capaUrl
+    ? `<img src="${capaUrl}" alt="${escolhido.n}">`
+    : `<div class="cover-fallback"><span class="ini">${escolhido.n.charAt(0).toUpperCase()}</span></div>`;
+  document.getElementById('destaqueNome').textContent = escolhido.n;
+  const info = anoDev[escolhido.id] || {};
+  const partes = [];
+  if(info.ano) partes.push(info.ano);
+  if(info.dev) partes.push(info.dev);
+  partes.push(rarLabel[escolhido.rar]);
+  document.getElementById('destaqueDesc').textContent = partes.join(' \u00b7 ');
+  const btn = document.getElementById('destaqueBtn');
+  btn.onclick = function(){ abrirModal(escolhido.id); };
+  card.style.display = 'flex';
+}
+
+function renderRaioX(){
+  const decadaEl = document.getElementById('decadaChart');
+  const devEl = document.getElementById('devChart');
+  if(!decadaEl || !devEl) return;
+
+  // Distribuicao por decada de lancamento
+  const decadas = {};
+  todosJogos().forEach(j => {
+    const info = anoDev[j.id] || {};
+    const ano = info.ano || j.ano;
+    if(!ano) return;
+    const decada = Math.floor(parseInt(ano, 10) / 10) * 10;
+    const label = `${decada}s`;
+    decadas[label] = (decadas[label] || 0) + 1;
+  });
+  const decadaKeys = Object.keys(decadas).sort();
+  const totalComAno = decadaKeys.reduce((s, k) => s + decadas[k], 0);
+  let htmlDec = '<div class="rc-title">Distribuição por década de lançamento</div>';
+  decadaKeys.forEach(k => {
+    const count = decadas[k];
+    const pct = totalComAno ? Math.round((count / totalComAno) * 100) : 0;
+    htmlDec += `
+      <div class="rc-row">
+        <span class="rc-label">${k}</span>
+        <div class="rc-bar-bg"><div class="rc-bar-fill" style="width:${pct}%"></div></div>
+        <span class="rc-count">${count}</span>
+      </div>
+    `;
+  });
+  decadaEl.innerHTML = htmlDec;
+
+  // Desenvolvedoras mais presentes na colecao
+  const devs = {};
+  todosJogos().forEach(j => {
+    const info = anoDev[j.id] || {};
+    const dev = info.dev || j.dev;
+    if(!dev) return;
+    devs[dev] = (devs[dev] || 0) + 1;
+  });
+  const topDevs = Object.entries(devs).sort((a, b) => b[1] - a[1]).slice(0, 5);
+  const maxDev = topDevs.length ? topDevs[0][1] : 0;
+  let htmlDev = '<div class="rc-title">Desenvolvedoras mais presentes</div>';
+  topDevs.forEach(([nome, count]) => {
+    const pct = maxDev ? Math.round((count / maxDev) * 100) : 0;
+    htmlDev += `
+      <div class="rc-row">
+        <span class="rc-label" style="min-width:150px;">${nome}</span>
+        <div class="rc-bar-bg"><div class="rc-bar-fill" style="width:${pct}%"></div></div>
+        <span class="rc-count">${count}</span>
+      </div>
+    `;
+  });
+  devEl.innerHTML = htmlDev;
+}
+
+function checkMilestones(){
+  const marcos = [25, 50, 75, 100, 125, 150, 200, 250, 300];
+  const total = todosJogos().length;
+  let celebrados = JSON.parse(localStorage.getItem('marcos_celebrados_ps4')) || [];
+  const novo = marcos.find(m => total >= m && !celebrados.includes(m));
+  if(novo){
+    celebrados.push(novo);
+    localStorage.setItem('marcos_celebrados_ps4', JSON.stringify(celebrados));
+    mostrarMarcoToast(novo);
+  }
+}
+
+function mostrarMarcoToast(marco){
+  const toast = document.createElement('div');
+  toast.className = 'marco-toast';
+  toast.innerHTML = `\ud83c\udfc6 Sua coleção atingiu <b>${marco} jogos</b>!`;
+  document.body.appendChild(toast);
+  requestAnimationFrame(() => toast.classList.add('show'));
+  setTimeout(() => {
+    toast.classList.remove('show');
+    setTimeout(() => toast.remove(), 400);
+  }, 4500);
+}
+
 function abrirModal(id){
   const j = todosJogos().find(x => x.id === id);
   if(!j) return;
@@ -1393,11 +1551,15 @@ function abrirModal(id){
   }
   desenharEstrelas(notaAtual);
 
+  history.replaceState(null, '', `#jogo-${id}`);
   overlay.classList.add('active');
 }
 
 function fecharModal(){
   document.getElementById('modalOverlay').classList.remove('active');
+  if(location.hash.startsWith('#jogo-')){
+    history.replaceState(null, '', location.pathname + location.search);
+  }
 }
 
 document.getElementById('searchInput').addEventListener('input', function(){
@@ -1698,6 +1860,17 @@ topBtn.addEventListener('click', function(){
 
 render();
 renderCanais();
+renderDestaque();
+checkMilestones();
+
+// Abrir modal automaticamente se a URL apontar direto pra um jogo (link compartilhado)
+(function(){
+  const match = location.hash.match(/^#jogo-(\d+)$/);
+  if(match){
+    const id = parseInt(match[1], 10);
+    if(todosJogos().some(j => j.id === id)) abrirModal(id);
+  }
+})();
 
 document.getElementById('canaisToggleCard').addEventListener('click', function(){
   const grid = document.getElementById('gridCanais');
