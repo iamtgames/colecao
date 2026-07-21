@@ -21,7 +21,7 @@ jobs:
           node-version: '20'
 
       - name: Buscar feed e gerar news.json
-        run: node scripts/fetch-news.js
+        run: node fetch-news.js
 
       - name: Commitar mudancas (se houver)
         run: |
