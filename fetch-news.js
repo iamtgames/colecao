@@ -13,12 +13,22 @@ function decodeEntities(str) {
   return str
     .replace(/<!\[CDATA\[/g, '')
     .replace(/\]\]>/g, '')
+    .replace(/&#(\d+);/g, (_, code) => String.fromCharCode(parseInt(code, 10)))
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, code) => String.fromCharCode(parseInt(code, 16)))
     .replace(/&amp;/g, '&')
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
     .replace(/&quot;/g, '"')
     .replace(/&#0?39;/g, "'")
     .trim();
+}
+
+function resolveImageUrl(src) {
+  if (!src) return '';
+  if (/^https?:\/\//i.test(src)) return src;
+  if (src.startsWith('//')) return 'https:' + src;
+  if (src.startsWith('/')) return 'https://flowgames.gg' + src;
+  return src;
 }
 
 function extractTag(block, tag) {
@@ -47,7 +57,7 @@ async function main() {
     const title = extractTag(block, 'title');
     const link = extractTag(block, 'link');
     const pubDate = extractTag(block, 'pubDate');
-    const image = extractImage(block);
+    const image = resolveImageUrl(extractImage(block));
     if (title && link) {
       items.push({ title, link, pubDate, image });
     }
