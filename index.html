@@ -253,6 +253,45 @@
   .canal-cta{
     margin-top:4px; font-size:11.5px; font-weight:700; color:#ffa733;
   }
+  .canal-card.canal-ao-vivo{border-color: rgba(255,45,45,0.6); box-shadow: 0 0 0 1px rgba(255,45,45,0.3), 0 16px 36px rgba(200,0,0,0.25);}
+  .canal-live-badge{
+    position:absolute; bottom:10px; left:10px; z-index:6;
+    font-size:10px; font-weight:800; letter-spacing:.4px; color:#fff;
+    background:#e21212; padding:4px 10px; border-radius:20px;
+    animation: pulseLive 1.6s ease-in-out infinite;
+  }
+  @keyframes pulseLive{
+    0%, 100%{ box-shadow: 0 0 0 0 rgba(226,18,18,0.55); }
+    50%{ box-shadow: 0 0 0 6px rgba(226,18,18,0); }
+  }
+
+  /* BALAO FLUTUANTE DE LIVE */
+  #liveBalloonWrap{
+    position: fixed; left:50%; top:14px; transform: translateX(-50%);
+    z-index: 60; display:flex; flex-direction:column; gap:8px; align-items:center;
+    max-width: calc(100vw - 32px);
+  }
+  .live-balloon{
+    display:flex; align-items:center; gap:10px;
+    background: rgba(20,8,8,0.88); backdrop-filter: blur(14px);
+    border: 1px solid rgba(255,60,60,0.5); border-radius: 999px;
+    padding: 8px 16px 8px 10px; text-decoration:none; color:#fff;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    animation: pulseLive 1.8s ease-in-out infinite;
+    transition: transform .15s;
+  }
+  .live-balloon:hover{ transform: scale(1.03); }
+  .live-balloon .dot{
+    width:9px; height:9px; border-radius:50%; background:#ff2d2d; flex-shrink:0;
+    animation: blinkDot 1s ease-in-out infinite;
+  }
+  @keyframes blinkDot{ 0%,100%{opacity:1;} 50%{opacity:.3;} }
+  .live-balloon .txt{font-size:12.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width: 60vw;}
+  .live-balloon .txt b{color:#ff8080;}
+  @media (max-width: 480px){
+    #liveBalloonWrap{ top:8px; }
+    .live-balloon .txt{ font-size:11px; max-width: 52vw; }
+  }
 
   .canais-toggle-card{
     background: var(--card-glass); backdrop-filter: blur(18px) saturate(140%);
@@ -625,6 +664,7 @@
 </style>
 </head>
 <body>
+<div id="liveBalloonWrap"></div>
 <div class="side-dock">
   <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
   <button id="paletaBtn" title="Alternar paleta de cores" aria-label="Alternar paleta de cores">🎨</button>
@@ -1375,6 +1415,8 @@ const canais = [
   { id:12, n:"VG Invest", plat:"youtube", link:"https://www.youtube.com/@vginvest", horario:"📺 Lives de empreendedorismo em games", dias:[], nota:"Foco: empreendedorismo e investimento no mercado de games." },
 ];
 
+let canaisLiveAtual = [];
+
 let jogosExtra = JSON.parse(localStorage.getItem('jogosExtra_ps4')) || [];
 let favoritos = JSON.parse(localStorage.getItem('favoritos_ps4')) || [];
 let notas = JSON.parse(localStorage.getItem('notas_ps4')) || {};
@@ -1440,6 +1482,7 @@ const I18N = {
     aovivoTitulo: 'Painel Ao Vivo', aovivoSub: 'Jogos grátis, notícias e descobertas — atualiza sozinho',
     aovivoJogosGratis: '🎮 Jogos grátis agora', aovivoNoticias: '📰 Notícias (Flow Games)',
     aovivoDescubra: '🎲 Descubra um jogo', sortearBtn: '🔀 Sortear jogo aleatório',
+    aoVivoBadge: 'AO VIVO', estaAoVivo: 'está ao vivo agora',
   },
   en: {
     statJogos: 'Games', statValor: 'Total spent', statFav: 'Favorites ⭐',
@@ -1480,6 +1523,7 @@ const I18N = {
     aovivoTitulo: 'Live Panel', aovivoSub: 'Free games, news and discoveries — updates on its own',
     aovivoJogosGratis: '🎮 Free games now', aovivoNoticias: '📰 News (Flow Games)',
     aovivoDescubra: '🎲 Discover a game', sortearBtn: '🔀 Draw random game',
+    aoVivoBadge: 'LIVE', estaAoVivo: 'is live now',
   }
 };
 function t(key){
@@ -1653,11 +1697,14 @@ function renderCanais(){
     const diaBadge = (ordenarPorDia && c.dias.length)
       ? `<span class="canal-dia-badge">${c.dias.map(d=>nomesDias[d]).join(' e ')}</span>`
       : '';
+    const liveInfo = canaisLiveAtual.find(l => l.id === c.id);
+    const liveBadge = liveInfo ? `<span class="canal-live-badge">🔴 ${t('aoVivoBadge')}</span>` : '';
     html += `
-      <div class="canal-card" data-link="${c.link}">
+      <div class="canal-card${liveInfo ? ' canal-ao-vivo' : ''}" data-link="${liveInfo ? liveInfo.videoUrl : c.link}">
         <div class="canal-top">
           <span class="canal-plat-badge ${c.plat}">${platLabel}</span>
           ${diaBadge}
+          ${liveBadge}
           <img src="${avatar}" alt="${c.n}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ini',textContent:'${inicial}'}))">
         </div>
         <div class="canal-body">
@@ -1678,6 +1725,33 @@ function renderCanais(){
       window.open(this.dataset.link, '_blank');
     });
   });
+}
+
+// BALAO FLUTUANTE + SELO "AO VIVO" nos canais (le canais_live.json, gerado sozinho pelo GitHub Actions)
+function renderLiveBalloon(){
+  const wrap = document.getElementById('liveBalloonWrap');
+  if(!wrap) return;
+  if(!canaisLiveAtual.length){ wrap.innerHTML = ''; return; }
+  wrap.innerHTML = canaisLiveAtual.map(c => `
+    <a class="live-balloon" href="${c.videoUrl}" target="_blank" rel="noopener">
+      <span class="dot"></span>
+      <span class="txt"><b>${c.n}</b> ${t('estaAoVivo')}</span>
+    </a>
+  `).join('');
+}
+
+async function carregarCanaisLive(){
+  try{
+    const r = await fetch('./canais_live.json?t=' + Date.now());
+    if(!r.ok) throw new Error('sem canais_live.json ainda');
+    const data = await r.json();
+    canaisLiveAtual = data.live || [];
+  }catch(e){
+    canaisLiveAtual = [];
+  }
+  renderLiveBalloon();
+  const gridCanais = document.getElementById('gridCanais');
+  if(gridCanais && gridCanais.style.display !== 'none') renderCanais();
 }
 
 function renderHighlights(){
@@ -3030,8 +3104,16 @@ function aplicarIdiomaCompleto(){
   idiomaBtn.title = t('idiomaToggleTitle');
   render();
   renderWishlist();
+  renderLiveBalloon();
+  const gridCanais = document.getElementById('gridCanais');
+  if(gridCanais && gridCanais.style.display !== 'none') renderCanais();
 }
 aplicarIdiomaCompleto();
+
+// Painel de lives: checa quem esta ao vivo agora (dados vem do canais_live.json,
+// atualizado sozinho pelo GitHub Actions a cada poucos minutos)
+carregarCanaisLive();
+setInterval(carregarCanaisLive, 3 * 60 * 1000);
 idiomaBtn.addEventListener('click', function(){
   idioma = idioma === 'en' ? 'pt' : 'en';
   localStorage.setItem('idioma_ps4', idioma);
