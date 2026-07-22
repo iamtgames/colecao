@@ -41,12 +41,25 @@ function decodeEntities(str) {
 async function checarCanal(canal) {
   try {
     const res = await fetch(`https://www.youtube.com/@${canal.handle}/live`, {
-      headers: { 'User-Agent': UA, 'Accept-Language': 'pt-BR,pt;q=0.9' }
+      headers: {
+        'User-Agent': UA,
+        'Accept-Language': 'pt-BR,pt;q=0.9',
+        // Sem esse cookie, o YouTube às vezes responde com a pagina de consentimento
+        // de cookies em vez da pagina do canal (comum em datacenters/CI) — isso faz
+        // a checagem de live falhar silenciosamente (nunca acha "isLiveNow":true).
+        'Cookie': 'CONSENT=YES+1; SOCS=CAI'
+      }
     });
     if (!res.ok) return null;
     const html = await res.text();
 
+    if (html.includes('consent.youtube.com') || html.includes('Before you continue')) {
+      console.warn(`Aviso: pagina de consentimento do YouTube retornada para ${canal.n} — pulando.`);
+      return null;
+    }
+
     const isLiveNow = html.includes('"isLiveNow":true');
+    console.log(`[debug] ${canal.n}: status=${res.status} tamanhoHtml=${html.length} isLiveNow=${isLiveNow}`);
     if (!isLiveNow) return null;
 
     const canonical = extract(html, /<link rel="canonical" href="([^"]+)">/);
