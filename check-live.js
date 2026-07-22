@@ -47,7 +47,20 @@ async function checarCanal(canal) {
         // Sem esse cookie, o YouTube às vezes responde com a pagina de consentimento
         // de cookies em vez da pagina do canal (comum em datacenters/CI) — isso faz
         // a checagem de live falhar silenciosamente (nunca acha "isLiveNow":true).
-        'Cookie': 'CONSENT=YES+1; SOCS=CAI'
+        'Cookie': 'CONSENT=YES+1; SOCS=CAI',
+        // Headers extras pra parecer mais com um navegador de verdade — o YouTube
+        // serve uma variante "enxuta" (sem os dados de live) pra requisicoes vindas
+        // de IPs de datacenter/CI que nao parecem um browser real.
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
+        'Accept-Encoding': 'gzip, deflate, br',
+        'Sec-Fetch-Mode': 'navigate',
+        'Sec-Fetch-Site': 'none',
+        'Sec-Fetch-User': '?1',
+        'Sec-Fetch-Dest': 'document',
+        'Upgrade-Insecure-Requests': '1',
+        'sec-ch-ua': '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
+        'sec-ch-ua-mobile': '?0',
+        'sec-ch-ua-platform': '"Windows"'
       }
     });
     if (!res.ok) return null;
@@ -58,11 +71,12 @@ async function checarCanal(canal) {
       return null;
     }
 
-    const isLiveNow = html.includes('"isLiveNow":true');
-    console.log(`[debug] ${canal.n}: status=${res.status} tamanhoHtml=${html.length} isLiveNow=${isLiveNow}`);
+    const canonical = extract(html, /<link rel="canonical" href="([^"]+)">/);
+    const redirecionouParaWatch = canonical.includes('/watch?v=');
+    const isLiveNow = html.includes('"isLiveNow":true') || (redirecionouParaWatch && html.includes('"isLive":true'));
+    console.log(`[debug] ${canal.n}: status=${res.status} tamanhoHtml=${html.length} canonical=${canonical} isLiveNow=${isLiveNow}`);
     if (!isLiveNow) return null;
 
-    const canonical = extract(html, /<link rel="canonical" href="([^"]+)">/);
     const videoId = extract(canonical, /[?&]v=([^&]+)/) || extract(html, /"videoId":"([^"]+)"/);
     let videoTitle = decodeEntities(extract(html, /<title>([^<]*)<\/title>/)).replace(/ - YouTube$/, '');
     if (!videoTitle) videoTitle = canal.n;
