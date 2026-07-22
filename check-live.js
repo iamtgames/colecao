@@ -1,9 +1,18 @@
 // Verifica se algum canal de YouTube da lista "canais" esta transmitindo AO VIVO agora.
 // Roda via GitHub Actions (.github/workflows/check-live.yml), sem chave de API:
 // usa o atalho https://www.youtube.com/@handle/live, que o proprio YouTube
-// redireciona para o video ao vivo quando existe uma transmissao rolando.
-// Sinal confiavel = "isLiveNow":true no HTML (isLiveBroadcast sozinho engana,
-// ele fica true ate em videos antigos que um dia foram transmitidos ao vivo).
+// redireciona (server-side) para o video mais recente/agendado daquele canal.
+//
+// Sinal confiavel = obj.microformat.playerMicroformatRenderer.liveBroadcastDetails.isLiveNow
+// dentro do JSON "ytInitialPlayerResponse" embutido no HTML.
+// NAO usar busca de string solta tipo html.includes('"isLiveNow":true') — isso da
+// falso-positivo, pois essa mesma string aparece em QUALQUER video ao vivo listado
+// na barra lateral de recomendados da pagina (ex.: abrir a /live de um canal que
+// esta OFFLINE mas que tem, por acaso, um video de OUTRO canal ao vivo sugerido do
+// lado, faz a busca ingenua acusar erroneamente que o canal errado esta ao vivo).
+// A extracao abaixo isola o JSON do player do video PRINCIPAL da pagina (usando
+// contagem de chaves, robusto a aspas/objetos aninhados) e le o campo isLiveNow
+// especificamente dali, que reflete o status real do video principal.
 
 const fs = require('fs');
 
@@ -23,11 +32,6 @@ const CANAIS_YOUTUBE = [
 
 const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
 
-function extract(html, regex) {
-  const m = html.match(regex);
-  return m ? m[1] : '';
-}
-
 function decodeEntities(str) {
   return str
     .replace(/&amp;/g, '&')
@@ -36,6 +40,34 @@ function decodeEntities(str) {
     .replace(/&quot;/g, '"')
     .replace(/&#0?39;/g, "'")
     .trim();
+}
+
+// Extrai o objeto JSON "var ytInitialPlayerResponse = {...};" do HTML usando
+// contagem de chaves (respeitando strings/escapes), em vez de regex guloso —
+// regex simples corta no lugar errado quando o JSON tem "};" dentro de strings.
+function extrairPlayerResponse(html) {
+  const key = 'var ytInitialPlayerResponse = ';
+  const start = html.indexOf(key);
+  if (start === -1) return null;
+  const jsonStart = start + key.length;
+  let depth = 0, i = jsonStart, inStr = false, esc = false;
+  for (; i < html.length; i++) {
+    const c = html[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === '\\') esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') { inStr = true; continue; }
+    if (c === '{') depth++;
+    else if (c === '}') { depth--; if (depth === 0) { i++; break; } }
+  }
+  try {
+    return JSON.parse(html.slice(jsonStart, i));
+  } catch (e) {
+    return null;
+  }
 }
 
 async function checarCanal(canal) {
@@ -71,14 +103,18 @@ async function checarCanal(canal) {
       return null;
     }
 
-    const canonical = extract(html, /<link rel="canonical" href="([^"]+)">/);
-    const redirecionouParaWatch = canonical.includes('/watch?v=');
-    const isLiveNow = html.includes('"isLiveNow":true') || (redirecionouParaWatch && html.includes('"isLive":true'));
-    console.log(`[debug] ${canal.n}: status=${res.status} tamanhoHtml=${html.length} canonical=${canonical} isLiveNow=${isLiveNow}`);
+    const player = extrairPlayerResponse(html);
+    const micro = player && player.microformat && player.microformat.playerMicroformatRenderer
+      ? player.microformat.playerMicroformatRenderer.liveBroadcastDetails
+      : null;
+    const isLiveNow = !!(micro && micro.isLiveNow === true);
+    const playabilityStatus = player && player.playabilityStatus ? player.playabilityStatus.status : 'sem-player';
+    console.log(`[debug] ${canal.n}: status=${res.status} tamanhoHtml=${html.length} playability=${playabilityStatus} isLiveNow=${isLiveNow}`);
     if (!isLiveNow) return null;
 
-    const videoId = extract(canonical, /[?&]v=([^&]+)/) || extract(html, /"videoId":"([^"]+)"/);
-    let videoTitle = decodeEntities(extract(html, /<title>([^<]*)<\/title>/)).replace(/ - YouTube$/, '');
+    const vd = player.videoDetails || {};
+    const videoId = vd.videoId;
+    let videoTitle = decodeEntities(vd.title || '');
     if (!videoTitle) videoTitle = canal.n;
 
     return {
