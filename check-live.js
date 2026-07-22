@@ -1,139 +1,104 @@
 // Verifica se algum canal de YouTube da lista "canais" esta transmitindo AO VIVO agora.
-// Roda via GitHub Actions (.github/workflows/check-live.yml), sem chave de API:
-// usa o atalho https://www.youtube.com/@handle/live, que o proprio YouTube
-// redireciona (server-side) para o video mais recente/agendado daquele canal.
+// Roda via GitHub Actions (.github/workflows/check-live.yml).
 //
-// Sinal confiavel = obj.microformat.playerMicroformatRenderer.liveBroadcastDetails.isLiveNow
-// dentro do JSON "ytInitialPlayerResponse" embutido no HTML.
-// NAO usar busca de string solta tipo html.includes('"isLiveNow":true') — isso da
-// falso-positivo, pois essa mesma string aparece em QUALQUER video ao vivo listado
-// na barra lateral de recomendados da pagina (ex.: abrir a /live de um canal que
-// esta OFFLINE mas que tem, por acaso, um video de OUTRO canal ao vivo sugerido do
-// lado, faz a busca ingenua acusar erroneamente que o canal errado esta ao vivo).
-// A extracao abaixo isola o JSON do player do video PRINCIPAL da pagina (usando
-// contagem de chaves, robusto a aspas/objetos aninhados) e le o campo isLiveNow
-// especificamente dali, que reflete o status real do video principal.
+// Usa a API oficial do YouTube Data API v3 (chave em process.env.YOUTUBE_API_KEY,
+// guardada como secret do GitHub Actions — nunca aparece no codigo nem no site).
+//
+// Por que trocamos a raspagem de HTML por essa abordagem:
+// tentamos antes raspar https://www.youtube.com/@handle/live direto, mas o YouTube
+// bloqueia requisicoes vindas de IPs de datacenter (como os runners do GitHub Actions)
+// com um erro "LOGIN_REQUIRED" especificamente em alguns canais/lives, mesmo quando
+// a transmissao esta genuinamente ao vivo (confirmado manualmente via navegador).
+// A API oficial nao sofre esse bloqueio e da a resposta correta sempre.
+//
+// Estrategia pra gastar pouca cota (limite gratuito: 10.000 unidades/dia):
+// 1) Pra cada canal, busca o feed RSS publico (gratis, sem chave, sem cota) em
+//    https://www.youtube.com/feeds/videos.xml?channel_id=... e pega os 3 videos
+//    mais recentes (o suficiente pra pegar uma live mesmo que nao seja a ultima
+//    postagem, como aconteceu com o canal Sig Chap).
+// 2) Junta os ids de video de TODOS os canais numa unica chamada videos.list
+//    (part=snippet), que custa so ~2 unidades no total, nao importa quantos ids
+//    (ate 50) — MUITO mais barato que 1 chamada search.list por canal (100
+//    unidades cada, o que estouraria a cota rodando a cada 10 minutos).
+// 3) Filtra quem tem snippet.liveBroadcastContent === 'live'.
 
 const fs = require('fs');
 
+const API_KEY = process.env.YOUTUBE_API_KEY;
+
 // Mesmos ids/nomes do array "canais" no index.html — mantenha em sincronia
 // ao adicionar/remover canais de YouTube na aba Vendedores/Lives/Leiloes.
+// channelId (UC...) resolvido uma vez via API (channels.list?forHandle=) e
+// fixado aqui pra nao gastar cota resolvendo handle -> id toda hora.
 const CANAIS_YOUTUBE = [
-  { id: 1, n: 'Diego Sheth', handle: 'DiegoSheth' },
-  { id: 2, n: 'Antec.r', handle: 'antec.r' },
-  { id: 3, n: 'Garimpo dos Games', handle: 'Garimpodosgames' },
-  { id: 4, n: 'Cara de Barata', handle: 'caradebarata' },
-  { id: 5, n: 'DJ Games Retro', handle: 'djgamesretro' },
-  { id: 6, n: 'Jotape Arcade', handle: 'JotapeArcade' },
-  { id: 7, n: 'Sigchap', handle: 'sigchap' },
-  { id: 9, n: 'Rodrigo Retro Games', handle: 'RodrigoRetroGames' },
-  { id: 12, n: 'VG Invest', handle: 'vginvest' },
+  { id: 1, n: 'Diego Sheth', channelId: 'UC6ZRxYOOJw2rwtuIerO-lrA' },
+  { id: 2, n: 'Antec.r', channelId: 'UCWX9kXOO4awp-c3VeJtObPw' },
+  { id: 3, n: 'Garimpo dos Games', channelId: 'UCkDTuzfIG3s_Z-JSoHw3IZQ' },
+  { id: 4, n: 'Cara de Barata', channelId: 'UCefKgYBOrc3yff2gkhgslcQ' },
+  { id: 5, n: 'DJ Games Retro', channelId: 'UC1yok96pYoUNtNnyN7zzWPQ' },
+  { id: 6, n: 'Jotape Arcade', channelId: 'UCDoeapAROOAnkBwd178MpUQ' },
+  { id: 7, n: 'Sigchap', channelId: 'UCpTyn0RRvTmjgNi7YYzUstA' },
+  { id: 9, n: 'Rodrigo Retro Games', channelId: 'UChKgfyQRLATKl7dl-z6tolg' },
+  { id: 12, n: 'VG Invest', channelId: 'UCEHV0ePP26xJVcPEoCLxfSQ' },
 ];
 
-const UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36';
+const MAX_VIDEOS_POR_CANAL = 3;
 
-function decodeEntities(str) {
-  return str
-    .replace(/&amp;/g, '&')
-    .replace(/&lt;/g, '<')
-    .replace(/&gt;/g, '>')
-    .replace(/&quot;/g, '"')
-    .replace(/&#0?39;/g, "'")
-    .trim();
-}
-
-// Extrai o objeto JSON "var ytInitialPlayerResponse = {...};" do HTML usando
-// contagem de chaves (respeitando strings/escapes), em vez de regex guloso —
-// regex simples corta no lugar errado quando o JSON tem "};" dentro de strings.
-function extrairPlayerResponse(html) {
-  const key = 'var ytInitialPlayerResponse = ';
-  const start = html.indexOf(key);
-  if (start === -1) return null;
-  const jsonStart = start + key.length;
-  let depth = 0, i = jsonStart, inStr = false, esc = false;
-  for (; i < html.length; i++) {
-    const c = html[i];
-    if (inStr) {
-      if (esc) esc = false;
-      else if (c === '\\') esc = true;
-      else if (c === '"') inStr = false;
-      continue;
-    }
-    if (c === '"') { inStr = true; continue; }
-    if (c === '{') depth++;
-    else if (c === '}') { depth--; if (depth === 0) { i++; break; } }
-  }
+async function pegarVideosRecentes(canal) {
   try {
-    return JSON.parse(html.slice(jsonStart, i));
-  } catch (e) {
-    return null;
-  }
-}
-
-async function checarCanal(canal) {
-  try {
-    const res = await fetch(`https://www.youtube.com/@${canal.handle}/live`, {
-      headers: {
-        'User-Agent': UA,
-        'Accept-Language': 'pt-BR,pt;q=0.9',
-        // Sem esse cookie, o YouTube às vezes responde com a pagina de consentimento
-        // de cookies em vez da pagina do canal (comum em datacenters/CI) — isso faz
-        // a checagem de live falhar silenciosamente (nunca acha "isLiveNow":true).
-        'Cookie': 'CONSENT=YES+1; SOCS=CAI',
-        // Headers extras pra parecer mais com um navegador de verdade — o YouTube
-        // serve uma variante "enxuta" (sem os dados de live) pra requisicoes vindas
-        // de IPs de datacenter/CI que nao parecem um browser real.
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8',
-        'Accept-Encoding': 'gzip, deflate, br',
-        'Sec-Fetch-Mode': 'navigate',
-        'Sec-Fetch-Site': 'none',
-        'Sec-Fetch-User': '?1',
-        'Sec-Fetch-Dest': 'document',
-        'Upgrade-Insecure-Requests': '1',
-        'sec-ch-ua': '"Chromium";v="124", "Google Chrome";v="124", "Not-A.Brand";v="99"',
-        'sec-ch-ua-mobile': '?0',
-        'sec-ch-ua-platform': '"Windows"'
-      }
-    });
-    if (!res.ok) return null;
-    const html = await res.text();
-
-    if (html.includes('consent.youtube.com') || html.includes('Before you continue')) {
-      console.warn(`Aviso: pagina de consentimento do YouTube retornada para ${canal.n} — pulando.`);
-      return null;
+    const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${canal.channelId}`);
+    if (!res.ok) {
+      console.warn(`Aviso: feed RSS falhou pra ${canal.n} (status ${res.status})`);
+      return [];
     }
-
-    const player = extrairPlayerResponse(html);
-    const micro = player && player.microformat && player.microformat.playerMicroformatRenderer
-      ? player.microformat.playerMicroformatRenderer.liveBroadcastDetails
-      : null;
-    const isLiveNow = !!(micro && micro.isLiveNow === true);
-    const playabilityStatus = player && player.playabilityStatus ? player.playabilityStatus.status : 'sem-player';
-    console.log(`[debug] ${canal.n}: status=${res.status} tamanhoHtml=${html.length} playability=${playabilityStatus} isLiveNow=${isLiveNow}`);
-    if (!isLiveNow) return null;
-
-    const vd = player.videoDetails || {};
-    const videoId = vd.videoId;
-    let videoTitle = decodeEntities(vd.title || '');
-    if (!videoTitle) videoTitle = canal.n;
-
-    return {
-      id: canal.id,
-      n: canal.n,
-      videoId,
-      videoTitle,
-      videoUrl: videoId ? `https://www.youtube.com/watch?v=${videoId}` : `https://www.youtube.com/@${canal.handle}/live`,
-      thumbnail: videoId ? `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg` : ''
-    };
+    const xml = await res.text();
+    const ids = Array.from(xml.matchAll(/<yt:videoId>([^<]+)<\/yt:videoId>/g))
+      .map(m => m[1])
+      .slice(0, MAX_VIDEOS_POR_CANAL);
+    return ids.map(videoId => ({ videoId, canal }));
   } catch (e) {
-    console.error(`Erro checando ${canal.n}:`, e.message);
-    return null;
+    console.error(`Erro buscando feed RSS de ${canal.n}:`, e.message);
+    return [];
   }
 }
 
 async function main() {
-  const resultados = await Promise.all(CANAIS_YOUTUBE.map(checarCanal));
-  const live = resultados.filter(Boolean);
+  if (!API_KEY) {
+    throw new Error('YOUTUBE_API_KEY nao configurada (secret do GitHub Actions ausente).');
+  }
+
+  const listasPorCanal = await Promise.all(CANAIS_YOUTUBE.map(pegarVideosRecentes));
+  const candidatos = listasPorCanal.flat();
+
+  if (!candidatos.length) {
+    throw new Error('Nenhum video encontrado via RSS pra nenhum canal — abortando pra nao sobrescrever canais_live.json com lista vazia por engano.');
+  }
+
+  const idParaCanal = {};
+  candidatos.forEach(c => { idParaCanal[c.videoId] = c.canal; });
+  const idsUnicos = Object.keys(idParaCanal);
+
+  const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${idsUnicos.join(',')}&key=${API_KEY}`;
+  const res = await fetch(url);
+  const data = await res.json();
+
+  if (data.error) {
+    throw new Error(`Erro da API do YouTube: ${data.error.message}`);
+  }
+
+  const live = (data.items || [])
+    .filter(v => v.snippet.liveBroadcastContent === 'live')
+    .map(v => {
+      const canal = idParaCanal[v.id];
+      return {
+        id: canal.id,
+        n: canal.n,
+        videoId: v.id,
+        videoTitle: v.snippet.title,
+        videoUrl: `https://www.youtube.com/watch?v=${v.id}`,
+        thumbnail: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`
+      };
+    });
 
   const payload = {
     updated: new Date().toISOString(),
@@ -141,7 +106,7 @@ async function main() {
   };
 
   fs.writeFileSync('canais_live.json', JSON.stringify(payload, null, 2) + '\n');
-  console.log(`OK: ${live.length} canal(is) ao vivo agora.`);
+  console.log(`OK: ${idsUnicos.length} videos checados via API, ${live.length} canal(is) ao vivo agora.`);
   live.forEach(c => console.log(` - ${c.n}: ${c.videoTitle}`));
 }
 
