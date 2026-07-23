@@ -11,18 +11,23 @@
 // a transmissao esta genuinamente ao vivo (confirmado manualmente via navegador).
 // A API oficial nao sofre esse bloqueio e da a resposta correta sempre.
 //
+// HISTORICO (23/07/2026): a primeira versao usava o feed RSS publico e gratuito
+// (https://www.youtube.com/feeds/videos.xml?channel_id=...) pra achar videos
+// candidatos sem gastar cota. Esse feed passou a retornar 404/500 de forma
+// inconsistente pra todos os canais simultaneamente (confirmado em 2 execucoes
+// reais do workflow, mesmo enviando User-Agent de navegador) — ou seja, parou
+// de ser confiavel vindo de IPs de datacenter do GitHub Actions. Trocamos pela
+// abordagem abaixo, que usa so a API oficial (nao depende de scraping):
+//
 // Estrategia pra gastar pouca cota (limite gratuito: 10.000 unidades/dia):
-// 1) Pra cada canal, busca o feed RSS publico (gratis, sem chave, sem cota) em
-//    https://www.youtube.com/feeds/videos.xml?channel_id=... e pega os 3 videos
-//    mais recentes (o suficiente pra pegar uma live mesmo que nao seja a ultima
-//    postagem, como aconteceu com o canal Sig Chap).
-//    OBS (23/07/2026): o feed passou a retornar 404 pra requisicoes sem
-//    User-Agent de navegador (rodando nos runners do GitHub Actions) — por
-//    isso o fetch abaixo envia um User-Agent/Accept explicitos.
+// 1) Cada canal tem uma "uploads playlist" oficial cujo ID e sempre o
+//    channelId com o prefixo "UC" trocado por "UU" (regra estavel e documentada
+//    da API do YouTube). Buscamos os 3 videos mais recentes dessa playlist via
+//    playlistItems.list (part=snippet), que custa so 1 unidade por chamada —
+//    9 canais = 9 unidades por execucao, nada perto do limite diario.
 // 2) Junta os ids de video de TODOS os canais numa unica chamada videos.list
-//    (part=snippet), que custa so ~2 unidades no total, nao importa quantos ids
-//    (ate 50) — MUITO mais barato que 1 chamada search.list por canal (100
-//    unidades cada, o que estouraria a cota rodando a cada 10 minutos).
+//    (part=snippet), que custa so ~1 unidade no total, nao importa quantos ids
+//    (ate 50).
 // 3) Filtra quem tem snippet.liveBroadcastContent === 'live'.
 
 const fs = require('fs');
@@ -47,25 +52,32 @@ const CANAIS_YOUTUBE = [
 
 const MAX_VIDEOS_POR_CANAL = 3;
 
+function uploadsPlaylistId(channelId) {
+  // Regra oficial da API: a "uploads playlist" de qualquer canal e o mesmo
+  // channelId trocando o prefixo "UC" por "UU".
+  return channelId.startsWith('UC') ? `UU${channelId.slice(2)}` : null;
+}
+
 async function pegarVideosRecentes(canal) {
+  const playlistId = uploadsPlaylistId(canal.channelId);
+  if (!playlistId) {
+    console.warn(`Aviso: channelId de ${canal.n} nao comeca com "UC" — nao da pra derivar a uploads playlist.`);
+    return [];
+  }
   try {
-    const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${canal.channelId}`, {
-      headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
-        'Accept': 'application/atom+xml,application/xml,text/xml,*/*'
-      }
-    });
-    if (!res.ok) {
-      console.warn(`Aviso: feed RSS falhou pra ${canal.n} (status ${res.status})`);
+    const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=${MAX_VIDEOS_POR_CANAL}&key=${API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    if (data.error) {
+      console.warn(`Aviso: playlistItems falhou pra ${canal.n}: ${data.error.message}`);
       return [];
     }
-    const xml = await res.text();
-    const ids = Array.from(xml.matchAll(/<yt:videoId>([^<]+)<\/yt:videoId>/g))
-      .map(m => m[1])
-      .slice(0, MAX_VIDEOS_POR_CANAL);
+    const ids = (data.items || [])
+      .map(it => it.snippet && it.snippet.resourceId && it.snippet.resourceId.videoId)
+      .filter(Boolean);
     return ids.map(videoId => ({ videoId, canal }));
   } catch (e) {
-    console.error(`Erro buscando feed RSS de ${canal.n}:`, e.message);
+    console.error(`Erro buscando uploads de ${canal.n}:`, e.message);
     return [];
   }
 }
@@ -79,7 +91,7 @@ async function main() {
   const candidatos = listasPorCanal.flat();
 
   if (!candidatos.length) {
-    throw new Error('Nenhum video encontrado via RSS pra nenhum canal — abortando pra nao sobrescrever canais_live.json com lista vazia por engano.');
+    throw new Error('Nenhum video encontrado via playlistItems pra nenhum canal — abortando pra nao sobrescrever canais_live.json com lista vazia por engano.');
   }
 
   const idParaCanal = {};
