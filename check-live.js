@@ -16,6 +16,9 @@
 //    https://www.youtube.com/feeds/videos.xml?channel_id=... e pega os 3 videos
 //    mais recentes (o suficiente pra pegar uma live mesmo que nao seja a ultima
 //    postagem, como aconteceu com o canal Sig Chap).
+//    OBS (23/07/2026): o feed passou a retornar 404 pra requisicoes sem
+//    User-Agent de navegador (rodando nos runners do GitHub Actions) — por
+//    isso o fetch abaixo envia um User-Agent/Accept explicitos.
 // 2) Junta os ids de video de TODOS os canais numa unica chamada videos.list
 //    (part=snippet), que custa so ~2 unidades no total, nao importa quantos ids
 //    (ate 50) — MUITO mais barato que 1 chamada search.list por canal (100
@@ -46,7 +49,12 @@ const MAX_VIDEOS_POR_CANAL = 3;
 
 async function pegarVideosRecentes(canal) {
   try {
-    const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${canal.channelId}`);
+    const res = await fetch(`https://www.youtube.com/feeds/videos.xml?channel_id=${canal.channelId}`, {
+      headers: {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0.0.0 Safari/537.36',
+        'Accept': 'application/atom+xml,application/xml,text/xml,*/*'
+      }
+    });
     if (!res.ok) {
       console.warn(`Aviso: feed RSS falhou pra ${canal.n} (status ${res.status})`);
       return [];
