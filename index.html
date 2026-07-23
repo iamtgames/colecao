@@ -2468,7 +2468,8 @@ function renderWishlist(){
   });
   grid.innerHTML = html;
   if(pager){
-    pager.style.display = totalPages > 1 ? 'flex' : 'none';
+    const gridAberto = grid.style.display !== 'none';
+    pager.style.display = (totalPages > 1 && gridAberto) ? 'flex' : 'none';
     if(pageInfo) pageInfo.textContent = idioma === 'en'
       ? `${start+1}–${Math.min(start+WISHLIST_PAGE_SIZE, wishlist.length)} of ${wishlist.length}`
       : `${start+1}–${Math.min(start+WISHLIST_PAGE_SIZE, wishlist.length)} de ${wishlist.length}`;
