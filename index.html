@@ -646,6 +646,7 @@
   .plat-breakdown{display:flex; gap:8px; margin-top:6px;}
   .plat-breakdown span{font-size:10px; color:var(--ink-dim);}
   .plat-breakdown b{color:var(--white);}
+  .valor-atualizado{font-size:9px; color:var(--ink-dim); opacity:.7; margin-top:4px; font-style:italic;}
 
   /* MODAL - EXTRAS */
   .modal-flip-wrap{perspective: 1200px;}
@@ -865,6 +866,7 @@
       <div class="stat"><div class="n" id="statTotal">0</div><div class="l" id="lblStatJogos">Jogos</div></div>
       <div class="stat"><div class="n" id="statValor">R$ 0</div><div class="l" id="lblStatValor">Valor pago (total)</div>
         <div class="plat-breakdown"><span>PS4: <b id="statValorPS4">R$0</b></span><span>PS3: <b id="statValorPS3">R$0</b></span></div>
+        <div class="valor-atualizado" id="valorAtualizadoEm"></div>
       </div>
       <div class="stat"><div class="n" id="statFav">0</div><div class="l" id="lblStatFav">Favoritos ⭐</div></div>
     </div>
@@ -1192,6 +1194,22 @@
 </div>
 
 <script>
+// ATUALIZAÇÃO MANUAL DE PREÇOS (gratuita, sem API — Mercado Livre/OLX bloqueiam
+// busca automática pra IP de datacenter, e o PriceCharting cobra assinatura
+// pra API. Então os valores abaixo são digitados à mão, de tempos em tempos,
+// olhando anúncios reais no Mercado Livre/OLX/lojas de usado).
+//
+// Campos de cada jogo:
+//   col  = valor de colecionador (edição completa, capa boa, se aplicável)
+//   loj  = valor médio visto em loja de usado
+//   bar  = valor de barganha (menor preço razoável encontrado)
+//   caro = valor mais alto visto (referência de teto)
+// O site usa (col+bar)/2 como "valor pago" estimado de cada jogo e soma tudo
+// pro total da coleção — não é preço de mercado em tempo real, é uma média
+// manual. Sempre que revisar os preços, atualize também a constante
+// PRECOS_ATUALIZADOS_EM logo abaixo, pra o site mostrar a data certa.
+const PRECOS_ATUALIZADOS_EM = '23/07/2026';
+
 const jogos = [
   { id:124, n:"Balan WonderWorld", cat:"infantil", col:30, loj:20, bar:15, caro:40, rar:"comum", v:false, plat:"PS4" },
   { id:215, n:"Battlefield V", cat:"fps", col:100, loj:90, bar:70, caro:140, rar:"pouco", v:true, plat:"PS4" },
@@ -1697,6 +1715,7 @@ const I18N = {
     vitrineModo: '🖼️ Modo Vitrine (tela cheia)', cartaoResumo: '🎁 Cartão resumo (compartilhar)',
     precoVerificado: '✓ preço verificado', precoConfirmar: 'preço a confirmar',
     verMercadoLivre: 'Ver no Mercado Livre →', valorPago: 'Valor pago: ',
+    valorAtualizadoEm: (data) => `Preços revisados manualmente em ${data}`,
     resultCount: (n) => `${n} jogos exibidos`,
     desejado: 'Desejado', radarVazio: 'Nenhum jogo na lista ainda.',
     menorPrecoML: 'Menor preço no Mercado Livre agora:', precoCaiu: '🔥 Caiu de preço!',
@@ -1744,6 +1763,7 @@ const I18N = {
     vitrineModo: '🖼️ Showcase mode (fullscreen)', cartaoResumo: '🎁 Summary card (share)',
     precoVerificado: '✓ price verified', precoConfirmar: 'price to confirm',
     verMercadoLivre: 'View on Mercado Livre →', valorPago: 'Amount paid: ',
+    valorAtualizadoEm: (data) => `Prices manually reviewed on ${data}`,
     resultCount: (n) => `${n} games shown`,
     desejado: 'Wanted', radarVazio: 'No games on the list yet.',
     menorPrecoML: 'Lowest Mercado Livre price now:', precoCaiu: '🔥 Price dropped!',
@@ -1867,6 +1887,7 @@ function render(){
   document.getElementById('statValorPS4').textContent = `R$${totalPS4}`;
   document.getElementById('statValorPS3').textContent = `R$${totalPS3}`;
   document.getElementById('statFav').textContent = favoritos.length;
+  document.getElementById('valorAtualizadoEm').textContent = t('valorAtualizadoEm')(PRECOS_ATUALIZADOS_EM);
 
   renderRarityChart();
   renderHighlights();
