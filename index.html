@@ -272,7 +272,7 @@
     max-width: calc(100vw - 32px);
   }
   .live-balloon{
-    display:flex; align-items:center; gap:10px;
+    display:flex; align-items:center; gap:10px; cursor:pointer;
     background: rgba(20,8,8,0.88); backdrop-filter: blur(14px);
     border: 1px solid rgba(255,60,60,0.5); border-radius: 999px;
     padding: 8px 16px 8px 10px; text-decoration:none; color:#fff;
@@ -292,6 +292,42 @@
     #liveBalloonWrap{ top:8px; }
     .live-balloon .txt{ font-size:11px; max-width: 52vw; }
   }
+
+  /* PAINEL DA LIVE (abre embutido ao clicar no balao, sem redirecionar) */
+  #livePanelOverlay{
+    position: fixed; inset:0; z-index: 70; display:none;
+    align-items:flex-start; justify-content:center;
+    background: rgba(0,0,0,0.45); backdrop-filter: blur(3px);
+    padding-top: 70px;
+  }
+  #livePanelOverlay.aberto{ display:flex; }
+  .live-panel{
+    width: min(360px, 92vw); perspective: 900px;
+    background: rgba(18,10,10,0.95); border: 1px solid rgba(255,60,60,0.45);
+    border-radius: 18px; overflow:hidden; box-shadow: 0 30px 70px rgba(0,0,0,0.6);
+    transform-origin: top center;
+    animation: painelAbrir3D .45s cubic-bezier(.2,.9,.3,1.3) forwards;
+  }
+  @keyframes painelAbrir3D{
+    0%{ transform: perspective(900px) rotateX(-75deg) scale(.7); opacity:0; }
+    100%{ transform: perspective(900px) rotateX(0deg) scale(1); opacity:1; }
+  }
+  .live-panel-head{
+    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    padding: 10px 12px; background: rgba(226,18,18,0.12);
+  }
+  .live-panel-title{
+    font-size:12.5px; font-weight:800; color:#fff; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:6px;
+  }
+  .live-panel-title .dot{ width:8px; height:8px; border-radius:50%; background:#ff2d2d; flex-shrink:0; animation: blinkDot 1s ease-in-out infinite; }
+  .live-panel-close{
+    background: rgba(255,255,255,0.08); border:none; color:#fff; cursor:pointer;
+    width:26px; height:26px; border-radius:50%; font-size:14px; line-height:1; flex-shrink:0;
+  }
+  .live-panel-close:hover{ background: rgba(255,255,255,0.18); }
+  .live-panel-video{ position:relative; width:100%; aspect-ratio:16/9; background:#000; }
+  .live-panel-video iframe, .live-panel-video > div{ position:absolute; inset:0; width:100%; height:100%; }
 
   .canais-toggle-card{
     background: var(--card-glass); backdrop-filter: blur(18px) saturate(140%);
@@ -665,6 +701,15 @@
 </head>
 <body>
 <div id="liveBalloonWrap"></div>
+<div id="livePanelOverlay">
+  <div class="live-panel">
+    <div class="live-panel-head">
+      <div class="live-panel-title"><span class="dot"></span><span id="livePanelTitleTxt">Ao vivo</span></div>
+      <button class="live-panel-close" id="livePanelCloseBtn" aria-label="Fechar" title="Fechar">✕</button>
+    </div>
+    <div class="live-panel-video" id="livePanelVideo"><div id="liveYtPlayer"></div></div>
+  </div>
+</div>
 <div class="side-dock">
   <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
   <button id="paletaBtn" title="Alternar paleta de cores" aria-label="Alternar paleta de cores">🎨</button>
@@ -1733,11 +1778,15 @@ function renderLiveBalloon(){
   if(!wrap) return;
   if(!canaisLiveAtual.length){ wrap.innerHTML = ''; return; }
   wrap.innerHTML = canaisLiveAtual.map(c => `
-    <a class="live-balloon" href="${c.videoUrl}" target="_blank" rel="noopener">
+    <div class="live-balloon" data-canal-id="${c.id}" role="button" tabindex="0">
       <span class="dot"></span>
       <span class="txt"><b>${c.n}</b> ${t('estaAoVivo')}</span>
-    </a>
+    </div>
   `).join('');
+  wrap.querySelectorAll('.live-balloon').forEach(el=>{
+    el.addEventListener('click', ()=> abrirLivePanelPorId(parseInt(el.dataset.canalId, 10)));
+    el.addEventListener('keydown', e=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); abrirLivePanelPorId(parseInt(el.dataset.canalId, 10)); } });
+  });
 }
 
 async function carregarCanaisLive(){
@@ -1752,7 +1801,83 @@ async function carregarCanaisLive(){
   renderLiveBalloon();
   const gridCanais = document.getElementById('gridCanais');
   if(gridCanais && gridCanais.style.display !== 'none') renderCanais();
+  // se a live que esta aberta no painel acabou, fecha sozinho
+  if(livePanelCanalId !== null && !canaisLiveAtual.some(c => c.id === livePanelCanalId)){
+    fecharLivePanel();
+  }
 }
+
+// ---- PAINEL DA LIVE EMBUTIDO (YouTube IFrame API) ----
+let ytApiPronta = false;
+let ytApiCarregando = false;
+let ytPlayer = null;
+let livePanelCanalId = null;
+let livePanelPendente = null;
+
+function garantirYtApi(){
+  if(ytApiPronta || ytApiCarregando) return;
+  ytApiCarregando = true;
+  const tag = document.createElement('script');
+  tag.src = 'https://www.youtube.com/iframe_api';
+  document.head.appendChild(tag);
+}
+window.onYouTubeIframeAPIReady = function(){
+  ytApiPronta = true;
+  if(livePanelPendente){
+    const c = livePanelPendente;
+    livePanelPendente = null;
+    criarOuTrocarPlayer(c);
+  }
+};
+
+function criarOuTrocarPlayer(c){
+  if(ytPlayer && typeof ytPlayer.loadVideoById === 'function'){
+    ytPlayer.loadVideoById(c.videoId);
+    return;
+  }
+  ytPlayer = new YT.Player('liveYtPlayer', {
+    videoId: c.videoId,
+    playerVars: { autoplay: 1, rel: 0, modestbranding: 1, playsinline: 1 },
+    events: {
+      onReady: function(e){
+        e.target.setVolume(30);
+        try{
+          const qualidades = e.target.getAvailableQualityLevels();
+          if(qualidades && qualidades.length) e.target.setPlaybackQuality(qualidades[0]);
+        }catch(err){}
+        e.target.playVideo();
+      }
+    }
+  });
+}
+
+function abrirLivePanelPorId(id){
+  const c = canaisLiveAtual.find(x => x.id === id);
+  if(!c) return;
+  livePanelCanalId = id;
+  document.getElementById('livePanelTitleTxt').textContent = `${c.n} — ${t('estaAoVivo')}`;
+  const overlay = document.getElementById('livePanelOverlay');
+  overlay.classList.add('aberto');
+  garantirYtApi();
+  if(ytApiPronta) criarOuTrocarPlayer(c);
+  else livePanelPendente = c;
+}
+
+function fecharLivePanel(){
+  const overlay = document.getElementById('livePanelOverlay');
+  overlay.classList.remove('aberto');
+  livePanelCanalId = null;
+  livePanelPendente = null;
+  if(ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
+}
+
+document.getElementById('livePanelCloseBtn').addEventListener('click', fecharLivePanel);
+document.getElementById('livePanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharLivePanel();
+});
+document.addEventListener('keydown', function(e){
+  if(e.key === 'Escape' && document.getElementById('livePanelOverlay').classList.contains('aberto')) fecharLivePanel();
+});
 
 function renderHighlights(){
   const el = document.getElementById('highlightRow');
