@@ -348,7 +348,9 @@
   .live-panel-head{
     display:flex; align-items:center; justify-content:space-between; gap:8px;
     padding: 10px 12px; background: rgba(226,18,18,0.12);
+    cursor: grab; touch-action: none; user-select: none;
   }
+  .live-panel-head.arrastando{ cursor: grabbing; }
   .live-panel-title{
     font-size:12.5px; font-weight:800; color:#fff; white-space:nowrap;
     overflow:hidden; text-overflow:ellipsis; display:flex; align-items:center; gap:6px;
@@ -2278,6 +2280,67 @@ document.getElementById('livePanelCloseBtn').addEventListener('click', fecharLiv
 document.getElementById('livePanelOverlay').addEventListener('click', function(e){
   if(e.target === this) fecharLivePanel();
 });
+
+// Painel arrastavel: o usuario pode segurar o cabecalho e mover o painel
+// pra qualquer lugar da tela, pra nao atrapalhar o que tiver atras.
+(function(){
+  const overlay = document.getElementById('livePanelOverlay');
+  const head = overlay ? overlay.querySelector('.live-panel-head') : null;
+  if(!overlay || !head) return;
+  let arrastando = false;
+  let offX = 0, offY = 0;
+
+  function aoMoverPonteiro(e){
+    if(!arrastando) return;
+    const panel = overlay.querySelector('.live-panel');
+    const largura = panel ? panel.offsetWidth : 340;
+    const altura = panel ? panel.offsetHeight : 200;
+    let novoLeft = e.clientX - offX;
+    let novoTop = e.clientY - offY;
+    novoLeft = Math.max(4, Math.min(novoLeft, window.innerWidth - largura - 4));
+    novoTop = Math.max(4, Math.min(novoTop, window.innerHeight - altura - 4));
+    overlay.style.left = novoLeft + 'px';
+    overlay.style.top = novoTop + 'px';
+    overlay.style.right = 'auto';
+    overlay.style.bottom = 'auto';
+  }
+  function aoSoltarPonteiro(){
+    if(!arrastando) return;
+    arrastando = false;
+    head.classList.remove('arrastando');
+    document.removeEventListener('pointermove', aoMoverPonteiro);
+    document.removeEventListener('pointerup', aoSoltarPonteiro);
+    try{
+      localStorage.setItem('livePanelPos', JSON.stringify({ left: overlay.style.left, top: overlay.style.top }));
+    }catch(err){}
+  }
+  head.addEventListener('pointerdown', function(e){
+    if(e.target.closest('.live-panel-close')) return; // clique no X nao inicia arraste
+    const rect = overlay.getBoundingClientRect();
+    offX = e.clientX - rect.left;
+    offY = e.clientY - rect.top;
+    arrastando = true;
+    head.classList.add('arrastando');
+    document.addEventListener('pointermove', aoMoverPonteiro);
+    document.addEventListener('pointerup', aoSoltarPonteiro);
+    e.preventDefault();
+  });
+
+  // restaura a posicao que o usuario deixou da ultima vez que arrastou o painel
+  // (com clamp pro caso da janela ter ficado menor desde entao, ex: trocou pro celular)
+  try{
+    const salvo = JSON.parse(localStorage.getItem('livePanelPos') || 'null');
+    if(salvo && salvo.left && salvo.top){
+      const largura = 340, altura = 200;
+      const left = Math.max(4, Math.min(parseFloat(salvo.left) || 0, window.innerWidth - largura - 4));
+      const top = Math.max(4, Math.min(parseFloat(salvo.top) || 0, window.innerHeight - altura - 4));
+      overlay.style.left = left + 'px';
+      overlay.style.top = top + 'px';
+      overlay.style.right = 'auto';
+      overlay.style.bottom = 'auto';
+    }
+  }catch(err){}
+})();
 
 // ---- MINI-PAINEIS 3D genericos (Ferramentas / Estatisticas) ----
 function abrirMiniPanel(id){
