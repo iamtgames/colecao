@@ -91,8 +91,22 @@ function pausar(ms){
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+async function diagnosticoRapido(item){
+  try{
+    const termo = encodeURIComponent(`${item.n} ${item.plat}`);
+    const url = `https://api.mercadolibre.com/sites/MLB/search?q=${termo}&limit=5`;
+    const res = await fetch(url);
+    const texto = await res.text();
+    console.log(`DIAGNOSTICO: status=${res.status} url=${url}`);
+    console.log(`DIAGNOSTICO: corpo (primeiros 500 chars) = ${texto.slice(0, 500)}`);
+  }catch(e){
+    console.log(`DIAGNOSTICO: erro de rede - ${e.message}`);
+  }
+}
+
 async function main(){
   const wishlist = extrairWishlist();
+  await diagnosticoRapido(wishlist[0]);
   const precosAnteriores = carregarPrecosAnteriores();
 
   const lotes = dividirEmLotes(wishlist, LOTE);
