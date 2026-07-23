@@ -1,0 +1,32 @@
+name: Checar precos do Radar de Caca
+
+on:
+  schedule:
+    - cron: '0 10 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  checar-precos:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Checar precos no Mercado Livre e gerar precos.json
+        run: node scripts/check-precos.js
+
+      - name: Commitar mudancas (se houver)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add precos.json
+          git diff --staged --quiet || git commit -m "Atualiza precos do Radar de Caca (automatico)"
+          git push
