@@ -2117,6 +2117,17 @@ function garantirYtApi(){
   ytApiCarregando = true;
   const tag = document.createElement('script');
   tag.src = 'https://www.youtube.com/iframe_api';
+  // Se o proprio script da API do YouTube falhar ao carregar (bloqueio de rede,
+  // adblock, instabilidade do youtube.com, etc.), onYouTubeIframeAPIReady nunca
+  // dispara e o player fica pra sempre num div vazio (tela preta), sem nenhum
+  // aviso pro usuario. Esse handler cobre esse caso.
+  tag.onerror = function(){
+    ytApiCarregando = false;
+    if(livePanelPendente){
+      livePanelPendente = null;
+      mostrarFallbackLive();
+    }
+  };
   document.head.appendChild(tag);
 }
 window.onYouTubeIframeAPIReady = function(){
@@ -2189,8 +2200,21 @@ function abrirLivePanelPorId(id){
   const overlay = document.getElementById('livePanelOverlay');
   overlay.classList.add('aberto');
   garantirYtApi();
-  if(ytApiPronta) criarOuTrocarPlayer(c);
-  else livePanelPendente = c;
+  if(ytApiPronta){
+    criarOuTrocarPlayer(c);
+  }else{
+    livePanelPendente = c;
+    // Rede de seguranca: se em 7s a API do YouTube ainda nao respondeu
+    // (script travou, respondeu com erro tipo 503, foi bloqueado por
+    // extensao/adblock etc.), nao deixa o player preto pra sempre --
+    // mostra o aviso com link direto pro YouTube.
+    setTimeout(function(){
+      if(livePanelPendente === c && !ytApiPronta){
+        livePanelPendente = null;
+        mostrarFallbackLive();
+      }
+    }, 7000);
+  }
 }
 
 function fecharLivePanel(){
