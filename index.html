@@ -19,7 +19,7 @@
      de dominios variados (TheGamesDB, lojas, RAWG, YouTube, etc.) que mudam
      conforme jogos/canais sao adicionados. script/frame/connect ficam restritos
      aos servicos que o site realmente usa. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io; frame-src https://www.youtube.com https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io; frame-src https://www.youtube.com https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230b0b0c'/%3E%3Ctext x='50' y='66' font-size='55' font-family='Arial' font-weight='900' fill='white' text-anchor='middle'%3EiT%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.json">
 <title>Controle Coleção iamT</title>
@@ -399,6 +399,24 @@
     max-height:74vh; overflow-y:auto;
   }
   .mini-panel-body .toggle-venda{ width:100%; text-align:left; }
+
+  .scanner-hint{ font-size:13px; color:var(--ink-dim); margin:0; }
+  .scanner-video-wrap{
+    position:relative; width:100%; aspect-ratio:4/3; background:#000;
+    border-radius:12px; overflow:hidden; border:1px solid var(--line);
+  }
+  .scanner-video-wrap video{ width:100%; height:100%; object-fit:cover; display:block; }
+  .scanner-line{
+    position:absolute; left:8%; right:8%; top:50%; height:2px;
+    background:rgba(255,60,60,.85); box-shadow:0 0 8px rgba(255,60,60,.7);
+    animation: scannerLinePulse 1.6s ease-in-out infinite;
+  }
+  @keyframes scannerLinePulse{ 0%,100%{ opacity:.4; } 50%{ opacity:1; } }
+  .scanner-result{ font-size:14px; }
+  .scanner-result .ok{ color:#4fb286; font-weight:700; }
+  .scanner-result .no{ color:#e0a94f; font-weight:700; }
+  .scanner-result .err{ color:#e05f5f; font-weight:700; }
+  .scanner-result .upc-code{ font-family:monospace; opacity:.8; }
 
   .cmdk-shortcut{
     font-size:10px; opacity:.6; border:1px solid currentColor; border-radius:5px;
@@ -847,6 +865,7 @@
   <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
   <button id="paletaBtn" title="Alternar paleta de cores" aria-label="Alternar paleta de cores">🎨</button>
   <button id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
+  <button id="scannerBtn" title="Scanner: já tenho esse jogo?" aria-label="Abrir scanner de código de barras">📷</button>
   <a href="https://www.instagram.com/marioturbino/" target="_blank" rel="noopener noreferrer" title="Instagram pessoal" aria-label="Abrir Instagram pessoal">👤</a>
   <a href="https://www.instagram.com/iamtgames/" target="_blank" rel="noopener noreferrer" title="Instagram da coleção" aria-label="Abrir Instagram da coleção">📸</a>
   <div class="divider"></div>
@@ -1060,6 +1079,21 @@
         <div class="rarity-chart" id="devChart"></div>
       </div>
       <div class="rarity-chart" id="perfilChart" style="margin-bottom:0;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-panel-overlay" id="scannerPanelOverlay">
+  <div class="mini-panel">
+    <div class="mini-panel-head"><h3>📷 Já tenho esse jogo?</h3><button class="mini-panel-close" id="scannerPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body">
+      <p class="scanner-hint" id="scannerHint">Aponte a câmera pro código de barras (EAN/UPC) da caixa do jogo.</p>
+      <div class="scanner-video-wrap" id="scannerVideoWrap">
+        <video id="scannerVideo" playsinline muted></video>
+        <div class="scanner-line"></div>
+      </div>
+      <div class="scanner-result" id="scannerResult"></div>
+      <button class="toggle-venda" id="scannerRetryBtn" style="display:none;">🔄 Escanear outro</button>
     </div>
   </div>
 </div>
@@ -2171,6 +2205,108 @@ function fecharMiniPanel(id){
   const ov = document.getElementById(id);
   if(ov) ov.classList.remove('aberto');
 }
+// ---- Scanner de codigo de barras: "ja tenho esse jogo?" ----
+// Nao usa nenhuma API externa de busca por codigo de barras (testamos o
+// UPCitemdb e o servidor deles bloqueia chamada direta do navegador via CORS,
+// so funciona server-side). Em vez disso, o scanner compara o codigo lido
+// pela camera com o campo "upc" de cada jogo em `jogos` (preenchido manualmente
+// por voce quando cadastra o codigo de um jogo que ja tem). 100% local, sem
+// custo, sem dependencia de terceiro pra decidir o resultado.
+let zxingScriptCarregado = false;
+let scannerControlsAtual = null;
+
+function carregarZXing(){
+  return new Promise((resolve, reject) => {
+    if(window.ZXingBrowser){ resolve(); return; }
+    if(zxingScriptCarregado){
+      // ja está carregando, so espera um pouco e confere de novo
+      const espera = setInterval(() => {
+        if(window.ZXingBrowser){ clearInterval(espera); resolve(); }
+      }, 150);
+      setTimeout(() => { clearInterval(espera); if(!window.ZXingBrowser) reject(new Error('Biblioteca do scanner demorou demais pra carregar.')); }, 8000);
+      return;
+    }
+    zxingScriptCarregado = true;
+    const s = document.createElement('script');
+    s.src = 'https://unpkg.com/@zxing/browser@0.2.1';
+    s.onload = () => resolve();
+    s.onerror = () => reject(new Error('Não consegui carregar a biblioteca do scanner (sem internet?).'));
+    document.head.appendChild(s);
+  });
+}
+
+async function abrirScanner(){
+  abrirMiniPanel('scannerPanelOverlay');
+  document.getElementById('scannerResult').innerHTML = '';
+  document.getElementById('scannerRetryBtn').style.display = 'none';
+  document.getElementById('scannerVideoWrap').style.display = '';
+  try{
+    await carregarZXing();
+    iniciarLeituraCamera();
+  }catch(e){
+    mostrarErroScanner(e.message);
+  }
+}
+
+function iniciarLeituraCamera(){
+  try{
+    const codeReader = new window.ZXingBrowser.BrowserMultiFormatReader();
+    codeReader.decodeFromConstraints(
+      { video: { facingMode: 'environment' } },
+      'scannerVideo',
+      (result, err, controls) => {
+        scannerControlsAtual = controls;
+        if(result){
+          controls.stop();
+          processarCodigoEscaneado(result.getText());
+        }
+      }
+    ).catch(() => {
+      mostrarErroScanner('Não consegui acessar a câmera. Verifique se você permitiu o uso da câmera pro navegador.');
+    });
+  }catch(e){
+    mostrarErroScanner('Erro ao iniciar o scanner: ' + e.message);
+  }
+}
+
+function processarCodigoEscaneado(codigo){
+  const jogo = todosJogos().find(j => j.upc && String(j.upc) === String(codigo));
+  document.getElementById('scannerVideoWrap').style.display = 'none';
+  document.getElementById('scannerRetryBtn').style.display = 'block';
+  const resultEl = document.getElementById('scannerResult');
+  if(jogo){
+    resultEl.innerHTML = `<span class="ok">✅ Você já tem esse jogo!</span><br>${escapeHtml(jogo.n)} — ${escapeHtml(jogo.plat)}<br><span class="upc-code">Código: ${escapeHtml(codigo)}</span>`;
+  }else{
+    resultEl.innerHTML = `<span class="no">❔ Não encontrado na sua coleção (ainda).</span><br><span class="upc-code">Código escaneado: ${escapeHtml(codigo)}</span><br><small>Se você já tem esse jogo, adicione <code>upc:"${escapeHtml(codigo)}"</code> no jogo correspondente dentro do array <code>jogos</code> no código-fonte.</small>`;
+  }
+}
+
+function mostrarErroScanner(msg){
+  document.getElementById('scannerVideoWrap').style.display = 'none';
+  document.getElementById('scannerRetryBtn').style.display = 'block';
+  document.getElementById('scannerResult').innerHTML = `<span class="err">⚠️ ${escapeHtml(msg)}</span>`;
+}
+
+function fecharScanner(){
+  fecharMiniPanel('scannerPanelOverlay');
+  if(scannerControlsAtual){
+    scannerControlsAtual.stop();
+    scannerControlsAtual = null;
+  }
+}
+
+document.getElementById('scannerBtn').addEventListener('click', abrirScanner);
+document.getElementById('scannerPanelCloseBtn').addEventListener('click', fecharScanner);
+document.getElementById('scannerPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharScanner();
+});
+document.getElementById('scannerRetryBtn').addEventListener('click', function(){
+  document.getElementById('scannerVideoWrap').style.display = '';
+  document.getElementById('scannerResult').innerHTML = '';
+  this.style.display = 'none';
+  iniciarLeituraCamera();
+});
+
 function fecharTodosMiniPaineis(){
   document.querySelectorAll('.mini-panel-overlay.aberto').forEach(ov => ov.classList.remove('aberto'));
 }
@@ -2191,6 +2327,7 @@ document.addEventListener('keydown', function(e){
   if(e.key !== 'Escape') return;
   if(document.getElementById('livePanelOverlay').classList.contains('aberto')) fecharLivePanel();
   if(document.getElementById('cmdkOverlay').classList.contains('aberto')) fecharCmdk();
+  if(document.getElementById('scannerPanelOverlay').classList.contains('aberto')) fecharScanner();
   fecharTodosMiniPaineis();
 });
 
