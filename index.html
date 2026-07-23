@@ -865,7 +865,6 @@
   <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
   <button id="paletaBtn" title="Alternar paleta de cores" aria-label="Alternar paleta de cores">🎨</button>
   <button id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
-  <button id="scannerBtn" title="Scanner: já tenho esse jogo?" aria-label="Abrir scanner de código de barras">📷</button>
   <a href="https://www.instagram.com/marioturbino/" target="_blank" rel="noopener noreferrer" title="Instagram pessoal" aria-label="Abrir Instagram pessoal">👤</a>
   <a href="https://www.instagram.com/iamtgames/" target="_blank" rel="noopener noreferrer" title="Instagram da coleção" aria-label="Abrir Instagram da coleção">📸</a>
   <div class="divider"></div>
@@ -976,6 +975,7 @@
     <button class="toggle-venda" id="compararToggle">⚖️ Comparar</button>
     <button class="toggle-venda" id="roletaBtn">🎲 O que jogar hoje?</button>
     <button class="toggle-venda" id="filtrosToggleBtn">🔽 Filtros</button>
+    <button class="toggle-venda" id="scannerBtn">📷 Scanner</button>
   </div>
 
   <div class="filters-dropdown" id="filtrosDropdown" style="display:none;">
@@ -1085,7 +1085,7 @@
 
 <div class="mini-panel-overlay" id="scannerPanelOverlay">
   <div class="mini-panel">
-    <div class="mini-panel-head"><h3>📷 Já tenho esse jogo?</h3><button class="mini-panel-close" id="scannerPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-head"><h3 id="scannerPanelTitulo">📷 Já tenho esse jogo?</h3><button class="mini-panel-close" id="scannerPanelCloseBtn" aria-label="Fechar">✕</button></div>
     <div class="mini-panel-body">
       <p class="scanner-hint" id="scannerHint">Aponte a câmera pro código de barras (EAN/UPC) da caixa do jogo.</p>
       <div class="scanner-video-wrap" id="scannerVideoWrap">
@@ -1212,6 +1212,10 @@
       </select>
       <input type="number" id="admCol" placeholder="Valor colecionador (R$)" required class="contato-input">
       <input type="number" id="admBar" placeholder="Valor venda rápida (R$)" required class="contato-input">
+      <div style="display:flex; gap:8px;">
+        <input type="text" id="admUpc" placeholder="Código de barras (opcional)" class="contato-input" style="flex:1;">
+        <button type="button" id="admEscanearBtn" class="toggle-venda" style="white-space:nowrap;">📷 Escanear</button>
+      </div>
       <input type="url" id="admCapa" placeholder="URL da capa (opcional)" class="contato-input">
       <input type="url" id="admVerso" placeholder="URL do verso (opcional)" class="contato-input">
       <input type="number" id="admAno" placeholder="Ano de lançamento (opcional)" class="contato-input">
@@ -2226,6 +2230,7 @@ function fecharMiniPanel(id){
 // custo, sem dependencia de terceiro pra decidir o resultado.
 let zxingScriptCarregado = false;
 let scannerControlsAtual = null;
+let scannerModoCaptura = false; // true quando aberto pelo formulario de adicionar jogo
 
 function carregarZXing(){
   return new Promise((resolve, reject) => {
@@ -2247,8 +2252,15 @@ function carregarZXing(){
   });
 }
 
-async function abrirScanner(){
+async function abrirScanner(modoCaptura){
+  scannerModoCaptura = !!modoCaptura;
   abrirMiniPanel('scannerPanelOverlay');
+  document.getElementById('scannerPanelTitulo').textContent = scannerModoCaptura
+    ? '📷 Escanear código do jogo'
+    : '📷 Já tenho esse jogo?';
+  document.getElementById('scannerHint').textContent = scannerModoCaptura
+    ? 'Aponte a câmera pro código de barras da caixa — vai preencher o campo sozinho.'
+    : 'Aponte a câmera pro código de barras (EAN/UPC) da caixa do jogo.';
   document.getElementById('scannerResult').innerHTML = '';
   document.getElementById('scannerRetryBtn').style.display = 'none';
   document.getElementById('scannerVideoWrap').style.display = '';
@@ -2282,10 +2294,20 @@ function iniciarLeituraCamera(){
 }
 
 function processarCodigoEscaneado(codigo){
-  const jogo = todosJogos().find(j => j.upc && String(j.upc) === String(codigo));
   document.getElementById('scannerVideoWrap').style.display = 'none';
-  document.getElementById('scannerRetryBtn').style.display = 'block';
   const resultEl = document.getElementById('scannerResult');
+
+  if(scannerModoCaptura){
+    // Modo captura: so preenche o campo do formulario de admin e fecha, sem checar a colecao.
+    const campo = document.getElementById('admUpc');
+    if(campo) campo.value = codigo;
+    resultEl.innerHTML = `<span class="ok">✅ Código capturado!</span><br><span class="upc-code">${escapeHtml(codigo)}</span>`;
+    setTimeout(fecharScanner, 900);
+    return;
+  }
+
+  document.getElementById('scannerRetryBtn').style.display = 'block';
+  const jogo = todosJogos().find(j => j.upc && String(j.upc) === String(codigo));
   if(jogo){
     resultEl.innerHTML = `<span class="ok">✅ Você já tem esse jogo!</span><br>${escapeHtml(jogo.n)} — ${escapeHtml(jogo.plat)}<br><span class="upc-code">Código: ${escapeHtml(codigo)}</span>`;
   }else{
@@ -2301,13 +2323,15 @@ function mostrarErroScanner(msg){
 
 function fecharScanner(){
   fecharMiniPanel('scannerPanelOverlay');
+  scannerModoCaptura = false;
   if(scannerControlsAtual){
     scannerControlsAtual.stop();
     scannerControlsAtual = null;
   }
 }
 
-document.getElementById('scannerBtn').addEventListener('click', abrirScanner);
+document.getElementById('scannerBtn').addEventListener('click', () => abrirScanner(false));
+document.getElementById('admEscanearBtn').addEventListener('click', () => abrirScanner(true));
 document.getElementById('scannerPanelCloseBtn').addEventListener('click', fecharScanner);
 document.getElementById('scannerPanelOverlay').addEventListener('click', function(e){
   if(e.target === this) fecharScanner();
@@ -3435,6 +3459,7 @@ function lerFormAdmin(){
     rar: document.getElementById('admRar').value,
     col: parseInt(document.getElementById('admCol').value) || 0,
     bar: parseInt(document.getElementById('admBar').value) || 0,
+    upc: document.getElementById('admUpc').value.trim(),
     loj: 0, caro: 0, v: false,
     capa: document.getElementById('admCapa').value.trim(),
     verso: document.getElementById('admVerso').value.trim(),
@@ -3467,7 +3492,8 @@ document.getElementById('admGerarCodigo').addEventListener('click', function(){
     area.value = 'Preencha ao menos o nome do jogo antes de gerar o código.';
     return;
   }
-  const linhaJogo = `  { id:${dados.id}, n:"${dados.n}", cat:"${dados.cat}", col:${dados.col}, loj:${dados.col}, bar:${dados.bar}, caro:${dados.col}, rar:"${dados.rar}", v:false, plat:"${dados.plat}" },`;
+  const upcParte = dados.upc ? `, upc:"${dados.upc}"` : '';
+  const linhaJogo = `  { id:${dados.id}, n:"${dados.n}", cat:"${dados.cat}", col:${dados.col}, loj:${dados.col}, bar:${dados.bar}, caro:${dados.col}, rar:"${dados.rar}", v:false, plat:"${dados.plat}"${upcParte} },`;
   let codigo = `// Cole esta linha dentro de "const jogos = [ ... ]":\n${linhaJogo}\n`;
   if(dados.capa) codigo += `\n// Cole esta linha dentro de "const capas = { ... }":\n  ${dados.id}: "${dados.capa}",\n`;
   if(dados.verso) codigo += `\n// Cole esta linha dentro de "const capasVerso = { ... }":\n  ${dados.id}: "${dados.verso}",\n`;
