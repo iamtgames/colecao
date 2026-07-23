@@ -14,6 +14,12 @@
 <meta name="twitter:description" content="Catálogo pessoal de jogos PS4 e PS3 com preços, capas, sinopses e raridade.">
 <meta name="twitter:image" content="https://iamtgames.github.io/colecao/og-image.png">
 <meta name="theme-color" content="#0b0b0c">
+<!-- CSP como camada extra de defesa (GitHub Pages nao permite headers reais).
+     img-src fica permissivo em https:/data: pq as capas/avatares/noticias vem
+     de dominios variados (TheGamesDB, lojas, RAWG, YouTube, etc.) que mudam
+     conforme jogos/canais sao adicionados. script/frame/connect ficam restritos
+     aos servicos que o site realmente usa. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io; frame-src https://www.youtube.com https://giscus.app; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230b0b0c'/%3E%3Ctext x='50' y='66' font-size='55' font-family='Arial' font-weight='900' fill='white' text-anchor='middle'%3EiT%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.json">
 <title>Controle Coleção iamT</title>
@@ -224,6 +230,17 @@
   }
   .card-foot a:hover{color:#ffc266; border-bottom-color: #ffc266;}
 
+  .wishlist-preco{
+    display:flex; flex-direction:column; gap:2px;
+    padding:6px 8px; margin-top:2px; border-radius:8px;
+    background: rgba(255,255,255,.04); border:1px solid var(--line);
+  }
+  .wishlist-preco.caiu{ background: rgba(255,90,60,.1); border-color: rgba(255,90,60,.4); }
+  .wishlist-preco-label{ font-size:10.5px; color:var(--ink-dim); }
+  .wishlist-preco-valor{ font-size:14px; font-weight:800; color:#4fb286; text-decoration:none; }
+  .wishlist-preco-valor:hover{ text-decoration:underline; }
+  .wishlist-preco-caiu{ font-size:11px; font-weight:700; color:#ff5a3c; }
+
   .result-count{color:var(--ink-dim); font-size:12.5px; margin-top:18px;}
   .section-title{font-size:18px; font-weight:400; color:var(--white); letter-spacing:-.3px; font-family:'Russo One','Space Grotesk','Segoe UI',sans-serif;}
 
@@ -382,6 +399,64 @@
     max-height:74vh; overflow-y:auto;
   }
   .mini-panel-body .toggle-venda{ width:100%; text-align:left; }
+
+  .cmdk-shortcut{
+    font-size:10px; opacity:.6; border:1px solid currentColor; border-radius:5px;
+    padding:1px 5px; margin-left:6px;
+  }
+
+  .cmdk-overlay{
+    display:none; position:fixed; inset:0; z-index:400;
+    background: rgba(0,0,0,.55); backdrop-filter: blur(4px);
+    align-items:flex-start; justify-content:center; padding-top: 10vh;
+  }
+  .cmdk-overlay.aberto{ display:flex; }
+  .cmdk-box{
+    width:min(600px, 92vw); max-height:70vh; display:flex; flex-direction:column;
+    background: var(--bg-panel); border:1px solid rgba(255,255,255,0.12);
+    border-radius:16px; box-shadow: 0 30px 80px rgba(0,0,0,.55);
+    transform-origin: top center;
+    animation: painelAbrir3D .32s cubic-bezier(.2,.9,.3,1.3);
+    overflow:hidden;
+  }
+  .cmdk-input-row{
+    display:flex; align-items:center; gap:10px; padding:14px 16px;
+    border-bottom:1px solid rgba(255,255,255,0.08);
+  }
+  .cmdk-ico{ font-size:18px; opacity:.8; }
+  .cmdk-input{
+    flex:1; background:transparent; border:none; outline:none;
+    color:var(--ink); font-size:16px; font-family:inherit;
+  }
+  .cmdk-close{
+    background:transparent; border:none; color:var(--ink-dim); font-size:16px;
+    cursor:pointer; padding:4px 6px; border-radius:6px;
+  }
+  .cmdk-close:hover{ background: rgba(255,255,255,0.08); color:var(--ink); }
+  .cmdk-results{ overflow-y:auto; padding:6px 0; }
+  .cmdk-empty{ padding:26px 20px; text-align:center; color:var(--ink-dim); font-size:13.5px; }
+  .cmdk-group-label{
+    padding:8px 16px 4px; font-size:11px; text-transform:uppercase; letter-spacing:.06em;
+    color:var(--ink-dim); font-weight:700;
+  }
+  .cmdk-item{
+    display:flex; align-items:center; gap:10px; padding:9px 16px; cursor:pointer;
+    border-left:3px solid transparent;
+  }
+  .cmdk-item:hover, .cmdk-item.ativo{ background: rgba(255,255,255,0.06); border-left-color: var(--accent); }
+  .cmdk-item img{ width:32px; height:32px; object-fit:cover; border-radius:6px; flex-shrink:0; }
+  .cmdk-item-ico{ width:32px; height:32px; display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+  .cmdk-item-txt{ min-width:0; flex:1; }
+  .cmdk-item-title{ font-size:13.5px; font-weight:600; color:var(--ink); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cmdk-item-sub{ font-size:11.5px; color:var(--ink-dim); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+  .cmdk-hint{
+    padding:8px 16px; font-size:10.5px; color:var(--ink-dim);
+    border-top:1px solid rgba(255,255,255,0.08); text-align:center;
+  }
+  @media (max-width: 640px){
+    .cmdk-overlay{ padding-top:4vh; }
+    .cmdk-box{ max-height:88vh; }
+  }
 
   .canais-toggle-card{
     background: var(--card-glass); backdrop-filter: blur(18px) saturate(140%);
@@ -771,12 +846,12 @@
   <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
   <button id="paletaBtn" title="Alternar paleta de cores" aria-label="Alternar paleta de cores">🎨</button>
   <button id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
-  <a href="https://www.instagram.com/marioturbino/" target="_blank" title="Instagram pessoal" aria-label="Abrir Instagram pessoal">👤</a>
-  <a href="https://www.instagram.com/iamtgames/" target="_blank" title="Instagram da coleção" aria-label="Abrir Instagram da coleção">📸</a>
+  <a href="https://www.instagram.com/marioturbino/" target="_blank" rel="noopener noreferrer" title="Instagram pessoal" aria-label="Abrir Instagram pessoal">👤</a>
+  <a href="https://www.instagram.com/iamtgames/" target="_blank" rel="noopener noreferrer" title="Instagram da coleção" aria-label="Abrir Instagram da coleção">📸</a>
   <div class="divider"></div>
   <button id="contatoBtn" title="Enviar sugestão / parceria" aria-label="Enviar sugestão ou parceria">✉️</button>
   <button id="adminBtn" title="Painel de admin" style="display:none;" aria-label="Abrir painel de admin">🛠️</button>
-  <a class="sell" href="https://www.olx.com.br/perfil/mario-t-34b3680f" target="_blank" title="Perfil de vendas OLX">
+  <a class="sell" href="https://www.olx.com.br/perfil/mario-t-34b3680f" target="_blank" rel="noopener noreferrer" title="Perfil de vendas OLX">
     <span class="ico">🏷️</span>
     <span>OLX</span>
   </a>
@@ -798,6 +873,7 @@
   <div class="tools" id="topActionsRow" style="margin-bottom:20px;">
     <button class="toggle-venda" id="vitrineBtn">🖼️ Modo Vitrine (tela cheia)</button>
     <button class="toggle-venda" id="cartaoResumoBtn">🎁 Cartão resumo (compartilhar)</button>
+    <button class="toggle-venda" id="cmdkOpenBtn" title="Busca unificada (Ctrl+K)"><span id="cmdkBtnTxt">🔎 Busca rápida</span> <span class="cmdk-shortcut">Ctrl+K</span></button>
   </div>
 
   <div class="canais-toggle-card" id="canaisToggleCard">
@@ -983,6 +1059,20 @@
       </div>
       <div class="rarity-chart" id="perfilChart" style="margin-bottom:0;"></div>
     </div>
+  </div>
+</div>
+
+<div class="cmdk-overlay" id="cmdkOverlay">
+  <div class="cmdk-box" role="dialog" aria-modal="true" aria-label="Busca unificada">
+    <div class="cmdk-input-row">
+      <span class="cmdk-ico">🔎</span>
+      <input type="text" id="cmdkInput" class="cmdk-input" placeholder="Buscar jogos, canais, notícias..." autocomplete="off">
+      <button class="cmdk-close" id="cmdkCloseBtn" aria-label="Fechar">✕</button>
+    </div>
+    <div class="cmdk-results" id="cmdkResults">
+      <div class="cmdk-empty" id="cmdkEmpty">Digite pra buscar em toda a coleção, canais e notícias.</div>
+    </div>
+    <div class="cmdk-hint" id="cmdkHintTxt">↑↓ navegar · Enter abrir · Esc fechar</div>
   </div>
 </div>
 
@@ -1609,6 +1699,12 @@ const I18N = {
     verMercadoLivre: 'Ver no Mercado Livre →', valorPago: 'Valor pago: ',
     resultCount: (n) => `${n} jogos exibidos`,
     desejado: 'Desejado', radarVazio: 'Nenhum jogo na lista ainda.',
+    menorPrecoML: 'Menor preço no Mercado Livre agora:', precoCaiu: '🔥 Caiu de preço!',
+    cmdkBtn: '🔎 Busca rápida', cmdkPlaceholder: 'Buscar jogos, canais, notícias...',
+    cmdkVazio: 'Digite pra buscar em toda a coleção, canais e notícias.',
+    cmdkNadaEncontrado: (n) => `Nada encontrado pra "${n}".`,
+    cmdkColecao: '🎮 Coleção', cmdkCanais: '📺 Vendedores & Canais', cmdkNoticias: '📰 Notícias',
+    cmdkHint: '↑↓ navegar · Enter abrir · Esc fechar',
     anterior: '◀ Anterior', proxima: 'Próxima ▶',
     livroVisitas: '💬 Livro de visitas', footerTxt: 'Controle Coleção iamT',
     compartilhar: '🔗 Compartilhar', gerarEtiqueta: '🏷️ Gerar etiqueta',
@@ -1650,6 +1746,12 @@ const I18N = {
     verMercadoLivre: 'View on Mercado Livre →', valorPago: 'Amount paid: ',
     resultCount: (n) => `${n} games shown`,
     desejado: 'Wanted', radarVazio: 'No games on the list yet.',
+    menorPrecoML: 'Lowest Mercado Livre price now:', precoCaiu: '🔥 Price dropped!',
+    cmdkBtn: '🔎 Quick search', cmdkPlaceholder: 'Search games, channels, news...',
+    cmdkVazio: 'Type to search across the whole collection, channels and news.',
+    cmdkNadaEncontrado: (n) => `Nothing found for "${n}".`,
+    cmdkColecao: '🎮 Collection', cmdkCanais: '📺 Sellers & Channels', cmdkNoticias: '📰 News',
+    cmdkHint: '↑↓ navigate · Enter open · Esc close',
     anterior: '◀ Previous', proxima: 'Next ▶',
     livroVisitas: '💬 Guestbook', footerTxt: 'iamT Collection Tracker',
     compartilhar: '🔗 Share', gerarEtiqueta: '🏷️ Generate label',
@@ -1675,6 +1777,18 @@ function t(key){
 
 function gerarLink(nome, plat){
   return `https://lista.mercadolivre.com.br/${encodeURIComponent(nome)}+${plat}`;
+}
+
+// Escapa texto vindo de APIs externas (GamerPower, RAWG, Flow Games) antes de
+// jogar em innerHTML — evita que um título/descrição malicioso injete HTML/JS.
+function escapeHtml(str){
+  if(str === null || str === undefined) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
 }
 
 function todosJogos(){
@@ -1734,7 +1848,7 @@ function render(){
             <div><span class="l">${t('valorPago')}</span><span class="v">R$ ${valorPago}</span></div>
           </div>
           <div class="card-foot">
-            <a href="${gerarLink(j.n, j.plat)}" target="_blank">${t('verMercadoLivre')}</a>
+            <a href="${gerarLink(j.n, j.plat)}" target="_blank" rel="noopener noreferrer">${t('verMercadoLivre')}</a>
           </div>
         </div>
       </div>
@@ -1835,7 +1949,7 @@ function renderCanais(){
     const platLabel = platLabels[c.plat] || c.plat;
     const avatar = avatarUrl(c);
     const instaLink = c.instagram
-      ? `<a href="${c.instagram}" target="_blank" class="canal-insta-link" onclick="event.stopPropagation()">📸 Instagram</a>`
+      ? `<a href="${c.instagram}" target="_blank" rel="noopener noreferrer" class="canal-insta-link" onclick="event.stopPropagation()">📸 Instagram</a>`
       : '';
     const diaBadge = (ordenarPorDia && c.dias.length)
       ? `<span class="canal-dia-badge">${c.dias.map(d=>nomesDias[d]).join(' e ')}</span>`
@@ -1887,6 +2001,24 @@ function renderLiveBalloon(){
   });
 }
 
+// RADAR DE CACA: menor preco anunciado no Mercado Livre por item (le precos.json,
+// gerado sozinho pelo GitHub Actions em scripts/check-precos.js).
+let precosWishlistAtual = {};
+
+async function carregarPrecosWishlist(){
+  try{
+    const r = await fetch('./precos.json?t=' + Date.now());
+    if(!r.ok) throw new Error('sem precos.json ainda');
+    const data = await r.json();
+    const mapa = {};
+    (data.itens || []).forEach(it => { mapa[`${it.n}|${it.plat}`] = it; });
+    precosWishlistAtual = mapa;
+  }catch(e){
+    precosWishlistAtual = {};
+  }
+  renderWishlist();
+}
+
 async function carregarCanaisLive(){
   try{
     const r = await fetch('./canais_live.json?t=' + Date.now());
@@ -1935,7 +2067,7 @@ function mostrarFallbackLive(){
   if(!fb || !c) return;
   fb.innerHTML = `
     <div>😕 Não foi possível abrir a live do <b>${c.n}</b> aqui — o canal desativou a incorporação deste vídeo.</div>
-    <a href="${c.videoUrl}" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+    <a href="${escapeHtml(c.videoUrl)}" target="_blank" rel="noopener noreferrer">Assistir no YouTube ↗</a>
   `;
   fb.classList.add('show');
 }
@@ -2037,7 +2169,185 @@ document.getElementById('statsPanelOverlay').addEventListener('click', function(
 document.addEventListener('keydown', function(e){
   if(e.key !== 'Escape') return;
   if(document.getElementById('livePanelOverlay').classList.contains('aberto')) fecharLivePanel();
+  if(document.getElementById('cmdkOverlay').classList.contains('aberto')) fecharCmdk();
   fecharTodosMiniPaineis();
+});
+
+// ---- BUSCA UNIFICADA (Ctrl+K): jogos da colecao + canais + noticias, tudo junto ----
+let indiceNoticiasBusca = [];
+let cmdkSelecionado = -1;
+
+async function carregarIndiceNoticiasBusca(){
+  try{
+    const r = await fetch('./news.json?t=' + Date.now());
+    if(!r.ok) throw new Error('sem news.json ainda');
+    const data = await r.json();
+    indiceNoticiasBusca = (data.items || []).slice(0, 30);
+  }catch(e){
+    indiceNoticiasBusca = [];
+  }
+}
+
+function buscarUnificado(termoOriginal){
+  const termo = termoOriginal.trim().toLowerCase();
+  if(!termo) return { jogos: [], canais: [], noticias: [] };
+
+  const jogos = todosJogos()
+    .filter(j => j.n.toLowerCase().includes(termo))
+    .slice(0, 6);
+
+  const canaisResultado = canais
+    .filter(c => c.n.toLowerCase().includes(termo))
+    .slice(0, 6);
+
+  const noticias = indiceNoticiasBusca
+    .filter(n => (n.title || '').toLowerCase().includes(termo))
+    .slice(0, 6);
+
+  return { jogos, canais: canaisResultado, noticias };
+}
+
+function montarListaCmdk(resultado){
+  const lista = [];
+  resultado.jogos.forEach(j => lista.push({ tipo:'jogo', dados:j }));
+  resultado.canais.forEach(c => lista.push({ tipo:'canal', dados:c }));
+  resultado.noticias.forEach(n => lista.push({ tipo:'noticia', dados:n }));
+  return lista;
+}
+
+function renderCmdkResultados(termo){
+  const box = document.getElementById('cmdkResults');
+  cmdkSelecionado = -1;
+  if(!termo.trim()){
+    box.innerHTML = `<div class="cmdk-empty" id="cmdkEmpty">${t('cmdkVazio')}</div>`;
+    return;
+  }
+  const resultado = buscarUnificado(termo);
+  const total = resultado.jogos.length + resultado.canais.length + resultado.noticias.length;
+  if(!total){
+    box.innerHTML = `<div class="cmdk-empty">${escapeHtml(t('cmdkNadaEncontrado')(termo))}</div>`;
+    return;
+  }
+  let html = '';
+  if(resultado.jogos.length){
+    html += `<div class="cmdk-group-label">${t('cmdkColecao')}</div>`;
+    resultado.jogos.forEach((j, i) => {
+      const capa = capas[j.id];
+      html += `
+        <div class="cmdk-item" data-tipo="jogo" data-id="${j.id}">
+          ${capa ? `<img src="${escapeHtml(capa)}" alt="">` : `<div class="cmdk-item-ico">🎮</div>`}
+          <div class="cmdk-item-txt">
+            <div class="cmdk-item-title">${escapeHtml(j.n)}</div>
+            <div class="cmdk-item-sub">${escapeHtml(j.plat || '')}</div>
+          </div>
+        </div>`;
+    });
+  }
+  if(resultado.canais.length){
+    html += `<div class="cmdk-group-label">${t('cmdkCanais')}</div>`;
+    resultado.canais.forEach(c => {
+      const avatar = avatarUrl(c);
+      html += `
+        <div class="cmdk-item" data-tipo="canal" data-id="${c.id}">
+          ${avatar ? `<img src="${escapeHtml(avatar)}" alt="">` : `<div class="cmdk-item-ico">📺</div>`}
+          <div class="cmdk-item-txt">
+            <div class="cmdk-item-title">${escapeHtml(c.n)}</div>
+            <div class="cmdk-item-sub">${escapeHtml(c.horario || '')}</div>
+          </div>
+        </div>`;
+    });
+  }
+  if(resultado.noticias.length){
+    html += `<div class="cmdk-group-label">${t('cmdkNoticias')}</div>`;
+    resultado.noticias.forEach((n, i) => {
+      html += `
+        <div class="cmdk-item" data-tipo="noticia" data-idx="${i}" data-link="${escapeHtml(n.link || '')}">
+          ${n.image ? `<img src="${escapeHtml(n.image)}" alt="">` : `<div class="cmdk-item-ico">📰</div>`}
+          <div class="cmdk-item-txt">
+            <div class="cmdk-item-title">${escapeHtml(n.title || '')}</div>
+            <div class="cmdk-item-sub">Flow Games</div>
+          </div>
+        </div>`;
+    });
+  }
+  box.innerHTML = html;
+  box.querySelectorAll('.cmdk-item').forEach(el => {
+    el.addEventListener('click', () => ativarItemCmdk(el));
+  });
+}
+
+function ativarItemCmdk(el){
+  const tipo = el.dataset.tipo;
+  if(tipo === 'jogo'){
+    fecharCmdk();
+    abrirModal(parseInt(el.dataset.id, 10));
+  }else if(tipo === 'canal'){
+    fecharCmdk();
+    const id = parseInt(el.dataset.id, 10);
+    const liveInfo = canaisLiveAtual.find(l => l.id === id);
+    const c = canais.find(x => x.id === id);
+    window.open(liveInfo ? liveInfo.videoUrl : (c ? c.link : '#'), '_blank');
+  }else if(tipo === 'noticia'){
+    fecharCmdk();
+    if(el.dataset.link) window.open(el.dataset.link, '_blank');
+  }
+}
+
+function abrirCmdk(){
+  const overlay = document.getElementById('cmdkOverlay');
+  overlay.classList.add('aberto');
+  const input = document.getElementById('cmdkInput');
+  input.value = '';
+  renderCmdkResultados('');
+  setTimeout(() => input.focus(), 30);
+  if(!indiceNoticiasBusca.length) carregarIndiceNoticiasBusca();
+}
+
+function fecharCmdk(){
+  document.getElementById('cmdkOverlay').classList.remove('aberto');
+}
+
+document.getElementById('cmdkOpenBtn').addEventListener('click', abrirCmdk);
+document.getElementById('cmdkCloseBtn').addEventListener('click', fecharCmdk);
+document.getElementById('cmdkOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharCmdk();
+});
+
+let debounceCmdk = null;
+document.getElementById('cmdkInput').addEventListener('input', function(){
+  const valor = this.value;
+  clearTimeout(debounceCmdk);
+  debounceCmdk = setTimeout(() => renderCmdkResultados(valor), 120);
+});
+
+document.getElementById('cmdkInput').addEventListener('keydown', function(e){
+  const itens = Array.from(document.querySelectorAll('#cmdkResults .cmdk-item'));
+  if(e.key === 'ArrowDown'){
+    e.preventDefault();
+    if(!itens.length) return;
+    cmdkSelecionado = Math.min(cmdkSelecionado + 1, itens.length - 1);
+    itens.forEach(el => el.classList.remove('ativo'));
+    itens[cmdkSelecionado].classList.add('ativo');
+    itens[cmdkSelecionado].scrollIntoView({ block:'nearest' });
+  }else if(e.key === 'ArrowUp'){
+    e.preventDefault();
+    if(!itens.length) return;
+    cmdkSelecionado = Math.max(cmdkSelecionado - 1, 0);
+    itens.forEach(el => el.classList.remove('ativo'));
+    itens[cmdkSelecionado].classList.add('ativo');
+    itens[cmdkSelecionado].scrollIntoView({ block:'nearest' });
+  }else if(e.key === 'Enter'){
+    e.preventDefault();
+    if(cmdkSelecionado >= 0 && itens[cmdkSelecionado]) ativarItemCmdk(itens[cmdkSelecionado]);
+    else if(itens.length) ativarItemCmdk(itens[0]);
+  }
+});
+
+document.addEventListener('keydown', function(e){
+  if((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k'){
+    e.preventDefault();
+    abrirCmdk();
+  }
 });
 
 function renderHighlights(){
@@ -2449,6 +2759,14 @@ function renderWishlist(){
     const coverInner = w.capa
       ? `<img src="${w.capa}" alt="${w.n}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'cover-fallback\'><span class=\'ini\'>${inicial}</span><span class=\'tag\'>capa indisponível</span></div>'">`
       : `<div class="cover-fallback"><span class="ini">${inicial}</span><span class="tag">desejado</span></div>`;
+    const infoPreco = precosWishlistAtual[`${w.n}|${w.plat}`];
+    const precoBloco = infoPreco
+      ? `<div class="wishlist-preco${infoPreco.caiu ? ' caiu' : ''}">
+          ${infoPreco.caiu ? `<span class="wishlist-preco-caiu">${t('precoCaiu')}</span>` : ''}
+          <span class="wishlist-preco-label">${t('menorPrecoML')}</span>
+          <a href="${escapeHtml(infoPreco.url || gerarLink(w.n, w.plat))}" target="_blank" rel="noopener noreferrer" class="wishlist-preco-valor">R$ ${Number(infoPreco.precoMin).toLocaleString('pt-BR', {minimumFractionDigits:2})}</a>
+        </div>`
+      : '';
     html += `
       <div class="card">
         <div class="cover-wrap" style="cursor:default;">
@@ -2459,8 +2777,9 @@ function renderWishlist(){
           <h3>${w.n}</h3>
           <div class="badges"><span class="badge b-pouco">${t('desejado')}</span></div>
           ${w.motivo ? `<p class="modal-extra" style="margin:0;">${w.motivo}</p>` : ''}
+          ${precoBloco}
           <div class="card-foot">
-            <a href="${gerarLink(w.n, w.plat)}" target="_blank">${t('verMercadoLivre')}</a>
+            <a href="${gerarLink(w.n, w.plat)}" target="_blank" rel="noopener noreferrer">${t('verMercadoLivre')}</a>
           </div>
         </div>
       </div>
@@ -2576,8 +2895,11 @@ function fecharModal(){
   }
 }
 
+let debounceBusca = null;
 document.getElementById('searchInput').addEventListener('input', function(){
-  termoBusca = this.value; render();
+  const valor = this.value;
+  clearTimeout(debounceBusca);
+  debounceBusca = setTimeout(() => { termoBusca = valor; render(); }, 180);
 });
 document.querySelectorAll('#filterContainer button').forEach(btn=>{
   btn.addEventListener('click', function(){
@@ -3150,11 +3472,11 @@ async function carregarJogosGratis(){
     }
     const itens = data.slice(0, 6);
     list.innerHTML = itens.map(g => `
-      <a class="aovivo-item" href="${g.open_giveaway_url || g.gamerpower_url}" target="_blank" rel="noopener">
-        <img src="${g.thumbnail}" alt="" loading="lazy">
+      <a class="aovivo-item" href="${escapeHtml(g.open_giveaway_url || g.gamerpower_url)}" target="_blank" rel="noopener noreferrer">
+        <img src="${escapeHtml(g.thumbnail)}" alt="" loading="lazy">
         <div>
-          <div class="aovivo-item-title">${g.title}</div>
-          <div class="aovivo-item-sub">${g.platforms || ''}</div>
+          <div class="aovivo-item-title">${escapeHtml(g.title)}</div>
+          <div class="aovivo-item-sub">${escapeHtml(g.platforms || '')}</div>
         </div>
       </a>
     `).join('') + `<div class="aovivo-updated">${idioma==='en' ? 'Source' : 'Fonte'}: GamerPower</div>`;
@@ -3172,10 +3494,10 @@ async function carregarNoticias(){
     const itens = (data.items || []).slice(0, 6);
     if(!itens.length) throw new Error('sem itens');
     list.innerHTML = itens.map(n => `
-      <a class="aovivo-item" href="${n.link}" target="_blank" rel="noopener">
-        ${n.image ? `<img src="${n.image}" alt="" loading="lazy">` : ''}
+      <a class="aovivo-item" href="${escapeHtml(n.link)}" target="_blank" rel="noopener noreferrer">
+        ${n.image ? `<img src="${escapeHtml(n.image)}" alt="" loading="lazy">` : ''}
         <div>
-          <div class="aovivo-item-title">${n.title}</div>
+          <div class="aovivo-item-title">${escapeHtml(n.title)}</div>
           <div class="aovivo-item-sub">${n.pubDate ? new Date(n.pubDate).toLocaleDateString('pt-BR') : ''}</div>
         </div>
       </a>
@@ -3203,13 +3525,13 @@ async function sortearJogoAleatorio(){
       box.innerHTML = `<p class="aovivo-empty">${idioma==='en' ? 'Could not find a game, try again.' : 'Não achei um jogo, tenta de novo.'}</p>`;
       return;
     }
-    const generos = (g.genres || []).map(x => x.name).join(', ');
+    const generos = escapeHtml((g.genres || []).map(x => x.name).join(', '));
     const nota = g.metacritic ? `⭐ ${g.metacritic}/100` : '';
     box.innerHTML = `
-      ${g.background_image ? `<img src="${g.background_image}" alt="${g.name}">` : ''}
-      <h5>${g.name}</h5>
-      <p>${g.released ? g.released.slice(0,4) : ''}${nota ? ' · '+nota : ''}${generos ? ' · '+generos : ''}</p>
-      <a class="toggle-venda" href="https://rawg.io/games/${g.slug}" target="_blank" rel="noopener" style="text-align:center;">${idioma==='en' ? 'See more' : 'Ver mais'}</a>
+      ${g.background_image ? `<img src="${escapeHtml(g.background_image)}" alt="${escapeHtml(g.name)}">` : ''}
+      <h5>${escapeHtml(g.name)}</h5>
+      <p>${g.released ? escapeHtml(g.released.slice(0,4)) : ''}${nota ? ' · '+nota : ''}${generos ? ' · '+generos : ''}</p>
+      <a class="toggle-venda" href="https://rawg.io/games/${encodeURIComponent(g.slug)}" target="_blank" rel="noopener noreferrer" style="text-align:center;">${idioma==='en' ? 'See more' : 'Ver mais'}</a>
     `;
   }catch(e){
     box.innerHTML = `<p class="aovivo-empty">${idioma==='en' ? 'Error loading game.' : 'Erro ao buscar jogo.'}</p>`;
@@ -3352,6 +3674,10 @@ function aplicarIdiomaUI(){
   if(byId('ordenarDiaBtn')) byId('ordenarDiaBtn').textContent = t('ordenarDia');
   if(byId('radarTituloEl')) byId('radarTituloEl').textContent = t('radarTitulo');
   if(byId('searchInput')) byId('searchInput').placeholder = t('buscarPlaceholder');
+  if(byId('cmdkBtnTxt')) byId('cmdkBtnTxt').textContent = t('cmdkBtn');
+  if(byId('cmdkInput')) byId('cmdkInput').placeholder = t('cmdkPlaceholder');
+  if(byId('cmdkHintTxt')) byId('cmdkHintTxt').textContent = t('cmdkHint');
+  if(byId('cmdkEmpty')) byId('cmdkEmpty').textContent = t('cmdkVazio');
   const sortOpts = { none: 'ordenarPor', 'nome-az': 'nomeAZ', 'nome-za': 'nomeZA', 'valor-desc': 'valorDesc', 'valor-asc': 'valorAsc', raridade: 'porRaridade' };
   Object.entries(sortOpts).forEach(([val, key]) => {
     const opt = document.querySelector(`#sortSelect option[value="${val}"]`);
@@ -3408,6 +3734,7 @@ aplicarIdiomaCompleto();
 // atualizado sozinho pelo GitHub Actions a cada poucos minutos)
 carregarCanaisLive();
 setInterval(carregarCanaisLive, 3 * 60 * 1000);
+carregarPrecosWishlist();
 idiomaBtn.addEventListener('click', function(){
   idioma = idioma === 'en' ? 'pt' : 'en';
   localStorage.setItem('idioma_ps4', idioma);
