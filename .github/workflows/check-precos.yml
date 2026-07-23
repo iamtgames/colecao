@@ -1,8 +1,13 @@
+# DESATIVADO por enquanto: a API publica do Mercado Livre esta bloqueando
+# buscas anonimas vindas de IP de datacenter (GitHub Actions) com erro 403
+# "PA_UNAUTHORIZED_RESULT_FROM_POLICIES" (confirmado em 23/07/2026, 3 tentativas
+# diferentes). Por isso o gatilho automatico (cron) foi removido — rodar isso
+# todo dia so gastaria minutos do Actions pra sempre retornar 0 precos.
+# So workflow_dispatch (manual) fica ativo, caso um dia voce registre um app
+# OAuth aprovado no Mercado Livre e queira testar de novo.
 name: Checar precos do Radar de Caca
 
 on:
-  schedule:
-    - cron: '0 10 * * *'
   workflow_dispatch:
 
 permissions:
