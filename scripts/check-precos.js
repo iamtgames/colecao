@@ -91,39 +91,15 @@ function pausar(ms){
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-async function diagnosticoRapido(item){
-  const termo = encodeURIComponent(`${item.n} ${item.plat}`);
-  const url = `https://api.mercadolibre.com/sites/MLB/search?q=${termo}&limit=5`;
-  // Teste 1: sem headers extras (igual antes)
-  try{
-    const res = await fetch(url);
-    const texto = await res.text();
-    console.log(`DIAGNOSTICO 1 (sem headers): status=${res.status} corpo=${texto.slice(0, 300)}`);
-  }catch(e){
-    console.log(`DIAGNOSTICO 1: erro de rede - ${e.message}`);
-  }
-  // Teste 2: com User-Agent de navegador comum
-  try{
-    const res2 = await fetch(url, { headers: { 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/124.0 Safari/537.36', 'Accept': 'application/json' } });
-    const texto2 = await res2.text();
-    console.log(`DIAGNOSTICO 2 (com UA navegador): status=${res2.status} corpo=${texto2.slice(0, 300)}`);
-  }catch(e){
-    console.log(`DIAGNOSTICO 2: erro de rede - ${e.message}`);
-  }
-  // Teste 3: endpoint de produtos (products) em vez de sites/MLB/search, sem termo de busca textual
-  try{
-    const url3 = `https://api.mercadolibre.com/products/search?site_id=MLB&q=${termo}`;
-    const res3 = await fetch(url3);
-    const texto3 = await res3.text();
-    console.log(`DIAGNOSTICO 3 (products/search): status=${res3.status} corpo=${texto3.slice(0, 300)}`);
-  }catch(e){
-    console.log(`DIAGNOSTICO 3: erro de rede - ${e.message}`);
-  }
-}
-
+// ATENCAO — bloqueado pela politica atual do Mercado Livre (ver comentario no topo do arquivo):
+// confirmado via testes reais (23/07/2026) que a API publica de busca
+// (sites/MLB/search e products/search) retorna 403 "PA_UNAUTHORIZED_RESULT_FROM_POLICIES"
+// pra requisicoes sem token OAuth de aplicativo aprovado, mesmo com User-Agent de navegador.
+// Ou seja: nao da pra buscar preco anonimo via IP de datacenter (GitHub Actions) hoje em dia.
+// Deixando o codigo pronto (nao fabrica dado nenhum, so retorna null e o site nao mostra
+// nada) caso um dia voce registre um app OAuth aprovado em developers.mercadolivre.com.br.
 async function main(){
   const wishlist = extrairWishlist();
-  await diagnosticoRapido(wishlist[0]);
   const precosAnteriores = carregarPrecosAnteriores();
 
   const lotes = dividirEmLotes(wishlist, LOTE);
