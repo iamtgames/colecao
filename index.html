@@ -328,6 +328,16 @@
   .live-panel-close:hover{ background: rgba(255,255,255,0.18); }
   .live-panel-video{ position:relative; width:100%; aspect-ratio:16/9; background:#000; }
   .live-panel-video iframe, .live-panel-video > div{ position:absolute; inset:0; width:100%; height:100%; }
+  .live-panel-fallback{
+    display:none; flex-direction:column; align-items:center; justify-content:center;
+    gap:10px; text-align:center; padding:16px; color:#fff; font-size:12.5px;
+    background:#0d0606; z-index:2;
+  }
+  .live-panel-fallback.show{ display:flex; }
+  .live-panel-fallback a{
+    color:#ff8080; font-weight:800; text-decoration:none;
+    border:1px solid rgba(255,60,60,0.5); padding:8px 14px; border-radius:999px;
+  }
 
   .canais-toggle-card{
     background: var(--card-glass); backdrop-filter: blur(18px) saturate(140%);
@@ -707,7 +717,10 @@
       <div class="live-panel-title"><span class="dot"></span><span id="livePanelTitleTxt">Ao vivo</span></div>
       <button class="live-panel-close" id="livePanelCloseBtn" aria-label="Fechar" title="Fechar">✕</button>
     </div>
-    <div class="live-panel-video" id="livePanelVideo"><div id="liveYtPlayer"></div></div>
+    <div class="live-panel-video" id="livePanelVideo">
+      <div id="liveYtPlayer"></div>
+      <div class="live-panel-fallback" id="livePanelFallback"></div>
+    </div>
   </div>
 </div>
 <div class="side-dock">
@@ -1813,6 +1826,7 @@ let ytApiCarregando = false;
 let ytPlayer = null;
 let livePanelCanalId = null;
 let livePanelPendente = null;
+let livePanelCanalAtual = null;
 
 function garantirYtApi(){
   if(ytApiPronta || ytApiCarregando) return;
@@ -1830,6 +1844,21 @@ window.onYouTubeIframeAPIReady = function(){
   }
 };
 
+function mostrarFallbackLive(){
+  const fb = document.getElementById('livePanelFallback');
+  const c = livePanelCanalAtual;
+  if(!fb || !c) return;
+  fb.innerHTML = `
+    <div>😕 Não foi possível abrir a live do <b>${c.n}</b> aqui — o canal desativou a incorporação deste vídeo.</div>
+    <a href="${c.videoUrl}" target="_blank" rel="noopener">Assistir no YouTube ↗</a>
+  `;
+  fb.classList.add('show');
+}
+function esconderFallbackLive(){
+  const fb = document.getElementById('livePanelFallback');
+  if(fb){ fb.classList.remove('show'); fb.innerHTML = ''; }
+}
+
 function criarOuTrocarPlayer(c){
   if(ytPlayer && typeof ytPlayer.loadVideoById === 'function'){
     ytPlayer.loadVideoById(c.videoId);
@@ -1846,6 +1875,21 @@ function criarOuTrocarPlayer(c){
           if(qualidades && qualidades.length) e.target.setPlaybackQuality(qualidades[0]);
         }catch(err){}
         e.target.playVideo();
+        // alguns canais desativam a incorporacao do video; nesse caso o player
+        // nao dispara onError, so fica travado sem nunca comecar a tocar.
+        // detecta isso por timeout e mostra um aviso com link pro YouTube.
+        const videoIdChecado = e.target.getVideoData ? e.target.getVideoData().video_id : null;
+        setTimeout(function(){
+          if(!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
+          const aindaEsseVideo = !videoIdChecado || (ytPlayer.getVideoData && ytPlayer.getVideoData().video_id === videoIdChecado);
+          const estado = ytPlayer.getPlayerState();
+          if(aindaEsseVideo && (estado === -1 || estado === 5)){
+            mostrarFallbackLive();
+          }
+        }, 4000);
+      },
+      onError: function(){
+        mostrarFallbackLive();
       }
     }
   });
@@ -1855,6 +1899,8 @@ function abrirLivePanelPorId(id){
   const c = canaisLiveAtual.find(x => x.id === id);
   if(!c) return;
   livePanelCanalId = id;
+  livePanelCanalAtual = c;
+  esconderFallbackLive();
   document.getElementById('livePanelTitleTxt').textContent = `${c.n} — ${t('estaAoVivo')}`;
   const overlay = document.getElementById('livePanelOverlay');
   overlay.classList.add('aberto');
@@ -1868,6 +1914,8 @@ function fecharLivePanel(){
   overlay.classList.remove('aberto');
   livePanelCanalId = null;
   livePanelPendente = null;
+  livePanelCanalAtual = null;
+  esconderFallbackLive();
   if(ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
 }
 
