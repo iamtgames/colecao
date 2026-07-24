@@ -119,27 +119,37 @@
     --skin-active-border: #1e6fd9;
     --skin-glow: rgba(80,170,255,.6);
   }
-  /* bloco compartilhado: so entra em acao quando data-skin e ps3 ou y2k
+  body[data-skin="neon"]{
+    --tema-accent:#39ff88; --tema-accent-ink:#031507;
+    --skin-font: 'Space Grotesk', 'Segoe UI', sans-serif;
+    --skin-surface-bg: linear-gradient(180deg, rgba(57,255,136,0.08) 0%, rgba(0,0,0,0.18) 50%, rgba(255,46,136,0.06) 100%);
+    --skin-border-color: rgba(57,255,136,0.45);
+    --skin-surface-shadow: inset 0 1px 0 rgba(255,255,255,0.05), 0 0 14px rgba(57,255,136,0.25);
+    --skin-active-bg: linear-gradient(180deg, #39ff88 0%, #00c9ff 100%);
+    --skin-active-border: #00f0ff;
+    --skin-glow: rgba(57,255,136,.75);
+  }
+  /* bloco compartilhado: so entra em acao quando data-skin e ps3, y2k ou neon
      (o modo "moderno"/padrao nao tem essas variaveis definidas, entao
      nenhum desses seletores casa e o visual atual continua 100% igual) */
-  body[data-skin="ps3"] .stat, body[data-skin="y2k"] .stat,
-  body[data-skin="ps3"] .search-box input, body[data-skin="y2k"] .search-box input,
-  body[data-skin="ps3"] .filters button, body[data-skin="y2k"] .filters button,
-  body[data-skin="ps3"] .toggle-venda, body[data-skin="y2k"] .toggle-venda,
-  body[data-skin="ps3"] .card, body[data-skin="y2k"] .card,
-  body[data-skin="ps3"] .top-controls-bar button, body[data-skin="y2k"] .top-controls-bar button,
-  body[data-skin="ps3"] .side-dock a, body[data-skin="y2k"] .side-dock a,
-  body[data-skin="ps3"] .side-dock button, body[data-skin="y2k"] .side-dock button{
+  body[data-skin="ps3"] .stat, body[data-skin="y2k"] .stat, body[data-skin="neon"] .stat,
+  body[data-skin="ps3"] .search-box input, body[data-skin="y2k"] .search-box input, body[data-skin="neon"] .search-box input,
+  body[data-skin="ps3"] .filters button, body[data-skin="y2k"] .filters button, body[data-skin="neon"] .filters button,
+  body[data-skin="ps3"] .toggle-venda, body[data-skin="y2k"] .toggle-venda, body[data-skin="neon"] .toggle-venda,
+  body[data-skin="ps3"] .card, body[data-skin="y2k"] .card, body[data-skin="neon"] .card,
+  body[data-skin="ps3"] .top-controls-bar button, body[data-skin="y2k"] .top-controls-bar button, body[data-skin="neon"] .top-controls-bar button,
+  body[data-skin="ps3"] .side-dock a, body[data-skin="y2k"] .side-dock a, body[data-skin="neon"] .side-dock a,
+  body[data-skin="ps3"] .side-dock button, body[data-skin="y2k"] .side-dock button, body[data-skin="neon"] .side-dock button{
     font-family: var(--skin-font);
     background-image: var(--skin-surface-bg);
     border: 1px solid var(--skin-border-color) !important;
     box-shadow: var(--skin-surface-shadow);
     transition: transform .2s, box-shadow .2s, border-color .2s;
   }
-  body[data-skin="ps3"] .filters button.active, body[data-skin="y2k"] .filters button.active{
+  body[data-skin="ps3"] .filters button.active, body[data-skin="y2k"] .filters button.active, body[data-skin="neon"] .filters button.active{
     background-image: var(--skin-active-bg); color:#fff; border-color: var(--skin-active-border) !important;
   }
-  body[data-skin="ps3"] .section-title, body[data-skin="y2k"] .section-title{ font-family: var(--skin-font); }
+  body[data-skin="ps3"] .section-title, body[data-skin="y2k"] .section-title, body[data-skin="neon"] .section-title{ font-family: var(--skin-font); }
 
   /* PS3 (XMB) -- particularidades: titulo com brilho holografico, duas
      camadas de "onda" de luz azul (SVG de verdade, nao listras) lembrando a
@@ -256,6 +266,51 @@
   .y2k-taskbar-clock{
     background: rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.15); border-radius:4px;
     padding: 5px 10px; font-variant-numeric: tabular-nums; flex-shrink:0;
+  }
+
+  /* Neon Geometrico -- inspirado no visual de jogos de plataforma neon/geometrico
+     (fundo escuro, contornos de espinho/triangulo brilhando, particulas
+     quadradas flutuando) mas 100% desenho original nosso: nada de personagem
+     ou asset de jogo com direitos autorais, so a linguagem visual (brilho
+     neon + geometria + particulas). Ligado pelo botao ⚡ na barra superior. */
+  body[data-skin="neon"]::before{
+    content:''; position:fixed; inset:0; z-index:-3; pointer-events:none;
+    background:
+      radial-gradient(ellipse 140% 60% at 50% 100%, rgba(57,255,136,0.12), transparent 60%),
+      radial-gradient(ellipse 100% 40% at 80% 0%, rgba(255,46,136,0.08), transparent 55%),
+      linear-gradient(180deg, #03060a 0%, #060a12 55%, #03060a 100%);
+  }
+  body[data-skin="neon"]::after{
+    content:''; position:fixed; inset:0; z-index:-2; pointer-events:none; opacity:.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cpolygon points='30,170 60,110 90,170' fill='none' stroke='%2339ff88' stroke-width='2' opacity='0.35'/%3E%3Cpolygon points='140,180 165,130 190,180' fill='none' stroke='%2300f0ff' stroke-width='2' opacity='0.3'/%3E%3Crect x='100' y='40' width='8' height='8' fill='%23ff2e88' opacity='0.5'/%3E%3Crect x='160' y='60' width='6' height='6' fill='%2339ff88' opacity='0.4'/%3E%3Crect x='40' y='30' width='5' height='5' fill='%2300f0ff' opacity='0.45'/%3E%3C/svg%3E");
+    background-repeat: repeat;
+    background-size: 220px 220px;
+    animation: neonDrift 45s linear infinite;
+  }
+  @keyframes neonDrift{
+    from{ background-position: 0 0; }
+    to{ background-position: -220px -220px; }
+  }
+  body[data-skin="neon"] .topbar h1{
+    font-family: var(--skin-font); font-weight:800; letter-spacing:.5px; color:#eafff2;
+    text-shadow: 0 0 10px var(--skin-glow), 0 0 22px rgba(0,240,255,.5);
+  }
+  body[data-skin="neon"] .filters button.active{
+    box-shadow: 0 0 16px var(--skin-glow), inset 0 1px 0 rgba(255,255,255,.15);
+  }
+  body[data-skin="neon"] .card:hover{
+    border-color: rgba(0,240,255,0.8) !important;
+    box-shadow: 0 0 24px rgba(57,255,136,.35), 0 16px 30px rgba(0,0,0,.5);
+    transform: translateY(-4px) scale(1.015);
+  }
+  body[data-skin="neon"] .top-controls-bar button:hover, body[data-skin="neon"] .side-dock a:hover, body[data-skin="neon"] .side-dock button:hover{
+    box-shadow: 0 0 14px var(--skin-glow);
+    transform: scale(1.12);
+  }
+  .fx-rastro-neon{
+    width:7px; height:7px; border-radius:2px;
+    background:#39ff88; box-shadow:0 0 6px 2px rgba(57,255,136,.8);
+    opacity:.9; transition: transform .5s ease-out, opacity .5s ease-out;
   }
 
   /* FILTRO CRT -- scanlines + vinheta + leve flicker, so um overlay decorativo
@@ -1123,6 +1178,12 @@
   .mascot-xiao .x-lowerLegR{ transform-origin: 37px 62px; }
   .mascot-xiao .x-cape{ transform-origin: 30px 30px; }
   .mascot-xiao .x-speed{ opacity:0; }
+  /* Reskin neon do guerreiro: brilho neon no corpo e rastro de velocidade
+     recolorido, só quando o skin "Neon Geométrico" estiver ativo. */
+  body[data-skin="neon"] .mascot-xiao svg{
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,.45)) drop-shadow(0 0 6px rgba(57,255,136,.75)) drop-shadow(0 0 12px rgba(0,240,255,.4));
+  }
+  body[data-skin="neon"] .mascot-xiao .x-speed{ stroke:#39ff88 !important; }
   /* Voo estilo super-heroi (substitui o antigo ciclo de passos): braço da
      frente esticado pra frente feito soco de voo, braço de tras varrido pra
      tras, pernas juntas arrastando, capa tremulando e rastro de velocidade
@@ -4144,9 +4205,9 @@ paletaBtn.addEventListener('click', function(){
 
 // DESIGNS DE EPOCA (skins visuais completos, separados da paleta de cor):
 // moderno -> PS3 (XMB) -> Y2K (PC/Windows anos 2000) -> moderno...
-const skins = ['moderno', 'ps3', 'y2k'];
-const skinEmoji = { moderno: '🎮', ps3: '💿', y2k: '💾' };
-const skinNome = { moderno: 'Moderno', ps3: 'PS3 (XMB)', y2k: 'Y2K (Windows anos 2000)' };
+const skins = ['moderno', 'ps3', 'y2k', 'neon'];
+const skinEmoji = { moderno: '🎮', ps3: '💿', y2k: '💾', neon: '⚡' };
+const skinNome = { moderno: 'Moderno', ps3: 'PS3 (XMB)', y2k: 'Y2K (Windows anos 2000)', neon: 'Neon Geométrico' };
 const skinBtn = document.getElementById('skinBtn');
 function aplicarSkin(nome){
   document.body.setAttribute('data-skin', nome);
@@ -5030,7 +5091,9 @@ idiomaBtn.addEventListener('click', function(){
     wrap.className = 'mascot-fx fx-confete-wrap';
     wrap.style.transform = 'translate(' + x + 'px,' + y + 'px)';
     layer.appendChild(wrap);
-    var cores = ['#ff5f6d', '#ffd23d', '#7ec4ff', '#3ddc84', '#b98fff'];
+    var cores = document.body.getAttribute('data-skin') === 'neon'
+      ? ['#39ff88', '#ff2e88', '#00f0ff', '#ffe14d']
+      : ['#ff5f6d', '#ffd23d', '#7ec4ff', '#3ddc84', '#b98fff'];
     for(var i = 0; i < 14; i++){
       (function(i){
         var piece = document.createElement('span');
@@ -5048,11 +5111,27 @@ idiomaBtn.addEventListener('click', function(){
     setTimeout(function(){ wrap.remove(); }, 900);
   }
 
+  function criarParticulaRastro(layer, x, y){
+    var p = document.createElement('div');
+    p.className = 'mascot-fx fx-rastro-neon';
+    p.style.position = 'absolute';
+    p.style.left = 0; p.style.top = 0;
+    p.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    layer.appendChild(p);
+    requestAnimationFrame(function(){
+      p.style.transform = 'translate(' + (x - 10 - Math.random() * 14) + 'px,' + (y + Math.random() * 10 - 5) + 'px) scale(0.3)';
+      p.style.opacity = '0';
+    });
+    setTimeout(function(){ p.remove(); }, 550);
+  }
+
   function criarBurst(layer, x, y, cor){
     var wrap = document.createElement('div');
     wrap.className = 'mascot-fx fx-burst';
     wrap.style.transform = 'translate(' + x + 'px,' + y + 'px)';
     layer.appendChild(wrap);
+    var neonAtivo = document.body.getAttribute('data-skin') === 'neon';
+    var coresNeon = ['#39ff88', '#ff2e88', '#00f0ff', '#ffe14d'];
     var n = 8;
     for(var i = 0; i < n; i++){
       (function(i){
@@ -5061,7 +5140,8 @@ idiomaBtn.addEventListener('click', function(){
         var dx = Math.cos(ang) * raio;
         var dy = Math.sin(ang) * raio;
         var piece = document.createElement('span');
-        piece.style.background = cor || '#ffd23d';
+        piece.style.background = neonAtivo ? coresNeon[i % coresNeon.length] : (cor || '#ffd23d');
+        if(neonAtivo){ piece.style.boxShadow = '0 0 6px 1px ' + coresNeon[i % coresNeon.length]; }
         wrap.appendChild(piece);
         requestAnimationFrame(function(){
           piece.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0)';
@@ -5863,6 +5943,19 @@ idiomaBtn.addEventListener('click', function(){
       setTimeout(function(){ vagar(ghost, 'ghost'); }, 800);
       setTimeout(function(){ vagar(xiao, 'xiao'); }, 1600);
       ligarReacoesDoSite(layer, ghost, xiao);
+      // Rastro de particulas neon atras do guerreiro voando, so quando o skin
+      // "Neon Geometrico" estiver ativo — poll leve, nao atrapalha nada mais.
+      if(!reduzido){
+        setInterval(function(){
+          try{
+            if(document.body.getAttribute('data-skin') !== 'neon') return;
+            if(!xiao.classList.contains('walking')) return;
+            var px = (parseFloat(xiao.dataset.x) || 0) + 28;
+            var py = (parseFloat(xiao.dataset.y) || 0) + 46;
+            criarParticulaRastro(layer, px, py);
+          }catch(e){}
+        }, 90);
+      }
       // As cenas de interacao (perseguicao, briga, portal, buraco negro,
       // bomba) sao mais intensas — pulamos elas se a pessoa pediu "reduzir
       // movimento" no sistema, mas os mascotes continuam aparecendo normal.
