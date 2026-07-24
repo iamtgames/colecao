@@ -25,7 +25,7 @@
 <title>Controle Coleção iamT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Space+Grotesk:wght@500;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Space+Grotesk:wght@500;700;800&family=Rajdhani:wght@500;600;700&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #0b0b0c;
@@ -76,51 +76,100 @@
   body[data-paleta="ps3"]::after{ background: radial-gradient(circle at 85% 100%, rgba(30,111,217,0.14), transparent 60%); }
   body[data-paleta="roxo"]::after{ background: radial-gradient(circle at 50% 50%, rgba(162,51,240,0.13), transparent 65%); }
 
-  /* MODO RETRO 2000/PS3 -- um "skin" visual completo por cima do tema/paleta,
-     nao so uma cor de acento: fonte diferente, botoes com brilho/bisel tipo
-     Web 2.0 dos anos 2000, titulo com gradiente cromado e uma "onda" de fundo
-     lembrando a XMB do PS3. Ligado/desligado pelo botao 💿 na barra superior. */
-  body[data-skin="retro"]{ --tema-accent:#2f8dff; --tema-accent-ink:#ffffff; }
-  body[data-skin="retro"]::before{
+  /* MODO PS3 (XMB) -- skin visual completo por cima do tema/paleta: fonte
+     arredondada tipo interface de console, titulo com brilho holografico e
+     duas camadas de "onda" de luz azul (SVG de verdade, nao listras) lembrando
+     a XMB do PS3, cada camada andando num sentido/velocidade diferente pra
+     dar profundidade. Ligado pelo botao 💿 na barra superior. */
+  body[data-skin="ps3"]{ --tema-accent:#2f8dff; --tema-accent-ink:#ffffff; }
+  body[data-skin="ps3"]::before{
     content:''; position:fixed; inset:0; z-index:-3; pointer-events:none;
     background:
       radial-gradient(ellipse 140% 55% at 50% 115%, rgba(30,111,217,0.4), transparent 62%),
       linear-gradient(180deg, #01050c 0%, #041225 55%, #01050c 100%);
   }
-  body[data-skin="retro"]::after{
-    content:''; position:fixed; left:-15%; right:-15%; bottom:-25%; height:65%; z-index:-2; pointer-events:none;
-    background: repeating-linear-gradient(100deg, rgba(120,190,255,0.10) 0 40px, rgba(120,190,255,0.02) 40px 80px);
-    filter: blur(1px);
-    animation: ondaPs3Retro 16s ease-in-out infinite;
+  body[data-skin="ps3"]::after{
+    content:'';
+    position:fixed; left:-20%; right:-20%; bottom:-8%; height:55%; z-index:-2; pointer-events:none;
+    background-image:
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 300'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%2360c8ff' stop-opacity='0.55'/%3E%3Cstop offset='100%25' stop-color='%23001a40' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cfilter id='b1' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeGaussianBlur stdDeviation='10'/%3E%3C/filter%3E%3C/defs%3E%3Cpath filter='url(%23b1)' fill='url(%23g1)' d='M-100,180 C100,120 300,240 500,180 C700,120 900,240 1100,180 C1300,120 1500,240 1700,180 L1700,300 L-100,300 Z'/%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 300'%3E%3Cdefs%3E%3ClinearGradient id='g2' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%232f8dff' stop-opacity='0.3'/%3E%3Cstop offset='100%25' stop-color='%23001a40' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cfilter id='b2' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeGaussianBlur stdDeviation='16'/%3E%3C/filter%3E%3C/defs%3E%3Cpath filter='url(%23b2)' fill='url(%23g2)' d='M-150,200 C150,130 450,270 750,200 C1050,130 1350,270 1650,200 C1800,165 1900,235 2050,200 L2050,300 L-150,300 Z'/%3E%3C/svg%3E");
+    background-repeat: repeat-x, repeat-x;
+    background-size: 1600px 100%, 2000px 100%;
+    background-position: 0 100%, 0 100%;
+    animation: ondaPs3A 18s linear infinite, ondaPs3B 30s linear infinite reverse;
   }
-  @keyframes ondaPs3Retro{
-    0%, 100%{ transform: translateX(0) skewY(-2deg); }
-    50%{ transform: translateX(-46px) skewY(2deg); }
-  }
-  body[data-skin="retro"] .topbar h1{
-    font-family: 'Rajdhani', 'Russo One', 'Space Grotesk', sans-serif;
-    font-weight: 700; letter-spacing: 1.2px;
+  @keyframes ondaPs3A{ 0%{ background-position: 0 100%; } 100%{ background-position: -1600px 100%; } }
+  @keyframes ondaPs3B{ 0%{ background-position: 0 100%; } 100%{ background-position: -2000px 100%; } }
+  body[data-skin="ps3"] .topbar h1{
+    font-family: 'M PLUS Rounded 1c', 'Russo One', 'Space Grotesk', sans-serif;
+    font-weight: 700; letter-spacing: .5px;
     background: linear-gradient(180deg, #f3fbff 0%, #8fcaff 42%, #2f8dff 58%, #0b3d80 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
     text-shadow: 0 1px 0 rgba(255,255,255,0.35);
   }
-  body[data-skin="retro"] .stat,
-  body[data-skin="retro"] .search-box input,
-  body[data-skin="retro"] .filters button,
-  body[data-skin="retro"] .toggle-venda,
-  body[data-skin="retro"] .card,
-  body[data-skin="retro"] .top-controls-bar button,
-  body[data-skin="retro"] .side-dock a, body[data-skin="retro"] .side-dock button{
-    font-family: 'Rajdhani', 'Space Grotesk', sans-serif;
+  body[data-skin="ps3"] .stat,
+  body[data-skin="ps3"] .search-box input,
+  body[data-skin="ps3"] .filters button,
+  body[data-skin="ps3"] .toggle-venda,
+  body[data-skin="ps3"] .card,
+  body[data-skin="ps3"] .top-controls-bar button,
+  body[data-skin="ps3"] .side-dock a, body[data-skin="ps3"] .side-dock button{
+    font-family: 'M PLUS Rounded 1c', 'Space Grotesk', sans-serif;
     background-image: linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.02) 45%, rgba(0,20,50,0.08) 100%);
     border-color: rgba(140,195,255,0.4) !important;
     box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 10px rgba(0,60,140,0.3);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
   }
-  body[data-skin="retro"] .filters button.active{
+  body[data-skin="ps3"] .filters button.active{
     background: linear-gradient(180deg, #7ec4ff 0%, #1e6fd9 100%); color:#fff; border-color:#1e6fd9 !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 0 16px rgba(47,141,255,.6);
   }
-  body[data-skin="retro"] .card:hover{ border-color: rgba(140,195,255,0.7) !important; box-shadow: 0 16px 36px rgba(10,60,140,0.5); }
-  body[data-skin="retro"] .section-title{ font-family:'Rajdhani','Russo One',sans-serif; letter-spacing:.8px; }
+  body[data-skin="ps3"] .card:hover{
+    border-color: rgba(140,195,255,0.8) !important; box-shadow: 0 16px 36px rgba(10,60,140,0.5);
+    transform: translateY(-4px) scale(1.015);
+  }
+  body[data-skin="ps3"] .top-controls-bar button:hover, body[data-skin="ps3"] .side-dock a:hover, body[data-skin="ps3"] .side-dock button:hover{
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 0 14px rgba(47,141,255,.7);
+    transform: scale(1.12);
+  }
+  body[data-skin="ps3"] .section-title{ font-family:'M PLUS Rounded 1c','Russo One',sans-serif; letter-spacing:.4px; }
+
+  /* MODO Y2K (PC/Windows dos anos 2000) -- botoes "gel" brilhosos tipo XP/Web
+     2.0, fonte de sistema da epoca (Trebuchet/Tahoma) e um ceu gradiente meio
+     "papel de parede de Windows" beeem sutil atras do conteudo escuro do site.
+     Ligado pelo botao 💾 na barra superior. */
+  body[data-skin="y2k"]::before{
+    content:''; position:fixed; inset:0; z-index:-3; pointer-events:none; opacity:.35;
+    background: linear-gradient(180deg, #2f7fe0 0%, #a9d8ff 32%, #eaf7d8 52%, #bfe08a 62%, #5a9a4a 100%);
+  }
+  body[data-skin="y2k"] .topbar h1{
+    font-family:'Trebuchet MS','Tahoma',sans-serif; font-weight:800; letter-spacing:0; color:#eaf4ff;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5), 0 2px 6px rgba(0,60,140,.7), 0 0 22px rgba(80,170,255,.5);
+  }
+  body[data-skin="y2k"] .stat,
+  body[data-skin="y2k"] .search-box input,
+  body[data-skin="y2k"] .filters button,
+  body[data-skin="y2k"] .toggle-venda,
+  body[data-skin="y2k"] .top-controls-bar button,
+  body[data-skin="y2k"] .side-dock a, body[data-skin="y2k"] .side-dock button{
+    font-family:'Trebuchet MS','Tahoma',sans-serif;
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.05) 48%, rgba(0,60,140,0.1) 52%, rgba(0,60,140,0.02) 100%);
+    border: 1px solid rgba(120,190,255,0.55) !important;
+    border-radius: 999px !important;
+    box-shadow: inset 0 1px 1px rgba(255,255,255,.6), 0 2px 6px rgba(0,40,100,.3);
+  }
+  body[data-skin="y2k"] .filters button.active{
+    background-image: linear-gradient(180deg, #cfe9ff 0%, #4f9df0 50%, #1e6fd9 100%); color:#fff;
+    border-color:#1e6fd9 !important;
+  }
+  body[data-skin="y2k"] .card{
+    border-radius: 10px !important;
+    border: 2px solid rgba(140,200,255,0.35) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 3px 12px rgba(0,40,100,.35);
+  }
+  body[data-skin="y2k"] .card:hover{ border-color: rgba(140,200,255,0.7) !important; }
+  body[data-skin="y2k"] .section-title{ font-family:'Trebuchet MS','Tahoma',sans-serif; }
 
   /* FILTRO CRT -- scanlines + vinheta + leve flicker, so um overlay decorativo
      (pointer-events:none), nao interfere em clique nenhum. Ligado pelo botao 📺. */
@@ -955,7 +1004,7 @@
   <button id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
   <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
   <button id="paletaBtn" title="Alternar paleta de cores" aria-label="Alternar paleta de cores">🎨</button>
-  <button id="skinBtn" title="Modo Retrô 2000/PS3: desligado — clique para ligar" aria-label="Alternar modo retrô 2000/PS3">💿</button>
+  <button id="skinBtn" title="Design atual: Moderno — clique para trocar" aria-label="Alternar design do site (PS3/Y2K)">🎮</button>
   <button id="crtBtn" title="Filtro CRT: desligado — clique para ligar" aria-label="Alternar filtro CRT">📺</button>
 </div>
 <div id="crtOverlay"></div>
@@ -3477,20 +3526,24 @@ paletaBtn.addEventListener('click', function(){
   aplicarPaleta(prox);
 });
 
-// MODO RETRO 2000/PS3 (skin visual completo, separado da paleta de cor)
+// DESIGNS DE EPOCA (skins visuais completos, separados da paleta de cor):
+// moderno -> PS3 (XMB) -> Y2K (PC/Windows anos 2000) -> moderno...
+const skins = ['moderno', 'ps3', 'y2k'];
+const skinEmoji = { moderno: '🎮', ps3: '💿', y2k: '💾' };
+const skinNome = { moderno: 'Moderno', ps3: 'PS3 (XMB)', y2k: 'Y2K (Windows anos 2000)' };
 const skinBtn = document.getElementById('skinBtn');
-function aplicarSkin(ligado){
-  document.body.setAttribute('data-skin', ligado ? 'retro' : 'moderno');
-  skinBtn.classList.toggle('ativo', ligado);
-  skinBtn.title = ligado
-    ? 'Modo Retrô 2000/PS3: ligado — clique para desligar'
-    : 'Modo Retrô 2000/PS3: desligado — clique para ligar';
+function aplicarSkin(nome){
+  document.body.setAttribute('data-skin', nome);
+  skinBtn.classList.toggle('ativo', nome !== 'moderno');
+  skinBtn.textContent = skinEmoji[nome] || '🎮';
+  skinBtn.title = `Design atual: ${skinNome[nome]} — clique para trocar`;
 }
-aplicarSkin(localStorage.getItem('skin_ps4') === 'retro');
+aplicarSkin(skins.includes(localStorage.getItem('skin_ps4')) ? localStorage.getItem('skin_ps4') : 'moderno');
 skinBtn.addEventListener('click', function(){
-  const ligado = document.body.getAttribute('data-skin') !== 'retro';
-  localStorage.setItem('skin_ps4', ligado ? 'retro' : 'moderno');
-  aplicarSkin(ligado);
+  const atual = document.body.getAttribute('data-skin') || 'moderno';
+  const prox = skins[(skins.indexOf(atual) + 1) % skins.length];
+  localStorage.setItem('skin_ps4', prox);
+  aplicarSkin(prox);
 });
 
 // FILTRO CRT (scanlines/vinheta decorativos, nao mexe em nenhuma funcionalidade)
