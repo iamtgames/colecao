@@ -25,7 +25,7 @@
 <title>Controle Coleção iamT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Space+Grotesk:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Space+Grotesk:wght@500;700;800&family=Rajdhani:wght@500;600;700&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #0b0b0c;
@@ -75,6 +75,74 @@
   body[data-paleta="ps4"]::after{ background: radial-gradient(circle at 15% 0%, rgba(47,141,255,0.16), transparent 60%); }
   body[data-paleta="ps3"]::after{ background: radial-gradient(circle at 85% 100%, rgba(30,111,217,0.14), transparent 60%); }
   body[data-paleta="roxo"]::after{ background: radial-gradient(circle at 50% 50%, rgba(162,51,240,0.13), transparent 65%); }
+
+  /* MODO RETRO 2000/PS3 -- um "skin" visual completo por cima do tema/paleta,
+     nao so uma cor de acento: fonte diferente, botoes com brilho/bisel tipo
+     Web 2.0 dos anos 2000, titulo com gradiente cromado e uma "onda" de fundo
+     lembrando a XMB do PS3. Ligado/desligado pelo botao 💿 na barra superior. */
+  body[data-skin="retro"]{ --tema-accent:#2f8dff; --tema-accent-ink:#ffffff; }
+  body[data-skin="retro"]::before{
+    content:''; position:fixed; inset:0; z-index:-3; pointer-events:none;
+    background:
+      radial-gradient(ellipse 140% 55% at 50% 115%, rgba(30,111,217,0.4), transparent 62%),
+      linear-gradient(180deg, #01050c 0%, #041225 55%, #01050c 100%);
+  }
+  body[data-skin="retro"]::after{
+    content:''; position:fixed; left:-15%; right:-15%; bottom:-25%; height:65%; z-index:-2; pointer-events:none;
+    background: repeating-linear-gradient(100deg, rgba(120,190,255,0.10) 0 40px, rgba(120,190,255,0.02) 40px 80px);
+    filter: blur(1px);
+    animation: ondaPs3Retro 16s ease-in-out infinite;
+  }
+  @keyframes ondaPs3Retro{
+    0%, 100%{ transform: translateX(0) skewY(-2deg); }
+    50%{ transform: translateX(-46px) skewY(2deg); }
+  }
+  body[data-skin="retro"] .topbar h1{
+    font-family: 'Rajdhani', 'Russo One', 'Space Grotesk', sans-serif;
+    font-weight: 700; letter-spacing: 1.2px;
+    background: linear-gradient(180deg, #f3fbff 0%, #8fcaff 42%, #2f8dff 58%, #0b3d80 100%);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 1px 0 rgba(255,255,255,0.35);
+  }
+  body[data-skin="retro"] .stat,
+  body[data-skin="retro"] .search-box input,
+  body[data-skin="retro"] .filters button,
+  body[data-skin="retro"] .toggle-venda,
+  body[data-skin="retro"] .card,
+  body[data-skin="retro"] .top-controls-bar button,
+  body[data-skin="retro"] .side-dock a, body[data-skin="retro"] .side-dock button{
+    font-family: 'Rajdhani', 'Space Grotesk', sans-serif;
+    background-image: linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.02) 45%, rgba(0,20,50,0.08) 100%);
+    border-color: rgba(140,195,255,0.4) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 10px rgba(0,60,140,0.3);
+  }
+  body[data-skin="retro"] .filters button.active{
+    background: linear-gradient(180deg, #7ec4ff 0%, #1e6fd9 100%); color:#fff; border-color:#1e6fd9 !important;
+  }
+  body[data-skin="retro"] .card:hover{ border-color: rgba(140,195,255,0.7) !important; box-shadow: 0 16px 36px rgba(10,60,140,0.5); }
+  body[data-skin="retro"] .section-title{ font-family:'Rajdhani','Russo One',sans-serif; letter-spacing:.8px; }
+
+  /* FILTRO CRT -- scanlines + vinheta + leve flicker, so um overlay decorativo
+     (pointer-events:none), nao interfere em clique nenhum. Ligado pelo botao 📺. */
+  #crtOverlay{
+    display:none; position:fixed; inset:0; z-index:9000; pointer-events:none;
+  }
+  body.crt-on #crtOverlay{ display:block; }
+  #crtOverlay::before{
+    content:''; position:absolute; inset:0;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0px, rgba(0,0,0,0.18) 1px, transparent 2px, transparent 3px);
+    mix-blend-mode: multiply; animation: crtFlicker 6s infinite;
+  }
+  #crtOverlay::after{
+    content:''; position:absolute; inset:0;
+    background: radial-gradient(ellipse at center, transparent 55%, rgba(0,0,0,0.35) 100%);
+  }
+  @keyframes crtFlicker{
+    0%, 96%, 100%{ opacity:1; }
+    97%{ opacity:.88; }
+    98%{ opacity:1; }
+    99%{ opacity:.92; }
+  }
 
   *{margin:0;padding:0;box-sizing:border-box;}
   body{
@@ -534,6 +602,27 @@
 
   .footer{margin-top:50px; text-align:center; color:var(--ink-dim); font-size:12px; border-top:1px solid var(--line); padding-top:20px;}
 
+  /* BARRA SUPERIOR: controles de tema/paleta/skin retro/crt (tirados da
+     barra lateral a pedido, pra ficar mais visivel logo no topo do site) */
+  .top-controls-bar{
+    position: sticky; top:0; z-index: 65;
+    display:flex; align-items:center; justify-content:flex-end; gap:8px;
+    padding: 8px 20px; background: var(--overlay-glass); backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--line-soft);
+  }
+  .top-controls-bar button{
+    width:34px; height:34px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    background: var(--bg-card); border:1px solid var(--line);
+    color: var(--ink); font-size:15px; cursor:pointer; transition:.2s;
+  }
+  .top-controls-bar button:hover{ background: var(--white); color:var(--bg-inverse); transform: scale(1.08); }
+  .top-controls-bar button.ativo{ background: var(--tema-accent, #2f8dff); color:#fff; border-color: var(--tema-accent, #2f8dff); }
+  @media (max-width: 480px){
+    .top-controls-bar{ padding:6px 10px; gap:6px; justify-content:center; }
+    .top-controls-bar button{ width:30px; height:30px; font-size:13px; }
+  }
+
   /* BARRA LATERAL FLUTUANTE */
   .side-dock{
     position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
@@ -705,7 +794,7 @@
   #printArea{display:none;}
 
   @media print{
-    body::before, .side-dock, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay{
+    body::before, .side-dock, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay, .top-controls-bar, #crtOverlay{
       display:none !important;
     }
     body{background:#fff !important; padding:0; color:#111;}
@@ -862,6 +951,13 @@
 </style>
 </head>
 <body>
+<div class="top-controls-bar" id="topControlsBar">
+  <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
+  <button id="paletaBtn" title="Alternar paleta de cores" aria-label="Alternar paleta de cores">🎨</button>
+  <button id="skinBtn" title="Modo Retrô 2000/PS3: desligado — clique para ligar" aria-label="Alternar modo retrô 2000/PS3">💿</button>
+  <button id="crtBtn" title="Filtro CRT: desligado — clique para ligar" aria-label="Alternar filtro CRT">📺</button>
+</div>
+<div id="crtOverlay"></div>
 <div id="liveBalloonWrap"></div>
 <div id="livePanelOverlay">
   <div class="live-panel">
@@ -878,8 +974,6 @@
   </div>
 </div>
 <div class="side-dock">
-  <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
-  <button id="paletaBtn" title="Alternar paleta de cores" aria-label="Alternar paleta de cores">🎨</button>
   <button id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
   <a href="https://www.instagram.com/marioturbino/" target="_blank" rel="noopener noreferrer" title="Instagram pessoal" aria-label="Abrir Instagram pessoal">👤</a>
   <a href="https://www.instagram.com/iamtgames/" target="_blank" rel="noopener noreferrer" title="Instagram da coleção" aria-label="Abrir Instagram da coleção">📸</a>
@@ -3381,6 +3475,36 @@ paletaBtn.addEventListener('click', function(){
   const prox = paletas[(paletas.indexOf(atual) + 1) % paletas.length];
   localStorage.setItem('paleta_ps4', prox);
   aplicarPaleta(prox);
+});
+
+// MODO RETRO 2000/PS3 (skin visual completo, separado da paleta de cor)
+const skinBtn = document.getElementById('skinBtn');
+function aplicarSkin(ligado){
+  document.body.setAttribute('data-skin', ligado ? 'retro' : 'moderno');
+  skinBtn.classList.toggle('ativo', ligado);
+  skinBtn.title = ligado
+    ? 'Modo Retrô 2000/PS3: ligado — clique para desligar'
+    : 'Modo Retrô 2000/PS3: desligado — clique para ligar';
+}
+aplicarSkin(localStorage.getItem('skin_ps4') === 'retro');
+skinBtn.addEventListener('click', function(){
+  const ligado = document.body.getAttribute('data-skin') !== 'retro';
+  localStorage.setItem('skin_ps4', ligado ? 'retro' : 'moderno');
+  aplicarSkin(ligado);
+});
+
+// FILTRO CRT (scanlines/vinheta decorativos, nao mexe em nenhuma funcionalidade)
+const crtBtn = document.getElementById('crtBtn');
+function aplicarCrt(ligado){
+  document.body.classList.toggle('crt-on', ligado);
+  crtBtn.classList.toggle('ativo', ligado);
+  crtBtn.title = ligado ? 'Filtro CRT: ligado — clique para desligar' : 'Filtro CRT: desligado — clique para ligar';
+}
+aplicarCrt(localStorage.getItem('crt_ps4') === 'on');
+crtBtn.addEventListener('click', function(){
+  const ligado = !document.body.classList.contains('crt-on');
+  localStorage.setItem('crt_ps4', ligado ? 'on' : 'off');
+  aplicarCrt(ligado);
 });
 
 // ESTANTE VIRTUAL 3D (tilt leve nas capas, só em telas com mouse de verdade)
