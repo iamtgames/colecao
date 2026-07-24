@@ -317,9 +317,11 @@
     background: var(--overlay-glass); backdrop-filter: blur(12px);
     border:1px solid rgba(255,255,255,0.08); border-radius: 14px;
     padding: 10px 18px; min-width: 120px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
   }
-  .stat .n{font-size:19px; font-weight:800; color:var(--white);}
-  .stat .l{font-size:10.5px; color:var(--ink-dim); margin-top:2px; text-transform:uppercase; letter-spacing:.4px;}
+  .stat .n{font-size:19px; font-weight:800; color:var(--white); width:100%;}
+  .stat .l{font-size:10.5px; color:var(--ink-dim); margin-top:2px; text-transform:uppercase; letter-spacing:.4px; width:100%;}
 
   /* TOOLS */
   .tools{
@@ -497,8 +499,8 @@
 
   /* BALAO FLUTUANTE DE LIVE */
   #liveBalloonWrap{
-    position: fixed; left:50%; top:14px; transform: translateX(-50%);
-    z-index: 60; display:flex; flex-direction:column; gap:8px; align-items:center;
+    position: fixed; left:50%; top:64px; transform: translateX(-50%);
+    z-index: 66; display:flex; flex-direction:column; gap:8px; align-items:center;
     max-width: calc(100vw - 32px);
   }
   .live-balloon{
@@ -519,7 +521,7 @@
   .live-balloon .txt{font-size:12.5px; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width: 60vw;}
   .live-balloon .txt b{color:#ff8080;}
   @media (max-width: 480px){
-    #liveBalloonWrap{ top:8px; }
+    #liveBalloonWrap{ top:56px; }
     .live-balloon .txt{ font-size:11px; max-width: 52vw; }
   }
 
@@ -1141,6 +1143,61 @@
   @media (max-width: 600px){
     .mascot-ghost svg{ width:36px; height:40px; }
     .mascot-xiao svg{ width:26px; height:46px; }
+  }
+
+  /* ===== Interacoes entre mascotes (perseguicao, briga, portal, buraco
+     negro, bomba) — camada extra dentro de cada mascote pra nao brigar com
+     a posicao (no .mascot) nem com o espelhamento (no .mascot-sprite). */
+  .mascot-fxwrap{ transition: transform .3s ease, opacity .3s ease; }
+  .mascot.sumindo .mascot-fxwrap{ transform: scale(0.15) rotate(180deg); opacity:0; }
+  .mascot.surgindo .mascot-fxwrap{ animation: surgirPop .38s ease-out; }
+  @keyframes surgirPop{
+    from{ transform: scale(0.15) rotate(-180deg); opacity:0; }
+    to{ transform: scale(1) rotate(0deg); opacity:1; }
+  }
+  .mascot.bump-hit .mascot-sprite{ animation: bumpShake .28s ease-in-out; }
+  @keyframes bumpShake{ 0%,100%{ transform: translateX(0);} 25%{ transform: translateX(-4px);} 75%{ transform: translateX(4px);} }
+
+  .mascot-fx{ position:absolute; top:0; left:0; pointer-events:none; }
+
+  .fx-portal{ width:54px; height:54px; animation: portalPop .3s ease-out; }
+  .fx-portal.closing{ animation: portalPop .3s ease-in reverse; }
+  .fx-portal .ring{
+    position:absolute; inset:0; border-radius:50%;
+    background: conic-gradient(from 0deg, #7ec4ff, #b98fff, #7ec4ff);
+    animation: portalSpin 1s linear infinite; filter:blur(1px);
+  }
+  .fx-portal .core{ position:absolute; inset:9px; border-radius:50%; background:#0a0410; }
+  @keyframes portalPop{ from{ transform:scale(0); opacity:0;} to{ transform:scale(1); opacity:1;} }
+  @keyframes portalSpin{ to{ transform:rotate(360deg); } }
+
+  .fx-blackhole{
+    width:70px; height:70px; border-radius:50%;
+    background: radial-gradient(circle, #000 0%, #000 55%, transparent 76%);
+    box-shadow: 0 0 0 3px rgba(180,140,255,0.5), 0 0 24px 8px rgba(120,80,255,0.4);
+    animation: holeAppear .4s ease-out, holeSpin 2s linear infinite;
+  }
+  .fx-blackhole.closing{ animation: holeClose .35s ease-in forwards; }
+  @keyframes holeAppear{ from{ transform:scale(0);} to{ transform:scale(1);} }
+  @keyframes holeSpin{ to{ transform:rotate(360deg);} }
+  @keyframes holeClose{ to{ transform:scale(0); opacity:0;} }
+
+  .fx-bomb{ width:26px; height:26px; }
+  .fx-bomb .corpo{
+    position:absolute; bottom:0; left:2px; width:22px; height:20px; border-radius:50%;
+    background:#1a1a1a; box-shadow: inset -3px -3px 0 rgba(0,0,0,0.4), inset 2px 3px 0 rgba(255,255,255,0.08);
+  }
+  .fx-bomb .pavio{ position:absolute; top:-10px; left:12px; width:3px; height:12px; background:#8a5a2a; border-radius:2px; transform: rotate(-12deg); }
+  .fx-bomb .faisca{ position:absolute; top:-14px; left:8px; width:6px; height:6px; border-radius:50%; background:#ffd23d; animation: faiscaPisca .25s steps(1) infinite; }
+  @keyframes faiscaPisca{ 0%,100%{ background:#ffd23d; transform:scale(1);} 50%{ background:#ff7a2d; transform:scale(1.3);} }
+  .fx-bomb.contando .corpo{ animation: bombaTremendo .5s ease-in-out infinite; }
+  @keyframes bombaTremendo{ 0%,100%{ transform: rotate(-3deg);} 50%{ transform: rotate(3deg);} }
+
+  .fx-burst{ width:0; height:0; }
+  .fx-burst span{
+    position:absolute; top:0; left:0; width:7px; height:7px; margin:-3.5px;
+    border-radius:2px; opacity:1; transform:translate(0,0) scale(1);
+    transition: transform .55s cubic-bezier(.2,.8,.2,1), opacity .55s ease;
   }
 </style>
 </head>
@@ -4459,12 +4516,17 @@ idiomaBtn.addEventListener('click', function(){
     };
   }
 
+  var estado = { interagindo: false };
+
   function criarMascote(layer, tipo, svgHTML){
     var el = document.createElement('div');
     el.className = 'mascot mascot-' + tipo + ' idle';
     var sprite = document.createElement('div');
     sprite.className = 'mascot-sprite';
-    sprite.innerHTML = svgHTML;
+    var fxwrap = document.createElement('div');
+    fxwrap.className = 'mascot-fxwrap';
+    fxwrap.innerHTML = svgHTML;
+    sprite.appendChild(fxwrap);
     el.appendChild(sprite);
     layer.appendChild(el);
     var area = areaSegura();
@@ -4475,8 +4537,226 @@ idiomaBtn.addEventListener('click', function(){
     return el;
   }
 
+  function esperar(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
+  function clampeia(v, min, max){ return Math.min(max, Math.max(min, v)); }
+  function retriggerAnim(el, cls){
+    el.classList.remove(cls);
+    void el.offsetWidth;
+    el.classList.add(cls);
+  }
+
+  function moverElementoPromise(el, destX, destY){
+    return new Promise(function(resolve){
+      var atualX = parseFloat(el.dataset.x) || 0;
+      var atualY = parseFloat(el.dataset.y) || 0;
+      var dist = Math.hypot(destX - atualX, destY - atualY);
+      var duracao = Math.max(0.5, dist / 95);
+      el.classList.toggle('flip', destX < atualX);
+      el.classList.remove('idle', 'hiding', 'peeking', 'kicking', 'sumindo', 'surgindo');
+      el.classList.add('walking');
+      el.style.transition = 'transform ' + duracao + 's ease-in-out';
+      el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
+      el.dataset.x = destX; el.dataset.y = destY;
+      setTimeout(function(){
+        el.classList.remove('walking');
+        el.classList.add('idle');
+        resolve();
+      }, duracao * 1000);
+    });
+  }
+
+  function criarBurst(layer, x, y, cor){
+    var wrap = document.createElement('div');
+    wrap.className = 'mascot-fx fx-burst';
+    wrap.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    layer.appendChild(wrap);
+    var n = 8;
+    for(var i = 0; i < n; i++){
+      (function(i){
+        var ang = (i / n) * Math.PI * 2;
+        var raio = 26 + Math.random() * 16;
+        var dx = Math.cos(ang) * raio;
+        var dy = Math.sin(ang) * raio;
+        var piece = document.createElement('span');
+        piece.style.background = cor || '#ffd23d';
+        wrap.appendChild(piece);
+        requestAnimationFrame(function(){
+          piece.style.transform = 'translate(' + dx + 'px,' + dy + 'px) scale(0)';
+          piece.style.opacity = '0';
+        });
+      })(i);
+    }
+    setTimeout(function(){ wrap.remove(); }, 650);
+  }
+
+  function criarPortal(layer, x, y){
+    var el = document.createElement('div');
+    el.className = 'mascot-fx fx-portal';
+    el.style.transform = 'translate(' + (x - 27) + 'px,' + (y - 27) + 'px)';
+    el.innerHTML = '<div class="ring"></div><div class="core"></div>';
+    layer.appendChild(el);
+    return el;
+  }
+  function fecharPortal(el){
+    el.classList.add('closing');
+    setTimeout(function(){ el.remove(); }, 320);
+  }
+
+  function criarBuracoNegro(layer, x, y){
+    var el = document.createElement('div');
+    el.className = 'mascot-fx fx-blackhole';
+    el.style.transform = 'translate(' + (x - 35) + 'px,' + (y - 35) + 'px)';
+    layer.appendChild(el);
+    return el;
+  }
+  function fecharBuraco(el){
+    el.classList.add('closing');
+    setTimeout(function(){ el.remove(); }, 420);
+  }
+
+  function criarBomba(layer, x, y){
+    var el = document.createElement('div');
+    el.className = 'mascot-fx fx-bomb';
+    el.style.transform = 'translate(' + (x - 13) + 'px,' + (y - 13) + 'px)';
+    el.innerHTML = '<div class="corpo"></div><div class="pavio"></div><div class="faisca"></div>';
+    layer.appendChild(el);
+    return el;
+  }
+
+  // ---- Cenas de interacao (escolhidas aleatoriamente pelo diretor) ----
+  async function cenaPerseguicao(layer, ghost, xiao){
+    var area = areaSegura();
+    var perseguidor = Math.random() < 0.5 ? xiao : ghost;
+    var perseguido = perseguidor === xiao ? ghost : xiao;
+    var voltas = 2 + Math.floor(Math.random() * 2);
+    for(var i = 0; i < voltas; i++){
+      var ax = area.minX + Math.random() * (area.maxX - area.minX);
+      var ay = area.minY + Math.random() * (area.maxY - area.minY);
+      await moverElementoPromise(perseguido, ax, ay);
+      var px = clampeia(ax + (Math.random() * 50 - 25), area.minX, area.maxX);
+      var py = clampeia(ay + (Math.random() * 50 - 25), area.minY, area.maxY);
+      await moverElementoPromise(perseguidor, px, py);
+    }
+    criarBurst(layer, (parseFloat(perseguido.dataset.x) || 0) + 18, (parseFloat(perseguido.dataset.y) || 0) + 20, '#eaf6ff');
+    await esperar(300);
+  }
+
+  async function cenaBriga(layer, ghost, xiao){
+    var area = areaSegura();
+    var mx = area.minX + Math.random() * (area.maxX - area.minX);
+    var my = area.minY + Math.random() * (area.maxY - area.minY);
+    await Promise.all([
+      moverElementoPromise(ghost, clampeia(mx - 26, area.minX, area.maxX), my),
+      moverElementoPromise(xiao, clampeia(mx + 26, area.minX, area.maxX), my)
+    ]);
+    for(var i = 0; i < 3; i++){
+      retriggerAnim(ghost, 'bump-hit');
+      retriggerAnim(xiao, 'kicking');
+      criarBurst(layer, mx, my, i % 2 ? '#b98fff' : '#ffd23d');
+      await esperar(300);
+    }
+    await Promise.all([
+      moverElementoPromise(ghost, clampeia(mx - 90, area.minX, area.maxX), my),
+      moverElementoPromise(xiao, clampeia(mx + 90, area.minX, area.maxX), my)
+    ]);
+  }
+
+  async function cenaPortal(layer, ghost, xiao){
+    var area = areaSegura();
+    var alvo = Math.random() < 0.5 ? ghost : xiao;
+    var ox = parseFloat(alvo.dataset.x) || 0;
+    var oy = parseFloat(alvo.dataset.y) || 0;
+    var portal1 = criarPortal(layer, ox + 16, oy + 20);
+    await esperar(350);
+    alvo.classList.remove('idle');
+    alvo.classList.add('sumindo');
+    await esperar(300);
+    fecharPortal(portal1);
+    alvo.style.transition = 'none';
+    var novoX = area.minX + Math.random() * (area.maxX - area.minX);
+    var novoY = area.minY + Math.random() * (area.maxY - area.minY);
+    alvo.style.transform = 'translate(' + novoX + 'px,' + novoY + 'px)';
+    alvo.dataset.x = novoX; alvo.dataset.y = novoY;
+    var portal2 = criarPortal(layer, novoX + 16, novoY + 20);
+    await esperar(150);
+    alvo.classList.remove('sumindo');
+    retriggerAnim(alvo, 'surgindo');
+    await esperar(400);
+    alvo.classList.remove('surgindo');
+    alvo.classList.add('idle');
+    fecharPortal(portal2);
+    await esperar(250);
+  }
+
+  async function cenaBuracoNegro(layer, ghost, xiao){
+    var area = areaSegura();
+    var vitima = Math.random() < 0.5 ? ghost : xiao;
+    var bx = area.minX + Math.random() * (area.maxX - area.minX);
+    var by = area.minY + Math.random() * (area.maxY - area.minY);
+    var hole = criarBuracoNegro(layer, bx, by);
+    await moverElementoPromise(vitima, clampeia(bx - 6, area.minX, area.maxX), clampeia(by - 6, area.minY, area.maxY));
+    vitima.classList.remove('idle');
+    vitima.classList.add('sumindo');
+    await esperar(420);
+    fecharBuraco(hole);
+    vitima.style.transition = 'none';
+    var novoX = area.minX + Math.random() * (area.maxX - area.minX);
+    var novoY = area.minY + Math.random() * (area.maxY - area.minY);
+    vitima.style.transform = 'translate(' + novoX + 'px,' + novoY + 'px)';
+    vitima.dataset.x = novoX; vitima.dataset.y = novoY;
+    await esperar(500);
+    vitima.classList.remove('sumindo');
+    retriggerAnim(vitima, 'surgindo');
+    await esperar(380);
+    vitima.classList.remove('surgindo');
+    vitima.classList.add('idle');
+    await esperar(200);
+  }
+
+  async function cenaBomba(layer, ghost, xiao){
+    var area = areaSegura();
+    var plantador = Math.random() < 0.5 ? xiao : ghost;
+    var alvo = plantador === xiao ? ghost : xiao;
+    var bx = clampeia((parseFloat(alvo.dataset.x) || 0) + (Math.random() * 30 - 15), area.minX, area.maxX);
+    var by = clampeia((parseFloat(alvo.dataset.y) || 0) + (Math.random() * 30 - 15), area.minY, area.maxY);
+    await moverElementoPromise(plantador, clampeia(bx + (Math.random() * 20 - 10), area.minX, area.maxX), clampeia(by + 20, area.minY, area.maxY));
+    var bomba = criarBomba(layer, bx, by);
+    await esperar(200);
+    bomba.classList.add('contando');
+    var fugaGhost = moverElementoPromise(ghost, clampeia((parseFloat(ghost.dataset.x) || 0) + (Math.random() * 160 - 80), area.minX, area.maxX), clampeia((parseFloat(ghost.dataset.y) || 0) + (Math.random() * 160 - 80), area.minY, area.maxY));
+    var fugaXiao = moverElementoPromise(xiao, clampeia((parseFloat(xiao.dataset.x) || 0) + (Math.random() * 160 - 80), area.minX, area.maxX), clampeia((parseFloat(xiao.dataset.y) || 0) + (Math.random() * 160 - 80), area.minY, area.maxY));
+    await esperar(1100);
+    bomba.remove();
+    criarBurst(layer, bx, by, '#ff7a2d');
+    criarBurst(layer, bx, by, '#ffd23d');
+    await Promise.all([fugaGhost, fugaXiao]);
+  }
+
+  var CENAS_DISPONIVEIS = [cenaPerseguicao, cenaBriga, cenaPortal, cenaBuracoNegro, cenaBomba];
+
+  function tentarCena(layer, ghost, xiao){
+    if(!document.body.contains(ghost) || !document.body.contains(xiao)) return;
+    if(estado.interagindo || !ghost.classList.contains('idle') || !xiao.classList.contains('idle')){
+      setTimeout(function(){ tentarCena(layer, ghost, xiao); }, 1500);
+      return;
+    }
+    estado.interagindo = true;
+    var escolhida = CENAS_DISPONIVEIS[Math.floor(Math.random() * CENAS_DISPONIVEIS.length)];
+    escolhida(layer, ghost, xiao).catch(function(){}).then(function(){
+      estado.interagindo = false;
+      vagar(ghost, 'ghost');
+      vagar(xiao, 'xiao');
+      agendarProximaCena(layer, ghost, xiao);
+    });
+  }
+
+  function agendarProximaCena(layer, ghost, xiao){
+    var espera = 9000 + Math.random() * 14000;
+    setTimeout(function(){ tentarCena(layer, ghost, xiao); }, espera);
+  }
+
   function vagar(el, tipo){
-    if(!document.body.contains(el)) return;
+    if(!document.body.contains(el) || estado.interagindo) return;
     var acao = Math.random();
     if(tipo === 'xiao' && acao < 0.25){
       el.classList.remove('idle');
@@ -4551,8 +4831,8 @@ idiomaBtn.addEventListener('click', function(){
 
   function iniciarMascotes(){
     try{
-      if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
       if(document.querySelector('.mascot-layer')) return;
+      var reduzido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       var layer = document.createElement('div');
       layer.className = 'mascot-layer';
       layer.setAttribute('aria-hidden', 'true');
@@ -4561,6 +4841,12 @@ idiomaBtn.addEventListener('click', function(){
       var xiao = criarMascote(layer, 'xiao', XIAO_SVG);
       setTimeout(function(){ vagar(ghost, 'ghost'); }, 800);
       setTimeout(function(){ vagar(xiao, 'xiao'); }, 1600);
+      // As cenas de interacao (perseguicao, briga, portal, buraco negro,
+      // bomba) sao mais intensas — pulamos elas se a pessoa pediu "reduzir
+      // movimento" no sistema, mas os mascotes continuam aparecendo normal.
+      if(!reduzido){
+        setTimeout(function(){ tentarCena(layer, ghost, xiao); }, 12000);
+      }
     }catch(e){ /* mascotes sao só decoracao — nunca deve travar o site */ }
   }
 
