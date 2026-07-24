@@ -1107,22 +1107,28 @@
   .mascot-ghost.hiding .mascot-sprite{ transform: scale(0.55); opacity:0.4; }
   .mascot-ghost.peeking .mascot-sprite{ transform: scale(0.85); opacity:0.85; }
 
-  .mascot-xiao svg{ width:52px; height:92px; }
+  /* Bytinho — heroi 8-bit pixelado original (boné/estrela/goggles, sem
+     nenhum personagem registrado), no mesmo esqueleto de classes do
+     Xiaoxiao antigo (x-rig/x-armL/x-armR/x-legL/x-legR/x-lowerLegR/x-speed)
+     pra reaproveitar as 15 cenas de interacao ja prontas sem mexer no JS. */
+  .mascot-xiao svg{ width:56px; height:92px; }
   .mascot-xiao .x-rig{ transform-origin: 30px 40px; }
-  .mascot-xiao .x-armL{ transform-origin: 24px 20px; }
-  .mascot-xiao .x-armR{ transform-origin: 36px 20px; }
-  .mascot-xiao .x-legL{ transform-origin: 27px 40px; }
-  .mascot-xiao .x-legR{ transform-origin: 33px 40px; }
-  .mascot-xiao .x-lowerLegR{ transform-origin: 33px 52px; }
+  .mascot-xiao .x-armL{ transform-origin: 8px 32px; }
+  .mascot-xiao .x-armR{ transform-origin: 52px 32px; }
+  .mascot-xiao .x-legL{ transform-origin: 23px 48px; }
+  .mascot-xiao .x-legR{ transform-origin: 37px 48px; }
+  .mascot-xiao .x-lowerLegR{ transform-origin: 37px 62px; }
   .mascot-xiao .x-speed{ opacity:0; }
-  .mascot-xiao.walking .x-armL{ animation: xwArmL .5s ease-in-out infinite; }
-  .mascot-xiao.walking .x-armR{ animation: xwArmR .5s ease-in-out infinite; }
-  .mascot-xiao.walking .x-legL{ animation: xwLegL .5s ease-in-out infinite; }
-  .mascot-xiao.walking .x-legR{ animation: xwLegR .5s ease-in-out infinite; }
-  @keyframes xwArmL{ 0%,100%{ transform: rotate(30deg);} 50%{ transform: rotate(-26deg);} }
-  @keyframes xwArmR{ 0%,100%{ transform: rotate(-30deg);} 50%{ transform: rotate(26deg);} }
-  @keyframes xwLegL{ 0%,100%{ transform: rotate(-24deg);} 50%{ transform: rotate(24deg);} }
-  @keyframes xwLegR{ 0%,100%{ transform: rotate(24deg);} 50%{ transform: rotate(-24deg);} }
+  .mascot-xiao.walking .x-armL{ animation: xwArmL .42s ease-in-out infinite; }
+  .mascot-xiao.walking .x-armR{ animation: xwArmR .42s ease-in-out infinite; }
+  .mascot-xiao.walking .x-legL{ animation: xwLegL .42s ease-in-out infinite; }
+  .mascot-xiao.walking .x-legR{ animation: xwLegR .42s ease-in-out infinite; }
+  .mascot-xiao.walking .x-rig{ animation: xwHop .42s ease-in-out infinite; }
+  @keyframes xwArmL{ 0%,100%{ transform: rotate(24deg);} 50%{ transform: rotate(-24deg);} }
+  @keyframes xwArmR{ 0%,100%{ transform: rotate(-24deg);} 50%{ transform: rotate(24deg);} }
+  @keyframes xwLegL{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-5px);} }
+  @keyframes xwLegR{ 0%,100%{ transform: translateY(-5px);} 50%{ transform: translateY(0);} }
+  @keyframes xwHop{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-3px);} }
   .mascot-xiao.idle .x-rig{ animation: xIdleBreathe 2.4s ease-in-out infinite; }
   @keyframes xIdleBreathe{ 0%,100%{ transform: scaleY(1);} 50%{ transform: scaleY(1.02);} }
   .mascot-xiao.kicking .x-armL{ animation: xkArmL 1.1s ease-in-out; }
@@ -1132,17 +1138,17 @@
   .mascot-xiao.kicking .x-lowerLegR{ animation: xkLowerLegR 1.1s ease-in-out; }
   .mascot-xiao.kicking .x-rig{ animation: xkLean 1.1s ease-in-out; }
   .mascot-xiao.kicking .x-speed{ animation: xkSpeed 1.1s ease-in-out; }
-  @keyframes xkLean{ 0%,20%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(-6deg);} 75%{ transform: rotate(0deg);} }
-  @keyframes xkArmL{ 0%,20%,100%{ transform: rotate(30deg);} 25%{ transform: rotate(-5deg);} 50%{ transform: rotate(40deg);} 75%{ transform: rotate(30deg);} }
-  @keyframes xkArmR{ 0%,20%,100%{ transform: rotate(-30deg);} 25%{ transform: rotate(-80deg);} 50%{ transform: rotate(-20deg);} 75%{ transform: rotate(-30deg);} }
-  @keyframes xkLegL{ 0%,20%,100%{ transform: rotate(-10deg);} 50%{ transform: rotate(-4deg);} 75%{ transform: rotate(-10deg);} }
-  @keyframes xkLegR{ 0%,20%,100%{ transform: rotate(10deg);} 45%{ transform: rotate(-30deg);} 50%{ transform: rotate(-95deg);} 75%{ transform: rotate(10deg);} }
-  @keyframes xkLowerLegR{ 0%,20%,100%{ transform: rotate(18deg);} 50%{ transform: rotate(0deg);} 75%{ transform: rotate(18deg);} }
+  @keyframes xkLean{ 0%,20%,100%{ transform: translateY(0);} 50%{ transform: translateY(-11px);} 75%{ transform: translateY(0);} }
+  @keyframes xkArmL{ 0%,20%,100%{ transform: rotate(24deg);} 50%{ transform: rotate(150deg);} 75%{ transform: rotate(24deg);} }
+  @keyframes xkArmR{ 0%,20%,100%{ transform: rotate(-24deg);} 50%{ transform: rotate(-150deg);} 75%{ transform: rotate(-24deg);} }
+  @keyframes xkLegL{ 0%,20%,100%{ transform: translateY(0);} 50%{ transform: translateY(-9px);} 75%{ transform: translateY(0);} }
+  @keyframes xkLegR{ 0%,20%,100%{ transform: translateY(0);} 50%{ transform: translateY(-9px);} 75%{ transform: translateY(0);} }
+  @keyframes xkLowerLegR{ 0%,20%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(26deg);} 75%{ transform: rotate(0deg);} }
   @keyframes xkSpeed{ 0%,45%{ opacity:0;} 50%,58%{ opacity:1;} 65%,100%{ opacity:0;} }
 
   @media (max-width: 600px){
     .mascot-ghost svg{ width:56px; height:64px; }
-    .mascot-xiao svg{ width:38px; height:68px; }
+    .mascot-xiao svg{ width:40px; height:68px; }
   }
 
   /* ===== Interacoes entre mascotes (perseguicao, briga, portal, buraco
@@ -4523,24 +4529,45 @@ idiomaBtn.addEventListener('click', function(){
     + '<rect x="90" y="120" width="20" height="6" fill="#0d0a1a"/>'
     + '</g></svg>';
 
-  var XIAO_SVG = '<svg viewBox="0 0 60 70"><g class="x-rig" stroke="#eaf6ff" stroke-width="2.6" stroke-linecap="round" fill="none">'
-    + '<circle cx="30" cy="10" r="6" fill="#eaf6ff" stroke="none"/>'
-    + '<line x1="30" y1="16" x2="30" y2="40" stroke-width="3"/>'
-    + '<line class="x-armL" x1="24" y1="20" x2="18" y2="38"/>'
-    + '<line class="x-armR" x1="36" y1="20" x2="42" y2="38"/>'
-    + '<circle cx="24" cy="20" r="1.6" fill="#eaf6ff" stroke="none"/>'
-    + '<circle cx="36" cy="20" r="1.6" fill="#eaf6ff" stroke="none"/>'
-    + '<g class="x-legL"><line x1="27" y1="40" x2="24" y2="64" stroke-width="3"/></g>'
-    + '<g class="x-legR"><line x1="33" y1="40" x2="33" y2="52" stroke-width="3"/>'
-    + '<line class="x-lowerLegR" x1="33" y1="52" x2="27" y2="62" stroke-width="3"/></g>'
-    + '<circle cx="27" cy="40" r="1.6" fill="#eaf6ff" stroke="none"/>'
-    + '<circle cx="33" cy="40" r="1.6" fill="#eaf6ff" stroke="none"/>'
-    + '<circle cx="33" cy="52" r="1.6" fill="#eaf6ff" stroke="none"/>'
-    + '<g class="x-speed" stroke="#eaf6ff" stroke-width="1.4">'
-    + '<line x1="36" y1="50" x2="52" y2="47"/>'
-    + '<line x1="36" y1="56" x2="53" y2="56"/>'
-    + '<line x1="35" y1="62" x2="50" y2="65"/>'
-    + '</g></g></svg>';
+  var XIAO_SVG = '<svg viewBox="0 0 60 70"><g class="x-rig">'
+    + '<rect x="15" y="9" width="30" height="5" rx="2" fill="#168f88"/>'
+    + '<rect x="17" y="2" width="26" height="10" rx="3" fill="#1ea8a0"/>'
+    + '<polygon points="30,2 32,6 36,6 33,9 34,13 30,11 26,13 27,9 24,6 28,6" fill="#ffd23d"/>'
+    + '<rect x="19" y="13" width="22" height="13" rx="4" fill="#f2c9a0"/>'
+    + '<rect x="17" y="18" width="26" height="6" rx="2" fill="#22262b"/>'
+    + '<rect x="20" y="19" width="8" height="4" rx="1" fill="#bff2ff"/>'
+    + '<rect x="32" y="19" width="8" height="4" rx="1" fill="#bff2ff"/>'
+    + '<rect x="15" y="29" width="30" height="19" rx="4" fill="#e8752c"/>'
+    + '<rect x="15" y="44" width="30" height="5" fill="#4a2f1a"/>'
+    + '<circle cx="30" cy="46" r="2.2" fill="#ffd23d"/>'
+    + '<g class="x-armL">'
+    + '<rect x="6" y="31" width="11" height="9" rx="2" fill="#e8752c"/>'
+    + '<rect x="4" y="38" width="8" height="14" rx="2" fill="#e8752c"/>'
+    + '<rect x="3" y="50" width="9" height="7" rx="2" fill="#f2c9a0"/>'
+    + '</g>'
+    + '<g class="x-armR">'
+    + '<rect x="43" y="31" width="11" height="9" rx="2" fill="#e8752c"/>'
+    + '<rect x="48" y="38" width="8" height="14" rx="2" fill="#e8752c"/>'
+    + '<rect x="48" y="50" width="9" height="7" rx="2" fill="#f2c9a0"/>'
+    + '</g>'
+    + '<g class="x-legL">'
+    + '<rect x="18" y="48" width="11" height="13" rx="2" fill="#2b3a67"/>'
+    + '<rect x="17" y="61" width="13" height="6" rx="2" fill="#2b3a67"/>'
+    + '<rect x="16" y="66" width="14" height="4" rx="1" fill="#1c1c1c"/>'
+    + '</g>'
+    + '<g class="x-legR">'
+    + '<rect x="32" y="48" width="11" height="13" rx="2" fill="#2b3a67"/>'
+    + '<g class="x-lowerLegR">'
+    + '<rect x="32" y="61" width="11" height="6" rx="2" fill="#2b3a67"/>'
+    + '<rect x="31" y="66" width="13" height="4" rx="1" fill="#1c1c1c"/>'
+    + '</g>'
+    + '</g>'
+    + '<g class="x-speed" stroke="#eaf6ff" stroke-width="1.6">'
+    + '<line x1="44" y1="30" x2="57" y2="26"/>'
+    + '<line x1="44" y1="38" x2="58" y2="40"/>'
+    + '<line x1="43" y1="46" x2="56" y2="50"/>'
+    + '</g>'
+    + '</g></svg>';
 
   function areaSegura(){
     return {
