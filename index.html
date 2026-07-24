@@ -1630,6 +1630,51 @@
   .fx-kite{ width:22px; height:22px; background:linear-gradient(135deg,#ff5f6d,#ffd23d); transform:rotate(45deg); border-radius:3px; }
   .fx-kite::after{ content:''; position:absolute; top:20px; left:9px; width:2px; height:26px; background:#8a5a2a; }
 
+  /* ===== Poder/arma do guerreiro + interacao real com os cards (oclusao
+     de verdade e "destruicao" cosmetica, 100% reversivel -- nada de dados
+     apagados, so um efeito visual temporario no card). ===== */
+  .mascot-xiao.carregando .x-armR{ animation: xCarregarBraco .7s ease-in-out infinite alternate; }
+  @keyframes xCarregarBraco{ 0%{ transform: rotate(-95deg);} 100%{ transform: rotate(-120deg);} }
+  .fx-carga{
+    width:14px; height:14px; border-radius:50%;
+    background: radial-gradient(circle, #fff, #ffd23d 55%, transparent 75%);
+    box-shadow: 0 0 12px 4px rgba(255,210,61,.8);
+    animation: fxCargaPulso .35s ease-in-out infinite alternate;
+  }
+  @keyframes fxCargaPulso{ 0%{ transform: scale(.7);} 100%{ transform: scale(1.15);} }
+  .fx-projetil{
+    width:16px; height:16px; border-radius:50%;
+    background: radial-gradient(circle, #fff, #ffd23d 50%, #ff7a2d 80%);
+    box-shadow: 0 0 14px 5px rgba(255,150,50,.85);
+  }
+  body[data-skin="neon"] .fx-carga, body[data-skin="neon"] .fx-projetil{
+    background: radial-gradient(circle, #fff, #39ff88 50%, #00f0ff 80%);
+    box-shadow: 0 0 14px 5px rgba(57,255,136,.85);
+  }
+  /* Oclusao real: o card sobe acima da camada dos mascotes (z-index 95)
+     enquanto alguem esta escondido atras dele de verdade -- nao eh mais
+     so opacidade/escala, o card fica fisicamente na frente. */
+  .card--fx-anchor{ position:relative; }
+  .card.card--oclui-mascote{ position:relative; z-index:96; }
+  .card.card--atingido{ animation: cardTremor .5s ease-in-out; }
+  @keyframes cardTremor{
+    0%,100%{ transform: translate(0,0) rotate(0);}
+    20%{ transform: translate(-6px,2px) rotate(-1.2deg);}
+    40%{ transform: translate(5px,-3px) rotate(1deg);}
+    60%{ transform: translate(-4px,3px) rotate(-0.8deg);}
+    80%{ transform: translate(3px,-2px) rotate(0.6deg);}
+  }
+  .fx-rachadura{
+    position:absolute; inset:0; pointer-events:none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cpath d='M50 5 L46 30 L60 40 L40 55 L52 70 L38 95 M20 20 L46 30 M60 40 L82 35 M40 55 L18 60 M52 70 L75 78' stroke='rgba(255,255,255,0.85)' stroke-width='1.4' fill='none'/%3E%3C/svg%3E");
+    background-size: cover;
+    opacity:0;
+    transition: opacity .18s ease;
+    border-radius: inherit;
+    z-index: 5;
+  }
+  .fx-rachadura.ativo{ opacity:.85; }
+
   .fx-portal{ width:54px; height:54px; animation: portalPop .3s ease-out; }
   .fx-portal.closing{ animation: portalPop .3s ease-in reverse; }
   .fx-portal .ring{
@@ -5037,25 +5082,74 @@ idiomaBtn.addEventListener('click', function(){
     el.classList.add(cls);
   }
 
-  function moverElementoPromise(el, destX, destY, velocidade){
+  function easeInOutCubic(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; }
+
+  // Motor de movimento fluido: em vez de interpolar em linha reta (o que
+  // sempre parecia meio robotico, so a velocidade variava), anima ao longo
+  // de uma curva (bezier quadratica com um "arco" perpendicular a rota) com
+  // easing suave, e ainda inclina o guerreiro (banking) conforme sobe/desce
+  // -- feito um heroi de verdade fazendo curva, nao um sprite deslizando.
+  function moverArco(el, destX, destY, duracaoMs, tipo, opts){
+    opts = opts || {};
+    var bancar = opts.bancar !== false && tipo === 'xiao';
+    var ajustarFlip = opts.flip !== false;
     return new Promise(function(resolve){
-      var atualX = parseFloat(el.dataset.x) || 0;
-      var atualY = parseFloat(el.dataset.y) || 0;
-      var dist = Math.hypot(destX - atualX, destY - atualY);
-      var vel = (velocidade || 95) * (0.88 + Math.random() * 0.24);
-      var duracao = Math.max(0.4, dist / vel);
-      el.classList.toggle('flip', destX < atualX);
-      el.classList.remove('idle', 'hiding', 'peeking', 'kicking', 'sumindo', 'surgindo', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
-      el.classList.add('walking');
-      el.style.transition = 'transform ' + duracao + 's ' + (velocidade && velocidade > 150 ? 'linear' : 'cubic-bezier(.4,.04,.32,1)');
-      el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
-      el.dataset.x = destX; el.dataset.y = destY;
-      setTimeout(function(){
-        el.classList.remove('walking');
-        el.classList.add('idle');
-        retriggerAnim(el, 'pousando');
-        resolve();
-      }, duracao * 1000);
+      var origX = parseFloat(el.dataset.x) || 0;
+      var origY = parseFloat(el.dataset.y) || 0;
+      var dx = destX - origX, dy = destY - origY;
+      var dist = Math.hypot(dx, dy) || 1;
+      var lado = Math.random() < 0.5 ? 1 : -1;
+      var arcoForca = (tipo === 'xiao' ? 0.20 : 0.10) * dist * lado;
+      var nx = dist ? -dy / dist : 0, ny = dist ? dx / dist : 0;
+      var ctrlX = origX + dx * 0.5 + nx * arcoForca;
+      var ctrlY = origY + dy * 0.5 + ny * arcoForca - dist * 0.04;
+      var sprite = el.querySelector('.mascot-sprite');
+      if(ajustarFlip && Math.abs(dx) > 4){ el.classList.toggle('flip', dx < 0); }
+      var flipAtivo = el.classList.contains('flip');
+      var t0 = null, prevY = origY;
+      function quadPoint(t){
+        var it = 1 - t;
+        return {
+          x: it*it*origX + 2*it*t*ctrlX + t*t*destX,
+          y: it*it*origY + 2*it*t*ctrlY + t*t*destY
+        };
+      }
+      function passo(agora){
+        if(t0 === null) t0 = agora;
+        var t = Math.min(1, (agora - t0) / duracaoMs);
+        var p = quadPoint(easeInOutCubic(t));
+        el.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)';
+        if(bancar && sprite){
+          var vy = p.y - prevY;
+          var bank = Math.max(-20, Math.min(20, -vy * 2.2));
+          sprite.style.transform = 'scaleX(' + (flipAtivo ? -1 : 1) + ') rotate(' + bank + 'deg)';
+        }
+        prevY = p.y;
+        if(t < 1){
+          requestAnimationFrame(passo);
+        } else {
+          el.dataset.x = destX; el.dataset.y = destY;
+          if(bancar && sprite){ sprite.style.transform = ''; }
+          resolve();
+        }
+      }
+      requestAnimationFrame(passo);
+    });
+  }
+
+  function moverElementoPromise(el, destX, destY, velocidade){
+    var atualX = parseFloat(el.dataset.x) || 0;
+    var atualY = parseFloat(el.dataset.y) || 0;
+    var dist = Math.hypot(destX - atualX, destY - atualY);
+    var vel = (velocidade || 95) * (0.88 + Math.random() * 0.24);
+    var duracao = Math.max(0.4, dist / vel);
+    var tipo = el.classList.contains('mascot-xiao') ? 'xiao' : 'ghost';
+    el.classList.remove('idle', 'hiding', 'peeking', 'kicking', 'sumindo', 'surgindo', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
+    el.classList.add('walking');
+    return moverArco(el, destX, destY, duracao * 1000, tipo).then(function(){
+      el.classList.remove('walking');
+      el.classList.add('idle');
+      retriggerAnim(el, 'pousando');
     });
   }
 
@@ -5619,7 +5713,10 @@ idiomaBtn.addEventListener('click', function(){
     if(!cards.length){ await esperar(200); return; }
     var escondCard = cards[Math.floor(Math.random() * cards.length)];
     var r0 = escondCard.getBoundingClientRect();
-    await moverElementoPromise(escondido, r0.left + r0.width / 2 - 24, r0.top - 18);
+    // Esconde de verdade dentro da area do card (oclusao real via z-index),
+    // nao so um fade acima dele.
+    escondCard.classList.add('card--oclui-mascote');
+    await moverElementoPromise(escondido, r0.left + r0.width / 2 - 24, r0.top + r0.height * 0.5 - 10);
     escondido.classList.remove('idle');
     escondido.classList.add('hiding');
     var tentativas = 2 + Math.floor(Math.random() * 2);
@@ -5632,6 +5729,7 @@ idiomaBtn.addEventListener('click', function(){
     await moverElementoPromise(procurador, r0.left + r0.width / 2 - 24, r0.top + 6);
     escondido.classList.remove('hiding');
     escondido.classList.add('idle');
+    escondCard.classList.remove('card--oclui-mascote');
     criarBurst(layer, r0.left + r0.width / 2, r0.top, '#3ddc84');
     await esperar(300);
   }
@@ -5673,12 +5771,78 @@ idiomaBtn.addEventListener('click', function(){
     await esperar(300);
   }
 
+  // O guerreiro carrega energia na mao, dispara uma esfera de poder que viaja
+  // ate um card de verdade do catalogo e "explode" nele -- o card treme e
+  // racha na hora (efeito 100% cosmetico e reversivel, nada de dado apagado),
+  // depois volta ao normal com um brilho de "regeneracao".
+  async function cenaAtaquePoder(layer, ghost, xiao){
+    var area = areaSegura();
+    var cards = Array.prototype.filter.call(document.querySelectorAll('.card'), function(c){
+      var r = c.getBoundingClientRect();
+      return r.top > 140 && r.top < window.innerHeight - 160 && r.left > 0 && r.left < window.innerWidth - 60 && r.width > 0;
+    });
+    if(!cards.length){ await esperar(200); return; }
+    var alvoCard = cards[Math.floor(Math.random() * cards.length)];
+    var r = alvoCard.getBoundingClientRect();
+    var px = clampeia(r.left - 70, area.minX, area.maxX);
+    var py = clampeia(r.top + r.height / 2 - 30, area.minY, area.maxY);
+    await moverElementoPromise(xiao, px, py, 130);
+    var gx = clampeia(r.right + 40, area.minX, area.maxX);
+    var gy = clampeia(py + 10, area.minY, area.maxY);
+    var fugaFantasma = moverElementoPromise(ghost, gx, gy, 70);
+
+    xiao.classList.remove('idle');
+    xiao.classList.add('carregando');
+    var mx = (parseFloat(xiao.dataset.x) || 0) + 46, my = (parseFloat(xiao.dataset.y) || 0) + 30;
+    var carga = criarProp(layer, mx, my, 'fx-carga', '');
+    await esperar(650);
+    removerPropSuave(carga);
+    xiao.classList.remove('carregando');
+    xiao.classList.add('idle');
+    retriggerAnim(xiao, 'kicking');
+
+    var alvoX = r.left + r.width / 2, alvoY = r.top + r.height / 2;
+    var projetil = criarProp(layer, mx, my, 'fx-projetil', '');
+    await new Promise(function(resolve){
+      var t0 = null, dur = 260;
+      function passo(agora){
+        if(t0 === null) t0 = agora;
+        var t = Math.min(1, (agora - t0) / dur);
+        var x = mx + (alvoX - mx) * t, y = my + (alvoY - my) * t;
+        projetil.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + (1 + t * 0.5) + ')';
+        if(t < 1){ requestAnimationFrame(passo); } else { resolve(); }
+      }
+      requestAnimationFrame(passo);
+    });
+    projetil.remove();
+
+    alvoCard.classList.add('card--fx-anchor');
+    var rachadura = document.createElement('div');
+    rachadura.className = 'fx-rachadura';
+    alvoCard.appendChild(rachadura);
+    requestAnimationFrame(function(){ rachadura.classList.add('ativo'); });
+    alvoCard.classList.add('card--atingido');
+    criarBurst(layer, alvoX, alvoY, '#ff7a2d');
+    criarBurst(layer, alvoX, alvoY, '#ffd23d');
+    await fugaFantasma;
+    retriggerAnim(ghost, 'surpreso');
+    await esperar(700);
+
+    alvoCard.classList.remove('card--atingido');
+    rachadura.classList.remove('ativo');
+    await esperar(300);
+    rachadura.remove();
+    alvoCard.classList.remove('card--fx-anchor');
+    criarBurst(layer, alvoX, alvoY, '#3ddc84');
+    await esperar(200);
+  }
+
   var CENAS_DISPONIVEIS = [
     cenaPerseguicao, cenaBriga, cenaPortal, cenaBuracoNegro, cenaBomba,
     cenaDuelo, cenaEscudoBloqueio, cenaRouboDeChapeu, cenaParaquedas, cenaPatinete,
     cenaPescaria, cenaJetpack, cenaFesta, cenaCaboDeGuerra, cenaSelfie,
     cenaAltoCinco, cenaBracoDeFerro, cenaPedraPapelTesoura, cenaCarona, cenaPipa,
-    cenaEscondeEsconde, cenaDancaSincronizada, cenaGuerraDeConfete
+    cenaEscondeEsconde, cenaDancaSincronizada, cenaGuerraDeConfete, cenaAtaquePoder
   ];
 
   function tentarCena(layer, ghost, xiao){
@@ -5761,10 +5925,15 @@ idiomaBtn.addEventListener('click', function(){
   }
 
   function moverPara(el, tipo, cardAlvo){
-    var destX, destY;
+    var destX, destY, hideX, hideY, peekX, peekY;
     if(cardAlvo){
       var r = cardAlvo.getBoundingClientRect();
-      destX = r.left + r.width / 2 - 24; destY = r.top - 18;
+      // Posicao "escondida" fica de verdade dentro da area do card (oclusao
+      // real via z-index abaixo); a "espiada" sobe pra cabeca aparecer acima
+      // da borda do card, que continua bloqueando o resto do corpo.
+      hideX = r.left + r.width / 2 - 24; hideY = r.top + r.height * 0.5 - 10;
+      peekX = r.left + r.width / 2 - 24; peekY = r.top - 18;
+      destX = hideX; destY = hideY;
     } else {
       var area = areaSegura();
       destX = area.minX + Math.random() * (area.maxX - area.minX);
@@ -5778,37 +5947,32 @@ idiomaBtn.addEventListener('click', function(){
     var baseVel = tipo === 'xiao' ? 92 : 58;
     var duracao = Math.max(tipo === 'xiao' ? 0.9 : 1.3, dist / (baseVel + Math.random() * 18));
 
-    el.classList.toggle('flip', destX < atualX);
     el.classList.remove('idle', 'hiding', 'peeking', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
     el.classList.add('walking');
     if(tipo === 'xiao'){ aplicarVarianteVoo(el); talvezFazerTruque(el); }
-    el.style.transition = 'transform ' + duracao + 's cubic-bezier(.4,.04,.32,1)';
-    el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
-    el.dataset.x = destX; el.dataset.y = destY;
+    if(cardAlvo){ cardAlvo.classList.add('card--oclui-mascote'); }
 
-    setTimeout(function(){
+    moverArco(el, destX, destY, duracao * 1000, tipo).then(function(){
       el.classList.remove('walking');
       if(cardAlvo){
         el.classList.add('hiding');
-        setTimeout(function(){
-          el.classList.remove('hiding');
-          el.classList.add('peeking');
-          setTimeout(function(){
-            el.classList.remove('peeking');
-            el.classList.add('hiding');
-            setTimeout(function(){
-              el.classList.remove('hiding');
-              el.classList.add('idle');
-              setTimeout(function(){ vagar(el, tipo); }, 300);
-            }, 700);
-          }, 900);
-        }, 900);
+        esperar(850)
+          .then(function(){ el.classList.remove('hiding'); el.classList.add('peeking'); return moverArco(el, peekX, peekY, 380, tipo, { bancar:false, flip:false }); })
+          .then(function(){ return esperar(850); })
+          .then(function(){ el.classList.remove('peeking'); el.classList.add('hiding'); return moverArco(el, hideX, hideY, 380, tipo, { bancar:false, flip:false }); })
+          .then(function(){ return esperar(650); })
+          .then(function(){
+            el.classList.remove('hiding');
+            el.classList.add('idle');
+            cardAlvo.classList.remove('card--oclui-mascote');
+            setTimeout(function(){ vagar(el, tipo); }, 300);
+          });
       } else {
         el.classList.add('idle');
         retriggerAnim(el, 'pousando');
         setTimeout(function(){ vagar(el, tipo); }, 500 + Math.random() * 1600);
       }
-    }, duracao * 1000);
+    });
   }
 
   function esconderAtrasDeCard(el, tipo){
@@ -5840,15 +6004,11 @@ idiomaBtn.addEventListener('click', function(){
     var baseVel = tipo === 'xiao' ? 96 : 62;
     var duracao = Math.max(tipo === 'xiao' ? 0.8 : 1.1, dist / (baseVel + Math.random() * 18));
 
-    el.classList.toggle('flip', destX < atualX);
     el.classList.remove('idle', 'hiding', 'peeking', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
     el.classList.add('walking');
     if(tipo === 'xiao'){ aplicarVarianteVoo(el); talvezFazerTruque(el); }
-    el.style.transition = 'transform ' + duracao + 's cubic-bezier(.4,.04,.32,1)';
-    el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
-    el.dataset.x = destX; el.dataset.y = destY;
 
-    setTimeout(function(){
+    moverArco(el, destX, destY, duracao * 1000, tipo).then(function(){
       el.classList.remove('walking');
       el.classList.add('perched', 'idle');
       retriggerAnim(el, 'pousando');
@@ -5856,7 +6016,7 @@ idiomaBtn.addEventListener('click', function(){
         el.classList.remove('perched');
         setTimeout(function(){ vagar(el, tipo); }, 300);
       }, 1600 + Math.random() * 1400);
-    }, duracao * 1000);
+    });
   }
 
   function ligarReacoesDoSite(layer, ghost, xiao){
