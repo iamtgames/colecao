@@ -5147,6 +5147,8 @@ idiomaBtn.addEventListener('click', function(){
         var sprite = el.querySelector('.mascot-sprite');
         var cape = bancar ? el.querySelector('.x-cape') : null;
         var speedFx = bancar ? el.querySelector('.x-speed') : null;
+        var fantasmaSolidos = opts.fantasmaSolidos;
+        var atravessando = false;
         if(ajustarFlip && Math.abs(dx) > 4){ el.classList.toggle('flip', dx < 0); }
         var flipAtivo = el.classList.contains('flip');
         var t0 = null, prevY = origY, prevX = origX, prevT = null, capeLag = 0;
@@ -5176,6 +5178,18 @@ idiomaBtn.addEventListener('click', function(){
               speedFx.style.setProperty('--velop', Math.max(0.2, Math.min(1.4, vel / 1.1)));
             }
           }
+          // O fantasma e sobrenatural: atravessa por cima de qualquer coisa
+          // solida no meio do caminho (o guerreiro nunca faz isso — pra ele
+          // o caminho ja foi desviado la em cima). Fica soo translucido
+          // enquanto estiver "dentro" de algo, reforcando visualmente que
+          // atravessou a materia de verdade.
+          if(fantasmaSolidos && fantasmaSolidos.length){
+            var dentro = !pontoLivre(p.x + 30, p.y + 40, fantasmaSolidos);
+            if(dentro !== atravessando){
+              atravessando = dentro;
+              el.style.opacity = dentro ? '0.45' : '';
+            }
+          }
           prevY = p.y; prevX = p.x; prevT = agora;
           if(t < 1){
             requestAnimationFrame(passo);
@@ -5184,6 +5198,7 @@ idiomaBtn.addEventListener('click', function(){
             if(bancar && sprite){ sprite.style.transform = ''; }
             if(cape){ cape.style.removeProperty('--bank'); }
             if(speedFx){ speedFx.style.removeProperty('--velop'); }
+            if(fantasmaSolidos){ el.style.opacity = ''; }
             resolve();
           }
         }
@@ -6172,7 +6187,16 @@ idiomaBtn.addEventListener('click', function(){
       if(mapa.pousaveis.length && Math.random() < 0.62){
         var sup = mapa.pousaveis[Math.floor(Math.random() * mapa.pousaveis.length)];
         var largura = Math.max(1, sup.right - sup.left);
-        destX = clampeia(sup.left + Math.random() * largura - 24, area.minX, area.maxX);
+        // A maior parte das vezes pousa em qualquer ponto da superficie, mas
+        // de vez em quando escolhe pousar bem na ponta/borda dela -- feito
+        // um heroi de verdade equilibrado na beirada de uma plataforma, em
+        // vez de sempre flutuar bem no meio.
+        var sorteBorda = Math.random();
+        var pontoSup;
+        if(sorteBorda < 0.18) pontoSup = 6;
+        else if(sorteBorda < 0.36) pontoSup = largura - 10;
+        else pontoSup = Math.random() * largura;
+        destX = clampeia(sup.left + pontoSup - 24, area.minX, area.maxX);
         destY = clampeia(sup.y - 34, area.minY, area.maxY);
         vaiPousarDepois = true;
         supEscolhida = sup;
@@ -6200,7 +6224,15 @@ idiomaBtn.addEventListener('click', function(){
     if(tipo === 'xiao'){ aplicarVarianteVoo(el); talvezFazerTruque(el); }
     if(cardAlvo){ cardAlvo.classList.add('card--oclui-mascote'); }
 
-    moverArco(el, destX, destY, duracao * 1000, tipo, solidosMapa ? { solidos: solidosMapa } : null).then(function(){
+    // Fisica diferente por personagem: o guerreiro e solido de verdade e
+    // tenta desviar de coisas no meio do caminho; o fantasma e sobrenatural,
+    // atravessa por cima do conteudo (so fica meio translucido enquanto
+    // passa por dentro de algo, pra ficar claro que ele "atravessou").
+    var optsMovimento = null;
+    if(solidosMapa){
+      optsMovimento = tipo === 'xiao' ? { solidos: solidosMapa } : { fantasmaSolidos: solidosMapa };
+    }
+    moverArco(el, destX, destY, duracao * 1000, tipo, optsMovimento).then(function(){
       el.classList.remove('walking');
       if(cardAlvo){
         el.classList.add('hiding');
@@ -6225,9 +6257,23 @@ idiomaBtn.addEventListener('click', function(){
         }
         retriggerAnim(el, 'pousando');
         if(vaiPousarDepois){
-          setTimeout(function(){ el.classList.remove('perched'); el._anexo = null; }, 1400 + Math.random() * 1400);
+          setTimeout(function(){
+            el.classList.remove('perched');
+            el._anexo = null;
+            // Sair do apoio tem um toque fisico de verdade: o guerreiro (que
+            // e solido, pesado) cai um pouco antes de retomar o voo, feito
+            // gravidade real puxando ele da beirada; o fantasma (etereo) so
+            // desgruda flutuando pra cima, sem peso nenhum.
+            var areaQ = areaSegura();
+            var qx = clampeia(parseFloat(el.dataset.x) || 0, areaQ.minX, areaQ.maxX);
+            var qy = clampeia((parseFloat(el.dataset.y) || 0) + (tipo === 'xiao' ? 36 : -20), areaQ.minY, areaQ.maxY);
+            moverArco(el, qx, qy, tipo === 'xiao' ? 240 : 340, tipo, { bancar:false, flip:false }).then(function(){
+              setTimeout(function(){ vagar(el, tipo); }, 180);
+            });
+          }, 1400 + Math.random() * 1400);
+        } else {
+          setTimeout(function(){ vagar(el, tipo); }, 500 + Math.random() * 1600);
         }
-        setTimeout(function(){ vagar(el, tipo); }, 500 + Math.random() * 1600);
       }
     });
   }
