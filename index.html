@@ -222,12 +222,15 @@
     font-family: var(--skin-font); font-size:10.5px; font-weight:700; color:#fff;
     text-shadow: 0 1px 1px rgba(0,0,0,.4);
     background-image:
-      linear-gradient(180deg, #4f9df0 0%, #1e5fc4 45%, #123f8f 100%),
       radial-gradient(circle, #ff5f57 45%, transparent 46%),
       radial-gradient(circle, #ffbd2e 45%, transparent 46%),
-      radial-gradient(circle, #28c93f 45%, transparent 46%);
-    background-size: 100% 100%, 10px 10px, 10px 10px, 10px 10px;
-    background-position: 0 0, calc(100% - 12px) 50%, calc(100% - 26px) 50%, calc(100% - 40px) 50%;
+      radial-gradient(circle, #28c93f 45%, transparent 46%),
+      linear-gradient(180deg, #4f9df0 0%, #1e5fc4 45%, #123f8f 100%);
+    /* os pontinhos precisam vir ANTES do gradiente da barra na lista, porque
+       em CSS o primeiro background listado fica por cima -- na v1 o gradiente
+       (solido) tava cobrindo os pontinhos por baixo, por isso nao aparecia. */
+    background-size: 10px 10px, 10px 10px, 10px 10px, 100% 100%;
+    background-position: calc(100% - 12px) 50%, calc(100% - 26px) 50%, calc(100% - 40px) 50%, 0 0;
     background-repeat: no-repeat;
   }
   /* barra de tarefas fixa no rodape (so aparece com esse skin ligado) */
