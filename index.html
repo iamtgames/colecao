@@ -1084,6 +1084,64 @@
     .toggle-venda{font-size:11.5px; padding:9px 12px;}
     #wishlistPageInfo{font-size:11.5px !important;}
   }
+
+  /* ===== Mascotes autonomos (Fantasminha 8-bit + Xiaoxiao) =====
+     Camada decorativa fixa, sem interacao, clique passa direto (pointer-events:none).
+     Ambos ficam abaixo de modais (z-index >=100) e acima do conteudo normal. */
+  .mascot-layer{ position:fixed; inset:0; z-index:95; pointer-events:none; overflow:hidden; }
+  .mascot{ position:absolute; top:0; left:0; will-change: transform; }
+  .mascot-sprite{ transition: transform .25s ease; }
+  .mascot.flip .mascot-sprite{ transform: scaleX(-1); }
+  .mascot svg{ display:block; filter: drop-shadow(0 3px 4px rgba(0,0,0,.45)); overflow:visible; }
+
+  .mascot-ghost svg{ width:46px; height:52px; }
+  .mascot-ghost .g-drift{ animation: ghostDrift 2.1s ease-in-out infinite; }
+  @keyframes ghostDrift{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-6px);} }
+  .mascot-ghost .g-eyes{ animation: ghostBlink 3.2s infinite; transform-origin: 100px 92px; }
+  @keyframes ghostBlink{ 0%,90%,100%{ transform: scaleY(1);} 94%{ transform: scaleY(0.1);} }
+  .mascot-ghost .g-pupil{ animation: ghostLook 4.5s ease-in-out infinite; }
+  @keyframes ghostLook{ 0%,100%{ transform: translateX(0);} 25%{ transform: translateX(2px);} 60%{ transform: translateX(-2px);} }
+  .mascot-ghost.walking .g-drift{ animation-duration: 0.5s; }
+  .mascot-ghost.hiding .mascot-sprite{ transform: scale(0.55); opacity:0.4; }
+  .mascot-ghost.peeking .mascot-sprite{ transform: scale(0.85); opacity:0.85; }
+
+  .mascot-xiao svg{ width:34px; height:60px; }
+  .mascot-xiao .x-rig{ transform-origin: 30px 40px; }
+  .mascot-xiao .x-armL{ transform-origin: 24px 20px; }
+  .mascot-xiao .x-armR{ transform-origin: 36px 20px; }
+  .mascot-xiao .x-legL{ transform-origin: 27px 40px; }
+  .mascot-xiao .x-legR{ transform-origin: 33px 40px; }
+  .mascot-xiao .x-lowerLegR{ transform-origin: 33px 52px; }
+  .mascot-xiao .x-speed{ opacity:0; }
+  .mascot-xiao.walking .x-armL{ animation: xwArmL .5s ease-in-out infinite; }
+  .mascot-xiao.walking .x-armR{ animation: xwArmR .5s ease-in-out infinite; }
+  .mascot-xiao.walking .x-legL{ animation: xwLegL .5s ease-in-out infinite; }
+  .mascot-xiao.walking .x-legR{ animation: xwLegR .5s ease-in-out infinite; }
+  @keyframes xwArmL{ 0%,100%{ transform: rotate(30deg);} 50%{ transform: rotate(-26deg);} }
+  @keyframes xwArmR{ 0%,100%{ transform: rotate(-30deg);} 50%{ transform: rotate(26deg);} }
+  @keyframes xwLegL{ 0%,100%{ transform: rotate(-24deg);} 50%{ transform: rotate(24deg);} }
+  @keyframes xwLegR{ 0%,100%{ transform: rotate(24deg);} 50%{ transform: rotate(-24deg);} }
+  .mascot-xiao.idle .x-rig{ animation: xIdleBreathe 2.4s ease-in-out infinite; }
+  @keyframes xIdleBreathe{ 0%,100%{ transform: scaleY(1);} 50%{ transform: scaleY(1.02);} }
+  .mascot-xiao.kicking .x-armL{ animation: xkArmL 1.1s ease-in-out; }
+  .mascot-xiao.kicking .x-armR{ animation: xkArmR 1.1s ease-in-out; }
+  .mascot-xiao.kicking .x-legL{ animation: xkLegL 1.1s ease-in-out; }
+  .mascot-xiao.kicking .x-legR{ animation: xkLegR 1.1s ease-in-out; }
+  .mascot-xiao.kicking .x-lowerLegR{ animation: xkLowerLegR 1.1s ease-in-out; }
+  .mascot-xiao.kicking .x-rig{ animation: xkLean 1.1s ease-in-out; }
+  .mascot-xiao.kicking .x-speed{ animation: xkSpeed 1.1s ease-in-out; }
+  @keyframes xkLean{ 0%,20%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(-6deg);} 75%{ transform: rotate(0deg);} }
+  @keyframes xkArmL{ 0%,20%,100%{ transform: rotate(30deg);} 25%{ transform: rotate(-5deg);} 50%{ transform: rotate(40deg);} 75%{ transform: rotate(30deg);} }
+  @keyframes xkArmR{ 0%,20%,100%{ transform: rotate(-30deg);} 25%{ transform: rotate(-80deg);} 50%{ transform: rotate(-20deg);} 75%{ transform: rotate(-30deg);} }
+  @keyframes xkLegL{ 0%,20%,100%{ transform: rotate(-10deg);} 50%{ transform: rotate(-4deg);} 75%{ transform: rotate(-10deg);} }
+  @keyframes xkLegR{ 0%,20%,100%{ transform: rotate(10deg);} 45%{ transform: rotate(-30deg);} 50%{ transform: rotate(-95deg);} 75%{ transform: rotate(10deg);} }
+  @keyframes xkLowerLegR{ 0%,20%,100%{ transform: rotate(18deg);} 50%{ transform: rotate(0deg);} 75%{ transform: rotate(18deg);} }
+  @keyframes xkSpeed{ 0%,45%{ opacity:0;} 50%,58%{ opacity:1;} 65%,100%{ opacity:0;} }
+
+  @media (max-width: 600px){
+    .mascot-ghost svg{ width:36px; height:40px; }
+    .mascot-xiao svg{ width:26px; height:46px; }
+  }
 </style>
 </head>
 <body>
@@ -4348,6 +4406,167 @@ idiomaBtn.addEventListener('click', function(){
   localStorage.setItem('idioma_ps4', idioma);
   aplicarIdiomaCompleto();
 });
+
+// ===== Mascotes autonomos: Fantasminha 8-bit + Xiaoxiao =====
+// Camada decorativa, sem nenhuma interacao necessaria (pointer-events:none em
+// tudo). Cada um vaga pela tela sozinho, escolhe destinos aleatorios, e de vez
+// em quando faz uma acao especial (o fantasma se esconde atras de um card, o
+// Xiaoxiao solta um combo de kung-fu). Roda pra sempre em loop.
+(function(){
+  var GHOST_SVG = '<svg viewBox="0 0 200 220"><g class="g-drift"><g fill="#b98fff">'
+    + '<rect x="76" y="60" width="48" height="8" rx="2"/>'
+    + '<rect x="68" y="68" width="64" height="8"/>'
+    + '<rect x="60" y="76" width="80" height="72"/>'
+    + '<rect x="60" y="148" width="16" height="10"/>'
+    + '<rect x="84" y="148" width="16" height="10"/>'
+    + '<rect x="108" y="148" width="16" height="10"/>'
+    + '<rect x="132" y="148" width="8" height="10"/>'
+    + '</g>'
+    + '<rect x="66" y="64" width="8" height="8" fill="#d6bbff"/>'
+    + '<rect x="126" y="64" width="8" height="8" fill="#d6bbff"/>'
+    + '<g class="g-eyes">'
+    + '<rect x="80" y="92" width="14" height="18" fill="#0d0a1a"/>'
+    + '<rect x="106" y="92" width="14" height="18" fill="#0d0a1a"/>'
+    + '<rect class="g-pupil" x="84" y="96" width="6" height="8" fill="#eaf6ff"/>'
+    + '<rect class="g-pupil" x="110" y="96" width="6" height="8" fill="#eaf6ff"/>'
+    + '</g>'
+    + '<rect x="90" y="120" width="20" height="6" fill="#0d0a1a"/>'
+    + '</g></svg>';
+
+  var XIAO_SVG = '<svg viewBox="0 0 60 70"><g class="x-rig" stroke="#0a0a0a" stroke-width="2.6" stroke-linecap="round" fill="none">'
+    + '<circle cx="30" cy="10" r="6" fill="#0a0a0a" stroke="none"/>'
+    + '<line x1="30" y1="16" x2="30" y2="40" stroke-width="3"/>'
+    + '<line class="x-armL" x1="24" y1="20" x2="18" y2="38"/>'
+    + '<line class="x-armR" x1="36" y1="20" x2="42" y2="38"/>'
+    + '<circle cx="24" cy="20" r="1.6" fill="#0a0a0a" stroke="none"/>'
+    + '<circle cx="36" cy="20" r="1.6" fill="#0a0a0a" stroke="none"/>'
+    + '<g class="x-legL"><line x1="27" y1="40" x2="24" y2="64" stroke-width="3"/></g>'
+    + '<g class="x-legR"><line x1="33" y1="40" x2="33" y2="52" stroke-width="3"/>'
+    + '<line class="x-lowerLegR" x1="33" y1="52" x2="27" y2="62" stroke-width="3"/></g>'
+    + '<circle cx="27" cy="40" r="1.6" fill="#0a0a0a" stroke="none"/>'
+    + '<circle cx="33" cy="40" r="1.6" fill="#0a0a0a" stroke="none"/>'
+    + '<circle cx="33" cy="52" r="1.6" fill="#0a0a0a" stroke="none"/>'
+    + '<g class="x-speed" stroke="#0a0a0a" stroke-width="1.4">'
+    + '<line x1="36" y1="50" x2="52" y2="47"/>'
+    + '<line x1="36" y1="56" x2="53" y2="56"/>'
+    + '<line x1="35" y1="62" x2="50" y2="65"/>'
+    + '</g></g></svg>';
+
+  function areaSegura(){
+    return {
+      minX: 10, maxX: Math.max(10, window.innerWidth - 70),
+      minY: 84, maxY: Math.max(84, window.innerHeight - 150)
+    };
+  }
+
+  function criarMascote(layer, tipo, svgHTML){
+    var el = document.createElement('div');
+    el.className = 'mascot mascot-' + tipo + ' idle';
+    var sprite = document.createElement('div');
+    sprite.className = 'mascot-sprite';
+    sprite.innerHTML = svgHTML;
+    el.appendChild(sprite);
+    layer.appendChild(el);
+    var area = areaSegura();
+    var x = area.minX + Math.random() * (area.maxX - area.minX);
+    var y = area.minY + Math.random() * (area.maxY - area.minY);
+    el.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    el.dataset.x = x; el.dataset.y = y;
+    return el;
+  }
+
+  function vagar(el, tipo){
+    if(!document.body.contains(el)) return;
+    var acao = Math.random();
+    if(tipo === 'xiao' && acao < 0.25){
+      el.classList.remove('idle');
+      el.classList.add('kicking');
+      var aoTerminar = function(){
+        el.classList.remove('kicking');
+        el.classList.add('idle');
+        el.removeEventListener('animationend', aoTerminar);
+        setTimeout(function(){ vagar(el, tipo); }, 500 + Math.random() * 900);
+      };
+      el.addEventListener('animationend', aoTerminar);
+      return;
+    }
+    if(tipo === 'ghost' && acao < 0.3){
+      esconderAtrasDeCard(el, tipo);
+      return;
+    }
+    moverPara(el, tipo, null);
+  }
+
+  function moverPara(el, tipo, cardAlvo){
+    var destX, destY, corte;
+    if(cardAlvo){
+      var r = cardAlvo.getBoundingClientRect();
+      destX = r.right - 40; destY = r.bottom - 48;
+    } else {
+      var area = areaSegura();
+      destX = area.minX + Math.random() * (area.maxX - area.minX);
+      destY = area.minY + Math.random() * (area.maxY - area.minY);
+    }
+    var atualX = parseFloat(el.dataset.x) || 0;
+    var atualY = parseFloat(el.dataset.y) || 0;
+    var dist = Math.hypot(destX - atualX, destY - atualY);
+    var duracao = Math.max(1.3, dist / 65);
+
+    el.classList.toggle('flip', destX < atualX);
+    el.classList.remove('idle', 'hiding', 'peeking');
+    el.classList.add('walking');
+    el.style.transition = 'transform ' + duracao + 's ease-in-out';
+    el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
+    el.dataset.x = destX; el.dataset.y = destY;
+
+    setTimeout(function(){
+      el.classList.remove('walking');
+      if(cardAlvo){
+        el.classList.add('hiding');
+        setTimeout(function(){
+          el.classList.remove('hiding');
+          el.classList.add('peeking');
+          setTimeout(function(){
+            el.classList.remove('peeking');
+            el.classList.add('idle');
+            setTimeout(function(){ vagar(el, tipo); }, 300);
+          }, 900);
+        }, 1500);
+      } else {
+        el.classList.add('idle');
+        setTimeout(function(){ vagar(el, tipo); }, 500 + Math.random() * 1600);
+      }
+    }, duracao * 1000);
+  }
+
+  function esconderAtrasDeCard(el, tipo){
+    var cards = Array.prototype.filter.call(document.querySelectorAll('.card'), function(c){
+      var r = c.getBoundingClientRect();
+      return r.top > 84 && r.top < window.innerHeight - 120 && r.left > 0 && r.left < window.innerWidth - 60 && r.width > 0;
+    });
+    if(!cards.length){ moverPara(el, tipo, null); return; }
+    var card = cards[Math.floor(Math.random() * cards.length)];
+    moverPara(el, tipo, card);
+  }
+
+  function iniciarMascotes(){
+    try{
+      if(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      if(document.querySelector('.mascot-layer')) return;
+      var layer = document.createElement('div');
+      layer.className = 'mascot-layer';
+      layer.setAttribute('aria-hidden', 'true');
+      document.body.appendChild(layer);
+      var ghost = criarMascote(layer, 'ghost', GHOST_SVG);
+      var xiao = criarMascote(layer, 'xiao', XIAO_SVG);
+      setTimeout(function(){ vagar(ghost, 'ghost'); }, 800);
+      setTimeout(function(){ vagar(xiao, 'xiao'); }, 1600);
+    }catch(e){ /* mascotes sao só decoracao — nunca deve travar o site */ }
+  }
+
+  if(document.readyState === 'complete'){ iniciarMascotes(); }
+  else { window.addEventListener('load', iniciarMascotes); }
+})();
 </script>
 <script src="https://giscus.app/client.js"
   data-repo="iamtgames/colecao"
