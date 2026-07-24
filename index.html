@@ -1092,8 +1092,10 @@
      Ambos ficam abaixo de modais (z-index >=100) e acima do conteudo normal. */
   .mascot-layer{ position:fixed; inset:0; z-index:95; pointer-events:none; overflow:hidden; }
   .mascot{ position:absolute; top:0; left:0; will-change: transform; }
-  .mascot-sprite{ transition: transform .25s ease; }
+  .mascot-sprite{ transition: transform .25s ease, opacity .25s ease; }
   .mascot.flip .mascot-sprite{ transform: scaleX(-1); }
+  .mascot.hiding .mascot-sprite{ transform: scale(0.55); opacity:0.4; }
+  .mascot.peeking .mascot-sprite{ transform: scale(0.85); opacity:0.85; }
   .mascot svg{ display:block; filter: drop-shadow(0 3px 4px rgba(0,0,0,.45)); overflow:visible; }
 
   .mascot-ghost svg{ width:76px; height:86px; }
@@ -1145,6 +1147,24 @@
   @keyframes xkLegR{ 0%,20%,100%{ transform: translateY(0);} 50%{ transform: translateY(-9px);} 75%{ transform: translateY(0);} }
   @keyframes xkLowerLegR{ 0%,20%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(26deg);} 75%{ transform: rotate(0deg);} }
   @keyframes xkSpeed{ 0%,45%{ opacity:0;} 50%,58%{ opacity:1;} 65%,100%{ opacity:0;} }
+
+  /* Poses soltas — repertorio solo maior pra nao ficar repetitivo: alem de
+     andar/se esconder/pousar, eles tambem descansam, se espreguicam, olham
+     ao redor, acenam e reagem (fantasma se assusta, susto ao trocar tema). */
+  .mascot.espreguicando .mascot-fxwrap{ animation: fxEspreguicar 1s ease-in-out; }
+  @keyframes fxEspreguicar{ 0%,100%{ transform:scale(1) rotate(0deg);} 40%{ transform:scale(1.12,0.9) rotate(-4deg);} 70%{ transform:scale(1.12,0.9) rotate(4deg);} }
+  .mascot.olhando .mascot-fxwrap{ animation: fxOlhar 1.6s ease-in-out; }
+  @keyframes fxOlhar{ 0%,100%{ transform:rotate(0deg);} 25%{ transform:rotate(-7deg);} 60%{ transform:rotate(7deg);} 85%{ transform:rotate(0deg);} }
+  .mascot.acenando .mascot-fxwrap{ animation: fxAcenar 1.1s ease-in-out 2; }
+  @keyframes fxAcenar{ 0%,100%{ transform:rotate(0deg) translateY(0);} 50%{ transform:rotate(-6deg) translateY(-5px);} }
+  .mascot.descansando .mascot-fxwrap{ animation: fxDescansar 2.2s ease-in-out infinite; }
+  @keyframes fxDescansar{ 0%,100%{ transform:translateY(0) scaleY(1);} 50%{ transform:translateY(3px) scaleY(0.95);} }
+  .mascot-ghost.assustando .mascot-fxwrap{ animation: fxBoo .6s ease-in-out; }
+  @keyframes fxBoo{ 0%,100%{ transform:scale(1);} 30%{ transform:scale(1.35);} 50%{ transform:scale(0.85);} 70%{ transform:scale(1.15);} }
+  .mascot.surpreso .mascot-fxwrap{ animation: fxSurpreso .5s ease-in-out; }
+  @keyframes fxSurpreso{ 0%,100%{ transform:translateY(0) rotate(0deg);} 30%{ transform:translateY(-14px);} 50%{ transform:translateY(-14px) rotate(-6deg);} 70%{ transform:translateY(0);} }
+  .mascot.pousando .mascot-fxwrap{ animation: fxPousar .22s ease-out; }
+  @keyframes fxPousar{ 0%{ transform:scaleY(1);} 45%{ transform:scaleY(0.86);} 100%{ transform:scaleY(1);} }
 
   @media (max-width: 600px){
     .mascot-ghost svg{ width:56px; height:64px; }
@@ -1198,6 +1218,9 @@
     transform:translate(0,0) rotate(0deg);
     transition: transform .85s cubic-bezier(.2,.6,.4,1), opacity .85s ease;
   }
+  .fx-emoji{ font-size:22px; line-height:1; width:26px; height:26px; text-align:center; }
+  .fx-kite{ width:22px; height:22px; background:linear-gradient(135deg,#ff5f6d,#ffd23d); transform:rotate(45deg); border-radius:3px; }
+  .fx-kite::after{ content:''; position:absolute; top:20px; left:9px; width:2px; height:26px; background:#8a5a2a; }
 
   .fx-portal{ width:54px; height:54px; animation: portalPop .3s ease-out; }
   .fx-portal.closing{ animation: portalPop .3s ease-in reverse; }
@@ -4610,19 +4633,36 @@ idiomaBtn.addEventListener('click', function(){
       var atualX = parseFloat(el.dataset.x) || 0;
       var atualY = parseFloat(el.dataset.y) || 0;
       var dist = Math.hypot(destX - atualX, destY - atualY);
-      var duracao = Math.max(0.4, dist / (velocidade || 95));
+      var vel = (velocidade || 95) * (0.88 + Math.random() * 0.24);
+      var duracao = Math.max(0.4, dist / vel);
       el.classList.toggle('flip', destX < atualX);
-      el.classList.remove('idle', 'hiding', 'peeking', 'kicking', 'sumindo', 'surgindo', 'perched');
+      el.classList.remove('idle', 'hiding', 'peeking', 'kicking', 'sumindo', 'surgindo', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
       el.classList.add('walking');
-      el.style.transition = 'transform ' + duracao + 's ' + (velocidade && velocidade > 150 ? 'linear' : 'ease-in-out');
+      el.style.transition = 'transform ' + duracao + 's ' + (velocidade && velocidade > 150 ? 'linear' : 'cubic-bezier(.4,.04,.32,1)');
       el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
       el.dataset.x = destX; el.dataset.y = destY;
       setTimeout(function(){
         el.classList.remove('walking');
         el.classList.add('idle');
+        retriggerAnim(el, 'pousando');
         resolve();
       }, duracao * 1000);
     });
+  }
+
+  // Segue um alvo (mascote ou prop) quadro a quadro via requestAnimationFrame —
+  // bem mais fluido que o setInterval de antes pra props que acompanham quem
+  // esta andando (chapeu roubado, skate, jetpack, pipa, carona).
+  function seguirElemento(prop, alvo, offX, offY){
+    var ativo = true;
+    function passo(){
+      if(!ativo) return;
+      var xx = parseFloat(alvo.dataset.x) || 0, xy = parseFloat(alvo.dataset.y) || 0;
+      prop.style.transform = 'translate(' + (xx + offX) + 'px,' + (xy + offY) + 'px)';
+      requestAnimationFrame(passo);
+    }
+    passo();
+    return function(){ ativo = false; };
   }
 
   function criarProp(layer, x, y, className, innerHTML){
@@ -4869,12 +4909,9 @@ idiomaBtn.addEventListener('click', function(){
     await esperar(400);
     await moverElementoPromise(xiao, clampeia(gx + 10, area.minX, area.maxX), gy);
     var alvo = clampeia(gx + 160, area.minX, area.maxX);
-    var segue = setInterval(function(){
-      var xx = parseFloat(xiao.dataset.x) || 0, xy = parseFloat(xiao.dataset.y) || 0;
-      chapeu.style.transform = 'translate(' + (xx + 10) + 'px,' + (xy - 16) + 'px)';
-    }, 50);
+    var pararSegue = seguirElemento(chapeu, xiao, 10, -16);
     await moverElementoPromise(xiao, alvo, clampeia(gy - 20, area.minY, area.maxY));
-    clearInterval(segue);
+    pararSegue();
     await moverElementoPromise(ghost, clampeia(alvo - 50, area.minX, area.maxX), gy);
     criarConfete(layer, alvo, gy);
     removerPropSuave(chapeu);
@@ -4902,13 +4939,10 @@ idiomaBtn.addEventListener('click', function(){
     var skate = criarProp(layer, parseFloat(patinador.dataset.x) || 0, (parseFloat(patinador.dataset.y) || 0) + 40, 'fx-skate', '');
     var destX = area.minX + Math.random() * (area.maxX - area.minX);
     var destY = parseFloat(patinador.dataset.y) || area.minY;
-    var segue = setInterval(function(){
-      var xx = parseFloat(patinador.dataset.x) || 0, xy = parseFloat(patinador.dataset.y) || 0;
-      skate.style.transform = 'translate(' + xx + 'px,' + (xy + 42) + 'px)';
-    }, 50);
+    var pararSegue = seguirElemento(skate, patinador, 0, 42);
     retriggerAnim(patinador, patinador === xiao ? 'kicking' : 'bump-hit');
     await moverElementoPromise(patinador, destX, destY, 150);
-    clearInterval(segue);
+    pararSegue();
     removerPropSuave(skate);
     await esperar(250);
   }
@@ -4933,12 +4967,9 @@ idiomaBtn.addEventListener('click', function(){
     var jato = criarProp(layer, parseFloat(voador.dataset.x) || 0, (parseFloat(voador.dataset.y) || 0) + 40, 'fx-jetflame', '');
     var destX = area.minX + Math.random() * (area.maxX - area.minX);
     var destY = area.minY + Math.random() * (area.maxY - area.minY);
-    var segue = setInterval(function(){
-      var xx = parseFloat(voador.dataset.x) || 0, xy = parseFloat(voador.dataset.y) || 0;
-      jato.style.transform = 'translate(' + (xx + 14) + 'px,' + (xy + 46) + 'px)';
-    }, 40);
+    var pararSegue = seguirElemento(jato, voador, 14, 46);
     await moverElementoPromise(voador, destX, destY, 220);
-    clearInterval(segue);
+    pararSegue();
     removerPropSuave(jato);
     await esperar(250);
   }
@@ -5006,10 +5037,172 @@ idiomaBtn.addEventListener('click', function(){
     await esperar(250);
   }
 
+  // ---- Ainda mais cenas: reduzem a repetitividade com truques novos ----
+  async function cenaAltoCinco(layer, ghost, xiao){
+    var area = areaSegura();
+    var mx = area.minX + Math.random() * (area.maxX - area.minX);
+    var my = area.minY + Math.random() * (area.maxY - area.minY);
+    await Promise.all([
+      moverElementoPromise(ghost, clampeia(mx - 20, area.minX, area.maxX), my),
+      moverElementoPromise(xiao, clampeia(mx + 20, area.minX, area.maxX), my)
+    ]);
+    retriggerAnim(ghost, 'bump-hit');
+    retriggerAnim(xiao, 'kicking');
+    criarBurst(layer, mx, my - 10, '#ffd23d');
+    await esperar(500);
+    await Promise.all([
+      moverElementoPromise(ghost, clampeia(mx - 60, area.minX, area.maxX), my),
+      moverElementoPromise(xiao, clampeia(mx + 60, area.minX, area.maxX), my)
+    ]);
+  }
+
+  async function cenaBracoDeFerro(layer, ghost, xiao){
+    var area = areaSegura();
+    var mx = area.minX + Math.random() * (area.maxX - area.minX);
+    var my = area.minY + Math.random() * (area.maxY - area.minY);
+    await Promise.all([
+      moverElementoPromise(ghost, clampeia(mx - 16, area.minX, area.maxX), my),
+      moverElementoPromise(xiao, clampeia(mx + 16, area.minX, area.maxX), my)
+    ]);
+    for(var i = 0; i < 4; i++){
+      retriggerAnim(ghost, 'bump-hit');
+      retriggerAnim(xiao, 'bump-hit');
+      await esperar(280);
+    }
+    var vencedor = Math.random() < 0.5 ? ghost : xiao;
+    retriggerAnim(vencedor, vencedor === xiao ? 'kicking' : 'assustando');
+    criarBurst(layer, mx, my, '#7ec4ff');
+    await esperar(500);
+  }
+
+  async function cenaPedraPapelTesoura(layer, ghost, xiao){
+    var area = areaSegura();
+    var mx = area.minX + Math.random() * (area.maxX - area.minX);
+    var my = area.minY + Math.random() * (area.maxY - area.minY);
+    await Promise.all([
+      moverElementoPromise(ghost, clampeia(mx - 22, area.minX, area.maxX), my),
+      moverElementoPromise(xiao, clampeia(mx + 22, area.minX, area.maxX), my)
+    ]);
+    var opcoes = ['✊', '✋', '✌️'];
+    var propG = criarProp(layer, mx - 14, my - 20, 'fx-emoji', opcoes[Math.floor(Math.random() * 3)]);
+    var propX = criarProp(layer, mx + 8, my - 20, 'fx-emoji', opcoes[Math.floor(Math.random() * 3)]);
+    for(var i = 0; i < 3; i++){
+      await esperar(260);
+      propG.textContent = opcoes[Math.floor(Math.random() * 3)];
+      propX.textContent = opcoes[Math.floor(Math.random() * 3)];
+    }
+    await esperar(400);
+    criarBurst(layer, mx, my - 20, '#3ddc84');
+    removerPropSuave(propG);
+    removerPropSuave(propX);
+    await esperar(300);
+  }
+
+  async function cenaCarona(layer, ghost, xiao){
+    var area = areaSegura();
+    var condutor = Math.random() < 0.5 ? ghost : xiao;
+    var passageiro = condutor === xiao ? ghost : xiao;
+    var cx = parseFloat(condutor.dataset.x) || 0, cy = parseFloat(condutor.dataset.y) || 0;
+    await moverElementoPromise(passageiro, clampeia(cx + 4, area.minX, area.maxX), clampeia(cy - 30, area.minY, area.maxY));
+    passageiro.style.transition = 'none';
+    var destX = area.minX + Math.random() * (area.maxX - area.minX);
+    var destY = area.minY + Math.random() * (area.maxY - area.minY);
+    var pararSegue = seguirElemento(passageiro, condutor, 4, -30);
+    await moverElementoPromise(condutor, destX, destY, 85);
+    pararSegue();
+    passageiro.dataset.x = (parseFloat(condutor.dataset.x) || 0) + 4;
+    passageiro.dataset.y = (parseFloat(condutor.dataset.y) || 0) - 30;
+    passageiro.style.transition = '';
+    criarBurst(layer, destX, destY - 20, '#b98fff');
+    await esperar(300);
+  }
+
+  async function cenaPipa(layer, ghost, xiao){
+    var area = areaSegura();
+    var soltador = Math.random() < 0.5 ? xiao : ghost;
+    var observador = soltador === xiao ? ghost : xiao;
+    var sx = parseFloat(soltador.dataset.x) || 0, sy = parseFloat(soltador.dataset.y) || 0;
+    var pipa = criarProp(layer, sx + 10, sy - 60, 'fx-kite', '');
+    await moverElementoPromise(observador, clampeia(sx - 50, area.minX, area.maxX), sy);
+    var pararSegue = seguirElemento(pipa, soltador, Math.random() * 20 - 10, -70 - Math.random() * 20);
+    var destX = area.minX + Math.random() * (area.maxX - area.minX);
+    await moverElementoPromise(soltador, destX, sy, 70);
+    pararSegue();
+    removerPropSuave(pipa);
+    await esperar(300);
+  }
+
+  async function cenaEscondeEsconde(layer, ghost, xiao){
+    var area = areaSegura();
+    var escondido = Math.random() < 0.5 ? ghost : xiao;
+    var procurador = escondido === xiao ? ghost : xiao;
+    var cards = Array.prototype.filter.call(document.querySelectorAll('.card'), function(c){
+      var r = c.getBoundingClientRect();
+      return r.top > 140 && r.top < window.innerHeight - 120 && r.left > 0 && r.left < window.innerWidth - 60 && r.width > 0;
+    });
+    if(!cards.length){ await esperar(200); return; }
+    var escondCard = cards[Math.floor(Math.random() * cards.length)];
+    var r0 = escondCard.getBoundingClientRect();
+    await moverElementoPromise(escondido, r0.left + r0.width / 2 - 24, r0.top - 18);
+    escondido.classList.remove('idle');
+    escondido.classList.add('hiding');
+    var tentativas = 2 + Math.floor(Math.random() * 2);
+    for(var i = 0; i < tentativas; i++){
+      var outroCard = cards[Math.floor(Math.random() * cards.length)];
+      var r1 = outroCard.getBoundingClientRect();
+      await moverElementoPromise(procurador, r1.left + r1.width / 2 - 24, r1.top - 18);
+      await esperar(400);
+    }
+    await moverElementoPromise(procurador, r0.left + r0.width / 2 - 24, r0.top + 6);
+    escondido.classList.remove('hiding');
+    escondido.classList.add('idle');
+    criarBurst(layer, r0.left + r0.width / 2, r0.top, '#3ddc84');
+    await esperar(300);
+  }
+
+  async function cenaDancaSincronizada(layer, ghost, xiao){
+    var area = areaSegura();
+    var mx = area.minX + Math.random() * (area.maxX - area.minX);
+    var my = area.minY + Math.random() * (area.maxY - area.minY);
+    await Promise.all([
+      moverElementoPromise(ghost, clampeia(mx - 20, area.minX, area.maxX), my),
+      moverElementoPromise(xiao, clampeia(mx + 20, area.minX, area.maxX), my)
+    ]);
+    var disco = criarProp(layer, mx - 8, my - 74, 'fx-disco', '');
+    for(var i = 0; i < 3; i++){
+      retriggerAnim(ghost, 'acenando');
+      retriggerAnim(xiao, 'acenando');
+      await esperar(600);
+    }
+    criarConfete(layer, mx, my - 10);
+    removerPropSuave(disco);
+    await esperar(300);
+  }
+
+  async function cenaGuerraDeConfete(layer, ghost, xiao){
+    var area = areaSegura();
+    var my = area.minY + Math.random() * (area.maxY - area.minY);
+    var gx = clampeia(area.minX + 30, area.minX, area.maxX);
+    var xx = clampeia(gx + 140, area.minX, area.maxX);
+    await Promise.all([
+      moverElementoPromise(ghost, gx, my),
+      moverElementoPromise(xiao, xx, my)
+    ]);
+    for(var i = 0; i < 3; i++){
+      criarConfete(layer, i % 2 ? gx + 20 : xx - 20, my);
+      retriggerAnim(i % 2 ? xiao : ghost, i % 2 ? 'kicking' : 'bump-hit');
+      await esperar(500);
+    }
+    criarBurst(layer, (gx + xx) / 2, my, '#ff5f6d');
+    await esperar(300);
+  }
+
   var CENAS_DISPONIVEIS = [
     cenaPerseguicao, cenaBriga, cenaPortal, cenaBuracoNegro, cenaBomba,
     cenaDuelo, cenaEscudoBloqueio, cenaRouboDeChapeu, cenaParaquedas, cenaPatinete,
-    cenaPescaria, cenaJetpack, cenaFesta, cenaCaboDeGuerra, cenaSelfie
+    cenaPescaria, cenaJetpack, cenaFesta, cenaCaboDeGuerra, cenaSelfie,
+    cenaAltoCinco, cenaBracoDeFerro, cenaPedraPapelTesoura, cenaCarona, cenaPipa,
+    cenaEscondeEsconde, cenaDancaSincronizada, cenaGuerraDeConfete
   ];
 
   function tentarCena(layer, ghost, xiao){
@@ -5029,33 +5222,62 @@ idiomaBtn.addEventListener('click', function(){
   }
 
   function agendarProximaCena(layer, ghost, xiao){
-    var espera = 9000 + Math.random() * 14000;
+    var espera = 7000 + Math.random() * 11000;
     setTimeout(function(){ tentarCena(layer, ghost, xiao); }, espera);
+  }
+
+  function fazerPose(el, tipo, classe, duracaoMs){
+    el.classList.remove('idle');
+    if(classe) el.classList.add(classe);
+    setTimeout(function(){
+      if(classe) el.classList.remove(classe);
+      el.classList.add('idle');
+      setTimeout(function(){ vagar(el, tipo); }, 400 + Math.random() * 900);
+    }, duracaoMs);
   }
 
   function vagar(el, tipo){
     if(!document.body.contains(el) || estado.interagindo) return;
     var acao = Math.random();
-    if(tipo === 'xiao' && acao < 0.18){
-      el.classList.remove('idle');
-      el.classList.add('kicking');
-      var aoTerminar = function(){
-        el.classList.remove('kicking');
-        el.classList.add('idle');
-        el.removeEventListener('animationend', aoTerminar);
-        setTimeout(function(){ vagar(el, tipo); }, 500 + Math.random() * 900);
-      };
-      el.addEventListener('animationend', aoTerminar);
+
+    // Cada um tem seu proprio trejeito especial (o Bytinho solta o combo de
+    // kung-fu, o fantasma se assusta e da um salto), alem de um leque de
+    // poses soltas compartilhadas pra nao ficar repetitivo so andando de
+    // um lado pro outro.
+    if(tipo === 'xiao' && acao < 0.12){
+      fazerPose(el, tipo, 'kicking', 1100);
+      return;
+    }
+    if(tipo === 'ghost' && acao < 0.12){
+      var layerBoo = document.querySelector('.mascot-layer');
+      if(layerBoo) criarBurst(layerBoo, (parseFloat(el.dataset.x) || 0) + 30, (parseFloat(el.dataset.y) || 0) + 30, '#b98fff');
+      fazerPose(el, tipo, 'assustando', 600);
+      return;
+    }
+    if(acao < 0.20){
+      fazerPose(el, tipo, 'espreguicando', 1000);
+      return;
+    }
+    if(acao < 0.28){
+      fazerPose(el, tipo, 'olhando', 1600);
+      return;
+    }
+    if(acao < 0.35){
+      fazerPose(el, tipo, 'acenando', 2200);
+      return;
+    }
+    if(acao < 0.43){
+      fazerPose(el, tipo, 'descansando', 2600);
       return;
     }
     // Os dois mascotes usam o site de verdade: se escondem atras dos jogos
     // (espiando por cima do card) e de vez em quando pousam em cima de um
     // botao da barra superior ou da dock lateral.
-    if(acao < 0.38){
+    if(acao < 0.68){
       esconderAtrasDeCard(el, tipo);
       return;
     }
-    if(acao < 0.55){
+    if(acao < 0.83){
       pousarNaBarra(el, tipo);
       return;
     }
@@ -5075,12 +5297,12 @@ idiomaBtn.addEventListener('click', function(){
     var atualX = parseFloat(el.dataset.x) || 0;
     var atualY = parseFloat(el.dataset.y) || 0;
     var dist = Math.hypot(destX - atualX, destY - atualY);
-    var duracao = Math.max(1.3, dist / 65);
+    var duracao = Math.max(1.3, dist / (58 + Math.random() * 16));
 
     el.classList.toggle('flip', destX < atualX);
-    el.classList.remove('idle', 'hiding', 'peeking', 'perched');
+    el.classList.remove('idle', 'hiding', 'peeking', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
     el.classList.add('walking');
-    el.style.transition = 'transform ' + duracao + 's ease-in-out';
+    el.style.transition = 'transform ' + duracao + 's cubic-bezier(.4,.04,.32,1)';
     el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
     el.dataset.x = destX; el.dataset.y = destY;
 
@@ -5103,6 +5325,7 @@ idiomaBtn.addEventListener('click', function(){
         }, 900);
       } else {
         el.classList.add('idle');
+        retriggerAnim(el, 'pousando');
         setTimeout(function(){ vagar(el, tipo); }, 500 + Math.random() * 1600);
       }
     }, duracao * 1000);
@@ -5134,23 +5357,95 @@ idiomaBtn.addEventListener('click', function(){
     var atualX = parseFloat(el.dataset.x) || 0;
     var atualY = parseFloat(el.dataset.y) || 0;
     var dist = Math.hypot(destX - atualX, destY - atualY);
-    var duracao = Math.max(1.1, dist / 70);
+    var duracao = Math.max(1.1, dist / (62 + Math.random() * 16));
 
     el.classList.toggle('flip', destX < atualX);
-    el.classList.remove('idle', 'hiding', 'peeking', 'perched');
+    el.classList.remove('idle', 'hiding', 'peeking', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
     el.classList.add('walking');
-    el.style.transition = 'transform ' + duracao + 's ease-in-out';
+    el.style.transition = 'transform ' + duracao + 's cubic-bezier(.4,.04,.32,1)';
     el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
     el.dataset.x = destX; el.dataset.y = destY;
 
     setTimeout(function(){
       el.classList.remove('walking');
       el.classList.add('perched', 'idle');
+      retriggerAnim(el, 'pousando');
       setTimeout(function(){
         el.classList.remove('perched');
         setTimeout(function(){ vagar(el, tipo); }, 300);
       }, 1600 + Math.random() * 1400);
     }, duracao * 1000);
+  }
+
+  function ligarReacoesDoSite(layer, ghost, xiao){
+    try{
+      var ultimaReacao = 0;
+      function podeReagir(){
+        var agora = Date.now();
+        if(agora - ultimaReacao < 6000) return false;
+        ultimaReacao = agora;
+        return true;
+      }
+      function reagirCurioso(){
+        if(!podeReagir()) return;
+        [ghost, xiao].forEach(function(m){
+          if(m.classList.contains('idle')){
+            retriggerAnim(m, 'olhando');
+            setTimeout(function(){ m.classList.remove('olhando'); }, 1650);
+          }
+        });
+      }
+      function reagirSurpresa(){
+        if(!podeReagir()) return;
+        [ghost, xiao].forEach(function(m){
+          if(m.classList.contains('idle')){
+            retriggerAnim(m, 'surpreso');
+            setTimeout(function(){ m.classList.remove('surpreso'); }, 520);
+          }
+        });
+      }
+      function reagirFesta(x, y){
+        if(!podeReagir()) return;
+        criarConfete(layer, x, y);
+        criarBurst(layer, x, y, '#ffd23d');
+      }
+
+      var busca = document.getElementById('searchInput');
+      if(busca) busca.addEventListener('input', reagirCurioso);
+
+      // Fase de captura: pegamos a posicao do botao antes do render() trocar
+      // o HTML da grade. O clique em si continua sendo tratado normalmente
+      // pelo listener que ja existe em cada .fav-btn — aqui so reagimos.
+      document.addEventListener('click', function(e){
+        var favBtn = e.target.closest && e.target.closest('.fav-btn');
+        if(!favBtn) return;
+        var id = parseInt(favBtn.dataset.id, 10);
+        var vaiFavoritar = favoritos.indexOf(id) === -1;
+        if(vaiFavoritar){
+          var r = favBtn.getBoundingClientRect();
+          reagirFesta(r.left + r.width / 2, r.top + r.height / 2);
+        }
+      }, true);
+
+      ['temaBtn', 'paletaBtn', 'skinBtn'].forEach(function(id){
+        var btn = document.getElementById(id);
+        if(btn) btn.addEventListener('click', reagirSurpresa);
+      });
+
+      var balaoWrap = document.getElementById('liveBalloonWrap');
+      if(balaoWrap && window.MutationObserver){
+        var tinhaLive = balaoWrap.children.length > 0;
+        var obs = new MutationObserver(function(){
+          var temLiveAgora = balaoWrap.children.length > 0;
+          if(temLiveAgora && !tinhaLive){
+            var r = balaoWrap.getBoundingClientRect();
+            reagirFesta(r.left + r.width / 2, r.bottom + 10);
+          }
+          tinhaLive = temLiveAgora;
+        });
+        obs.observe(balaoWrap, { childList: true });
+      }
+    }catch(e){ /* reacoes com o site sao um bonus — nunca podem travar nada */ }
   }
 
   function iniciarMascotes(){
@@ -5165,6 +5460,7 @@ idiomaBtn.addEventListener('click', function(){
       var xiao = criarMascote(layer, 'xiao', XIAO_SVG);
       setTimeout(function(){ vagar(ghost, 'ghost'); }, 800);
       setTimeout(function(){ vagar(xiao, 'xiao'); }, 1600);
+      ligarReacoesDoSite(layer, ghost, xiao);
       // As cenas de interacao (perseguicao, briga, portal, buraco negro,
       // bomba) sao mais intensas — pulamos elas se a pessoa pediu "reduzir
       // movimento" no sistema, mas os mascotes continuam aparecendo normal.
