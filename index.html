@@ -1096,7 +1096,7 @@
   .mascot.flip .mascot-sprite{ transform: scaleX(-1); }
   .mascot svg{ display:block; filter: drop-shadow(0 3px 4px rgba(0,0,0,.45)); overflow:visible; }
 
-  .mascot-ghost svg{ width:46px; height:52px; }
+  .mascot-ghost svg{ width:76px; height:86px; }
   .mascot-ghost .g-drift{ animation: ghostDrift 2.1s ease-in-out infinite; }
   @keyframes ghostDrift{ 0%,100%{ transform: translateY(0);} 50%{ transform: translateY(-6px);} }
   .mascot-ghost .g-eyes{ animation: ghostBlink 3.2s infinite; transform-origin: 100px 92px; }
@@ -1107,7 +1107,7 @@
   .mascot-ghost.hiding .mascot-sprite{ transform: scale(0.55); opacity:0.4; }
   .mascot-ghost.peeking .mascot-sprite{ transform: scale(0.85); opacity:0.85; }
 
-  .mascot-xiao svg{ width:34px; height:60px; }
+  .mascot-xiao svg{ width:52px; height:92px; }
   .mascot-xiao .x-rig{ transform-origin: 30px 40px; }
   .mascot-xiao .x-armL{ transform-origin: 24px 20px; }
   .mascot-xiao .x-armR{ transform-origin: 36px 20px; }
@@ -1141,8 +1141,8 @@
   @keyframes xkSpeed{ 0%,45%{ opacity:0;} 50%,58%{ opacity:1;} 65%,100%{ opacity:0;} }
 
   @media (max-width: 600px){
-    .mascot-ghost svg{ width:36px; height:40px; }
-    .mascot-xiao svg{ width:26px; height:46px; }
+    .mascot-ghost svg{ width:56px; height:64px; }
+    .mascot-xiao svg{ width:38px; height:68px; }
   }
 
   /* ===== Interacoes entre mascotes (perseguicao, briga, portal, buraco
@@ -1716,7 +1716,7 @@ const capas = {
   131: "https://cdn.thegamesdb.net/images/original/boxart/front/87924-1.jpg",
   132: "https://cdn.thegamesdb.net/images/original/boxart/front/98756-1.jpg",
   133: "https://cdn.thegamesdb.net/images/original/boxart/front/68242-1.jpg",
-  134: "https://cdn.thegamesdb.net/images/original/boxart/front/114902-1.jpg",
+  134: "https://cdn.thegamesdb.net/images/original/boxart/front/116099-1.jpg",
   135: "https://cdn.thegamesdb.net/images/original/boxart/front/29277-1.jpg",
   136: "https://cdn.thegamesdb.net/images/original/boxart/front/75308-1.jpg",
   137: "https://cdn.thegamesdb.net/images/original/boxart/front/75954-1.jpg",
@@ -4511,8 +4511,8 @@ idiomaBtn.addEventListener('click', function(){
 
   function areaSegura(){
     return {
-      minX: 10, maxX: Math.max(10, window.innerWidth - 70),
-      minY: 84, maxY: Math.max(84, window.innerHeight - 150)
+      minX: 10, maxX: Math.max(10, window.innerWidth - 100),
+      minY: 84, maxY: Math.max(84, window.innerHeight - 190)
     };
   }
 
@@ -4758,7 +4758,7 @@ idiomaBtn.addEventListener('click', function(){
   function vagar(el, tipo){
     if(!document.body.contains(el) || estado.interagindo) return;
     var acao = Math.random();
-    if(tipo === 'xiao' && acao < 0.25){
+    if(tipo === 'xiao' && acao < 0.18){
       el.classList.remove('idle');
       el.classList.add('kicking');
       var aoTerminar = function(){
@@ -4770,18 +4770,25 @@ idiomaBtn.addEventListener('click', function(){
       el.addEventListener('animationend', aoTerminar);
       return;
     }
-    if(tipo === 'ghost' && acao < 0.3){
+    // Os dois mascotes usam o site de verdade: se escondem atras dos jogos
+    // (espiando por cima do card) e de vez em quando pousam em cima de um
+    // botao da barra superior ou da dock lateral.
+    if(acao < 0.38){
       esconderAtrasDeCard(el, tipo);
+      return;
+    }
+    if(acao < 0.55){
+      pousarNaBarra(el, tipo);
       return;
     }
     moverPara(el, tipo, null);
   }
 
   function moverPara(el, tipo, cardAlvo){
-    var destX, destY, corte;
+    var destX, destY;
     if(cardAlvo){
       var r = cardAlvo.getBoundingClientRect();
-      destX = r.right - 40; destY = r.bottom - 48;
+      destX = r.left + r.width / 2 - 24; destY = r.top - 18;
     } else {
       var area = areaSegura();
       destX = area.minX + Math.random() * (area.maxX - area.minX);
@@ -4793,7 +4800,7 @@ idiomaBtn.addEventListener('click', function(){
     var duracao = Math.max(1.3, dist / 65);
 
     el.classList.toggle('flip', destX < atualX);
-    el.classList.remove('idle', 'hiding', 'peeking');
+    el.classList.remove('idle', 'hiding', 'peeking', 'perched');
     el.classList.add('walking');
     el.style.transition = 'transform ' + duracao + 's ease-in-out';
     el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
@@ -4808,10 +4815,14 @@ idiomaBtn.addEventListener('click', function(){
           el.classList.add('peeking');
           setTimeout(function(){
             el.classList.remove('peeking');
-            el.classList.add('idle');
-            setTimeout(function(){ vagar(el, tipo); }, 300);
+            el.classList.add('hiding');
+            setTimeout(function(){
+              el.classList.remove('hiding');
+              el.classList.add('idle');
+              setTimeout(function(){ vagar(el, tipo); }, 300);
+            }, 700);
           }, 900);
-        }, 1500);
+        }, 900);
       } else {
         el.classList.add('idle');
         setTimeout(function(){ vagar(el, tipo); }, 500 + Math.random() * 1600);
@@ -4822,11 +4833,46 @@ idiomaBtn.addEventListener('click', function(){
   function esconderAtrasDeCard(el, tipo){
     var cards = Array.prototype.filter.call(document.querySelectorAll('.card'), function(c){
       var r = c.getBoundingClientRect();
-      return r.top > 84 && r.top < window.innerHeight - 120 && r.left > 0 && r.left < window.innerWidth - 60 && r.width > 0;
+      return r.top > 140 && r.top < window.innerHeight - 120 && r.left > 0 && r.left < window.innerWidth - 60 && r.width > 0;
     });
     if(!cards.length){ moverPara(el, tipo, null); return; }
     var card = cards[Math.floor(Math.random() * cards.length)];
     moverPara(el, tipo, card);
+  }
+
+  function pousarNaBarra(el, tipo){
+    var alvos = Array.prototype.filter.call(
+      document.querySelectorAll('.top-controls-bar button, .side-dock a, .side-dock button'),
+      function(b){
+        var r = b.getBoundingClientRect();
+        return r.width > 0 && r.top >= 0 && r.top < window.innerHeight && r.left >= 0 && r.left < window.innerWidth;
+      }
+    );
+    if(!alvos.length){ moverPara(el, tipo, null); return; }
+    var alvo = alvos[Math.floor(Math.random() * alvos.length)];
+    var r = alvo.getBoundingClientRect();
+    var destX = r.left + r.width / 2 - 22;
+    var destY = r.top - 36;
+    var atualX = parseFloat(el.dataset.x) || 0;
+    var atualY = parseFloat(el.dataset.y) || 0;
+    var dist = Math.hypot(destX - atualX, destY - atualY);
+    var duracao = Math.max(1.1, dist / 70);
+
+    el.classList.toggle('flip', destX < atualX);
+    el.classList.remove('idle', 'hiding', 'peeking', 'perched');
+    el.classList.add('walking');
+    el.style.transition = 'transform ' + duracao + 's ease-in-out';
+    el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
+    el.dataset.x = destX; el.dataset.y = destY;
+
+    setTimeout(function(){
+      el.classList.remove('walking');
+      el.classList.add('perched', 'idle');
+      setTimeout(function(){
+        el.classList.remove('perched');
+        setTimeout(function(){ vagar(el, tipo); }, 300);
+      }, 1600 + Math.random() * 1400);
+    }, duracao * 1000);
   }
 
   function iniciarMascotes(){
