@@ -76,12 +76,60 @@
   body[data-paleta="ps3"]::after{ background: radial-gradient(circle at 85% 100%, rgba(30,111,217,0.14), transparent 60%); }
   body[data-paleta="roxo"]::after{ background: radial-gradient(circle at 50% 50%, rgba(162,51,240,0.13), transparent 65%); }
 
-  /* MODO PS3 (XMB) -- skin visual completo por cima do tema/paleta: fonte
-     arredondada tipo interface de console, titulo com brilho holografico e
-     duas camadas de "onda" de luz azul (SVG de verdade, nao listras) lembrando
-     a XMB do PS3, cada camada andando num sentido/velocidade diferente pra
-     dar profundidade. Ligado pelo botao 💿 na barra superior. */
-  body[data-skin="ps3"]{ --tema-accent:#2f8dff; --tema-accent-ink:#ffffff; }
+  /* =====================================================================
+     SISTEMA DE DESIGNS DE EPOCA (skins) -- TOKENS
+     Cada skin (ps3, y2k, e qualquer um que a gente criar depois) so precisa
+     definir esse punhado de variaveis --skin-*. Um UNICO bloco de regras logo
+     abaixo aplica essas variaveis nos componentes reais (card, stat, botao,
+     etc). Antes, cada skin novo repetia a mesma lista de ~7 seletores do
+     zero -- agora um skin novo = so declarar as variaveis, nada mais.
+     Coisas muito particulares de cada skin (titulo, fundo/onda, hover
+     especial) continuam em blocos proprios logo depois dos tokens. */
+  body[data-skin="ps3"]{
+    --tema-accent:#2f8dff; --tema-accent-ink:#ffffff;
+    --skin-font: 'M PLUS Rounded 1c', 'Space Grotesk', sans-serif;
+    --skin-surface-bg: linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.02) 45%, rgba(0,20,50,0.08) 100%);
+    --skin-border-color: rgba(140,195,255,0.4);
+    --skin-surface-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 10px rgba(0,60,140,0.3);
+    --skin-active-bg: linear-gradient(180deg, #7ec4ff 0%, #1e6fd9 100%);
+    --skin-active-border: #1e6fd9;
+    --skin-glow: rgba(47,141,255,.7);
+  }
+  body[data-skin="y2k"]{
+    --skin-font: 'Trebuchet MS', 'Tahoma', sans-serif;
+    --skin-surface-bg: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.05) 48%, rgba(0,60,140,0.1) 52%, rgba(0,60,140,0.02) 100%);
+    --skin-border-color: rgba(120,190,255,0.55);
+    --skin-surface-shadow: inset 0 1px 1px rgba(255,255,255,.6), 0 2px 6px rgba(0,40,100,.3);
+    --skin-active-bg: linear-gradient(180deg, #cfe9ff 0%, #4f9df0 50%, #1e6fd9 100%);
+    --skin-active-border: #1e6fd9;
+    --skin-glow: rgba(80,170,255,.6);
+  }
+  /* bloco compartilhado: so entra em acao quando data-skin e ps3 ou y2k
+     (o modo "moderno"/padrao nao tem essas variaveis definidas, entao
+     nenhum desses seletores casa e o visual atual continua 100% igual) */
+  body[data-skin="ps3"] .stat, body[data-skin="y2k"] .stat,
+  body[data-skin="ps3"] .search-box input, body[data-skin="y2k"] .search-box input,
+  body[data-skin="ps3"] .filters button, body[data-skin="y2k"] .filters button,
+  body[data-skin="ps3"] .toggle-venda, body[data-skin="y2k"] .toggle-venda,
+  body[data-skin="ps3"] .card, body[data-skin="y2k"] .card,
+  body[data-skin="ps3"] .top-controls-bar button, body[data-skin="y2k"] .top-controls-bar button,
+  body[data-skin="ps3"] .side-dock a, body[data-skin="y2k"] .side-dock a,
+  body[data-skin="ps3"] .side-dock button, body[data-skin="y2k"] .side-dock button{
+    font-family: var(--skin-font);
+    background-image: var(--skin-surface-bg);
+    border: 1px solid var(--skin-border-color) !important;
+    box-shadow: var(--skin-surface-shadow);
+    transition: transform .2s, box-shadow .2s, border-color .2s;
+  }
+  body[data-skin="ps3"] .filters button.active, body[data-skin="y2k"] .filters button.active{
+    background-image: var(--skin-active-bg); color:#fff; border-color: var(--skin-active-border) !important;
+  }
+  body[data-skin="ps3"] .section-title, body[data-skin="y2k"] .section-title{ font-family: var(--skin-font); }
+
+  /* PS3 (XMB) -- particularidades: titulo com brilho holografico, duas
+     camadas de "onda" de luz azul (SVG de verdade, nao listras) lembrando a
+     XMB, cada camada andando num sentido/velocidade diferente pra dar
+     profundidade, e hover com glow. Ligado pelo botao 💿 na barra superior. */
   body[data-skin="ps3"]::before{
     content:''; position:fixed; inset:0; z-index:-3; pointer-events:none;
     background:
@@ -102,66 +150,37 @@
   @keyframes ondaPs3A{ 0%{ background-position: 0 100%; } 100%{ background-position: -1600px 100%; } }
   @keyframes ondaPs3B{ 0%{ background-position: 0 100%; } 100%{ background-position: -2000px 100%; } }
   body[data-skin="ps3"] .topbar h1{
-    font-family: 'M PLUS Rounded 1c', 'Russo One', 'Space Grotesk', sans-serif;
+    font-family: var(--skin-font), 'Russo One', 'Space Grotesk', sans-serif;
     font-weight: 700; letter-spacing: .5px;
     background: linear-gradient(180deg, #f3fbff 0%, #8fcaff 42%, #2f8dff 58%, #0b3d80 100%);
     -webkit-background-clip: text; background-clip: text; color: transparent;
     text-shadow: 0 1px 0 rgba(255,255,255,0.35);
   }
-  body[data-skin="ps3"] .stat,
-  body[data-skin="ps3"] .search-box input,
-  body[data-skin="ps3"] .filters button,
-  body[data-skin="ps3"] .toggle-venda,
-  body[data-skin="ps3"] .card,
-  body[data-skin="ps3"] .top-controls-bar button,
-  body[data-skin="ps3"] .side-dock a, body[data-skin="ps3"] .side-dock button{
-    font-family: 'M PLUS Rounded 1c', 'Space Grotesk', sans-serif;
-    background-image: linear-gradient(180deg, rgba(255,255,255,0.16) 0%, rgba(255,255,255,0.02) 45%, rgba(0,20,50,0.08) 100%);
-    border-color: rgba(140,195,255,0.4) !important;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.3), 0 2px 10px rgba(0,60,140,0.3);
-    transition: transform .2s, box-shadow .2s, border-color .2s;
-  }
-  body[data-skin="ps3"] .filters button.active{
-    background: linear-gradient(180deg, #7ec4ff 0%, #1e6fd9 100%); color:#fff; border-color:#1e6fd9 !important;
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 0 16px rgba(47,141,255,.6);
-  }
+  body[data-skin="ps3"] .filters button.active{ box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 0 16px var(--skin-glow); }
   body[data-skin="ps3"] .card:hover{
     border-color: rgba(140,195,255,0.8) !important; box-shadow: 0 16px 36px rgba(10,60,140,0.5);
     transform: translateY(-4px) scale(1.015);
   }
   body[data-skin="ps3"] .top-controls-bar button:hover, body[data-skin="ps3"] .side-dock a:hover, body[data-skin="ps3"] .side-dock button:hover{
-    box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 0 14px rgba(47,141,255,.7);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 0 14px var(--skin-glow);
     transform: scale(1.12);
   }
-  body[data-skin="ps3"] .section-title{ font-family:'M PLUS Rounded 1c','Russo One',sans-serif; letter-spacing:.4px; }
 
-  /* MODO Y2K (PC/Windows dos anos 2000) -- botoes "gel" brilhosos tipo XP/Web
-     2.0, fonte de sistema da epoca (Trebuchet/Tahoma) e um ceu gradiente meio
-     "papel de parede de Windows" beeem sutil atras do conteudo escuro do site.
-     Ligado pelo botao 💾 na barra superior. */
+  /* Y2K (PC/Windows dos anos 2000) -- particularidades: botoes "gel" em
+     formato de pilula, cantos de card mais retos, ceu gradiente bem sutil
+     de fundo tipo papel de parede de Windows. Ligado pelo botao 💾. */
   body[data-skin="y2k"]::before{
     content:''; position:fixed; inset:0; z-index:-3; pointer-events:none; opacity:.35;
     background: linear-gradient(180deg, #2f7fe0 0%, #a9d8ff 32%, #eaf7d8 52%, #bfe08a 62%, #5a9a4a 100%);
   }
   body[data-skin="y2k"] .topbar h1{
-    font-family:'Trebuchet MS','Tahoma',sans-serif; font-weight:800; letter-spacing:0; color:#eaf4ff;
-    text-shadow: 0 1px 0 rgba(255,255,255,.5), 0 2px 6px rgba(0,60,140,.7), 0 0 22px rgba(80,170,255,.5);
+    font-family: var(--skin-font); font-weight:800; letter-spacing:0; color:#eaf4ff;
+    text-shadow: 0 1px 0 rgba(255,255,255,.5), 0 2px 6px rgba(0,60,140,.7), 0 0 22px var(--skin-glow);
   }
-  body[data-skin="y2k"] .stat,
-  body[data-skin="y2k"] .search-box input,
-  body[data-skin="y2k"] .filters button,
-  body[data-skin="y2k"] .toggle-venda,
-  body[data-skin="y2k"] .top-controls-bar button,
-  body[data-skin="y2k"] .side-dock a, body[data-skin="y2k"] .side-dock button{
-    font-family:'Trebuchet MS','Tahoma',sans-serif;
-    background-image: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.05) 48%, rgba(0,60,140,0.1) 52%, rgba(0,60,140,0.02) 100%);
-    border: 1px solid rgba(120,190,255,0.55) !important;
+  body[data-skin="y2k"] .stat, body[data-skin="y2k"] .search-box input,
+  body[data-skin="y2k"] .filters button, body[data-skin="y2k"] .toggle-venda,
+  body[data-skin="y2k"] .top-controls-bar button, body[data-skin="y2k"] .side-dock a, body[data-skin="y2k"] .side-dock button{
     border-radius: 999px !important;
-    box-shadow: inset 0 1px 1px rgba(255,255,255,.6), 0 2px 6px rgba(0,40,100,.3);
-  }
-  body[data-skin="y2k"] .filters button.active{
-    background-image: linear-gradient(180deg, #cfe9ff 0%, #4f9df0 50%, #1e6fd9 100%); color:#fff;
-    border-color:#1e6fd9 !important;
   }
   body[data-skin="y2k"] .card{
     border-radius: 10px !important;
@@ -169,7 +188,6 @@
     box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 3px 12px rgba(0,40,100,.35);
   }
   body[data-skin="y2k"] .card:hover{ border-color: rgba(140,200,255,0.7) !important; }
-  body[data-skin="y2k"] .section-title{ font-family:'Trebuchet MS','Tahoma',sans-serif; }
 
   /* FILTRO CRT -- scanlines + vinheta + leve flicker, so um overlay decorativo
      (pointer-events:none), nao interfere em clique nenhum. Ligado pelo botao 📺. */
