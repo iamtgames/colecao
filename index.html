@@ -1158,7 +1158,40 @@
   .mascot.bump-hit .mascot-sprite{ animation: bumpShake .28s ease-in-out; }
   @keyframes bumpShake{ 0%,100%{ transform: translateX(0);} 25%{ transform: translateX(-4px);} 75%{ transform: translateX(4px);} }
 
-  .mascot-fx{ position:absolute; top:0; left:0; pointer-events:none; }
+  .mascot-fx{ position:absolute; top:0; left:0; pointer-events:none; transition: opacity .25s ease; }
+
+  /* ===== Equipamentos/props das cenas extras ===== */
+  .fx-sword{ width:6px; height:36px; }
+  .fx-sword .lamina{ position:absolute; inset:0; background:linear-gradient(180deg,#eaf6ff,#7ec4ff); border-radius:3px; box-shadow:0 0 8px 2px rgba(126,196,255,.8); }
+  .fx-shield{ width:30px; height:30px; border-radius:50%; background:radial-gradient(circle, rgba(126,196,255,.35), rgba(126,196,255,.05)); border:2px solid #7ec4ff; box-shadow:0 0 10px 3px rgba(126,196,255,.5); }
+  .fx-hat{ width:0; height:0; border-left:14px solid transparent; border-right:14px solid transparent; border-bottom:26px solid #ff5f6d; }
+  .fx-hat::after{ content:''; position:absolute; top:-4px; left:-3px; width:6px; height:6px; border-radius:50%; background:#ffd23d; }
+  .fx-parachute{ width:50px; height:30px; }
+  .fx-parachute .capa{ position:absolute; inset:0; border-radius:50% 50% 0 0/100% 100% 0 0; background:linear-gradient(180deg,#ff8fa3,#b98fff); }
+  .fx-skate{ width:34px; height:8px; background:#1a1a1a; border-radius:4px; }
+  .fx-skate::before, .fx-skate::after{ content:''; position:absolute; bottom:-4px; width:8px; height:8px; border-radius:50%; background:#7ec4ff; }
+  .fx-skate::before{ left:2px; }
+  .fx-skate::after{ right:2px; }
+  .fx-rod{ width:3px; height:50px; background:#8a5a2a; border-radius:2px; }
+  .fx-rod .linha{ position:absolute; top:50px; left:1px; width:1px; height:26px; background:#cfd8e0; }
+  .fx-rod .anzol{ position:absolute; top:74px; left:-3px; width:8px; height:8px; border:2px solid #cfd8e0; border-top:none; border-left:none; border-radius:0 0 8px 0; }
+  .fx-jetflame{ width:12px; height:20px; }
+  .fx-jetflame::before{ content:''; position:absolute; inset:0; background:linear-gradient(180deg,#ffd23d,#ff5f2d); border-radius:0 0 8px 8px; animation: faiscaPisca .2s steps(1) infinite; }
+  .fx-disco{
+    width:26px; height:26px; border-radius:50%;
+    background: conic-gradient(#eaf6ff 0deg 45deg, #7ec4ff 45deg 90deg, #eaf6ff 90deg 135deg, #7ec4ff 135deg 180deg, #eaf6ff 180deg 225deg, #7ec4ff 225deg 270deg, #eaf6ff 270deg 315deg, #7ec4ff 315deg 360deg);
+    box-shadow:0 0 12px 4px rgba(126,196,255,.5); animation: portalSpin 1.2s linear infinite;
+  }
+  .fx-rope{ height:4px; background:#8a5a2a; border-radius:2px; }
+  .fx-flash{ width:100%; height:100%; background:#fff; opacity:0; transition: opacity .12s ease; }
+  .fx-polaroid{ width:60px; height:74px; background:#fff; border-radius:3px; box-shadow:0 6px 16px rgba(0,0,0,.4); }
+  .fx-polaroid .foto{ position:absolute; top:6px; left:6px; right:6px; height:52px; background:linear-gradient(135deg,#b98fff,#7ec4ff); border-radius:2px; }
+  .fx-confete-wrap{ width:0; height:0; }
+  .fx-confete-wrap span{
+    position:absolute; top:0; left:0; width:6px; height:9px; opacity:1;
+    transform:translate(0,0) rotate(0deg);
+    transition: transform .85s cubic-bezier(.2,.6,.4,1), opacity .85s ease;
+  }
 
   .fx-portal{ width:54px; height:54px; animation: portalPop .3s ease-out; }
   .fx-portal.closing{ animation: portalPop .3s ease-in reverse; }
@@ -4545,16 +4578,16 @@ idiomaBtn.addEventListener('click', function(){
     el.classList.add(cls);
   }
 
-  function moverElementoPromise(el, destX, destY){
+  function moverElementoPromise(el, destX, destY, velocidade){
     return new Promise(function(resolve){
       var atualX = parseFloat(el.dataset.x) || 0;
       var atualY = parseFloat(el.dataset.y) || 0;
       var dist = Math.hypot(destX - atualX, destY - atualY);
-      var duracao = Math.max(0.5, dist / 95);
+      var duracao = Math.max(0.4, dist / (velocidade || 95));
       el.classList.toggle('flip', destX < atualX);
-      el.classList.remove('idle', 'hiding', 'peeking', 'kicking', 'sumindo', 'surgindo');
+      el.classList.remove('idle', 'hiding', 'peeking', 'kicking', 'sumindo', 'surgindo', 'perched');
       el.classList.add('walking');
-      el.style.transition = 'transform ' + duracao + 's ease-in-out';
+      el.style.transition = 'transform ' + duracao + 's ' + (velocidade && velocidade > 150 ? 'linear' : 'ease-in-out');
       el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
       el.dataset.x = destX; el.dataset.y = destY;
       setTimeout(function(){
@@ -4563,6 +4596,41 @@ idiomaBtn.addEventListener('click', function(){
         resolve();
       }, duracao * 1000);
     });
+  }
+
+  function criarProp(layer, x, y, className, innerHTML){
+    var el = document.createElement('div');
+    el.className = 'mascot-fx ' + className;
+    el.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    if(innerHTML) el.innerHTML = innerHTML;
+    layer.appendChild(el);
+    return el;
+  }
+  function removerPropSuave(el){
+    el.style.opacity = '0';
+    setTimeout(function(){ el.remove(); }, 260);
+  }
+  function criarConfete(layer, x, y){
+    var wrap = document.createElement('div');
+    wrap.className = 'mascot-fx fx-confete-wrap';
+    wrap.style.transform = 'translate(' + x + 'px,' + y + 'px)';
+    layer.appendChild(wrap);
+    var cores = ['#ff5f6d', '#ffd23d', '#7ec4ff', '#3ddc84', '#b98fff'];
+    for(var i = 0; i < 14; i++){
+      (function(i){
+        var piece = document.createElement('span');
+        piece.style.background = cores[i % cores.length];
+        var dx = Math.random() * 120 - 60;
+        var dy = 60 + Math.random() * 70;
+        var rot = Math.random() * 360;
+        wrap.appendChild(piece);
+        requestAnimationFrame(function(){
+          piece.style.transform = 'translate(' + dx + 'px,' + dy + 'px) rotate(' + rot + 'deg)';
+          piece.style.opacity = '0';
+        });
+      })(i);
+    }
+    setTimeout(function(){ wrap.remove(); }, 900);
   }
 
   function criarBurst(layer, x, y, cor){
@@ -4732,7 +4800,190 @@ idiomaBtn.addEventListener('click', function(){
     await Promise.all([fugaGhost, fugaXiao]);
   }
 
-  var CENAS_DISPONIVEIS = [cenaPerseguicao, cenaBriga, cenaPortal, cenaBuracoNegro, cenaBomba];
+  // ---- Mais cenas: equipamentos e novas interacoes entre os dois ----
+  async function cenaDuelo(layer, ghost, xiao){
+    var area = areaSegura();
+    var mx = area.minX + Math.random() * (area.maxX - area.minX);
+    var my = area.minY + Math.random() * (area.maxY - area.minY);
+    await Promise.all([
+      moverElementoPromise(xiao, clampeia(mx - 30, area.minX, area.maxX), my),
+      moverElementoPromise(ghost, clampeia(mx + 30, area.minX, area.maxX), my)
+    ]);
+    var espada = criarProp(layer, mx - 14, my - 10, 'fx-sword', '<div class="lamina"></div>');
+    var escudo = criarProp(layer, mx + 16, my - 6, 'fx-shield', '');
+    await esperar(200);
+    for(var i = 0; i < 3; i++){
+      retriggerAnim(xiao, 'kicking');
+      criarBurst(layer, mx, my - 4, i % 2 ? '#7ec4ff' : '#eaf6ff');
+      await esperar(380);
+    }
+    removerPropSuave(espada);
+    removerPropSuave(escudo);
+    await esperar(250);
+  }
+
+  async function cenaEscudoBloqueio(layer, ghost, xiao){
+    var area = areaSegura();
+    var gx = parseFloat(ghost.dataset.x) || 0, gy = parseFloat(ghost.dataset.y) || 0;
+    await moverElementoPromise(xiao, clampeia(gx + 50, area.minX, area.maxX), gy);
+    var escudo = criarProp(layer, gx - 8, gy + 6, 'fx-shield', '');
+    retriggerAnim(xiao, 'kicking');
+    await esperar(500);
+    criarBurst(layer, gx + 20, gy + 20, '#7ec4ff');
+    await esperar(400);
+    removerPropSuave(escudo);
+    await esperar(250);
+  }
+
+  async function cenaRouboDeChapeu(layer, ghost, xiao){
+    var area = areaSegura();
+    var gx = parseFloat(ghost.dataset.x) || 0, gy = parseFloat(ghost.dataset.y) || 0;
+    var chapeu = criarProp(layer, gx + 14, gy - 14, 'fx-hat', '');
+    await esperar(400);
+    await moverElementoPromise(xiao, clampeia(gx + 10, area.minX, area.maxX), gy);
+    var alvo = clampeia(gx + 160, area.minX, area.maxX);
+    var segue = setInterval(function(){
+      var xx = parseFloat(xiao.dataset.x) || 0, xy = parseFloat(xiao.dataset.y) || 0;
+      chapeu.style.transform = 'translate(' + (xx + 10) + 'px,' + (xy - 16) + 'px)';
+    }, 50);
+    await moverElementoPromise(xiao, alvo, clampeia(gy - 20, area.minY, area.maxY));
+    clearInterval(segue);
+    await moverElementoPromise(ghost, clampeia(alvo - 50, area.minX, area.maxX), gy);
+    criarConfete(layer, alvo, gy);
+    removerPropSuave(chapeu);
+    await esperar(250);
+  }
+
+  async function cenaParaquedas(layer, ghost, xiao){
+    var area = areaSegura();
+    var alvo = Math.random() < 0.5 ? ghost : xiao;
+    var destX = area.minX + Math.random() * (area.maxX - area.minX);
+    alvo.style.transition = 'none';
+    alvo.style.transform = 'translate(' + destX + 'px,-80px)';
+    alvo.dataset.x = destX; alvo.dataset.y = -80;
+    var paraquedas = criarProp(layer, destX + 8, -110, 'fx-parachute', '<div class="capa"></div>');
+    var destY = area.minY + Math.random() * (area.maxY - area.minY);
+    await esperar(120);
+    await moverElementoPromise(alvo, destX, destY);
+    removerPropSuave(paraquedas);
+    await esperar(250);
+  }
+
+  async function cenaPatinete(layer, ghost, xiao){
+    var area = areaSegura();
+    var patinador = Math.random() < 0.5 ? xiao : ghost;
+    var skate = criarProp(layer, parseFloat(patinador.dataset.x) || 0, (parseFloat(patinador.dataset.y) || 0) + 40, 'fx-skate', '');
+    var destX = area.minX + Math.random() * (area.maxX - area.minX);
+    var destY = parseFloat(patinador.dataset.y) || area.minY;
+    var segue = setInterval(function(){
+      var xx = parseFloat(patinador.dataset.x) || 0, xy = parseFloat(patinador.dataset.y) || 0;
+      skate.style.transform = 'translate(' + xx + 'px,' + (xy + 42) + 'px)';
+    }, 50);
+    retriggerAnim(patinador, patinador === xiao ? 'kicking' : 'bump-hit');
+    await moverElementoPromise(patinador, destX, destY, 150);
+    clearInterval(segue);
+    removerPropSuave(skate);
+    await esperar(250);
+  }
+
+  async function cenaPescaria(layer, ghost, xiao){
+    var area = areaSegura();
+    var pescador = Math.random() < 0.5 ? xiao : ghost;
+    var peixe = pescador === xiao ? ghost : xiao;
+    var px = parseFloat(pescador.dataset.x) || 0, py = parseFloat(pescador.dataset.y) || 0;
+    var vara = criarProp(layer, px + 20, py - 30, 'fx-rod', '<div class="linha"></div><div class="anzol"></div>');
+    await esperar(300);
+    var alvo = clampeia(px + 60, area.minX, area.maxX);
+    await moverElementoPromise(peixe, alvo, py + 6);
+    removerPropSuave(vara);
+    criarBurst(layer, alvo, py, '#7ec4ff');
+    await esperar(300);
+  }
+
+  async function cenaJetpack(layer, ghost, xiao){
+    var area = areaSegura();
+    var voador = Math.random() < 0.5 ? ghost : xiao;
+    var jato = criarProp(layer, parseFloat(voador.dataset.x) || 0, (parseFloat(voador.dataset.y) || 0) + 40, 'fx-jetflame', '');
+    var destX = area.minX + Math.random() * (area.maxX - area.minX);
+    var destY = area.minY + Math.random() * (area.maxY - area.minY);
+    var segue = setInterval(function(){
+      var xx = parseFloat(voador.dataset.x) || 0, xy = parseFloat(voador.dataset.y) || 0;
+      jato.style.transform = 'translate(' + (xx + 14) + 'px,' + (xy + 46) + 'px)';
+    }, 40);
+    await moverElementoPromise(voador, destX, destY, 220);
+    clearInterval(segue);
+    removerPropSuave(jato);
+    await esperar(250);
+  }
+
+  async function cenaFesta(layer, ghost, xiao){
+    var area = areaSegura();
+    var mx = area.minX + Math.random() * (area.maxX - area.minX);
+    var my = area.minY + Math.random() * (area.maxY - area.minY);
+    await Promise.all([
+      moverElementoPromise(ghost, clampeia(mx - 24, area.minX, area.maxX), my),
+      moverElementoPromise(xiao, clampeia(mx + 24, area.minX, area.maxX), my)
+    ]);
+    var disco = criarProp(layer, mx - 10, my - 70, 'fx-disco', '');
+    retriggerAnim(ghost, 'bump-hit');
+    retriggerAnim(xiao, 'kicking');
+    criarConfete(layer, mx, my - 20);
+    await esperar(900);
+    criarConfete(layer, mx, my - 20);
+    await esperar(700);
+    removerPropSuave(disco);
+    await esperar(250);
+  }
+
+  async function cenaCaboDeGuerra(layer, ghost, xiao){
+    var area = areaSegura();
+    var my = area.minY + Math.random() * (area.maxY - area.minY);
+    var gx = clampeia(area.minX + 20, area.minX, area.maxX);
+    var xx = clampeia(gx + 130, area.minX, area.maxX);
+    await Promise.all([
+      moverElementoPromise(ghost, gx, my),
+      moverElementoPromise(xiao, xx, my)
+    ]);
+    var corda = criarProp(layer, gx + 30, my + 20, 'fx-rope', '');
+    corda.style.width = Math.max(10, xx - gx - 20) + 'px';
+    await esperar(700);
+    retriggerAnim(ghost, 'bump-hit');
+    retriggerAnim(xiao, 'kicking');
+    await esperar(500);
+    criarBurst(layer, (gx + xx) / 2, my + 20, '#ffd23d');
+    removerPropSuave(corda);
+    await Promise.all([
+      moverElementoPromise(ghost, clampeia(gx - 40, area.minX, area.maxX), my + 10),
+      moverElementoPromise(xiao, clampeia(xx + 40, area.minX, area.maxX), my + 10)
+    ]);
+  }
+
+  async function cenaSelfie(layer, ghost, xiao){
+    var area = areaSegura();
+    var mx = area.minX + Math.random() * (area.maxX - area.minX);
+    var my = area.minY + Math.random() * (area.maxY - area.minY);
+    await Promise.all([
+      moverElementoPromise(ghost, clampeia(mx - 20, area.minX, area.maxX), my),
+      moverElementoPromise(xiao, clampeia(mx + 20, area.minX, area.maxX), my)
+    ]);
+    await esperar(400);
+    var flash = criarProp(layer, 0, 0, 'fx-flash', '');
+    requestAnimationFrame(function(){ flash.style.opacity = '0.85'; });
+    await esperar(120);
+    flash.style.opacity = '0';
+    setTimeout(function(){ flash.remove(); }, 260);
+    var polaroid = criarProp(layer, mx - 30, my - 90, 'fx-polaroid', '<div class="foto"></div>');
+    polaroid.style.transform += ' rotate(-6deg)';
+    await esperar(1400);
+    removerPropSuave(polaroid);
+    await esperar(250);
+  }
+
+  var CENAS_DISPONIVEIS = [
+    cenaPerseguicao, cenaBriga, cenaPortal, cenaBuracoNegro, cenaBomba,
+    cenaDuelo, cenaEscudoBloqueio, cenaRouboDeChapeu, cenaParaquedas, cenaPatinete,
+    cenaPescaria, cenaJetpack, cenaFesta, cenaCaboDeGuerra, cenaSelfie
+  ];
 
   function tentarCena(layer, ghost, xiao){
     if(!document.body.contains(ghost) || !document.body.contains(xiao)) return;
