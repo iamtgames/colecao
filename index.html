@@ -55,20 +55,35 @@
     --card-glass: rgba(255,255,255,0.7);
     --overlay-glass: rgba(255,255,255,0.7);
   }
-  /* PALETAS DE COR EXTRAS (acento visual por cima do tema claro/escuro) */
-  body[data-paleta="ps4"]{ --tema-accent:#2f8dff; --tema-accent-ink:#ffffff; }
-  body[data-paleta="ps3"]{ --tema-accent:#1e6fd9; --tema-accent-ink:#ffffff; }
-  body[data-paleta="roxo"]{ --tema-accent:#a233f0; --tema-accent-ink:#ffffff; }
+  /* PALETAS DE COR EXTRAS (acento visual por cima do tema claro/escuro).
+     Atualizadas pra usar o mesmo espirito de "token" dos designs de epoca:
+     alem da cor de destaque, agora tambem da um brilho/glow real em cards e
+     campos ao passar o mouse, em vez de so pintar o titulo e o botao ativo. */
+  body[data-paleta="ps4"]{ --tema-accent:#2f8dff; --tema-accent-ink:#ffffff; --tema-accent-rgb:47,141,255; }
+  body[data-paleta="ps3"]{ --tema-accent:#1e6fd9; --tema-accent-ink:#ffffff; --tema-accent-rgb:30,111,217; }
+  body[data-paleta="roxo"]{ --tema-accent:#a233f0; --tema-accent-ink:#ffffff; --tema-accent-rgb:162,51,240; }
   body[data-paleta]:not([data-paleta="padrao"]) .filters button.active{
     background: var(--tema-accent); color: var(--tema-accent-ink); border-color: var(--tema-accent);
   }
   body[data-paleta]:not([data-paleta="padrao"]) .topbar h1{ color: var(--tema-accent); }
   body[data-paleta]:not([data-paleta="padrao"]) .side-dock a:hover,
-  body[data-paleta]:not([data-paleta="padrao"]) .side-dock button:hover{
+  body[data-paleta]:not([data-paleta="padrao"]) .side-dock button:hover,
+  body[data-paleta]:not([data-paleta="padrao"]) .top-controls-bar button:hover{
     background: var(--tema-accent); border-color: var(--tema-accent); color:#fff;
+    box-shadow: 0 0 14px rgba(var(--tema-accent-rgb), 0.6);
   }
   body[data-paleta]:not([data-paleta="padrao"]) .plat-chip{ border-color: var(--tema-accent); }
   body[data-paleta]:not([data-paleta="padrao"]) #topBtn:hover{ background: var(--tema-accent); border-color: var(--tema-accent); }
+  body[data-paleta]:not([data-paleta="padrao"]) .card{ transition: border-color .2s, box-shadow .2s, transform .2s; }
+  body[data-paleta]:not([data-paleta="padrao"]) .card:hover{
+    border-color: rgba(var(--tema-accent-rgb), 0.6);
+    box-shadow: 0 16px 36px rgba(0,0,0,0.4), 0 0 20px rgba(var(--tema-accent-rgb), 0.3);
+  }
+  body[data-paleta]:not([data-paleta="padrao"]) .stat{ border-color: rgba(var(--tema-accent-rgb), 0.3); }
+  body[data-paleta]:not([data-paleta="padrao"]) .search-box input:focus{
+    border-color: var(--tema-accent); box-shadow: 0 0 0 3px rgba(var(--tema-accent-rgb), 0.18);
+  }
+  body[data-paleta]:not([data-paleta="padrao"]) .filters button:hover{ border-color: rgba(var(--tema-accent-rgb), 0.6); }
   body[data-paleta]::after{
     content:''; position:fixed; inset:0; pointer-events:none; z-index:-1;
   }
