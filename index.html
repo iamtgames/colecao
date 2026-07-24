@@ -111,7 +111,7 @@
     --skin-glow: rgba(47,141,255,.7);
   }
   body[data-skin="y2k"]{
-    --skin-font: 'Trebuchet MS', 'Tahoma', sans-serif;
+    --skin-font: 'Tahoma', 'Segoe UI', 'Trebuchet MS', sans-serif;
     --skin-surface-bg: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.05) 48%, rgba(0,60,140,0.1) 52%, rgba(0,60,140,0.02) 100%);
     --skin-border-color: rgba(120,190,255,0.55);
     --skin-surface-shadow: inset 0 1px 1px rgba(255,255,255,.6), 0 2px 6px rgba(0,40,100,.3);
@@ -151,19 +151,26 @@
       radial-gradient(ellipse 140% 55% at 50% 115%, rgba(30,111,217,0.4), transparent 62%),
       linear-gradient(180deg, #01050c 0%, #041225 55%, #01050c 100%);
   }
+  /* Onda v2: fitas finas de luz (stroke, nao preenchimento), flutuando no
+     meio da tela, sem nenhuma borda reta -- baseado em fotos reais da XMB
+     (pesquisadas). O caminho da fita tem periodo de exatamente 800 unidades
+     e o tile e desenhado com EXATAMENTE 800px de largura, entao a emenda
+     bate certinho (sem corte/salto) -- era esse o defeito da versao 1. */
   body[data-skin="ps3"]::after{
     content:'';
-    position:fixed; left:-20%; right:-20%; bottom:-8%; height:55%; z-index:-2; pointer-events:none;
+    position:fixed; inset:0; z-index:-2; pointer-events:none;
     background-image:
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 300'%3E%3Cdefs%3E%3ClinearGradient id='g1' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%2360c8ff' stop-opacity='0.55'/%3E%3Cstop offset='100%25' stop-color='%23001a40' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cfilter id='b1' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeGaussianBlur stdDeviation='10'/%3E%3C/filter%3E%3C/defs%3E%3Cpath filter='url(%23b1)' fill='url(%23g1)' d='M-100,180 C100,120 300,240 500,180 C700,120 900,240 1100,180 C1300,120 1500,240 1700,180 L1700,300 L-100,300 Z'/%3E%3C/svg%3E"),
-      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 2000 300'%3E%3Cdefs%3E%3ClinearGradient id='g2' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%232f8dff' stop-opacity='0.3'/%3E%3Cstop offset='100%25' stop-color='%23001a40' stop-opacity='0'/%3E%3C/linearGradient%3E%3Cfilter id='b2' x='-20%25' y='-20%25' width='140%25' height='140%25'%3E%3CfeGaussianBlur stdDeviation='16'/%3E%3C/filter%3E%3C/defs%3E%3Cpath filter='url(%23b2)' fill='url(%23g2)' d='M-150,200 C150,130 450,270 750,200 C1050,130 1350,270 1650,200 C1800,165 1900,235 2050,200 L2050,300 L-150,300 Z'/%3E%3C/svg%3E");
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 800 600'%3E%3Cdefs%3E%3Cpath id='w' d='M0,0 C133,-45 267,-45 400,0 C533,45 667,45 800,0'/%3E%3Cfilter id='bA' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='16'/%3E%3C/filter%3E%3Cfilter id='bB' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='6'/%3E%3C/filter%3E%3Cfilter id='bC' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='1.5'/%3E%3C/filter%3E%3C/defs%3E%3Cg transform='translate(0,140)'%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%232f8dff' stroke-width='28' opacity='0.16' filter='url(%23bA)'/%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%2360c8ff' stroke-width='7' opacity='0.4' filter='url(%23bB)'/%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%23eaf6ff' stroke-width='2' opacity='0.8' filter='url(%23bC)' stroke-linecap='round'/%3E%3C/g%3E%3Cg transform='translate(260,300) scale(1,0.75)'%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%231e6fd9' stroke-width='30' opacity='0.14' filter='url(%23bA)'/%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%234fa8f5' stroke-width='6' opacity='0.28' filter='url(%23bB)'/%3E%3C/g%3E%3Cg transform='translate(520,440) scale(1,0.55)'%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%231e6fd9' stroke-width='22' opacity='0.1' filter='url(%23bA)'/%3E%3C/g%3E%3C/svg%3E"),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' viewBox='0 0 800 600'%3E%3Cdefs%3E%3Cpath id='w' d='M0,0 C133,-45 267,-45 400,0 C533,45 667,45 800,0'/%3E%3Cfilter id='bA' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='16'/%3E%3C/filter%3E%3Cfilter id='bB' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='6'/%3E%3C/filter%3E%3Cfilter id='bC' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='1.5'/%3E%3C/filter%3E%3C/defs%3E%3Cg transform='translate(0,140)'%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%232f8dff' stroke-width='28' opacity='0.16' filter='url(%23bA)'/%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%2360c8ff' stroke-width='7' opacity='0.4' filter='url(%23bB)'/%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%23eaf6ff' stroke-width='2' opacity='0.8' filter='url(%23bC)' stroke-linecap='round'/%3E%3C/g%3E%3Cg transform='translate(260,300) scale(1,0.75)'%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%231e6fd9' stroke-width='30' opacity='0.14' filter='url(%23bA)'/%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%234fa8f5' stroke-width='6' opacity='0.28' filter='url(%23bB)'/%3E%3C/g%3E%3Cg transform='translate(520,440) scale(1,0.55)'%3E%3Cuse href='%23w' xlink:href='%23w' fill='none' stroke='%231e6fd9' stroke-width='22' opacity='0.1' filter='url(%23bA)'/%3E%3C/g%3E%3C/svg%3E");
     background-repeat: repeat-x, repeat-x;
-    background-size: 1600px 100%, 2000px 100%;
-    background-position: 0 100%, 0 100%;
-    animation: ondaPs3A 18s linear infinite, ondaPs3B 30s linear infinite reverse;
+    background-size: 800px 85%, 1100px 65%;
+    background-position: 0 8%, 0 30%;
+    animation: ondaPs3 26s linear infinite;
   }
-  @keyframes ondaPs3A{ 0%{ background-position: 0 100%; } 100%{ background-position: -1600px 100%; } }
-  @keyframes ondaPs3B{ 0%{ background-position: 0 100%; } 100%{ background-position: -2000px 100%; } }
+  @keyframes ondaPs3{
+    from{ background-position: 0 8%, 0 30%; }
+    to{ background-position: -800px 8%, -1100px 30%; }
+  }
   body[data-skin="ps3"] .topbar h1{
     font-family: var(--skin-font), 'Russo One', 'Space Grotesk', sans-serif;
     font-weight: 700; letter-spacing: .5px;
@@ -181,12 +188,15 @@
     transform: scale(1.12);
   }
 
-  /* Y2K (PC/Windows dos anos 2000) -- particularidades: botoes "gel" em
-     formato de pilula, cantos de card mais retos, ceu gradiente bem sutil
-     de fundo tipo papel de parede de Windows. Ligado pelo botao 💾. */
+  /* Y2K (PC/Windows XP dos anos 2000) -- baseado em screenshots reais de
+     desktop de 2001: papel de parede "colina verde + ceu azul" (o famoso
+     Bliss do XP), barra de tarefas azul com botao Iniciar verde e relogio,
+     e cada card ganha uma barrinha de titulo de janela (gradiente azul +
+     3 botoezinhos) por cima da capa, tipo janela do Windows de verdade. */
   body[data-skin="y2k"]::before{
-    content:''; position:fixed; inset:0; z-index:-3; pointer-events:none; opacity:.35;
-    background: linear-gradient(180deg, #2f7fe0 0%, #a9d8ff 32%, #eaf7d8 52%, #bfe08a 62%, #5a9a4a 100%);
+    content:''; position:fixed; inset:0; z-index:-3; pointer-events:none; opacity:.55;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900' preserveAspectRatio='xMidYMax slice'%3E%3Cdefs%3E%3ClinearGradient id='sky' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%232f7fe0'/%3E%3Cstop offset='60%25' stop-color='%2378b8f2'/%3E%3Cstop offset='100%25' stop-color='%23cfe8ff'/%3E%3C/linearGradient%3E%3ClinearGradient id='hill' x1='0' y1='0' x2='0' y2='1'%3E%3Cstop offset='0%25' stop-color='%237ec850'/%3E%3Cstop offset='100%25' stop-color='%233f8a2c'/%3E%3C/linearGradient%3E%3Cfilter id='cb' x='-50%25' y='-50%25' width='200%25' height='200%25'%3E%3CfeGaussianBlur stdDeviation='10'/%3E%3C/filter%3E%3C/defs%3E%3Crect width='1600' height='900' fill='url(%23sky)'/%3E%3Cg filter='url(%23cb)' fill='%23ffffff' opacity='0.9'%3E%3Cellipse cx='260' cy='160' rx='120' ry='40'/%3E%3Cellipse cx='340' cy='140' rx='90' ry='34'/%3E%3Cellipse cx='1200' cy='110' rx='140' ry='36'/%3E%3Cellipse cx='1300' cy='95' rx='90' ry='28'/%3E%3C/g%3E%3Cpath fill='url(%23hill)' d='M0,620 C300,520 500,700 800,600 C1100,500 1350,640 1600,560 L1600,900 L0,900 Z'/%3E%3C/svg%3E");
+    background-size: cover; background-position: center bottom; background-repeat: no-repeat;
   }
   body[data-skin="y2k"] .topbar h1{
     font-family: var(--skin-font); font-weight:800; letter-spacing:0; color:#eaf4ff;
@@ -203,6 +213,45 @@
     box-shadow: inset 0 1px 0 rgba(255,255,255,.15), 0 3px 12px rgba(0,40,100,.35);
   }
   body[data-skin="y2k"] .card:hover{ border-color: rgba(140,200,255,0.7) !important; }
+  /* barrinha de titulo de janela por cima de cada card (o overflow:hidden +
+     border-radius do .card ja arredonda as pontas de cima sozinho) */
+  body[data-skin="y2k"] .card::before{
+    content:'🎮 jogo.exe'; order:-1; flex-shrink:0;
+    display:flex; align-items:center;
+    height:22px; padding:0 46px 0 8px;
+    font-family: var(--skin-font); font-size:10.5px; font-weight:700; color:#fff;
+    text-shadow: 0 1px 1px rgba(0,0,0,.4);
+    background-image:
+      linear-gradient(180deg, #4f9df0 0%, #1e5fc4 45%, #123f8f 100%),
+      radial-gradient(circle, #ff5f57 45%, transparent 46%),
+      radial-gradient(circle, #ffbd2e 45%, transparent 46%),
+      radial-gradient(circle, #28c93f 45%, transparent 46%);
+    background-size: 100% 100%, 10px 10px, 10px 10px, 10px 10px;
+    background-position: 0 0, calc(100% - 12px) 50%, calc(100% - 26px) 50%, calc(100% - 40px) 50%;
+    background-repeat: no-repeat;
+  }
+  /* barra de tarefas fixa no rodape (so aparece com esse skin ligado) */
+  body[data-skin="y2k"]{ padding-bottom: 58px; }
+  body[data-skin="y2k"] #livePanelOverlay{ bottom: 52px; }
+  .y2k-taskbar{
+    display:none; position:fixed; left:0; right:0; bottom:0; z-index:80;
+    height:34px; align-items:center; gap:10px; padding:0 8px;
+    background: linear-gradient(180deg, #2a7bdc 0%, #1557b0 55%, #0d3f8a 100%);
+    border-top: 1px solid #6cb0ff; box-shadow: 0 -2px 10px rgba(0,0,0,.45);
+    font-family: 'Tahoma','Segoe UI',sans-serif; font-size:11px; color:#fff;
+  }
+  body[data-skin="y2k"] .y2k-taskbar{ display:flex; }
+  .y2k-start{
+    display:flex; align-items:center; gap:5px; height:26px; padding:0 12px 0 8px;
+    background: linear-gradient(180deg, #4cc93f 0%, #2f9e26 50%, #1f7a1a 100%);
+    border-radius: 6px; font-weight:800; font-size:12px; flex-shrink:0;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 1px 3px rgba(0,0,0,.4);
+  }
+  .y2k-taskbar-sep{ flex:1; }
+  .y2k-taskbar-clock{
+    background: rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.15); border-radius:4px;
+    padding: 5px 10px; font-variant-numeric: tabular-nums; flex-shrink:0;
+  }
 
   /* FILTRO CRT -- scanlines + vinheta + leve flicker, so um overlay decorativo
      (pointer-events:none), nao interfere em clique nenhum. Ligado pelo botao 📺. */
@@ -1041,6 +1090,11 @@
   <button id="crtBtn" title="Filtro CRT: desligado — clique para ligar" aria-label="Alternar filtro CRT">📺</button>
 </div>
 <div id="crtOverlay"></div>
+<div class="y2k-taskbar">
+  <div class="y2k-start">🏁 <span>iniciar</span></div>
+  <div class="y2k-taskbar-sep"></div>
+  <div class="y2k-taskbar-clock" id="y2kClock">--:--</div>
+</div>
 <div id="liveBalloonWrap"></div>
 <div id="livePanelOverlay">
   <div class="live-panel">
@@ -3578,6 +3632,19 @@ skinBtn.addEventListener('click', function(){
   localStorage.setItem('skin_ps4', prox);
   aplicarSkin(prox);
 });
+
+// Relogio da barra de tarefas do skin Y2K (so tem efeito visual quando o
+// skin esta ligado, mas mantem a hora sempre certa nos bastidores)
+function atualizarRelogioY2k(){
+  const el = document.getElementById('y2kClock');
+  if(!el) return;
+  const agora = new Date();
+  const hh = String(agora.getHours()).padStart(2,'0');
+  const mm = String(agora.getMinutes()).padStart(2,'0');
+  el.textContent = `${hh}:${mm}`;
+}
+atualizarRelogioY2k();
+setInterval(atualizarRelogioY2k, 15000);
 
 // FILTRO CRT (scanlines/vinheta decorativos, nao mexe em nenhuma funcionalidade)
 const crtBtn = document.getElementById('crtBtn');
