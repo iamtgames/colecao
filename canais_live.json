@@ -1,6 +1,14 @@
 {
-  "updated": "2026-07-24T22:15:17.723Z",
+  "updated": "2026-07-24T22:30:18.214Z",
   "live": [
+    {
+      "id": 1,
+      "n": "Diego Sheth",
+      "videoId": "Sb7U_oxy1TI",
+      "videoTitle": "LIVE DE VENDAS !!!",
+      "videoUrl": "https://www.youtube.com/watch?v=Sb7U_oxy1TI",
+      "thumbnail": "https://i.ytimg.com/vi/Sb7U_oxy1TI/hqdefault.jpg"
+    },
     {
       "id": 2,
       "n": "Antec.r",
