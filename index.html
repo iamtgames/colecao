@@ -312,6 +312,14 @@
     background:#39ff88; box-shadow:0 0 6px 2px rgba(57,255,136,.8);
     opacity:.9; transition: transform .5s ease-out, opacity .5s ease-out;
   }
+  /* Farrapo etereo do fantasma: bem mais discreto que o rastro neon do
+     guerreiro (fica ativo o tempo todo, entao precisa ser sutil pra nao
+     poluir a tela) -- so um sopro esbranquicado/roxo subindo devagar. */
+  .fx-wisp-fantasma{
+    width:10px; height:10px; border-radius:50%;
+    background: radial-gradient(circle, rgba(234,246,255,.55), rgba(185,143,255,.28) 60%, transparent 80%);
+    opacity:.5; transition: transform .78s ease-out, opacity .78s ease-out;
+  }
 
   /* FILTRO CRT -- scanlines + vinheta + leve flicker, so um overlay decorativo
      (pointer-events:none), nao interfere em clique nenhum. Ligado pelo botao 📺. */
@@ -5377,6 +5385,23 @@ idiomaBtn.addEventListener('click', function(){
     setTimeout(function(){ p.remove(); }, 550);
   }
 
+  // Farrapo etereo atras do fantasma quando ele esta voando -- sempre ativo
+  // (nao depende do skin, ao contrario do rastro neon do guerreiro), bem
+  // sutil, reforcando que ele desliza no ar em vez de so deslocar sem rastro.
+  function criarWispFantasma(layer, x, y){
+    var p = document.createElement('div');
+    p.className = 'mascot-fx fx-wisp-fantasma';
+    p.style.position = 'absolute';
+    p.style.left = 0; p.style.top = 0;
+    p.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(0.9)';
+    layer.appendChild(p);
+    requestAnimationFrame(function(){
+      p.style.transform = 'translate(' + (x + Math.random() * 8 - 4) + 'px,' + (y - 12 - Math.random() * 10) + 'px) scale(0.2)';
+      p.style.opacity = '0';
+    });
+    setTimeout(function(){ p.remove(); }, 780);
+  }
+
   function criarBurst(layer, x, y, cor){
     var wrap = document.createElement('div');
     wrap.className = 'mascot-fx fx-burst';
@@ -6282,7 +6307,15 @@ idiomaBtn.addEventListener('click', function(){
       // apoio pra pousar (o "mapa 2D"); o resto do tempo continuam voando
       // livre pelo ar, mas evitando materializar por dentro de algo solido.
       if(mapa.pousaveis.length && Math.random() < 0.62){
-        var sup = mapa.pousaveis[Math.floor(Math.random() * mapa.pousaveis.length)];
+        // Consciencia do outro mascote: evita escolher a mesma superficie
+        // onde o colega ja esta pousado/escondido de verdade -- sem isso os
+        // dois as vezes materializavam empilhados no mesmo card, quebrando a
+        // ilusao do "mapa 2D" compartilhado.
+        var outroM = el.classList.contains('mascot-ghost') ? document.querySelector('.mascot-xiao') : document.querySelector('.mascot-ghost');
+        var elOcupado = outroM && outroM._anexo ? outroM._anexo.elemento : null;
+        var opcoesLivres = elOcupado ? mapa.pousaveis.filter(function(p){ return p.el !== elOcupado; }) : mapa.pousaveis;
+        if(!opcoesLivres.length) opcoesLivres = mapa.pousaveis;
+        var sup = opcoesLivres[Math.floor(Math.random() * opcoesLivres.length)];
         var largura = Math.max(1, sup.right - sup.left);
         // A maior parte das vezes pousa em qualquer ponto da superficie, mas
         // de vez em quando escolhe pousar bem na ponta/borda dela -- feito
@@ -6561,6 +6594,10 @@ idiomaBtn.addEventListener('click', function(){
       [[ghost, 'ghost'], [xiao, 'xiao']].forEach(function(par){
         var m = par[0], tipoM = par[1];
         var arrastando = false, offX = 0, offY = 0;
+        // Rastreia as ultimas posicoes/tempos do ponteiro pra medir a
+        // velocidade real do gesto — assim soltar rapido de verdade
+        // arremessa o mascote na mesma direcao, em vez de so cair no lugar.
+        var histPonteiro = [];
         m.addEventListener('mousedown', function(e){
           if(!m.classList.contains('idle')) return;
           e.preventDefault();
@@ -6571,12 +6608,15 @@ idiomaBtn.addEventListener('click', function(){
           m.classList.add('segurado');
           var mx = parseFloat(m.dataset.x) || 0, my = parseFloat(m.dataset.y) || 0;
           offX = mx - e.clientX; offY = my - e.clientY;
+          histPonteiro = [{ x: e.clientX, y: e.clientY, t: Date.now() }];
         });
         window.addEventListener('mousemove', function(e){
           if(!arrastando) return;
           var nx = e.clientX + offX, ny = e.clientY + offY;
           m.style.transform = 'translate(' + nx + 'px,' + ny + 'px)';
           m.dataset.x = nx; m.dataset.y = ny;
+          histPonteiro.push({ x: e.clientX, y: e.clientY, t: Date.now() });
+          if(histPonteiro.length > 6) histPonteiro.shift();
         });
         window.addEventListener('mouseup', function(){
           if(!arrastando) return;
@@ -6585,9 +6625,31 @@ idiomaBtn.addEventListener('click', function(){
           var r = m.getBoundingClientRect();
           criarBurst(layer, r.left + r.width / 2, r.top + r.height / 2, tipoM === 'xiao' ? '#ffd23d' : '#b98fff');
           retriggerAnim(m, 'surpreso');
+          // Velocidade do gesto (ultima amostra menos a mais antiga do
+          // historico curto) vira um arremesso de verdade: quanto mais rapido
+          // soltou, mais longe o mascote desliza antes de assentar.
+          var velX = 0, velY = 0;
+          if(histPonteiro.length >= 2){
+            var prim = histPonteiro[0], ult = histPonteiro[histPonteiro.length - 1];
+            var dt = Math.max(16, ult.t - prim.t);
+            velX = (ult.x - prim.x) / dt;
+            velY = (ult.y - prim.y) / dt;
+          }
+          var velMag = Math.hypot(velX, velY);
+          var area = areaSegura();
           setTimeout(function(){
-            m.classList.remove('surpreso');
-            setTimeout(function(){ vagar(m, tipoM); }, 200);
+            if(velMag > 0.15){
+              var alcance = Math.min(260, velMag * 160);
+              var qx = clampeia((parseFloat(m.dataset.x) || 0) + velX * alcance, area.minX, area.maxX);
+              var qy = clampeia((parseFloat(m.dataset.y) || 0) + velY * alcance, area.minY, area.maxY);
+              moverArco(m, qx, qy, 260 + Math.random() * 120, tipoM, { bancar:false, flip:false, impulso:false }).then(function(){
+                retriggerAnim(m, 'pousando');
+                setTimeout(function(){ vagar(m, tipoM); }, 200);
+              });
+            } else {
+              m.classList.remove('surpreso');
+              setTimeout(function(){ vagar(m, tipoM); }, 200);
+            }
           }, 400);
         });
       });
@@ -6634,8 +6696,21 @@ idiomaBtn.addEventListener('click', function(){
       // mascote pousado/escondido "descolava" do card no instante em que
       // alguem rolava. Aqui eles acompanham de verdade a superficie onde
       // estao apoiados, feito parte real do cenario.
-      window.addEventListener('scroll', function(){ atualizarAnexos(ghost, xiao); }, { passive: true });
-      window.addEventListener('resize', function(){ atualizarAnexos(ghost, xiao); }, { passive: true });
+      // Throttle via requestAnimationFrame: um scroll rapido (roda do mouse,
+      // inercia no touch) dispara dezenas de eventos 'scroll' por segundo --
+      // sem isso cada um chamava atualizarAnexos na hora, fazendo trabalho
+      // redundante quadro a quadro. Agora no maximo 1x por frame de verdade.
+      var anexoPendente = false;
+      function agendarAtualizarAnexos(){
+        if(anexoPendente) return;
+        anexoPendente = true;
+        requestAnimationFrame(function(){
+          anexoPendente = false;
+          atualizarAnexos(ghost, xiao);
+        });
+      }
+      window.addEventListener('scroll', agendarAtualizarAnexos, { passive: true });
+      window.addEventListener('resize', agendarAtualizarAnexos, { passive: true });
       // Um unico tick compartilhado cuida da sombra projetada e do rastro
       // neon -- antes eram dois setInterval separados fazendo trabalho
       // parecido (ler dataset/classList dos mascotes) em frequencias
@@ -6647,11 +6722,18 @@ idiomaBtn.addEventListener('click', function(){
           _tickN++;
           if(_tickN % 2 !== 0) return; // rastro neon a ~140ms, sombra a ~70ms
           try{
-            if(document.body.getAttribute('data-skin') !== 'neon') return;
-            if(!xiao.classList.contains('walking')) return;
-            var px = (parseFloat(xiao.dataset.x) || 0) + 28;
-            var py = (parseFloat(xiao.dataset.y) || 0) + 46;
-            criarParticulaRastro(layer, px, py);
+            if(document.body.getAttribute('data-skin') === 'neon' && xiao.classList.contains('walking')){
+              var px = (parseFloat(xiao.dataset.x) || 0) + 28;
+              var py = (parseFloat(xiao.dataset.y) || 0) + 46;
+              criarParticulaRastro(layer, px, py);
+            }
+          }catch(e){}
+          if(_tickN % 4 !== 0) return; // farrapo do fantasma, ainda mais raro (~280ms)
+          try{
+            if(!ghost.classList.contains('walking')) return;
+            var gx = (parseFloat(ghost.dataset.x) || 0) + 26;
+            var gy = (parseFloat(ghost.dataset.y) || 0) + 40;
+            criarWispFantasma(layer, gx, gy);
           }catch(e){}
         }, 70);
       }
