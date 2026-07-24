@@ -1601,6 +1601,16 @@
   @keyframes bumpShake{ 0%,100%{ transform: translateX(0);} 25%{ transform: translateX(-4px);} 75%{ transform: translateX(4px);} }
 
   .mascot-fx{ position:absolute; top:0; left:0; pointer-events:none; transition: opacity .25s ease; }
+  /* Sombra projetada: reforca visualmente o "chao" -- escurece/aparece
+     quando o mascote esta apoiado em algo de verdade, e clareia/encolhe
+     quando esta voando alto, feito contato real com uma superficie. */
+  .mascot-sombra{
+    position:absolute; top:0; left:0; width:44px; height:13px;
+    border-radius:50%; background: radial-gradient(ellipse, rgba(0,0,0,.5), transparent 72%);
+    pointer-events:none; opacity:0; z-index:-1;
+    transition: opacity .3s ease, transform .3s ease;
+  }
+  .mascot-dust{ width:8px; height:8px; border-radius:50%; background:rgba(210,210,220,.85); }
 
   /* ===== Equipamentos/props das cenas extras ===== */
   .fx-sword{ width:6px; height:36px; }
@@ -5074,12 +5084,31 @@ idiomaBtn.addEventListener('click', function(){
     sprite.appendChild(fxwrap);
     el.appendChild(sprite);
     layer.appendChild(el);
+    var sombra = document.createElement('div');
+    sombra.className = 'mascot-sombra';
+    layer.appendChild(sombra);
+    el._sombra = sombra;
     var area = areaSegura();
     var x = area.minX + Math.random() * (area.maxX - area.minX);
     var y = area.minY + Math.random() * (area.maxY - area.minY);
     el.style.transform = 'translate(' + x + 'px,' + y + 'px)';
     el.dataset.x = x; el.dataset.y = y;
     return el;
+  }
+
+  // Sincroniza a sombra projetada com a posicao/estado atual de cada
+  // mascote -- roda num intervalo leve e separado do motor de movimento
+  // (moverArco), pra nao inflar aquela funcao com mais uma responsabilidade.
+  function sincronizarSombras(ghost, xiao){
+    [ghost, xiao].forEach(function(m){
+      var sombra = m && m._sombra;
+      if(!sombra) return;
+      var x = parseFloat(m.dataset.x) || 0, y = parseFloat(m.dataset.y) || 0;
+      var noChao = m.classList.contains('idle') || m.classList.contains('perched') || m.classList.contains('hiding') || m.classList.contains('peeking');
+      var alturaPes = m.classList.contains('mascot-xiao') ? 90 : 84;
+      sombra.style.transform = 'translate(' + (x + 6) + 'px,' + (y + alturaPes) + 'px) scale(' + (noChao ? 1 : 0.55) + ')';
+      sombra.style.opacity = noChao ? '0.38' : '0.08';
+    });
   }
 
   function esperar(ms){ return new Promise(function(r){ setTimeout(r, ms); }); }
@@ -5135,13 +5164,31 @@ idiomaBtn.addEventListener('click', function(){
         // por dentro de algo real -- se sim, tenta arquear pro outro lado
         // em vez de atravessar por cima do conteudo.
         if(opts.solidos && opts.solidos.length){
-          var midX0 = 0.25*origX + 0.5*ctrlX + 0.25*destX;
-          var midY0 = 0.25*origY + 0.5*ctrlY + 0.25*destY;
-          if(!pontoLivre(midX0, midY0, opts.solidos)){
+          // 3 amostras ao longo da curva (25/50/75%) em vez de so o meio --
+          // pega bloqueios que um unico ponto central deixava passar.
+          var checarCurva = function(cx, cy){
+            for(var ts = 0.25; ts <= 0.75; ts += 0.25){
+              var itc = 1 - ts;
+              var px = itc*itc*origX + 2*itc*ts*cx + ts*ts*destX;
+              var py = itc*itc*origY + 2*itc*ts*cy + ts*ts*destY;
+              if(!pontoLivre(px, py, opts.solidos)) return false;
+            }
+            return true;
+          };
+          if(!checarCurva(ctrlX, ctrlY)){
             lado = -lado;
             arcoForca = (tipo === 'xiao' ? 0.20 : 0.10) * dist * lado;
-            ctrlX = origX + dx * 0.5 + nx * arcoForca;
-            ctrlY = origY + dy * 0.5 + ny * arcoForca - dist * 0.04;
+            var ctrlXAlt = origX + dx * 0.5 + nx * arcoForca;
+            var ctrlYAlt = origY + dy * 0.5 + ny * arcoForca - dist * 0.04;
+            if(checarCurva(ctrlXAlt, ctrlYAlt)){
+              ctrlX = ctrlXAlt; ctrlY = ctrlYAlt;
+            } else {
+              // Nenhum dos dois lados livre — arqueia bem mais largo pro
+              // lado original, tentando passar por cima de vez.
+              arcoForca = (tipo === 'xiao' ? 0.20 : 0.10) * dist * -lado * 1.8;
+              ctrlX = origX + dx * 0.5 + nx * arcoForca;
+              ctrlY = origY + dy * 0.5 + ny * arcoForca - dist * 0.08;
+            }
           }
         }
         var sprite = el.querySelector('.mascot-sprite');
@@ -6092,7 +6139,14 @@ idiomaBtn.addEventListener('click', function(){
   // como solidos (evitam materializar por dentro deles quando estao so
   // vagando no ar, sem intencao de se esconder). Recalculado a cada
   // deslocamento porque a pagina pode ter rolado/redimensionado.
+  // Cache curto (700ms): varias decisoes de movimento em sequencia rapida
+  // (vagar/moverPara/cenas) chamavam mapearSite() de novo a cada uma, forcando
+  // reflow (getBoundingClientRect em 100+ elementos) repetidas vezes por
+  // nada -- o layout no mundo real nao muda tao rapido assim.
+  var _mapaCache = null, _mapaCacheT = 0;
   function mapearSite(){
+    var agora = Date.now();
+    if(_mapaCache && (agora - _mapaCacheT) < 700) return _mapaCache;
     var pousaveis = [], solidos = [], portas = [];
     function ver(el){
       var r = el.getBoundingClientRect();
@@ -6118,7 +6172,9 @@ idiomaBtn.addEventListener('click', function(){
     Array.prototype.forEach.call(document.querySelectorAll('.canais-toggle-card'), function(el){
       if(ver(el)) portas.push(el);
     });
-    return { pousaveis: pousaveis, solidos: solidos, portas: portas };
+    _mapaCache = { pousaveis: pousaveis, solidos: solidos, portas: portas };
+    _mapaCacheT = agora;
+    return _mapaCache;
   }
 
   // Um ponto e "livre" se nao cai por dentro de nenhum solido do mapa (com
@@ -6254,6 +6310,23 @@ idiomaBtn.addEventListener('click', function(){
         if(vaiPousarDepois && supEscolhida && supEscolhida.el){
           el.classList.add('perched');
           el._anexo = { elemento: supEscolhida.el, offX: destX - supEscolhida.left, offY: destY - supEscolhida.y };
+          // Poeirinha de pouso -- so quando aterrissa de verdade numa
+          // superficie do mapa (nao num ponto qualquer flutuando no ar),
+          // reforcando o "contato" com o chao real.
+          var layerPo = document.querySelector('.mascot-layer');
+          if(layerPo){
+            for(var pi = 0; pi < 4; pi++){
+              (function(pi){
+                var pxOff = (pi - 1.5) * 9;
+                var poeira = criarProp(layerPo, destX + 22 + pxOff, destY + 60, 'mascot-dust', '');
+                requestAnimationFrame(function(){
+                  poeira.style.transform = 'translate(' + (destX + 22 + pxOff * 2.2) + 'px,' + (destY + 66) + 'px)';
+                  poeira.style.opacity = '0';
+                });
+                setTimeout(function(){ poeira.remove(); }, 420);
+              })(pi);
+            }
+          }
         }
         retriggerAnim(el, 'pousando');
         if(vaiPousarDepois){
@@ -6488,6 +6561,9 @@ idiomaBtn.addEventListener('click', function(){
       // estao apoiados, feito parte real do cenario.
       window.addEventListener('scroll', function(){ atualizarAnexos(ghost, xiao); }, { passive: true });
       window.addEventListener('resize', function(){ atualizarAnexos(ghost, xiao); }, { passive: true });
+      if(!reduzido){
+        setInterval(function(){ sincronizarSombras(ghost, xiao); }, 70);
+      }
       // Rastro de particulas neon atras do guerreiro voando, so quando o skin
       // "Neon Geometrico" estiver ativo — poll leve, nao atrapalha nada mais.
       if(!reduzido){
