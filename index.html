@@ -1146,7 +1146,8 @@
      Camada decorativa fixa, sem interacao, clique passa direto (pointer-events:none).
      Ambos ficam abaixo de modais (z-index >=100) e acima do conteudo normal. */
   .mascot-layer{ position:fixed; inset:0; z-index:95; pointer-events:none; overflow:hidden; }
-  .mascot{ position:absolute; top:0; left:0; will-change: transform; }
+  .mascot{ position:absolute; top:0; left:0; will-change: transform; pointer-events:auto; cursor:pointer; }
+  .mascot:hover .mascot-fxwrap{ filter: brightness(1.18); }
   .mascot-sprite{ transition: transform .25s ease, opacity .25s ease; }
   .mascot.flip .mascot-sprite{ transform: scaleX(-1); }
   .mascot.hiding .mascot-sprite{ transform: scale(0.55); opacity:0.4; }
@@ -1203,8 +1204,15 @@
   @keyframes xflyLegL{ 0%,100%{ transform: rotate(16deg);} 50%{ transform: rotate(22deg);} }
   @keyframes xflyLegR{ 0%,100%{ transform: rotate(20deg);} 50%{ transform: rotate(14deg);} }
   @keyframes xflyLowerLegR{ 0%,100%{ transform: rotate(6deg);} 50%{ transform: rotate(12deg);} }
-  @keyframes xflyCape{ 0%,100%{ transform: scaleX(1) translateY(0);} 50%{ transform: scaleX(1.18) translateY(3px);} }
-  @keyframes xflySpeed{ 0%,100%{ opacity:0.55;} 50%{ opacity:1;} }
+  /* --bank e --velop sao atualizados quadro a quadro pelo motor de movimento
+     (moverArco) -- a capa reage de verdade a curva/inclinacao do voo (com
+     um leve atraso, feito pano puxado pelo ar) e o rastro de velocidade
+     acende mais forte quanto mais rapido o guerreiro estiver de verdade,
+     em vez de so piscar num ritmo fixo sempre igual. */
+  @keyframes xflyCape{ 0%,100%{ transform: rotate(var(--bank,0deg)) scaleX(1) translateY(0);} 50%{ transform: rotate(var(--bank,0deg)) scaleX(1.18) translateY(3px);} }
+  @keyframes xflySpeed{ 0%,100%{ opacity: calc(var(--velop,0.55) * 0.6);} 50%{ opacity: var(--velop,0.55);} }
+  @keyframes fxImpulso{ 0%{ transform: scaleY(1) scaleX(1);} 55%{ transform: scaleY(0.82) scaleX(1.14);} 100%{ transform: scaleY(1) scaleX(1);} }
+  .mascot.impulso .mascot-fxwrap{ animation: fxImpulso .13s ease-out; }
   .mascot-xiao.idle .x-rig{ animation: xIdleBreathe 2.4s ease-in-out infinite; }
   @keyframes xIdleBreathe{ 0%,100%{ transform: scaleY(1);} 50%{ transform: scaleY(1.02);} }
   .mascot-xiao.kicking .x-armL{ animation: xkArmL 1.1s ease-in-out; }
@@ -5083,57 +5091,96 @@ idiomaBtn.addEventListener('click', function(){
   }
 
   function easeInOutCubic(t){ return t < 0.5 ? 4*t*t*t : 1 - Math.pow(-2*t + 2, 3) / 2; }
+  // Anticipation + overshoot (2 dos 12 principios classicos de animacao) num
+  // unico easing: puxa pra tras um pouquinho antes de arrancar e passa um
+  // pouco do alvo antes de assentar -- em vez de so ir e parar seco, que
+  // era a cara "robotica" reclamada.
+  function easeInOutBack(t){
+    var c1 = 1.20, c2 = c1 * 1.525;
+    return t < 0.5
+      ? (Math.pow(2*t, 2) * ((c2 + 1) * 2*t - c2)) / 2
+      : (Math.pow(2*t - 2, 2) * ((c2 + 1) * (t*2 - 2) + c2) + 2) / 2;
+  }
 
   // Motor de movimento fluido: em vez de interpolar em linha reta (o que
   // sempre parecia meio robotico, so a velocidade variava), anima ao longo
   // de uma curva (bezier quadratica com um "arco" perpendicular a rota) com
-  // easing suave, e ainda inclina o guerreiro (banking) conforme sobe/desce
-  // -- feito um heroi de verdade fazendo curva, nao um sprite deslizando.
+  // easing de anticipation/overshoot, inclina o guerreiro (banking) conforme
+  // sobe/desce, e ainda da vida a capa (atraso realista, "puxada pelo ar")
+  // e ao rastro de velocidade (acende de acordo com a velocidade de verdade
+  // quadro a quadro, nao um piscar constante) -- feito um heroi de verdade
+  // fazendo curva, nao um sprite deslizando.
   function moverArco(el, destX, destY, duracaoMs, tipo, opts){
     opts = opts || {};
     var bancar = opts.bancar !== false && tipo === 'xiao';
     var ajustarFlip = opts.flip !== false;
+    var origX0 = parseFloat(el.dataset.x) || 0;
+    var origY0 = parseFloat(el.dataset.y) || 0;
+    var dist0 = Math.hypot(destX - origX0, destY - origY0);
+    var usarBack = bancar && opts.easing !== 'cubic' && dist0 > 60;
+    var comImpulso = usarBack && opts.impulso !== false;
     return new Promise(function(resolve){
-      var origX = parseFloat(el.dataset.x) || 0;
-      var origY = parseFloat(el.dataset.y) || 0;
-      var dx = destX - origX, dy = destY - origY;
-      var dist = Math.hypot(dx, dy) || 1;
-      var lado = Math.random() < 0.5 ? 1 : -1;
-      var arcoForca = (tipo === 'xiao' ? 0.20 : 0.10) * dist * lado;
-      var nx = dist ? -dy / dist : 0, ny = dist ? dx / dist : 0;
-      var ctrlX = origX + dx * 0.5 + nx * arcoForca;
-      var ctrlY = origY + dy * 0.5 + ny * arcoForca - dist * 0.04;
-      var sprite = el.querySelector('.mascot-sprite');
-      if(ajustarFlip && Math.abs(dx) > 4){ el.classList.toggle('flip', dx < 0); }
-      var flipAtivo = el.classList.contains('flip');
-      var t0 = null, prevY = origY;
-      function quadPoint(t){
-        var it = 1 - t;
-        return {
-          x: it*it*origX + 2*it*t*ctrlX + t*t*destX,
-          y: it*it*origY + 2*it*t*ctrlY + t*t*destY
-        };
-      }
-      function passo(agora){
-        if(t0 === null) t0 = agora;
-        var t = Math.min(1, (agora - t0) / duracaoMs);
-        var p = quadPoint(easeInOutCubic(t));
-        el.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)';
-        if(bancar && sprite){
-          var vy = p.y - prevY;
-          var bank = Math.max(-20, Math.min(20, -vy * 2.2));
-          sprite.style.transform = 'scaleX(' + (flipAtivo ? -1 : 1) + ') rotate(' + bank + 'deg)';
+      function iniciar(){
+        var origX = parseFloat(el.dataset.x) || 0;
+        var origY = parseFloat(el.dataset.y) || 0;
+        var dx = destX - origX, dy = destY - origY;
+        var dist = Math.hypot(dx, dy) || 1;
+        var lado = Math.random() < 0.5 ? 1 : -1;
+        var arcoForca = (tipo === 'xiao' ? 0.20 : 0.10) * dist * lado;
+        var nx = dist ? -dy / dist : 0, ny = dist ? dx / dist : 0;
+        var ctrlX = origX + dx * 0.5 + nx * arcoForca;
+        var ctrlY = origY + dy * 0.5 + ny * arcoForca - dist * 0.04;
+        var sprite = el.querySelector('.mascot-sprite');
+        var cape = bancar ? el.querySelector('.x-cape') : null;
+        var speedFx = bancar ? el.querySelector('.x-speed') : null;
+        if(ajustarFlip && Math.abs(dx) > 4){ el.classList.toggle('flip', dx < 0); }
+        var flipAtivo = el.classList.contains('flip');
+        var t0 = null, prevY = origY, prevX = origX, prevT = null, capeLag = 0;
+        function quadPoint(t){
+          var it = 1 - t;
+          return {
+            x: it*it*origX + 2*it*t*ctrlX + t*t*destX,
+            y: it*it*origY + 2*it*t*ctrlY + t*t*destY
+          };
         }
-        prevY = p.y;
-        if(t < 1){
-          requestAnimationFrame(passo);
-        } else {
-          el.dataset.x = destX; el.dataset.y = destY;
-          if(bancar && sprite){ sprite.style.transform = ''; }
-          resolve();
+        function passo(agora){
+          if(t0 === null){ t0 = agora; prevT = agora; }
+          var t = Math.min(1, (agora - t0) / duracaoMs);
+          var p = quadPoint(usarBack ? easeInOutBack(t) : easeInOutCubic(t));
+          el.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)';
+          var dtMs = Math.max(1, agora - prevT);
+          if(bancar && sprite){
+            var vy = p.y - prevY, vx = p.x - prevX;
+            var bank = Math.max(-22, Math.min(22, -vy * 2.2));
+            sprite.style.transform = 'scaleX(' + (flipAtivo ? -1 : 1) + ') rotate(' + bank + 'deg)';
+            if(cape){
+              capeLag += (bank * 0.8 - capeLag) * 0.25;
+              cape.style.setProperty('--bank', capeLag + 'deg');
+            }
+            if(speedFx){
+              var vel = Math.hypot(vx, vy) / dtMs;
+              speedFx.style.setProperty('--velop', Math.max(0.2, Math.min(1.4, vel / 1.1)));
+            }
+          }
+          prevY = p.y; prevX = p.x; prevT = agora;
+          if(t < 1){
+            requestAnimationFrame(passo);
+          } else {
+            el.dataset.x = destX; el.dataset.y = destY;
+            if(bancar && sprite){ sprite.style.transform = ''; }
+            if(cape){ cape.style.removeProperty('--bank'); }
+            if(speedFx){ speedFx.style.removeProperty('--velop'); }
+            resolve();
+          }
         }
+        requestAnimationFrame(passo);
       }
-      requestAnimationFrame(passo);
+      if(comImpulso){
+        el.classList.add('impulso');
+        setTimeout(function(){ el.classList.remove('impulso'); iniciar(); }, 110);
+      } else {
+        iniciar();
+      }
     });
   }
 
@@ -6069,10 +6116,29 @@ idiomaBtn.addEventListener('click', function(){
         }
       }, true);
 
-      ['temaBtn', 'paletaBtn', 'skinBtn'].forEach(function(id){
+      ['temaBtn', 'paletaBtn', 'skinBtn', 'vitrineBtn', 'cartaoResumoBtn', 'filtrosToggleBtn', 'scannerBtn', 'randomGameBtn', 'roletaBtn', 'cmdkOpenBtn'].forEach(function(id){
         var btn = document.getElementById(id);
         if(btn) btn.addEventListener('click', reagirSurpresa);
       });
+
+      // Espia os cards conforme o usuario passa o mouse por eles -- os
+      // mascotes acompanham o que esta rolando no site de verdade.
+      document.addEventListener('mouseover', function(e){
+        var card = e.target.closest && e.target.closest('.card');
+        if(card) reagirCurioso();
+      });
+
+      // Reage tambem quando a pessoa rola a pagina (com throttle proprio,
+      // senao dispararia dezenas de vezes por segundo).
+      var ultimoScrollY = window.scrollY, ultimaChecagemScroll = 0;
+      window.addEventListener('scroll', function(){
+        var agora = Date.now();
+        if(agora - ultimaChecagemScroll < 4000) return;
+        if(Math.abs(window.scrollY - ultimoScrollY) < 120) return;
+        ultimaChecagemScroll = agora;
+        ultimoScrollY = window.scrollY;
+        reagirCurioso();
+      }, { passive: true });
 
       var balaoWrap = document.getElementById('liveBalloonWrap');
       if(balaoWrap && window.MutationObserver){
@@ -6087,6 +6153,59 @@ idiomaBtn.addEventListener('click', function(){
         });
         obs.observe(balaoWrap, { childList: true });
       }
+
+      // Interacao direta com os mascotes: antes a camada inteira tinha
+      // pointer-events:none e eles eram so decoracao passiva, sem nenhuma
+      // resposta ao usuario. Agora da pra passar o mouse ou clicar de
+      // verdade em cada um (cooldown proprio, mais curto que o das reacoes
+      // gerais do site, pra sentir responsivo mesmo repetindo o toque).
+      var ultimoToque = { ghost: 0, xiao: 0 };
+      function podeResponderToque(tipo){
+        var agora = Date.now();
+        if(agora - ultimoToque[tipo] < 2200) return false;
+        ultimoToque[tipo] = agora;
+        return true;
+      }
+      [[ghost, 'ghost'], [xiao, 'xiao']].forEach(function(par){
+        var m = par[0], tipo = par[1];
+        m.addEventListener('mouseenter', function(){
+          if(!podeResponderToque(tipo) || !m.classList.contains('idle')) return;
+          retriggerAnim(m, 'acenando');
+          setTimeout(function(){ m.classList.remove('acenando'); }, 1250);
+        });
+        m.addEventListener('click', function(e){
+          e.stopPropagation();
+          if(!podeResponderToque(tipo)) return;
+          var r = m.getBoundingClientRect();
+          criarBurst(layer, r.left + r.width / 2, r.top + r.height / 2, tipo === 'xiao' ? '#ffd23d' : '#b98fff');
+          if(m.classList.contains('idle')){
+            retriggerAnim(m, 'surpreso');
+            setTimeout(function(){ m.classList.remove('surpreso'); }, 520);
+          }
+        });
+      });
+
+      // De vez em quando, se os dois estiverem perto um do outro e livres
+      // (ninguem numa cena roteirizada), eles se percebem e trocam um aceno
+      // -- um momento organico, nao so os encontros programados do
+      // agendarProximaCena.
+      var ultimoAvistamento = 0;
+      setInterval(function(){
+        if(estado.interagindo) return;
+        if(!ghost.classList.contains('idle') || !xiao.classList.contains('idle')) return;
+        var agora = Date.now();
+        if(agora - ultimoAvistamento < 14000) return;
+        var dist = Math.hypot(
+          (parseFloat(ghost.dataset.x) || 0) - (parseFloat(xiao.dataset.x) || 0),
+          (parseFloat(ghost.dataset.y) || 0) - (parseFloat(xiao.dataset.y) || 0)
+        );
+        if(dist > 140) return;
+        ultimoAvistamento = agora;
+        [ghost, xiao].forEach(function(m){
+          retriggerAnim(m, 'acenando');
+          setTimeout(function(){ m.classList.remove('acenando'); }, 1250);
+        });
+      }, 3500);
     }catch(e){ /* reacoes com o site sao um bonus — nunca podem travar nada */ }
   }
 
