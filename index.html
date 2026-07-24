@@ -1179,6 +1179,340 @@
   .mascot.pousando .mascot-fxwrap{ animation: fxPousar .22s ease-out; }
   @keyframes fxPousar{ 0%{ transform:scaleY(1);} 45%{ transform:scaleY(0.86);} 100%{ transform:scaleY(1);} }
 
+  /* ===== 30 variantes continuas de voo (6 estilos x 5 cada) — sorteadas
+     aleatoriamente pelo JS toda vez que o guerreiro comeca a voar sozinho
+     (esconderAtrasDeCard/pousarNaBarra/vagar livre). As cenas em dupla
+     continuam usando a pose padrao (xflyBob/xflyArmL/xflyArmR acima). ===== */
+  .mascot-xiao.walking.fv-punch1 .x-rig{ animation: kfv_punch1_rig 0.5s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch1 .x-armR{ animation: kfv_punch1_armR 0.55s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch1 .x-armL{ animation: kfv_punch1_armL 0.55s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch1 .x-legL{ animation: kfv_punch1_leg 0.55s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch1 .x-legR{ animation: kfv_punch1_leg 0.55s ease-in-out infinite; }
+  @keyframes kfv_punch1_rig{ 0%,100%{ transform: rotate(-14deg) translateY(0);} 50%{ transform: rotate(-14deg) translateY(-3px);} }
+  @keyframes kfv_punch1_armR{ 0%,100%{ transform: rotate(-95deg);} 50%{ transform: rotate(-105deg);} }
+  @keyframes kfv_punch1_armL{ 0%,100%{ transform: rotate(45deg);} 50%{ transform: rotate(55deg);} }
+  @keyframes kfv_punch1_leg{ 0%,100%{ transform: rotate(14deg);} 50%{ transform: rotate(20deg);} }
+  .mascot-xiao.walking.fv-punch2 .x-rig{ animation: kfv_punch2_rig 0.55s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch2 .x-armR{ animation: kfv_punch2_armR 0.6s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch2 .x-armL{ animation: kfv_punch2_armL 0.6s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch2 .x-legL{ animation: kfv_punch2_leg 0.6s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch2 .x-legR{ animation: kfv_punch2_leg 0.6s ease-in-out infinite; }
+  @keyframes kfv_punch2_rig{ 0%,100%{ transform: rotate(-18deg) translateY(0);} 50%{ transform: rotate(-18deg) translateY(-4px);} }
+  @keyframes kfv_punch2_armR{ 0%,100%{ transform: rotate(-100deg);} 50%{ transform: rotate(-112deg);} }
+  @keyframes kfv_punch2_armL{ 0%,100%{ transform: rotate(50deg);} 50%{ transform: rotate(62deg);} }
+  @keyframes kfv_punch2_leg{ 0%,100%{ transform: rotate(16deg);} 50%{ transform: rotate(22deg);} }
+  .mascot-xiao.walking.fv-punch3 .x-rig{ animation: kfv_punch3_rig 0.6s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch3 .x-armR{ animation: kfv_punch3_armR 0.62s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch3 .x-armL{ animation: kfv_punch3_armL 0.62s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch3 .x-legL{ animation: kfv_punch3_leg 0.62s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch3 .x-legR{ animation: kfv_punch3_leg 0.62s ease-in-out infinite; }
+  @keyframes kfv_punch3_rig{ 0%,100%{ transform: rotate(-20deg) translateY(0);} 50%{ transform: rotate(-20deg) translateY(-5px);} }
+  @keyframes kfv_punch3_armR{ 0%,100%{ transform: rotate(-105deg);} 50%{ transform: rotate(-118deg);} }
+  @keyframes kfv_punch3_armL{ 0%,100%{ transform: rotate(55deg);} 50%{ transform: rotate(68deg);} }
+  @keyframes kfv_punch3_leg{ 0%,100%{ transform: rotate(18deg);} 50%{ transform: rotate(24deg);} }
+  .mascot-xiao.walking.fv-punch4 .x-rig{ animation: kfv_punch4_rig 0.48s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch4 .x-armR{ animation: kfv_punch4_armR 0.5s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch4 .x-armL{ animation: kfv_punch4_armL 0.5s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch4 .x-legL{ animation: kfv_punch4_leg 0.5s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch4 .x-legR{ animation: kfv_punch4_leg 0.5s ease-in-out infinite; }
+  @keyframes kfv_punch4_rig{ 0%,100%{ transform: rotate(-12deg) translateY(0);} 50%{ transform: rotate(-12deg) translateY(-3.5px);} }
+  @keyframes kfv_punch4_armR{ 0%,100%{ transform: rotate(-90deg);} 50%{ transform: rotate(-100deg);} }
+  @keyframes kfv_punch4_armL{ 0%,100%{ transform: rotate(40deg);} 50%{ transform: rotate(50deg);} }
+  @keyframes kfv_punch4_leg{ 0%,100%{ transform: rotate(12deg);} 50%{ transform: rotate(18deg);} }
+  .mascot-xiao.walking.fv-punch5 .x-rig{ animation: kfv_punch5_rig 0.65s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch5 .x-armR{ animation: kfv_punch5_armR 0.68s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch5 .x-armL{ animation: kfv_punch5_armL 0.68s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch5 .x-legL{ animation: kfv_punch5_leg 0.68s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-punch5 .x-legR{ animation: kfv_punch5_leg 0.68s ease-in-out infinite; }
+  @keyframes kfv_punch5_rig{ 0%,100%{ transform: rotate(-22deg) translateY(0);} 50%{ transform: rotate(-22deg) translateY(-5.5px);} }
+  @keyframes kfv_punch5_armR{ 0%,100%{ transform: rotate(-108deg);} 50%{ transform: rotate(-122deg);} }
+  @keyframes kfv_punch5_armL{ 0%,100%{ transform: rotate(58deg);} 50%{ transform: rotate(72deg);} }
+  @keyframes kfv_punch5_leg{ 0%,100%{ transform: rotate(20deg);} 50%{ transform: rotate(26deg);} }
+  .mascot-xiao.walking.fv-torpedo1 .x-rig{ animation: kfv_torpedo1_rig 0.4s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo1 .x-armR{ animation: kfv_torpedo1_armR 0.42s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo1 .x-armL{ animation: kfv_torpedo1_armL 0.42s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo1 .x-legL{ animation: kfv_torpedo1_leg 0.42s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo1 .x-legR{ animation: kfv_torpedo1_leg 0.42s ease-in-out infinite; }
+  @keyframes kfv_torpedo1_rig{ 0%,100%{ transform: rotate(-24deg) translateY(0);} 50%{ transform: rotate(-24deg) translateY(-3px);} }
+  @keyframes kfv_torpedo1_armR{ 0%,100%{ transform: rotate(-95deg);} 50%{ transform: rotate(-105deg);} }
+  @keyframes kfv_torpedo1_armL{ 0%,100%{ transform: rotate(-75deg);} 50%{ transform: rotate(-85deg);} }
+  @keyframes kfv_torpedo1_leg{ 0%,100%{ transform: rotate(10deg);} 50%{ transform: rotate(14deg);} }
+  .mascot-xiao.walking.fv-torpedo2 .x-rig{ animation: kfv_torpedo2_rig 0.42s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo2 .x-armR{ animation: kfv_torpedo2_armR 0.44s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo2 .x-armL{ animation: kfv_torpedo2_armL 0.44s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo2 .x-legL{ animation: kfv_torpedo2_leg 0.44s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo2 .x-legR{ animation: kfv_torpedo2_leg 0.44s ease-in-out infinite; }
+  @keyframes kfv_torpedo2_rig{ 0%,100%{ transform: rotate(-26deg) translateY(0);} 50%{ transform: rotate(-26deg) translateY(-3.5px);} }
+  @keyframes kfv_torpedo2_armR{ 0%,100%{ transform: rotate(-100deg);} 50%{ transform: rotate(-110deg);} }
+  @keyframes kfv_torpedo2_armL{ 0%,100%{ transform: rotate(-80deg);} 50%{ transform: rotate(-90deg);} }
+  @keyframes kfv_torpedo2_leg{ 0%,100%{ transform: rotate(11deg);} 50%{ transform: rotate(15deg);} }
+  .mascot-xiao.walking.fv-torpedo3 .x-rig{ animation: kfv_torpedo3_rig 0.38s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo3 .x-armR{ animation: kfv_torpedo3_armR 0.4s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo3 .x-armL{ animation: kfv_torpedo3_armL 0.4s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo3 .x-legL{ animation: kfv_torpedo3_leg 0.4s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo3 .x-legR{ animation: kfv_torpedo3_leg 0.4s ease-in-out infinite; }
+  @keyframes kfv_torpedo3_rig{ 0%,100%{ transform: rotate(-22deg) translateY(0);} 50%{ transform: rotate(-22deg) translateY(-2.8px);} }
+  @keyframes kfv_torpedo3_armR{ 0%,100%{ transform: rotate(-90deg);} 50%{ transform: rotate(-100deg);} }
+  @keyframes kfv_torpedo3_armL{ 0%,100%{ transform: rotate(-70deg);} 50%{ transform: rotate(-80deg);} }
+  @keyframes kfv_torpedo3_leg{ 0%,100%{ transform: rotate(9deg);} 50%{ transform: rotate(13deg);} }
+  .mascot-xiao.walking.fv-torpedo4 .x-rig{ animation: kfv_torpedo4_rig 0.45s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo4 .x-armR{ animation: kfv_torpedo4_armR 0.46s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo4 .x-armL{ animation: kfv_torpedo4_armL 0.46s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo4 .x-legL{ animation: kfv_torpedo4_leg 0.46s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo4 .x-legR{ animation: kfv_torpedo4_leg 0.46s ease-in-out infinite; }
+  @keyframes kfv_torpedo4_rig{ 0%,100%{ transform: rotate(-28deg) translateY(0);} 50%{ transform: rotate(-28deg) translateY(-4px);} }
+  @keyframes kfv_torpedo4_armR{ 0%,100%{ transform: rotate(-105deg);} 50%{ transform: rotate(-115deg);} }
+  @keyframes kfv_torpedo4_armL{ 0%,100%{ transform: rotate(-85deg);} 50%{ transform: rotate(-95deg);} }
+  @keyframes kfv_torpedo4_leg{ 0%,100%{ transform: rotate(12deg);} 50%{ transform: rotate(16deg);} }
+  .mascot-xiao.walking.fv-torpedo5 .x-rig{ animation: kfv_torpedo5_rig 0.41s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo5 .x-armR{ animation: kfv_torpedo5_armR 0.43s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo5 .x-armL{ animation: kfv_torpedo5_armL 0.43s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo5 .x-legL{ animation: kfv_torpedo5_leg 0.43s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-torpedo5 .x-legR{ animation: kfv_torpedo5_leg 0.43s ease-in-out infinite; }
+  @keyframes kfv_torpedo5_rig{ 0%,100%{ transform: rotate(-25deg) translateY(0);} 50%{ transform: rotate(-25deg) translateY(-3.2px);} }
+  @keyframes kfv_torpedo5_armR{ 0%,100%{ transform: rotate(-98deg);} 50%{ transform: rotate(-108deg);} }
+  @keyframes kfv_torpedo5_armL{ 0%,100%{ transform: rotate(-78deg);} 50%{ transform: rotate(-88deg);} }
+  @keyframes kfv_torpedo5_leg{ 0%,100%{ transform: rotate(10deg);} 50%{ transform: rotate(14deg);} }
+  .mascot-xiao.walking.fv-bullet1 .x-rig{ animation: kfv_bullet1_rig 0.3s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet1 .x-armR{ animation: kfv_bullet1_armR 0.32s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet1 .x-armL{ animation: kfv_bullet1_armL 0.32s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet1 .x-legL{ animation: kfv_bullet1_leg 0.32s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet1 .x-legR{ animation: kfv_bullet1_leg 0.32s ease-in-out infinite; }
+  @keyframes kfv_bullet1_rig{ 0%,100%{ transform: rotate(-26deg) translateY(0);} 50%{ transform: rotate(-26deg) translateY(-1.8px);} }
+  @keyframes kfv_bullet1_armR{ 0%,100%{ transform: rotate(-20deg);} 50%{ transform: rotate(-28deg);} }
+  @keyframes kfv_bullet1_armL{ 0%,100%{ transform: rotate(12deg);} 50%{ transform: rotate(20deg);} }
+  @keyframes kfv_bullet1_leg{ 0%,100%{ transform: rotate(8deg);} 50%{ transform: rotate(11deg);} }
+  .mascot-xiao.walking.fv-bullet2 .x-rig{ animation: kfv_bullet2_rig 0.32s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet2 .x-armR{ animation: kfv_bullet2_armR 0.33s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet2 .x-armL{ animation: kfv_bullet2_armL 0.33s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet2 .x-legL{ animation: kfv_bullet2_leg 0.33s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet2 .x-legR{ animation: kfv_bullet2_leg 0.33s ease-in-out infinite; }
+  @keyframes kfv_bullet2_rig{ 0%,100%{ transform: rotate(-28deg) translateY(0);} 50%{ transform: rotate(-28deg) translateY(-2px);} }
+  @keyframes kfv_bullet2_armR{ 0%,100%{ transform: rotate(-24deg);} 50%{ transform: rotate(-32deg);} }
+  @keyframes kfv_bullet2_armL{ 0%,100%{ transform: rotate(14deg);} 50%{ transform: rotate(22deg);} }
+  @keyframes kfv_bullet2_leg{ 0%,100%{ transform: rotate(9deg);} 50%{ transform: rotate(12deg);} }
+  .mascot-xiao.walking.fv-bullet3 .x-rig{ animation: kfv_bullet3_rig 0.28s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet3 .x-armR{ animation: kfv_bullet3_armR 0.3s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet3 .x-armL{ animation: kfv_bullet3_armL 0.3s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet3 .x-legL{ animation: kfv_bullet3_leg 0.3s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet3 .x-legR{ animation: kfv_bullet3_leg 0.3s ease-in-out infinite; }
+  @keyframes kfv_bullet3_rig{ 0%,100%{ transform: rotate(-30deg) translateY(0);} 50%{ transform: rotate(-30deg) translateY(-1.6px);} }
+  @keyframes kfv_bullet3_armR{ 0%,100%{ transform: rotate(-18deg);} 50%{ transform: rotate(-25deg);} }
+  @keyframes kfv_bullet3_armL{ 0%,100%{ transform: rotate(10deg);} 50%{ transform: rotate(17deg);} }
+  @keyframes kfv_bullet3_leg{ 0%,100%{ transform: rotate(7deg);} 50%{ transform: rotate(10deg);} }
+  .mascot-xiao.walking.fv-bullet4 .x-rig{ animation: kfv_bullet4_rig 0.34s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet4 .x-armR{ animation: kfv_bullet4_armR 0.34s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet4 .x-armL{ animation: kfv_bullet4_armL 0.34s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet4 .x-legL{ animation: kfv_bullet4_leg 0.34s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet4 .x-legR{ animation: kfv_bullet4_leg 0.34s ease-in-out infinite; }
+  @keyframes kfv_bullet4_rig{ 0%,100%{ transform: rotate(-27deg) translateY(0);} 50%{ transform: rotate(-27deg) translateY(-2.2px);} }
+  @keyframes kfv_bullet4_armR{ 0%,100%{ transform: rotate(-22deg);} 50%{ transform: rotate(-30deg);} }
+  @keyframes kfv_bullet4_armL{ 0%,100%{ transform: rotate(13deg);} 50%{ transform: rotate(21deg);} }
+  @keyframes kfv_bullet4_leg{ 0%,100%{ transform: rotate(8deg);} 50%{ transform: rotate(12deg);} }
+  .mascot-xiao.walking.fv-bullet5 .x-rig{ animation: kfv_bullet5_rig 0.31s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet5 .x-armR{ animation: kfv_bullet5_armR 0.32s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet5 .x-armL{ animation: kfv_bullet5_armL 0.32s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet5 .x-legL{ animation: kfv_bullet5_leg 0.32s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-bullet5 .x-legR{ animation: kfv_bullet5_leg 0.32s ease-in-out infinite; }
+  @keyframes kfv_bullet5_rig{ 0%,100%{ transform: rotate(-29deg) translateY(0);} 50%{ transform: rotate(-29deg) translateY(-1.9px);} }
+  @keyframes kfv_bullet5_armR{ 0%,100%{ transform: rotate(-26deg);} 50%{ transform: rotate(-34deg);} }
+  @keyframes kfv_bullet5_armL{ 0%,100%{ transform: rotate(15deg);} 50%{ transform: rotate(23deg);} }
+  @keyframes kfv_bullet5_leg{ 0%,100%{ transform: rotate(9deg);} 50%{ transform: rotate(13deg);} }
+  .mascot-xiao.walking.fv-glide1 .x-rig{ animation: kfv_glide1_rig 0.85s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide1 .x-armR{ animation: kfv_glide1_armR 0.9s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide1 .x-armL{ animation: kfv_glide1_armL 0.9s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide1 .x-legL{ animation: kfv_glide1_leg 0.9s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide1 .x-legR{ animation: kfv_glide1_leg 0.9s ease-in-out infinite; }
+  @keyframes kfv_glide1_rig{ 0%,100%{ transform: rotate(-8deg) translateY(0);} 50%{ transform: rotate(-8deg) translateY(-6px);} }
+  @keyframes kfv_glide1_armR{ 0%,100%{ transform: rotate(-70deg);} 50%{ transform: rotate(-80deg);} }
+  @keyframes kfv_glide1_armL{ 0%,100%{ transform: rotate(70deg);} 50%{ transform: rotate(80deg);} }
+  @keyframes kfv_glide1_leg{ 0%,100%{ transform: rotate(10deg);} 50%{ transform: rotate(15deg);} }
+  .mascot-xiao.walking.fv-glide2 .x-rig{ animation: kfv_glide2_rig 0.9s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide2 .x-armR{ animation: kfv_glide2_armR 0.92s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide2 .x-armL{ animation: kfv_glide2_armL 0.92s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide2 .x-legL{ animation: kfv_glide2_leg 0.92s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide2 .x-legR{ animation: kfv_glide2_leg 0.92s ease-in-out infinite; }
+  @keyframes kfv_glide2_rig{ 0%,100%{ transform: rotate(-10deg) translateY(0);} 50%{ transform: rotate(-10deg) translateY(-6.5px);} }
+  @keyframes kfv_glide2_armR{ 0%,100%{ transform: rotate(-75deg);} 50%{ transform: rotate(-85deg);} }
+  @keyframes kfv_glide2_armL{ 0%,100%{ transform: rotate(75deg);} 50%{ transform: rotate(85deg);} }
+  @keyframes kfv_glide2_leg{ 0%,100%{ transform: rotate(11deg);} 50%{ transform: rotate(16deg);} }
+  .mascot-xiao.walking.fv-glide3 .x-rig{ animation: kfv_glide3_rig 0.8s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide3 .x-armR{ animation: kfv_glide3_armR 0.85s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide3 .x-armL{ animation: kfv_glide3_armL 0.85s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide3 .x-legL{ animation: kfv_glide3_leg 0.85s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide3 .x-legR{ animation: kfv_glide3_leg 0.85s ease-in-out infinite; }
+  @keyframes kfv_glide3_rig{ 0%,100%{ transform: rotate(-6deg) translateY(0);} 50%{ transform: rotate(-6deg) translateY(-5.5px);} }
+  @keyframes kfv_glide3_armR{ 0%,100%{ transform: rotate(-65deg);} 50%{ transform: rotate(-75deg);} }
+  @keyframes kfv_glide3_armL{ 0%,100%{ transform: rotate(65deg);} 50%{ transform: rotate(75deg);} }
+  @keyframes kfv_glide3_leg{ 0%,100%{ transform: rotate(9deg);} 50%{ transform: rotate(14deg);} }
+  .mascot-xiao.walking.fv-glide4 .x-rig{ animation: kfv_glide4_rig 0.95s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide4 .x-armR{ animation: kfv_glide4_armR 0.97s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide4 .x-armL{ animation: kfv_glide4_armL 0.97s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide4 .x-legL{ animation: kfv_glide4_leg 0.97s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide4 .x-legR{ animation: kfv_glide4_leg 0.97s ease-in-out infinite; }
+  @keyframes kfv_glide4_rig{ 0%,100%{ transform: rotate(-12deg) translateY(0);} 50%{ transform: rotate(-12deg) translateY(-7px);} }
+  @keyframes kfv_glide4_armR{ 0%,100%{ transform: rotate(-78deg);} 50%{ transform: rotate(-88deg);} }
+  @keyframes kfv_glide4_armL{ 0%,100%{ transform: rotate(78deg);} 50%{ transform: rotate(88deg);} }
+  @keyframes kfv_glide4_leg{ 0%,100%{ transform: rotate(12deg);} 50%{ transform: rotate(17deg);} }
+  .mascot-xiao.walking.fv-glide5 .x-rig{ animation: kfv_glide5_rig 0.88s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide5 .x-armR{ animation: kfv_glide5_armR 0.89s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide5 .x-armL{ animation: kfv_glide5_armL 0.89s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide5 .x-legL{ animation: kfv_glide5_leg 0.89s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-glide5 .x-legR{ animation: kfv_glide5_leg 0.89s ease-in-out infinite; }
+  @keyframes kfv_glide5_rig{ 0%,100%{ transform: rotate(-9deg) translateY(0);} 50%{ transform: rotate(-9deg) translateY(-6.2px);} }
+  @keyframes kfv_glide5_armR{ 0%,100%{ transform: rotate(-72deg);} 50%{ transform: rotate(-82deg);} }
+  @keyframes kfv_glide5_armL{ 0%,100%{ transform: rotate(72deg);} 50%{ transform: rotate(82deg);} }
+  @keyframes kfv_glide5_leg{ 0%,100%{ transform: rotate(10deg);} 50%{ transform: rotate(15deg);} }
+  .mascot-xiao.walking.fv-cruise1 .x-rig{ animation: kfv_cruise1_rig 0.65s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise1 .x-armR{ animation: kfv_cruise1_armR 0.68s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise1 .x-armL{ animation: kfv_cruise1_armL 0.68s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise1 .x-legL{ animation: kfv_cruise1_leg 0.68s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise1 .x-legR{ animation: kfv_cruise1_leg 0.68s ease-in-out infinite; }
+  @keyframes kfv_cruise1_rig{ 0%,100%{ transform: rotate(-5deg) translateY(0);} 50%{ transform: rotate(-5deg) translateY(-3px);} }
+  @keyframes kfv_cruise1_armR{ 0%,100%{ transform: rotate(-40deg);} 50%{ transform: rotate(-48deg);} }
+  @keyframes kfv_cruise1_armL{ 0%,100%{ transform: rotate(30deg);} 50%{ transform: rotate(38deg);} }
+  @keyframes kfv_cruise1_leg{ 0%,100%{ transform: rotate(12deg);} 50%{ transform: rotate(16deg);} }
+  .mascot-xiao.walking.fv-cruise2 .x-rig{ animation: kfv_cruise2_rig 0.68s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise2 .x-armR{ animation: kfv_cruise2_armR 0.7s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise2 .x-armL{ animation: kfv_cruise2_armL 0.7s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise2 .x-legL{ animation: kfv_cruise2_leg 0.7s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise2 .x-legR{ animation: kfv_cruise2_leg 0.7s ease-in-out infinite; }
+  @keyframes kfv_cruise2_rig{ 0%,100%{ transform: rotate(-6deg) translateY(0);} 50%{ transform: rotate(-6deg) translateY(-3.5px);} }
+  @keyframes kfv_cruise2_armR{ 0%,100%{ transform: rotate(-45deg);} 50%{ transform: rotate(-53deg);} }
+  @keyframes kfv_cruise2_armL{ 0%,100%{ transform: rotate(33deg);} 50%{ transform: rotate(41deg);} }
+  @keyframes kfv_cruise2_leg{ 0%,100%{ transform: rotate(13deg);} 50%{ transform: rotate(17deg);} }
+  .mascot-xiao.walking.fv-cruise3 .x-rig{ animation: kfv_cruise3_rig 0.6s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise3 .x-armR{ animation: kfv_cruise3_armR 0.63s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise3 .x-armL{ animation: kfv_cruise3_armL 0.63s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise3 .x-legL{ animation: kfv_cruise3_leg 0.63s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise3 .x-legR{ animation: kfv_cruise3_leg 0.63s ease-in-out infinite; }
+  @keyframes kfv_cruise3_rig{ 0%,100%{ transform: rotate(-4deg) translateY(0);} 50%{ transform: rotate(-4deg) translateY(-2.8px);} }
+  @keyframes kfv_cruise3_armR{ 0%,100%{ transform: rotate(-38deg);} 50%{ transform: rotate(-45deg);} }
+  @keyframes kfv_cruise3_armL{ 0%,100%{ transform: rotate(28deg);} 50%{ transform: rotate(35deg);} }
+  @keyframes kfv_cruise3_leg{ 0%,100%{ transform: rotate(11deg);} 50%{ transform: rotate(15deg);} }
+  .mascot-xiao.walking.fv-cruise4 .x-rig{ animation: kfv_cruise4_rig 0.7s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise4 .x-armR{ animation: kfv_cruise4_armR 0.72s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise4 .x-armL{ animation: kfv_cruise4_armL 0.72s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise4 .x-legL{ animation: kfv_cruise4_leg 0.72s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise4 .x-legR{ animation: kfv_cruise4_leg 0.72s ease-in-out infinite; }
+  @keyframes kfv_cruise4_rig{ 0%,100%{ transform: rotate(-7deg) translateY(0);} 50%{ transform: rotate(-7deg) translateY(-3.8px);} }
+  @keyframes kfv_cruise4_armR{ 0%,100%{ transform: rotate(-48deg);} 50%{ transform: rotate(-56deg);} }
+  @keyframes kfv_cruise4_armL{ 0%,100%{ transform: rotate(35deg);} 50%{ transform: rotate(44deg);} }
+  @keyframes kfv_cruise4_leg{ 0%,100%{ transform: rotate(14deg);} 50%{ transform: rotate(18deg);} }
+  .mascot-xiao.walking.fv-cruise5 .x-rig{ animation: kfv_cruise5_rig 0.66s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise5 .x-armR{ animation: kfv_cruise5_armR 0.69s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise5 .x-armL{ animation: kfv_cruise5_armL 0.69s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise5 .x-legL{ animation: kfv_cruise5_leg 0.69s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-cruise5 .x-legR{ animation: kfv_cruise5_leg 0.69s ease-in-out infinite; }
+  @keyframes kfv_cruise5_rig{ 0%,100%{ transform: rotate(-5.5deg) translateY(0);} 50%{ transform: rotate(-5.5deg) translateY(-3.2px);} }
+  @keyframes kfv_cruise5_armR{ 0%,100%{ transform: rotate(-42deg);} 50%{ transform: rotate(-50deg);} }
+  @keyframes kfv_cruise5_armL{ 0%,100%{ transform: rotate(31deg);} 50%{ transform: rotate(39deg);} }
+  @keyframes kfv_cruise5_leg{ 0%,100%{ transform: rotate(12.5deg);} 50%{ transform: rotate(16.5deg);} }
+  .mascot-xiao.walking.fv-dash1 .x-rig{ animation: kfv_dash1_rig 0.4s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash1 .x-armR{ animation: kfv_dash1_armR 0.42s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash1 .x-armL{ animation: kfv_dash1_armL 0.42s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash1 .x-legL{ animation: kfv_dash1_leg 0.42s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash1 .x-legR{ animation: kfv_dash1_leg 0.42s ease-in-out infinite; }
+  @keyframes kfv_dash1_rig{ 0%,100%{ transform: rotate(-30deg) translateY(0);} 50%{ transform: rotate(-30deg) translateY(-5px);} }
+  @keyframes kfv_dash1_armR{ 0%,100%{ transform: rotate(-120deg);} 50%{ transform: rotate(-135deg);} }
+  @keyframes kfv_dash1_armL{ 0%,100%{ transform: rotate(80deg);} 50%{ transform: rotate(95deg);} }
+  @keyframes kfv_dash1_leg{ 0%,100%{ transform: rotate(24deg);} 50%{ transform: rotate(30deg);} }
+  .mascot-xiao.walking.fv-dash2 .x-rig{ animation: kfv_dash2_rig 0.42s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash2 .x-armR{ animation: kfv_dash2_armR 0.44s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash2 .x-armL{ animation: kfv_dash2_armL 0.44s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash2 .x-legL{ animation: kfv_dash2_leg 0.44s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash2 .x-legR{ animation: kfv_dash2_leg 0.44s ease-in-out infinite; }
+  @keyframes kfv_dash2_rig{ 0%,100%{ transform: rotate(-33deg) translateY(0);} 50%{ transform: rotate(-33deg) translateY(-5.5px);} }
+  @keyframes kfv_dash2_armR{ 0%,100%{ transform: rotate(-125deg);} 50%{ transform: rotate(-140deg);} }
+  @keyframes kfv_dash2_armL{ 0%,100%{ transform: rotate(85deg);} 50%{ transform: rotate(100deg);} }
+  @keyframes kfv_dash2_leg{ 0%,100%{ transform: rotate(26deg);} 50%{ transform: rotate(32deg);} }
+  .mascot-xiao.walking.fv-dash3 .x-rig{ animation: kfv_dash3_rig 0.38s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash3 .x-armR{ animation: kfv_dash3_armR 0.4s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash3 .x-armL{ animation: kfv_dash3_armL 0.4s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash3 .x-legL{ animation: kfv_dash3_leg 0.4s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash3 .x-legR{ animation: kfv_dash3_leg 0.4s ease-in-out infinite; }
+  @keyframes kfv_dash3_rig{ 0%,100%{ transform: rotate(-28deg) translateY(0);} 50%{ transform: rotate(-28deg) translateY(-4.5px);} }
+  @keyframes kfv_dash3_armR{ 0%,100%{ transform: rotate(-115deg);} 50%{ transform: rotate(-128deg);} }
+  @keyframes kfv_dash3_armL{ 0%,100%{ transform: rotate(75deg);} 50%{ transform: rotate(90deg);} }
+  @keyframes kfv_dash3_leg{ 0%,100%{ transform: rotate(22deg);} 50%{ transform: rotate(28deg);} }
+  .mascot-xiao.walking.fv-dash4 .x-rig{ animation: kfv_dash4_rig 0.45s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash4 .x-armR{ animation: kfv_dash4_armR 0.47s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash4 .x-armL{ animation: kfv_dash4_armL 0.47s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash4 .x-legL{ animation: kfv_dash4_leg 0.47s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash4 .x-legR{ animation: kfv_dash4_leg 0.47s ease-in-out infinite; }
+  @keyframes kfv_dash4_rig{ 0%,100%{ transform: rotate(-35deg) translateY(0);} 50%{ transform: rotate(-35deg) translateY(-6px);} }
+  @keyframes kfv_dash4_armR{ 0%,100%{ transform: rotate(-130deg);} 50%{ transform: rotate(-145deg);} }
+  @keyframes kfv_dash4_armL{ 0%,100%{ transform: rotate(90deg);} 50%{ transform: rotate(105deg);} }
+  @keyframes kfv_dash4_leg{ 0%,100%{ transform: rotate(28deg);} 50%{ transform: rotate(34deg);} }
+  .mascot-xiao.walking.fv-dash5 .x-rig{ animation: kfv_dash5_rig 0.41s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash5 .x-armR{ animation: kfv_dash5_armR 0.43s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash5 .x-armL{ animation: kfv_dash5_armL 0.43s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash5 .x-legL{ animation: kfv_dash5_leg 0.43s ease-in-out infinite; }
+  .mascot-xiao.walking.fv-dash5 .x-legR{ animation: kfv_dash5_leg 0.43s ease-in-out infinite; }
+  @keyframes kfv_dash5_rig{ 0%,100%{ transform: rotate(-32deg) translateY(0);} 50%{ transform: rotate(-32deg) translateY(-5.2px);} }
+  @keyframes kfv_dash5_armR{ 0%,100%{ transform: rotate(-122deg);} 50%{ transform: rotate(-137deg);} }
+  @keyframes kfv_dash5_armL{ 0%,100%{ transform: rotate(82deg);} 50%{ transform: rotate(97deg);} }
+  @keyframes kfv_dash5_leg{ 0%,100%{ transform: rotate(25deg);} 50%{ transform: rotate(31deg);} }
+
+  /* ===== 20 truques de voo — flourishes curtos e unicos disparados de vez
+     em quando ao decolar (classe .trickando + a classe do truque, removidas
+     sozinhas pelo JS depois da duracao). Especificidade maior que a pose
+     continua entao sobrepoem o voo normal so por um instante. ===== */
+  .mascot-xiao.trickando.t-barrel1 .x-rig{ animation: trickBarrel1 600ms ease-in-out; }
+  @keyframes trickBarrel1{ 0%{transform:rotate(0deg);}100%{transform:rotate(360deg);} }
+  .mascot-xiao.trickando.t-barrel2 .x-rig{ animation: trickBarrel2 480ms ease-in; }
+  @keyframes trickBarrel2{ 0%{transform:rotate(0deg);}100%{transform:rotate(360deg);} }
+  .mascot-xiao.trickando.t-backflip .x-rig{ animation: trickBackflip 650ms ease-in-out; }
+  @keyframes trickBackflip{ 0%{transform:rotate(0deg);}100%{transform:rotate(-360deg);} }
+  .mascot-xiao.trickando.t-corkscrew .x-rig{ animation: trickCorkscrew 700ms ease-in-out; }
+  @keyframes trickCorkscrew{ 0%{transform:rotate(0deg) scaleX(1);}50%{transform:rotate(180deg) scaleX(-1);}100%{transform:rotate(360deg) scaleX(1);} }
+  .mascot-xiao.trickando.t-doubleroll .x-rig{ animation: trickDoubleRoll 900ms linear; }
+  @keyframes trickDoubleRoll{ 0%{transform:rotate(0deg);}100%{transform:rotate(720deg);} }
+  .mascot-xiao.trickando.t-twirl .x-rig{ animation: trickTwirl 500ms ease-in-out; }
+  @keyframes trickTwirl{ 0%,100%{transform:rotate(0deg);}50%{transform:rotate(180deg);} }
+  .mascot-xiao.trickando.t-wobble .x-rig{ animation: trickWobble 500ms ease-in-out; }
+  @keyframes trickWobble{ 0%,100%{transform:rotate(0deg);}25%{transform:rotate(-15deg);}50%{transform:rotate(15deg);}75%{transform:rotate(-10deg);} }
+  .mascot-xiao.trickando.t-spiral .x-rig{ animation: trickSpiral 700ms ease-in-out; }
+  @keyframes trickSpiral{ 0%{transform:rotate(0deg) scale(1);}50%{transform:rotate(180deg) scale(1.15);}100%{transform:rotate(360deg) scale(1);} }
+  .mascot-xiao.trickando.t-tumble .x-rig{ animation: trickTumble 600ms ease-in-out; }
+  @keyframes trickTumble{ 0%{transform:rotate(0deg) translateY(0);}50%{transform:rotate(180deg) translateY(10px);}100%{transform:rotate(360deg) translateY(0);} }
+  .mascot-xiao.trickando.t-shimmy .x-rig{ animation: trickShimmy 400ms ease-in-out; }
+  @keyframes trickShimmy{ 0%,100%{transform:rotate(0deg);}25%{transform:rotate(-8deg);}50%{transform:rotate(8deg);}75%{transform:rotate(-6deg);} }
+  .mascot-xiao.trickando.t-fistpump .x-armR{ animation: trickFistPumpR 500ms ease-in-out; }
+  @keyframes trickFistPumpR{ 0%,100%{transform:rotate(-100deg);}25%{transform:rotate(-150deg);}50%{transform:rotate(-100deg);}75%{transform:rotate(-150deg);}100%{transform:rotate(-100deg);} }
+  .mascot-xiao.trickando.t-victory .x-armR{ animation: trickVictoryR 400ms ease-out; }
+  @keyframes trickVictoryR{ 0%{transform:rotate(-100deg);}100%{transform:rotate(-165deg);} }
+  .mascot-xiao.trickando.t-wave .x-armL{ animation: trickWaveL 600ms ease-in-out; }
+  @keyframes trickWaveL{ 0%,100%{transform:rotate(30deg);}25%{transform:rotate(60deg);}50%{transform:rotate(25deg);}75%{transform:rotate(60deg);} }
+  .mascot-xiao.trickando.t-salute .x-armR{ animation: trickSaluteR 350ms ease-out; }
+  @keyframes trickSaluteR{ 0%{transform:rotate(-100deg);}100%{transform:rotate(-135deg);} }
+  .mascot-xiao.trickando.t-spread .x-armR{ animation: trickSpreadR 400ms ease-out; }
+  @keyframes trickSpreadR{ 0%{transform:rotate(-100deg);}100%{transform:rotate(-80deg);} }
+  .mascot-xiao.trickando.t-spread .x-armL{ animation: trickSpreadL 400ms ease-out; }
+  @keyframes trickSpreadL{ 0%{transform:rotate(50deg);}100%{transform:rotate(80deg);} }
+  .mascot-xiao.trickando.t-star .x-armR{ animation: trickStarR 450ms ease-out; }
+  @keyframes trickStarR{ 0%{transform:rotate(-100deg);}100%{transform:rotate(-75deg);} }
+  .mascot-xiao.trickando.t-star .x-armL{ animation: trickStarL 450ms ease-out; }
+  @keyframes trickStarL{ 0%{transform:rotate(50deg);}100%{transform:rotate(75deg);} }
+  .mascot-xiao.trickando.t-star .x-legL{ animation: trickStarLegL 450ms ease-out; }
+  @keyframes trickStarLegL{ 0%{transform:rotate(16deg);}100%{transform:rotate(-12deg);} }
+  .mascot-xiao.trickando.t-star .x-legR{ animation: trickStarLegR 450ms ease-out; }
+  @keyframes trickStarLegR{ 0%{transform:rotate(20deg);}100%{transform:rotate(12deg);} }
+  .mascot-xiao.trickando.t-shrug .x-armR{ animation: trickShrugR 500ms ease-in-out; }
+  @keyframes trickShrugR{ 0%,100%{transform:rotate(-100deg);}50%{transform:rotate(-70deg);} }
+  .mascot-xiao.trickando.t-shrug .x-armL{ animation: trickShrugL 500ms ease-in-out; }
+  @keyframes trickShrugL{ 0%,100%{transform:rotate(50deg);}50%{transform:rotate(30deg);} }
+  .mascot-xiao.trickando.t-powerflex .x-armR{ animation: trickFlexR 400ms ease-out; }
+  @keyframes trickFlexR{ 0%{transform:rotate(-100deg);}100%{transform:rotate(-170deg);} }
+  .mascot-xiao.trickando.t-powerflex .x-armL{ animation: trickFlexL 400ms ease-out; }
+  @keyframes trickFlexL{ 0%{transform:rotate(50deg);}100%{transform:rotate(100deg);} }
+  .mascot-xiao.trickando.t-fistbumpsky .x-armR{ animation: trickFistBumpSky 500ms ease-out; }
+  @keyframes trickFistBumpSky{ 0%{transform:rotate(-100deg);}60%{transform:rotate(-172deg);}80%{transform:rotate(-158deg);}100%{transform:rotate(-165deg);} }
+  .mascot-xiao.trickando.t-crossarms .x-armR{ animation: trickCrossR 400ms ease-out; }
+  @keyframes trickCrossR{ 0%{transform:rotate(-100deg);}100%{transform:rotate(-55deg);} }
+  .mascot-xiao.trickando.t-crossarms .x-armL{ animation: trickCrossL 400ms ease-out; }
+  @keyframes trickCrossL{ 0%{transform:rotate(50deg);}100%{transform:rotate(-120deg);} }
+
   @media (max-width: 600px){
     .mascot-ghost svg{ width:56px; height:64px; }
     .mascot-xiao svg{ width:40px; height:68px; }
@@ -4772,6 +5106,54 @@ idiomaBtn.addEventListener('click', function(){
     return el;
   }
 
+  // ===== Voo do guerreiro: 30 variantes continuas + 20 truques curtos =====
+  // (mais de 50 movimentos de voo diferentes ao todo, contando a pose padrao
+  // ja existente). So se aplica ao voo livre/solo (moverPara/pousarNaBarra);
+  // as cenas em dupla continuam com a pose padrao pra nao atrapalhar a
+  // coreografia combinada com o fantasma.
+  var FLIGHT_VARIANTS = ['fv-punch1','fv-punch2','fv-punch3','fv-punch4','fv-punch5','fv-torpedo1','fv-torpedo2','fv-torpedo3','fv-torpedo4','fv-torpedo5','fv-bullet1','fv-bullet2','fv-bullet3','fv-bullet4','fv-bullet5','fv-glide1','fv-glide2','fv-glide3','fv-glide4','fv-glide5','fv-cruise1','fv-cruise2','fv-cruise3','fv-cruise4','fv-cruise5','fv-dash1','fv-dash2','fv-dash3','fv-dash4','fv-dash5'];
+  var FLIGHT_TRICKS = [
+    { cls: 't-barrel1', dur: 600, burst: false },
+    { cls: 't-barrel2', dur: 480, burst: false },
+    { cls: 't-backflip', dur: 650, burst: false },
+    { cls: 't-corkscrew', dur: 700, burst: false },
+    { cls: 't-doubleroll', dur: 900, burst: false },
+    { cls: 't-twirl', dur: 500, burst: false },
+    { cls: 't-wobble', dur: 500, burst: false },
+    { cls: 't-spiral', dur: 700, burst: false },
+    { cls: 't-tumble', dur: 600, burst: false },
+    { cls: 't-shimmy', dur: 400, burst: false },
+    { cls: 't-fistpump', dur: 500, burst: false },
+    { cls: 't-victory', dur: 400, burst: false },
+    { cls: 't-wave', dur: 600, burst: false },
+    { cls: 't-salute', dur: 350, burst: false },
+    { cls: 't-spread', dur: 400, burst: false },
+    { cls: 't-star', dur: 450, burst: false },
+    { cls: 't-shrug', dur: 500, burst: false },
+    { cls: 't-powerflex', dur: 400, burst: false },
+    { cls: 't-fistbumpsky', dur: 500, burst: true },
+    { cls: 't-crossarms', dur: 400, burst: false }
+  ];
+
+  function aplicarVarianteVoo(el){
+    for(var i = 0; i < FLIGHT_VARIANTS.length; i++){ el.classList.remove(FLIGHT_VARIANTS[i]); }
+    var escolhida = FLIGHT_VARIANTS[Math.floor(Math.random() * FLIGHT_VARIANTS.length)];
+    el.classList.add(escolhida);
+  }
+
+  function talvezFazerTruque(el){
+    if(Math.random() > 0.35) return;
+    var t = FLIGHT_TRICKS[Math.floor(Math.random() * FLIGHT_TRICKS.length)];
+    el.classList.add('trickando', t.cls);
+    if(t.burst){
+      var layerTruque = document.querySelector('.mascot-layer');
+      if(layerTruque) criarBurst(layerTruque, (parseFloat(el.dataset.x) || 0) + 45, (parseFloat(el.dataset.y) || 0) - 30, '#ffd23d');
+    }
+    setTimeout(function(){
+      el.classList.remove('trickando', t.cls);
+    }, t.dur);
+  }
+
   // ---- Cenas de interacao (escolhidas aleatoriamente pelo diretor) ----
   async function cenaPerseguicao(layer, ghost, xiao){
     var area = areaSegura();
@@ -5319,6 +5701,7 @@ idiomaBtn.addEventListener('click', function(){
     el.classList.toggle('flip', destX < atualX);
     el.classList.remove('idle', 'hiding', 'peeking', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
     el.classList.add('walking');
+    if(tipo === 'xiao'){ aplicarVarianteVoo(el); talvezFazerTruque(el); }
     el.style.transition = 'transform ' + duracao + 's cubic-bezier(.4,.04,.32,1)';
     el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
     el.dataset.x = destX; el.dataset.y = destY;
@@ -5380,6 +5763,7 @@ idiomaBtn.addEventListener('click', function(){
     el.classList.toggle('flip', destX < atualX);
     el.classList.remove('idle', 'hiding', 'peeking', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
     el.classList.add('walking');
+    if(tipo === 'xiao'){ aplicarVarianteVoo(el); talvezFazerTruque(el); }
     el.style.transition = 'transform ' + duracao + 's cubic-bezier(.4,.04,.32,1)';
     el.style.transform = 'translate(' + destX + 'px,' + destY + 'px)';
     el.dataset.x = destX; el.dataset.y = destY;
