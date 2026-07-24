@@ -5884,12 +5884,43 @@ idiomaBtn.addEventListener('click', function(){
     await esperar(200);
   }
 
+  // O guerreiro vai ate um painel real do site (os accordions "Vendedores,
+  // Lives e Leiloes" / "Radar de Caca" / etc, o mapa ja sabe onde eles
+  // estao) e literalmente clica nele -- abre a "porta" de verdade (o painel
+  // expande de verdade), espera um pouco, e fecha de novo, do jeito que
+  // pediu pra interagir com portas reais do site.
+  async function cenaAbrirPorta(layer, ghost, xiao){
+    var portas = Array.prototype.filter.call(document.querySelectorAll('.canais-toggle-card'), function(el){
+      var r = el.getBoundingClientRect();
+      return r.width > 0 && r.top > 90 && r.top < window.innerHeight - 60;
+    });
+    if(!portas.length){ await esperar(200); return; }
+    var porta = portas[Math.floor(Math.random() * portas.length)];
+    var area = areaSegura();
+    var r = porta.getBoundingClientRect();
+    var px = clampeia(r.left + 40, area.minX, area.maxX);
+    var py = clampeia(r.top - 30, area.minY, area.maxY);
+    await moverElementoPromise(xiao, px, py, 120);
+    var gx = clampeia(r.left + r.width - 60, area.minX, area.maxX);
+    var fugaFantasma = moverElementoPromise(ghost, gx, py, 70);
+    retriggerAnim(xiao, 'kicking');
+    criarBurst(layer, r.left + 40, r.top, '#7ec4ff');
+    await esperar(220);
+    porta.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    await fugaFantasma;
+    retriggerAnim(ghost, 'olhando');
+    await esperar(1500 + Math.random() * 600);
+    porta.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true }));
+    await esperar(300);
+  }
+
   var CENAS_DISPONIVEIS = [
     cenaPerseguicao, cenaBriga, cenaPortal, cenaBuracoNegro, cenaBomba,
     cenaDuelo, cenaEscudoBloqueio, cenaRouboDeChapeu, cenaParaquedas, cenaPatinete,
     cenaPescaria, cenaJetpack, cenaFesta, cenaCaboDeGuerra, cenaSelfie,
     cenaAltoCinco, cenaBracoDeFerro, cenaPedraPapelTesoura, cenaCarona, cenaPipa,
-    cenaEscondeEsconde, cenaDancaSincronizada, cenaGuerraDeConfete, cenaAtaquePoder
+    cenaEscondeEsconde, cenaDancaSincronizada, cenaGuerraDeConfete, cenaAtaquePoder,
+    cenaAbrirPorta
   ];
 
   function tentarCena(layer, ghost, xiao){
@@ -5971,8 +6002,54 @@ idiomaBtn.addEventListener('click', function(){
     moverPara(el, tipo, null);
   }
 
+  // ===== Mapa do site: em vez de so sortear um ponto (x,y) qualquer no ar,
+  // os mascotes "leem" o layout de verdade da pagina como um mapa 2D --
+  // sabem quais elementos tem uma superficie de cima pra pousar (cards,
+  // paineis, barra superior, dock lateral) e tratam esses mesmos elementos
+  // como solidos (evitam materializar por dentro deles quando estao so
+  // vagando no ar, sem intencao de se esconder). Recalculado a cada
+  // deslocamento porque a pagina pode ter rolado/redimensionado.
+  function mapearSite(){
+    var pousaveis = [], solidos = [], portas = [];
+    function ver(el){
+      var r = el.getBoundingClientRect();
+      if(r.width <= 4 || r.height <= 4) return null;
+      if(r.bottom < 100 || r.top > window.innerHeight - 20) return null;
+      if(r.right < 10 || r.left > window.innerWidth - 10) return null;
+      return r;
+    }
+    Array.prototype.forEach.call(document.querySelectorAll('.card'), function(el){
+      var r = ver(el); if(!r) return;
+      pousaveis.push({ left:r.left, right:r.right, y:r.top });
+      solidos.push(r);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.canais-toggle-card, .stat, .top-controls-bar'), function(el){
+      var r = ver(el); if(!r) return;
+      pousaveis.push({ left:r.left, right:r.right, y:r.top });
+      solidos.push(r);
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.top-controls-bar button, .side-dock a, .side-dock button, .filters button'), function(el){
+      var r = ver(el); if(!r) return;
+      pousaveis.push({ left:r.left, right:r.right, y:r.top });
+    });
+    Array.prototype.forEach.call(document.querySelectorAll('.canais-toggle-card'), function(el){
+      if(ver(el)) portas.push(el);
+    });
+    return { pousaveis: pousaveis, solidos: solidos, portas: portas };
+  }
+
+  // Um ponto e "livre" se nao cai por dentro de nenhum solido do mapa (com
+  // uma margem, pra nao rocar visualmente na borda).
+  function pontoLivre(x, y, solidos){
+    for(var i = 0; i < solidos.length; i++){
+      var r = solidos[i];
+      if(x > r.left - 18 && x < r.right + 18 && y > r.top - 8 && y < r.bottom + 8) return false;
+    }
+    return true;
+  }
+
   function moverPara(el, tipo, cardAlvo){
-    var destX, destY, hideX, hideY, peekX, peekY;
+    var destX, destY, hideX, hideY, peekX, peekY, vaiPousarDepois = false;
     if(cardAlvo){
       var r = cardAlvo.getBoundingClientRect();
       // Posicao "escondida" fica de verdade dentro da area do card (oclusao
@@ -5983,8 +6060,25 @@ idiomaBtn.addEventListener('click', function(){
       destX = hideX; destY = hideY;
     } else {
       var area = areaSegura();
-      destX = area.minX + Math.random() * (area.maxX - area.minX);
-      destY = area.minY + Math.random() * (area.maxY - area.minY);
+      var mapa = mapearSite();
+      // Na maior parte das vezes eles usam uma superficie real do site como
+      // apoio pra pousar (o "mapa 2D"); o resto do tempo continuam voando
+      // livre pelo ar, mas evitando materializar por dentro de algo solido.
+      if(mapa.pousaveis.length && Math.random() < 0.62){
+        var sup = mapa.pousaveis[Math.floor(Math.random() * mapa.pousaveis.length)];
+        var largura = Math.max(1, sup.right - sup.left);
+        destX = clampeia(sup.left + Math.random() * largura - 24, area.minX, area.maxX);
+        destY = clampeia(sup.y - 34, area.minY, area.maxY);
+        vaiPousarDepois = true;
+      } else {
+        var tent = 0, ax, ay;
+        do{
+          ax = area.minX + Math.random() * (area.maxX - area.minX);
+          ay = area.minY + Math.random() * (area.maxY - area.minY);
+          tent++;
+        } while(!pontoLivre(ax, ay, mapa.solidos) && tent < 6);
+        destX = ax; destY = ay;
+      }
     }
     var atualX = parseFloat(el.dataset.x) || 0;
     var atualY = parseFloat(el.dataset.y) || 0;
@@ -6016,7 +6110,11 @@ idiomaBtn.addEventListener('click', function(){
           });
       } else {
         el.classList.add('idle');
+        if(vaiPousarDepois) el.classList.add('perched');
         retriggerAnim(el, 'pousando');
+        if(vaiPousarDepois){
+          setTimeout(function(){ el.classList.remove('perched'); }, 1400 + Math.random() * 1400);
+        }
         setTimeout(function(){ vagar(el, tipo); }, 500 + Math.random() * 1600);
       }
     });
