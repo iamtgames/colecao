@@ -1213,6 +1213,12 @@
   @keyframes xflySpeed{ 0%,100%{ opacity: calc(var(--velop,0.55) * 0.6);} 50%{ opacity: var(--velop,0.55);} }
   @keyframes fxImpulso{ 0%{ transform: scaleY(1) scaleX(1);} 55%{ transform: scaleY(0.82) scaleX(1.14);} 100%{ transform: scaleY(1) scaleX(1);} }
   .mascot.impulso .mascot-fxwrap{ animation: fxImpulso .13s ease-out; }
+  /* Segurar o mascote com o mouse: cursor de "agarrado" + um leve
+     balanco de quem esta sendo carregado, pra sentir fisico de verdade
+     em vez de so teleportar preso ao ponteiro. */
+  .mascot.segurado{ cursor: grabbing; z-index: 97; }
+  .mascot.segurado .mascot-fxwrap{ animation: fxSegurado .4s ease-in-out infinite; filter: brightness(1.25); }
+  @keyframes fxSegurado{ 0%,100%{ transform: rotate(-4deg);} 50%{ transform: rotate(4deg);} }
   .mascot-xiao.idle .x-rig{ animation: xIdleBreathe 2.4s ease-in-out infinite; }
   @keyframes xIdleBreathe{ 0%,100%{ transform: scaleY(1);} 50%{ transform: scaleY(1.02);} }
   .mascot-xiao.kicking .x-armL{ animation: xkArmL 1.1s ease-in-out; }
@@ -1668,6 +1674,21 @@
   body[data-skin="neon"] .fx-carga, body[data-skin="neon"] .fx-projetil{
     background: radial-gradient(circle, #fff, #39ff88 50%, #00f0ff 80%);
     box-shadow: 0 0 14px 5px rgba(57,255,136,.85);
+  }
+  /* Faisca de desvio: pisca no ponto exato onde o motor de movimento
+     detectou um obstaculo no meio da curva, antes de recalcular a rota --
+     deixa visivel que o "desviar de coisas solidas" e real, nao so sorte. */
+  .fx-desvio{
+    width:10px; height:10px; border-radius:50%;
+    background: radial-gradient(circle, #fff, #7ec4ff 55%, transparent 78%);
+    box-shadow: 0 0 10px 4px rgba(126,196,255,.85);
+    opacity: 0; transform-origin: center;
+    transition: opacity .12s ease-out, transform .28s ease-out;
+  }
+  .fx-desvio.ativo{ opacity: 1; transform: scale(2.2); }
+  body[data-skin="neon"] .fx-desvio{
+    background: radial-gradient(circle, #fff, #ff2e88 55%, transparent 78%);
+    box-shadow: 0 0 10px 4px rgba(255,46,136,.85);
   }
   /* Oclusao real: o card sobe acima da camada dos mascotes (z-index 95)
      enquanto alguem esta escondido atras dele de verdade -- nao eh mais
@@ -5176,6 +5197,19 @@ idiomaBtn.addEventListener('click', function(){
             return true;
           };
           if(!checarCurva(ctrlX, ctrlY)){
+            // Feedback visual de que o desvio e "inteligente" de verdade:
+            // uma faisca rapida no ponto exato que ele detectou como
+            // bloqueado, antes de recalcular a rota por outro lado.
+            var layerSpark = el.parentElement;
+            if(layerSpark){
+              var blocX = 0.25*origX + 0.5*ctrlX + 0.25*destX;
+              var blocY = 0.25*origY + 0.5*ctrlY + 0.25*destY;
+              var spark = criarProp(layerSpark, blocX, blocY, 'fx-desvio', '');
+              (function(spk){
+                requestAnimationFrame(function(){ spk.classList.add('ativo'); });
+                setTimeout(function(){ spk.remove(); }, 320);
+              })(spark);
+            }
             lado = -lado;
             arcoForca = (tipo === 'xiao' ? 0.20 : 0.10) * dist * lado;
             var ctrlXAlt = origX + dx * 0.5 + nx * arcoForca;
@@ -5830,10 +5864,10 @@ idiomaBtn.addEventListener('click', function(){
     var area = areaSegura();
     var escondido = Math.random() < 0.5 ? ghost : xiao;
     var procurador = escondido === xiao ? ghost : xiao;
-    var cards = Array.prototype.filter.call(document.querySelectorAll('.card'), function(c){
-      var r = c.getBoundingClientRect();
-      return r.top > 140 && r.top < window.innerHeight - 120 && r.left > 0 && r.left < window.innerWidth - 60 && r.width > 0;
-    });
+    var mapaEsc = mapearSite();
+    var cards = mapaEsc.pousaveis.filter(function(p){
+      return p.kind === 'card' && p.y > 140 && p.y < window.innerHeight - 120 && p.left > 0 && p.left < window.innerWidth - 60;
+    }).map(function(p){ return p.el; });
     if(!cards.length){ await esperar(200); return; }
     var escondCard = cards[Math.floor(Math.random() * cards.length)];
     var r0 = escondCard.getBoundingClientRect();
@@ -5903,10 +5937,10 @@ idiomaBtn.addEventListener('click', function(){
   // depois volta ao normal com um brilho de "regeneracao".
   async function cenaAtaquePoder(layer, ghost, xiao){
     var area = areaSegura();
-    var cards = Array.prototype.filter.call(document.querySelectorAll('.card'), function(c){
-      var r = c.getBoundingClientRect();
-      return r.top > 140 && r.top < window.innerHeight - 160 && r.left > 0 && r.left < window.innerWidth - 60 && r.width > 0;
-    });
+    var mapaAtq = mapearSite();
+    var cards = mapaAtq.pousaveis.filter(function(p){
+      return p.kind === 'card' && p.y > 140 && p.y < window.innerHeight - 160 && p.left > 0 && p.left < window.innerWidth - 60;
+    }).map(function(p){ return p.el; });
     if(!cards.length){ await esperar(200); return; }
     var alvoCard = cards[Math.floor(Math.random() * cards.length)];
     var r = alvoCard.getBoundingClientRect();
@@ -5969,7 +6003,8 @@ idiomaBtn.addEventListener('click', function(){
   // expande de verdade), espera um pouco, e fecha de novo, do jeito que
   // pediu pra interagir com portas reais do site.
   async function cenaAbrirPorta(layer, ghost, xiao){
-    var portas = Array.prototype.filter.call(document.querySelectorAll('.canais-toggle-card'), function(el){
+    var mapaPorta1 = mapearSite();
+    var portas = Array.prototype.filter.call(mapaPorta1.portas, function(el){
       var r = el.getBoundingClientRect();
       return r.width > 0 && r.top > 90 && r.top < window.innerHeight - 60;
     });
@@ -5997,7 +6032,8 @@ idiomaBtn.addEventListener('click', function(){
   // guerreiro carrega energia e atira de longe na porta real do site --
   // o impacto do projetil e que aciona o clique de verdade (abre/fecha).
   async function cenaTiroNaPorta(layer, ghost, xiao){
-    var portas = Array.prototype.filter.call(document.querySelectorAll('.canais-toggle-card'), function(el){
+    var mapaPorta2 = mapearSite();
+    var portas = Array.prototype.filter.call(mapaPorta2.portas, function(el){
       var r = el.getBoundingClientRect();
       return r.width > 0 && r.top > 90 && r.top < window.innerHeight - 60;
     });
@@ -6155,19 +6191,24 @@ idiomaBtn.addEventListener('click', function(){
       if(r.right < 10 || r.left > window.innerWidth - 10) return null;
       return r;
     }
+    // Cada superficie mapeada carrega um "kind" agora -- assim as cenas
+    // (esconde-esconde, ataque de poder, abrir/atirar na porta) conseguem
+    // filtrar o tipo que precisam direto do mapa ja cacheado, em vez de
+    // cada uma varrer o DOM de novo do zero (querySelectorAll proprio).
     Array.prototype.forEach.call(document.querySelectorAll('.card'), function(el){
       var r = ver(el); if(!r) return;
-      pousaveis.push({ left:r.left, right:r.right, y:r.top, el:el });
+      pousaveis.push({ left:r.left, right:r.right, y:r.top, el:el, kind:'card' });
       solidos.push(r);
     });
     Array.prototype.forEach.call(document.querySelectorAll('.canais-toggle-card, .stat, .top-controls-bar'), function(el){
       var r = ver(el); if(!r) return;
-      pousaveis.push({ left:r.left, right:r.right, y:r.top, el:el });
+      var kind = el.classList.contains('canais-toggle-card') ? 'porta' : 'painel';
+      pousaveis.push({ left:r.left, right:r.right, y:r.top, el:el, kind:kind });
       solidos.push(r);
     });
     Array.prototype.forEach.call(document.querySelectorAll('.top-controls-bar button, .side-dock a, .side-dock button, .filters button'), function(el){
       var r = ver(el); if(!r) return;
-      pousaveis.push({ left:r.left, right:r.right, y:r.top, el:el });
+      pousaveis.push({ left:r.left, right:r.right, y:r.top, el:el, kind:'botao' });
     });
     Array.prototype.forEach.call(document.querySelectorAll('.canais-toggle-card'), function(el){
       if(ver(el)) portas.push(el);
@@ -6352,23 +6393,20 @@ idiomaBtn.addEventListener('click', function(){
   }
 
   function esconderAtrasDeCard(el, tipo){
-    var cards = Array.prototype.filter.call(document.querySelectorAll('.card'), function(c){
-      var r = c.getBoundingClientRect();
-      return r.top > 140 && r.top < window.innerHeight - 120 && r.left > 0 && r.left < window.innerWidth - 60 && r.width > 0;
-    });
+    var mapaEsc2 = mapearSite();
+    var cards = mapaEsc2.pousaveis.filter(function(p){
+      return p.kind === 'card' && p.y > 140 && p.y < window.innerHeight - 120 && p.left > 0 && p.left < window.innerWidth - 60;
+    }).map(function(p){ return p.el; });
     if(!cards.length){ moverPara(el, tipo, null); return; }
     var card = cards[Math.floor(Math.random() * cards.length)];
     moverPara(el, tipo, card);
   }
 
   function pousarNaBarra(el, tipo){
-    var alvos = Array.prototype.filter.call(
-      document.querySelectorAll('.top-controls-bar button, .side-dock a, .side-dock button'),
-      function(b){
-        var r = b.getBoundingClientRect();
-        return r.width > 0 && r.top >= 0 && r.top < window.innerHeight && r.left >= 0 && r.left < window.innerWidth;
-      }
-    );
+    var mapaBarra = mapearSite();
+    var alvos = mapaBarra.pousaveis.filter(function(p){
+      return p.kind === 'botao';
+    }).map(function(p){ return p.el; });
     if(!alvos.length){ moverPara(el, tipo, null); return; }
     var alvo = alvos[Math.floor(Math.random() * alvos.length)];
     var r = alvo.getBoundingClientRect();
@@ -6517,6 +6555,43 @@ idiomaBtn.addEventListener('click', function(){
         });
       });
 
+      // Arrastar e soltar: segurar o mouse num mascote parado ("idle") deixa
+      // pega-lo e mover na mao de verdade -- ao soltar, um efeito de impacto
+      // toca e o proprio mascote retoma o controle sozinho de onde caiu.
+      [[ghost, 'ghost'], [xiao, 'xiao']].forEach(function(par){
+        var m = par[0], tipoM = par[1];
+        var arrastando = false, offX = 0, offY = 0;
+        m.addEventListener('mousedown', function(e){
+          if(!m.classList.contains('idle')) return;
+          e.preventDefault();
+          e.stopPropagation();
+          arrastando = true;
+          m._anexo = null;
+          m.classList.remove('perched', 'hiding', 'peeking');
+          m.classList.add('segurado');
+          var mx = parseFloat(m.dataset.x) || 0, my = parseFloat(m.dataset.y) || 0;
+          offX = mx - e.clientX; offY = my - e.clientY;
+        });
+        window.addEventListener('mousemove', function(e){
+          if(!arrastando) return;
+          var nx = e.clientX + offX, ny = e.clientY + offY;
+          m.style.transform = 'translate(' + nx + 'px,' + ny + 'px)';
+          m.dataset.x = nx; m.dataset.y = ny;
+        });
+        window.addEventListener('mouseup', function(){
+          if(!arrastando) return;
+          arrastando = false;
+          m.classList.remove('segurado');
+          var r = m.getBoundingClientRect();
+          criarBurst(layer, r.left + r.width / 2, r.top + r.height / 2, tipoM === 'xiao' ? '#ffd23d' : '#b98fff');
+          retriggerAnim(m, 'surpreso');
+          setTimeout(function(){
+            m.classList.remove('surpreso');
+            setTimeout(function(){ vagar(m, tipoM); }, 200);
+          }, 400);
+        });
+      });
+
       // De vez em quando, se os dois estiverem perto um do outro e livres
       // (ninguem numa cena roteirizada), eles se percebem e trocam um aceno
       // -- um momento organico, nao so os encontros programados do
@@ -6561,13 +6636,16 @@ idiomaBtn.addEventListener('click', function(){
       // estao apoiados, feito parte real do cenario.
       window.addEventListener('scroll', function(){ atualizarAnexos(ghost, xiao); }, { passive: true });
       window.addEventListener('resize', function(){ atualizarAnexos(ghost, xiao); }, { passive: true });
+      // Um unico tick compartilhado cuida da sombra projetada e do rastro
+      // neon -- antes eram dois setInterval separados fazendo trabalho
+      // parecido (ler dataset/classList dos mascotes) em frequencias
+      // proximas; agora e uma so leitura por quadro, mais leve.
       if(!reduzido){
-        setInterval(function(){ sincronizarSombras(ghost, xiao); }, 70);
-      }
-      // Rastro de particulas neon atras do guerreiro voando, so quando o skin
-      // "Neon Geometrico" estiver ativo — poll leve, nao atrapalha nada mais.
-      if(!reduzido){
+        var _tickN = 0;
         setInterval(function(){
+          sincronizarSombras(ghost, xiao);
+          _tickN++;
+          if(_tickN % 2 !== 0) return; // rastro neon a ~140ms, sombra a ~70ms
           try{
             if(document.body.getAttribute('data-skin') !== 'neon') return;
             if(!xiao.classList.contains('walking')) return;
@@ -6575,7 +6653,7 @@ idiomaBtn.addEventListener('click', function(){
             var py = (parseFloat(xiao.dataset.y) || 0) + 46;
             criarParticulaRastro(layer, px, py);
           }catch(e){}
-        }, 90);
+        }, 70);
       }
       // As cenas de interacao (perseguicao, briga, portal, buraco negro,
       // bomba) sao mais intensas — pulamos elas se a pessoa pediu "reduzir
