@@ -2852,17 +2852,28 @@ function escapeHtml(str){
     .replace(/'/g, '&#39;');
 }
 
+// A lista completa (jogos fixos + adicionados pelo usuario) era recalculada
+// do zero com .concat() TODA vez que qualquer coisa chamava todosJogos() --
+// e ela e chamada mais de duas dezenas de vezes espalhadas pelo codigo,
+// incluindo umas 5-10 vezes dentro de um unico render() (que roda a cada
+// tecla digitada na busca, cada clique de filtro, favorito, etc). Agora o
+// resultado fica em cache e so e recalculado quando a lista de verdade muda
+// (invalidarTodosJogosCache, chamado nos 2 lugares que alteram jogosExtra).
+let _todosJogosCache = null;
 function todosJogos(){
-  return jogos.concat(jogosExtra);
+  if(!_todosJogosCache) _todosJogosCache = jogos.concat(jogosExtra);
+  return _todosJogosCache;
 }
+function invalidarTodosJogosCache(){ _todosJogosCache = null; }
 
 function render(){
   const grid = document.getElementById('grid');
   const termo = termoBusca.toLowerCase().trim();
   let html = '';
   let visiveis = 0;
+  const todos = todosJogos();
 
-  let lista = todosJogos().filter(j => {
+  let lista = todos.filter(j => {
     if(!j.n.toLowerCase().includes(termo)) return false;
     if(filtroAtivo !== 'all' && j.cat !== filtroAtivo) return false;
     if(plataformaAtiva !== 'all' && j.plat !== plataformaAtiva) return false;
@@ -2919,11 +2930,15 @@ function render(){
   grid.innerHTML = html;
   grid.className = 'grid' + (vistaAtual === 'list' ? ' list-view' : '');
   document.getElementById('resultCount').textContent = I18N[idioma].resultCount(visiveis);
-  document.getElementById('statTotal').textContent = todosJogos().length;
+  document.getElementById('statTotal').textContent = todos.length;
 
-  const totalPago = todosJogos().reduce((s,j)=>s+Math.round((j.col+j.bar)/2),0);
-  const totalPS4 = todosJogos().filter(j=>j.plat==='PS4').reduce((s,j)=>s+Math.round((j.col+j.bar)/2),0);
-  const totalPS3 = todosJogos().filter(j=>j.plat==='PS3').reduce((s,j)=>s+Math.round((j.col+j.bar)/2),0);
+  let totalPago = 0, totalPS4 = 0, totalPS3 = 0;
+  for(const j of todos){
+    const v = Math.round((j.col + j.bar) / 2);
+    totalPago += v;
+    if(j.plat === 'PS4') totalPS4 += v;
+    else if(j.plat === 'PS3') totalPS3 += v;
+  }
   document.getElementById('statValor').textContent = `R$ ${totalPago}`;
   document.getElementById('statValorPS4').textContent = `R$${totalPS4}`;
   document.getElementById('statValorPS3').textContent = `R$${totalPS3}`;
@@ -4587,6 +4602,7 @@ function renderAdminLista(){
       const id = parseInt(this.dataset.removeId);
       jogosExtra = jogosExtra.filter(j=>j.id !== id);
       localStorage.setItem('jogosExtra_ps4', JSON.stringify(jogosExtra));
+      invalidarTodosJogosCache();
       renderAdminLista();
       render();
     });
@@ -4633,6 +4649,7 @@ document.getElementById('adminForm').addEventListener('submit', function(e){
   const { capa, verso, ...jogoObj } = dados;
   jogosExtra.push(jogoObj);
   localStorage.setItem('jogosExtra_ps4', JSON.stringify(jogosExtra));
+  invalidarTodosJogosCache();
   if(capa) capas[jogoObj.id] = capa;
   if(verso) capasVerso[jogoObj.id] = verso;
   if(jogoObj.sinopse) sinopses[jogoObj.id] = jogoObj.sinopse;
@@ -4665,7 +4682,7 @@ document.getElementById('admGerarCodigo').addEventListener('click', function(){
 const topBtn = document.getElementById('topBtn');
 window.addEventListener('scroll', function(){
   topBtn.classList.toggle('show', window.scrollY > 500);
-});
+}, { passive: true });
 topBtn.addEventListener('click', function(){
   window.scrollTo({ top: 0, behavior: 'smooth' });
 });
