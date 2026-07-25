@@ -352,6 +352,42 @@
   }
   .fx-trofeu img{ width:100%; height:100%; object-fit:cover; display:block; }
 
+  /* Teia de aranha do fantasma -- a "bolinha" enquanto viaja ate o alvo, e o
+     emaranhado que fica grudado de verdade em cima de quem foi pego. */
+  .fx-teia-bola{
+    width:12px; height:12px; border-radius:50%;
+    background: radial-gradient(circle, #fff, #d8d8e8 55%, transparent 78%);
+    box-shadow: 0 0 8px 2px rgba(216,216,232,.75);
+  }
+  .fx-teia{
+    width:64px; height:76px; opacity:0; transform-origin:center;
+    transition: opacity .25s ease, transform .25s ease;
+    background:
+      radial-gradient(circle at 50% 30%, transparent 8%, rgba(230,230,240,.55) 9%, transparent 10%),
+      repeating-conic-gradient(from 0deg, rgba(230,230,240,.5) 0deg 2deg, transparent 2deg 22.5deg);
+    filter: drop-shadow(0 0 5px rgba(230,230,240,.5));
+  }
+  .fx-teia.ativo{ opacity:1; }
+  /* O guerreiro preso na teia treme se debatendo em vez de ficar parado --
+     deixa claro que ele esta tentando se soltar, nao so parado esperando. */
+  @keyframes presoTremor{ 0%,100%{ transform: rotate(-3deg);} 50%{ transform: rotate(3deg);} }
+  .mascot.preso .mascot-fxwrap{ animation: presoTremor .18s ease-in-out infinite; filter: saturate(.6); }
+
+  /* Hadouken do guerreiro -- carga azul-branca (bem diferente da laranja do
+     ataque de poder generico) e a onda alongada que viaja ate o alvo, no
+     estilo classico dos jogos de luta que ele imita. */
+  .fx-carga-hadouken{
+    width:14px; height:14px; border-radius:50%;
+    background: radial-gradient(circle, #fff, #4fd8ff 55%, transparent 78%);
+    box-shadow: 0 0 14px 5px rgba(79,216,255,.85);
+    animation: fxCargaPulso .3s ease-in-out infinite alternate;
+  }
+  .fx-onda-hadouken{
+    width:30px; height:16px; border-radius:50%;
+    background: radial-gradient(ellipse, #fff, #4fd8ff 45%, #2f9fe0 75%, transparent 92%);
+    box-shadow: 0 0 18px 6px rgba(79,216,255,.8);
+  }
+
   /* FILTRO CRT -- scanlines + vinheta + leve flicker, so um overlay decorativo
      (pointer-events:none), nao interfere em clique nenhum. Ligado pelo botao 📺. */
   #crtOverlay{
@@ -5430,12 +5466,12 @@ idiomaBtn.addEventListener('click', function(){
     'Essa coleção tem história.', 'Eu conheço todos os cantos daqui.', 'Psiu... segredo.',
     'Já vi essa capa antes...', 'As sombras guardam boas surpresas.'
   ];
-  function mostrarBalaoFala(el, tipo){
+  function mostrarBalaoFala(el, tipo, textoForcado){
     try{
       var layer = el.parentElement;
       if(!layer) return;
       var falas = tipo === 'xiao' ? FALAS_XIAO : FALAS_GHOST;
-      var texto = falas[Math.floor(Math.random() * falas.length)];
+      var texto = textoForcado || falas[Math.floor(Math.random() * falas.length)];
       var x = parseFloat(el.dataset.x) || 0, y = parseFloat(el.dataset.y) || 0;
       var balao = document.createElement('div');
       balao.className = 'mascot-fx mascot-balao ' + (tipo === 'xiao' ? 'balao-xiao' : 'balao-ghost');
@@ -6262,13 +6298,106 @@ idiomaBtn.addEventListener('click', function(){
     await esperar(300);
   }
 
+  // Poder proprio do fantasma: uma teia de aranha de verdade -- gruda no
+  // guerreiro (que fica preso se debatendo por um instante, tremendo) em vez
+  // de so um susto visual generico. Reforca que cada personagem tem seu jeito
+  // de "poder": o guerreiro solta energia, o fantasma prende com teia.
+  async function cenaTeiaAranha(layer, ghost, xiao){
+    var area = areaSegura();
+    var gx = clampeia((parseFloat(xiao.dataset.x) || 0) - 110, area.minX, area.maxX);
+    var gy = clampeia((parseFloat(xiao.dataset.y) || 0) - 30, area.minY, area.maxY);
+    await moverElementoPromise(ghost, gx, gy, 90);
+    retriggerAnim(ghost, 'assustando');
+    await esperar(150);
+
+    var origemX = (parseFloat(ghost.dataset.x) || 0) + 30, origemY = (parseFloat(ghost.dataset.y) || 0) + 40;
+    var alvoX = (parseFloat(xiao.dataset.x) || 0) + 24, alvoY = (parseFloat(xiao.dataset.y) || 0) + 40;
+    var teiaBola = criarProp(layer, origemX, origemY, 'fx-teia-bola', '');
+    await new Promise(function(resolve){
+      var t0 = null, dur = 320;
+      function passo(agora){
+        if(t0 === null) t0 = agora;
+        var t = Math.min(1, (agora - t0) / dur);
+        var x = origemX + (alvoX - origemX) * t, y = origemY + (alvoY - origemY) * t;
+        teiaBola.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + (1 + t * 0.7) + ')';
+        if(t < 1){ requestAnimationFrame(passo); } else { resolve(); }
+      }
+      requestAnimationFrame(passo);
+    });
+    teiaBola.remove();
+
+    xiao.classList.add('preso');
+    var teiaOverlay = document.createElement('div');
+    teiaOverlay.className = 'mascot-fx fx-teia';
+    layer.appendChild(teiaOverlay);
+    requestAnimationFrame(function(){ teiaOverlay.classList.add('ativo'); });
+    var pararSeguirTeia = seguirElemento(teiaOverlay, xiao, -8, -8);
+    retriggerAnim(ghost, 'acenando');
+    await esperar(1300 + Math.random() * 500);
+
+    pararSeguirTeia();
+    xiao.classList.remove('preso');
+    retriggerAnim(xiao, 'surpreso');
+    removerPropSuave(teiaOverlay);
+    setTimeout(function(){ teiaOverlay.remove(); }, 300);
+    criarBurst(layer, (parseFloat(xiao.dataset.x) || 0) + 24, (parseFloat(xiao.dataset.y) || 0) + 40, '#d8d8e8');
+    await esperar(300);
+  }
+
+  // Poder proprio do guerreiro: um "hadouken" de verdade -- carrega energia
+  // azul, solta o grito (balao de fala forcado) e manda uma onda de energia
+  // no fantasma, que reage com susto e recuo comico (100% cosmetico, e so
+  // brincadeira entre os dois -- ninguem realmente se machuca).
+  async function cenaHadouken(layer, ghost, xiao){
+    var area = areaSegura();
+    var px = clampeia((parseFloat(ghost.dataset.x) || 0) + 130, area.minX, area.maxX);
+    var py = clampeia(parseFloat(ghost.dataset.y) || 0, area.minY, area.maxY);
+    await moverElementoPromise(xiao, px, py, 130);
+
+    xiao.classList.remove('idle');
+    xiao.classList.add('carregando');
+    var mx = (parseFloat(xiao.dataset.x) || 0) + 46, my = (parseFloat(xiao.dataset.y) || 0) + 30;
+    var carga = criarProp(layer, mx, my, 'fx-carga-hadouken', '');
+    mostrarBalaoFala(xiao, 'xiao', 'HADOUKEN!');
+    await esperar(650);
+    removerPropSuave(carga);
+    xiao.classList.remove('carregando');
+    xiao.classList.add('idle');
+    retriggerAnim(xiao, 'kicking');
+
+    var alvoX = (parseFloat(ghost.dataset.x) || 0) + 30, alvoY = (parseFloat(ghost.dataset.y) || 0) + 40;
+    var onda = criarProp(layer, mx, my, 'fx-onda-hadouken', '');
+    await new Promise(function(resolve){
+      var t0 = null, dur = 320;
+      function passo(agora){
+        if(t0 === null) t0 = agora;
+        var t = Math.min(1, (agora - t0) / dur);
+        var x = mx + (alvoX - mx) * t, y = my + (alvoY - my) * t;
+        onda.style.transform = 'translate(' + x + 'px,' + y + 'px) scale(' + (1 + t * 0.8) + ')';
+        if(t < 1){ requestAnimationFrame(passo); } else { resolve(); }
+      }
+      requestAnimationFrame(passo);
+    });
+    onda.remove();
+    criarBurst(layer, alvoX, alvoY, '#4fd8ff');
+    criarBurst(layer, alvoX, alvoY, '#ffffff');
+    retriggerAnim(ghost, 'surpreso');
+
+    var recuoX = clampeia((parseFloat(ghost.dataset.x) || 0) + 50, area.minX, area.maxX);
+    var recuoY = clampeia(parseFloat(ghost.dataset.y) || 0, area.minY, area.maxY);
+    await moverArco(ghost, recuoX, recuoY, 260, 'ghost', { bancar:false, flip:false });
+    await esperar(450);
+    retriggerAnim(ghost, 'acenando');
+    await esperar(400);
+  }
+
   var CENAS_DISPONIVEIS = [
     cenaPerseguicao, cenaBriga, cenaPortal, cenaBuracoNegro, cenaBomba,
     cenaDuelo, cenaEscudoBloqueio, cenaRouboDeChapeu, cenaParaquedas, cenaPatinete,
     cenaPescaria, cenaJetpack, cenaFesta, cenaCaboDeGuerra, cenaSelfie,
     cenaAltoCinco, cenaBracoDeFerro, cenaPedraPapelTesoura, cenaCarona, cenaPipa,
     cenaEscondeEsconde, cenaDancaSincronizada, cenaGuerraDeConfete, cenaAtaquePoder,
-    cenaAbrirPorta, cenaTiroNaPorta, cenaTrofeuReal
+    cenaAbrirPorta, cenaTiroNaPorta, cenaTrofeuReal, cenaTeiaAranha, cenaHadouken
   ];
 
   function tentarCena(layer, ghost, xiao){
