@@ -321,6 +321,37 @@
     opacity:.5; transition: transform .78s ease-out, opacity .78s ease-out;
   }
 
+  /* Balao de fala: da voz de verdade pro guerreiro e pro fantasma, cada um
+     com sua cor de identidade, com uma setinha apontando pro mascote embaixo. */
+  .mascot-balao{
+    max-width: 170px; padding: 7px 11px; border-radius: 12px;
+    font-size: 12.5px; line-height: 1.3; font-weight: 600;
+    background: rgba(20,22,30,.92); color: #f2f4ff;
+    box-shadow: 0 4px 14px rgba(0,0,0,.35);
+    opacity: 0; transform-origin: bottom left;
+    transition: opacity .22s ease, transform .22s ease;
+    transform: translate(0,0) scale(.85);
+  }
+  .mascot-balao.ativo{ opacity: 1; }
+  .mascot-balao::after{
+    content:''; position:absolute; left: 22px; bottom: -7px;
+    border-width: 7px 6px 0 6px; border-style: solid;
+    border-color: rgba(20,22,30,.92) transparent transparent transparent;
+  }
+  .mascot-balao.balao-xiao{ border: 1px solid rgba(255,210,61,.55); }
+  .mascot-balao.balao-xiao::after{ border-color: rgba(20,22,30,.92) transparent transparent transparent; }
+  .mascot-balao.balao-ghost{ border: 1px solid rgba(185,143,255,.55); font-style: italic; }
+
+  /* "Trofeu" que o guerreiro carrega na cena cenaTrofeuReal -- uma copia
+     visual pequena da capa de verdade do jogo (o card original nunca e
+     alterado), com um leve brilho dourado de "conquista". */
+  .fx-trofeu{
+    width: 46px; height: 62px; border-radius: 5px; overflow: hidden;
+    box-shadow: 0 0 0 2px rgba(255,210,61,.85), 0 6px 16px rgba(0,0,0,.45);
+    transition: opacity .3s ease;
+  }
+  .fx-trofeu img{ width:100%; height:100%; object-fit:cover; display:block; }
+
   /* FILTRO CRT -- scanlines + vinheta + leve flicker, so um overlay decorativo
      (pointer-events:none), nao interfere em clique nenhum. Ligado pelo botao 📺. */
   #crtOverlay{
@@ -5103,6 +5134,14 @@ idiomaBtn.addEventListener('click', function(){
 
   var estado = { interagindo: false };
 
+  // Referencia direta aos dois mascotes assim que sao criados -- varias
+  // funcoes precisavam achar "o outro mascote" e faziam isso com um
+  // document.querySelector('.mascot-ghost'/'.mascot-xiao') toda vez; agora
+  // guardamos a referencia uma unica vez e reaproveitamos (mais rapido e
+  // mais direto que buscar no DOM de novo a cada chamada).
+  var _ghostRef = null, _xiaoRef = null;
+  function pegarMascotes(){ return { ghost: _ghostRef, xiao: _xiaoRef }; }
+
   function criarMascote(layer, tipo, svgHTML){
     var el = document.createElement('div');
     el.className = 'mascot mascot-' + tipo + ' idle';
@@ -5242,7 +5281,6 @@ idiomaBtn.addEventListener('click', function(){
         var atravessando = false;
         if(ajustarFlip && Math.abs(dx) > 4){ el.classList.toggle('flip', dx < 0); }
         var flipAtivo = el.classList.contains('flip');
-        var outroSel = tipo === 'xiao' ? '.mascot-ghost' : '.mascot-xiao';
         var t0 = null, prevY = origY, prevX = origX, prevT = null, capeLag = 0;
         function quadPoint(t){
           var it = 1 - t;
@@ -5262,8 +5300,9 @@ idiomaBtn.addEventListener('click', function(){
           // pro lado (so no visual deste quadro, o destino final continua o
           // mesmo) -- evita os sprites se atravessando feio no meio do ar.
           if(t < 1){
-            var outroEl = document.querySelector(outroSel);
-            if(outroEl){
+            var parMascotes = pegarMascotes();
+            var outroEl = tipo === 'xiao' ? parMascotes.ghost : parMascotes.xiao;
+            if(outroEl && outroEl !== el){
               var ox = parseFloat(outroEl.dataset.x) || 0, oy = parseFloat(outroEl.dataset.y) || 0;
               var ddx = p.x - ox, ddy = p.y - oy;
               var dd = Math.hypot(ddx, ddy);
@@ -5375,6 +5414,40 @@ idiomaBtn.addEventListener('click', function(){
   function removerPropSuave(el){
     el.style.opacity = '0';
     setTimeout(function(){ el.remove(); }, 260);
+  }
+
+  // Falas curtas de personalidade -- ate agora os mascotes so reagiam com
+  // efeitos visuais (burst, susto, pose), nunca "diziam" nada. Um balaozinho
+  // de fala da voz de verdade pra cada um, cada personagem com seu jeito
+  // (o guerreiro fala de aventura/colecao, o fantasma e mais misterioso).
+  var FALAS_XIAO = [
+    'Bora catar mais um clássico!', 'Essa estante tá show!', 'Modo herói ativado!',
+    'Já jogou esse aí? Recomendo!', 'Coleção crescendo forte!', 'Toca o jogo!',
+    'Pronto pra mais uma aventura!', 'Essa capa é linda demais.'
+  ];
+  var FALAS_GHOST = [
+    'Shhh... eu vivo aqui.', 'Tem jogo bom escondido aqui...', '👻 Só de passagem.',
+    'Essa coleção tem história.', 'Eu conheço todos os cantos daqui.', 'Psiu... segredo.',
+    'Já vi essa capa antes...', 'As sombras guardam boas surpresas.'
+  ];
+  function mostrarBalaoFala(el, tipo){
+    try{
+      var layer = el.parentElement;
+      if(!layer) return;
+      var falas = tipo === 'xiao' ? FALAS_XIAO : FALAS_GHOST;
+      var texto = falas[Math.floor(Math.random() * falas.length)];
+      var x = parseFloat(el.dataset.x) || 0, y = parseFloat(el.dataset.y) || 0;
+      var balao = document.createElement('div');
+      balao.className = 'mascot-fx mascot-balao ' + (tipo === 'xiao' ? 'balao-xiao' : 'balao-ghost');
+      balao.textContent = texto;
+      balao.style.transform = 'translate(' + (x - 20) + 'px,' + (y - 58) + 'px)';
+      layer.appendChild(balao);
+      requestAnimationFrame(function(){ balao.classList.add('ativo'); });
+      setTimeout(function(){
+        balao.classList.remove('ativo');
+        setTimeout(function(){ balao.remove(); }, 220);
+      }, 1900);
+    }catch(e){}
   }
   function criarConfete(layer, x, y){
     var wrap = document.createElement('div');
@@ -5986,6 +6059,60 @@ idiomaBtn.addEventListener('click', function(){
     await esperar(300);
   }
 
+  // O guerreiro vai ate um card de verdade da colecao, "pega" a capa real
+  // do jogo (uma copia visual da imagem, o card original nunca e tocado) e
+  // sai voando com ela erguida tipo trofeu -- o fantasma bate palma (burst) --
+  // antes de devolver com cuidado no lugar certo. Primeira cena que usa
+  // conteudo real da colecao (a capa de verdade) em vez de props genericos.
+  async function cenaTrofeuReal(layer, ghost, xiao){
+    var mapaTrf = mapearSite();
+    var cardsComCapa = mapaTrf.pousaveis.filter(function(p){
+      if(p.kind !== 'card') return false;
+      var img = p.el.querySelector('.cover-wrap img');
+      return img && img.getAttribute('src');
+    }).map(function(p){ return p.el; });
+    if(!cardsComCapa.length){ await esperar(200); return; }
+    var card = cardsComCapa[Math.floor(Math.random() * cardsComCapa.length)];
+    var img = card.querySelector('.cover-wrap img');
+    var r = card.getBoundingClientRect();
+    var area = areaSegura();
+    var px = clampeia(r.left + r.width / 2 - 24, area.minX, area.maxX);
+    var py = clampeia(r.top - 40, area.minY, area.maxY);
+    await moverElementoPromise(xiao, px, py, 120);
+    retriggerAnim(xiao, 'kicking');
+    criarBurst(layer, r.left + r.width / 2, r.top, '#ffd23d');
+
+    var trofeu = document.createElement('div');
+    trofeu.className = 'mascot-fx fx-trofeu';
+    var clone = img.cloneNode(true);
+    clone.removeAttribute('loading');
+    trofeu.appendChild(clone);
+    layer.appendChild(trofeu);
+    var pararSeguir = seguirElemento(trofeu, xiao, 14, -34);
+
+    var gx2 = clampeia(area.minX + Math.random() * (area.maxX - area.minX), area.minX, area.maxX);
+    var gy2 = clampeia(area.minY + Math.random() * (area.maxY - area.minY) * 0.4, area.minY, area.maxY);
+    var fugaFantasma2 = moverElementoPromise(ghost, gx2, gy2);
+    var destX2 = clampeia((parseFloat(xiao.dataset.x) || 0) - 60, area.minX, area.maxX);
+    var destY2 = clampeia(area.minY + 10, area.minY, area.maxY);
+    await moverElementoPromise(xiao, destX2, destY2, 110);
+    retriggerAnim(xiao, 'acenando');
+    await fugaFantasma2;
+    retriggerAnim(ghost, 'acenando');
+    criarBurst(layer, (parseFloat(xiao.dataset.x) || 0) + 20, (parseFloat(xiao.dataset.y) || 0) - 20, '#b98fff');
+    await esperar(1200);
+
+    pararSeguir();
+    var rVolta = card.getBoundingClientRect();
+    var voltaX = clampeia(rVolta.left + rVolta.width / 2 - 24, area.minX, area.maxX);
+    var voltaY = clampeia(rVolta.top - 40, area.minY, area.maxY);
+    await moverElementoPromise(xiao, voltaX, voltaY, 120);
+    removerPropSuave(trofeu);
+    setTimeout(function(){ trofeu.remove(); }, 300);
+    criarBurst(layer, rVolta.left + rVolta.width / 2, rVolta.top, '#3ddc84');
+    await esperar(300);
+  }
+
   // O guerreiro carrega energia na mao, dispara uma esfera de poder que viaja
   // ate um card de verdade do catalogo e "explode" nele -- o card treme e
   // racha na hora (efeito 100% cosmetico e reversivel, nada de dado apagado),
@@ -6141,7 +6268,7 @@ idiomaBtn.addEventListener('click', function(){
     cenaPescaria, cenaJetpack, cenaFesta, cenaCaboDeGuerra, cenaSelfie,
     cenaAltoCinco, cenaBracoDeFerro, cenaPedraPapelTesoura, cenaCarona, cenaPipa,
     cenaEscondeEsconde, cenaDancaSincronizada, cenaGuerraDeConfete, cenaAtaquePoder,
-    cenaAbrirPorta, cenaTiroNaPorta
+    cenaAbrirPorta, cenaTiroNaPorta, cenaTrofeuReal
   ];
 
   function tentarCena(layer, ghost, xiao){
@@ -6341,7 +6468,8 @@ idiomaBtn.addEventListener('click', function(){
         // onde o colega ja esta pousado/escondido de verdade -- sem isso os
         // dois as vezes materializavam empilhados no mesmo card, quebrando a
         // ilusao do "mapa 2D" compartilhado.
-        var outroM = el.classList.contains('mascot-ghost') ? document.querySelector('.mascot-xiao') : document.querySelector('.mascot-ghost');
+        var parMascotesM = pegarMascotes();
+        var outroM = el.classList.contains('mascot-ghost') ? parMascotesM.xiao : parMascotesM.ghost;
         var elOcupado = outroM && outroM._anexo ? outroM._anexo.elemento : null;
         var opcoesLivres = elOcupado ? mapa.pousaveis.filter(function(p){ return p.el !== elOcupado; }) : mapa.pousaveis;
         if(!opcoesLivres.length) opcoesLivres = mapa.pousaveis;
@@ -6615,6 +6743,9 @@ idiomaBtn.addEventListener('click', function(){
             retriggerAnim(m, 'surpreso');
             setTimeout(function(){ m.classList.remove('surpreso'); }, 520);
           }
+          // Metade das vezes, alem do susto, ele solta uma fala curta --
+          // da uma personalidade de verdade em vez de so reagir em silencio.
+          if(Math.random() < 0.5) mostrarBalaoFala(m, tipo);
         });
         // Duplo-clique e uma reacao especial, diferente do toque simples --
         // o guerreiro faz um truque de voo rapido (ja tem um catalogo de 20
@@ -6744,7 +6875,8 @@ idiomaBtn.addEventListener('click', function(){
     try{
       var layer = document.querySelector('.mascot-layer');
       if(!layer) return;
-      [document.querySelector('.mascot-ghost'), document.querySelector('.mascot-xiao')].forEach(function(m){
+      var parReagir = pegarMascotes();
+      [parReagir.ghost, parReagir.xiao].forEach(function(m){
         if(!m || m.classList.contains('segurado')) return;
         var r = m.getBoundingClientRect();
         var cor = m.classList.contains('mascot-xiao') ? '#ffd23d' : '#b98fff';
@@ -6767,6 +6899,7 @@ idiomaBtn.addEventListener('click', function(){
       document.body.appendChild(layer);
       var ghost = criarMascote(layer, 'ghost', GHOST_SVG);
       var xiao = criarMascote(layer, 'xiao', XIAO_SVG);
+      _ghostRef = ghost; _xiaoRef = xiao;
       setTimeout(function(){ vagar(ghost, 'ghost'); }, 800);
       setTimeout(function(){ vagar(xiao, 'xiao'); }, 1600);
       ligarReacoesDoSite(layer, ghost, xiao);
