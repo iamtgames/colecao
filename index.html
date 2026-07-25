@@ -4313,6 +4313,7 @@ skinBtn.addEventListener('click', function(){
   const prox = skins[(skins.indexOf(atual) + 1) % skins.length];
   localStorage.setItem('skin_ps4', prox);
   aplicarSkin(prox);
+  if(typeof reagirMudancaSkin === 'function') reagirMudancaSkin();
 });
 
 // Relogio da barra de tarefas do skin Y2K (so tem efeito visual quando o
@@ -5237,9 +5238,11 @@ idiomaBtn.addEventListener('click', function(){
         var cape = bancar ? el.querySelector('.x-cape') : null;
         var speedFx = bancar ? el.querySelector('.x-speed') : null;
         var fantasmaSolidos = opts.fantasmaSolidos;
+        var querEsticar = opts.esticar !== false;
         var atravessando = false;
         if(ajustarFlip && Math.abs(dx) > 4){ el.classList.toggle('flip', dx < 0); }
         var flipAtivo = el.classList.contains('flip');
+        var outroSel = tipo === 'xiao' ? '.mascot-ghost' : '.mascot-xiao';
         var t0 = null, prevY = origY, prevX = origX, prevT = null, capeLag = 0;
         function quadPoint(t){
           var it = 1 - t;
@@ -5252,19 +5255,46 @@ idiomaBtn.addEventListener('click', function(){
           if(t0 === null){ t0 = agora; prevT = agora; }
           var t = Math.min(1, (agora - t0) / duracaoMs);
           var p = quadPoint(usarBack ? easeInOutBack(t) : easeInOutCubic(t));
-          el.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)';
           var dtMs = Math.max(1, agora - prevT);
-          if(bancar && sprite){
-            var vy = p.y - prevY, vx = p.x - prevX;
-            var bank = Math.max(-22, Math.min(22, -vy * 2.2));
-            sprite.style.transform = 'scaleX(' + (flipAtivo ? -1 : 1) + ') rotate(' + bank + 'deg)';
-            if(cape){
-              capeLag += (bank * 0.8 - capeLag) * 0.25;
-              cape.style.setProperty('--bank', capeLag + 'deg');
+          var vy0 = p.y - prevY, vx0 = p.x - prevX;
+          // Esquiva mutua leve em pleno voo: se os dois mascotes cruzarem
+          // muito perto um do outro no meio do caminho, um empurra sutilmente
+          // pro lado (so no visual deste quadro, o destino final continua o
+          // mesmo) -- evita os sprites se atravessando feio no meio do ar.
+          if(t < 1){
+            var outroEl = document.querySelector(outroSel);
+            if(outroEl){
+              var ox = parseFloat(outroEl.dataset.x) || 0, oy = parseFloat(outroEl.dataset.y) || 0;
+              var ddx = p.x - ox, ddy = p.y - oy;
+              var dd = Math.hypot(ddx, ddy);
+              if(dd > 0.5 && dd < 46){
+                var forcaEmpurrao = (46 - dd) * 0.5;
+                p.x += (ddx / dd) * forcaEmpurrao;
+                p.y += (ddy / dd) * forcaEmpurrao;
+              }
             }
-            if(speedFx){
-              var vel = Math.hypot(vx, vy) / dtMs;
-              speedFx.style.setProperty('--velop', Math.max(0.2, Math.min(1.4, vel / 1.1)));
+          }
+          el.style.transform = 'translate(' + p.x + 'px,' + p.y + 'px)';
+          if(sprite && querEsticar){
+            // Squash/stretch (principio classico de animacao): estica um
+            // pouco na direcao do movimento quanto mais rapido estiver
+            // indo, e comprime levemente no eixo perpendicular -- reforca
+            // peso e velocidade reais em vez de deslizar sempre rigido.
+            var velTotal = Math.hypot(vx0, vy0) / dtMs;
+            var esticado = Math.min(0.16, velTotal * 0.55);
+            var stretchCss = 'scale(' + (1 + esticado) + ',' + (1 - esticado * 0.5) + ')';
+            if(bancar){
+              var bank = Math.max(-22, Math.min(22, -vy0 * 2.2));
+              sprite.style.transform = 'scaleX(' + (flipAtivo ? -1 : 1) + ') rotate(' + bank + 'deg) ' + stretchCss;
+              if(cape){
+                capeLag += (bank * 0.8 - capeLag) * 0.25;
+                cape.style.setProperty('--bank', capeLag + 'deg');
+              }
+              if(speedFx){
+                speedFx.style.setProperty('--velop', Math.max(0.2, Math.min(1.4, velTotal / 1.1)));
+              }
+            } else {
+              sprite.style.transform = 'scaleX(' + (flipAtivo ? -1 : 1) + ') ' + stretchCss;
             }
           }
           // O fantasma e sobrenatural: atravessa por cima de qualquer coisa
@@ -5284,7 +5314,7 @@ idiomaBtn.addEventListener('click', function(){
             requestAnimationFrame(passo);
           } else {
             el.dataset.x = destX; el.dataset.y = destY;
-            if(bancar && sprite){ sprite.style.transform = ''; }
+            if(sprite && querEsticar){ sprite.style.transform = ''; }
             if(cape){ cape.style.removeProperty('--bank'); }
             if(speedFx){ speedFx.style.removeProperty('--velop'); }
             if(fantasmaSolidos){ el.style.opacity = ''; }
@@ -5498,8 +5528,8 @@ idiomaBtn.addEventListener('click', function(){
     el.classList.add(escolhida);
   }
 
-  function talvezFazerTruque(el){
-    if(Math.random() > 0.35) return;
+  function talvezFazerTruque(el, forcar){
+    if(!forcar && Math.random() > 0.35) return;
     var t = FLIGHT_TRICKS[Math.floor(Math.random() * FLIGHT_TRICKS.length)];
     el.classList.add('trickando', t.cls);
     if(t.burst){
@@ -6368,9 +6398,9 @@ idiomaBtn.addEventListener('click', function(){
         el.classList.add('hiding');
         el._anexo = { elemento: cardAlvo };
         esperar(850)
-          .then(function(){ el.classList.remove('hiding'); el.classList.add('peeking'); return moverArco(el, peekX, peekY, 380, tipo, { bancar:false, flip:false }); })
+          .then(function(){ el.classList.remove('hiding'); el.classList.add('peeking'); return moverArco(el, peekX, peekY, 380, tipo, { bancar:false, flip:false, esticar:false }); })
           .then(function(){ return esperar(850); })
-          .then(function(){ el.classList.remove('peeking'); el.classList.add('hiding'); return moverArco(el, hideX, hideY, 380, tipo, { bancar:false, flip:false }); })
+          .then(function(){ el.classList.remove('peeking'); el.classList.add('hiding'); return moverArco(el, hideX, hideY, 380, tipo, { bancar:false, flip:false, esticar:false }); })
           .then(function(){ return esperar(650); })
           .then(function(){
             el.classList.remove('hiding');
@@ -6586,6 +6616,34 @@ idiomaBtn.addEventListener('click', function(){
             setTimeout(function(){ m.classList.remove('surpreso'); }, 520);
           }
         });
+        // Duplo-clique e uma reacao especial, diferente do toque simples --
+        // o guerreiro faz um truque de voo rapido (ja tem um catalogo de 20
+        // truques prontos), o fantasma some e reaparece de outro lugar bem
+        // perto (susto sobrenatural), os dois com faisca dupla colorida.
+        m.addEventListener('dblclick', function(e){
+          e.stopPropagation();
+          e.preventDefault();
+          if(!m.classList.contains('idle')) return;
+          var r = m.getBoundingClientRect();
+          var cor = tipo === 'xiao' ? '#ffd23d' : '#b98fff';
+          criarBurst(layer, r.left + r.width / 2, r.top + r.height / 2, cor);
+          setTimeout(function(){ criarBurst(layer, r.left + r.width / 2, r.top + r.height / 2, cor); }, 120);
+          if(tipo === 'xiao' && typeof talvezFazerTruque === 'function'){
+            talvezFazerTruque(m, true);
+          } else if(tipo === 'ghost'){
+            retriggerAnim(m, 'sumindo');
+            setTimeout(function(){
+              m.classList.remove('sumindo');
+              var area = areaSegura();
+              var nx = clampeia((parseFloat(m.dataset.x) || 0) + (Math.random() < 0.5 ? -70 : 70), area.minX, area.maxX);
+              var ny = clampeia((parseFloat(m.dataset.y) || 0) + (Math.random() * 40 - 20), area.minY, area.maxY);
+              m.dataset.x = nx; m.dataset.y = ny;
+              m.style.transform = 'translate(' + nx + 'px,' + ny + 'px)';
+              retriggerAnim(m, 'surgindo');
+              setTimeout(function(){ m.classList.remove('surgindo'); }, 400);
+            }, 280);
+          }
+        });
       });
 
       // Arrastar e soltar: segurar o mouse num mascote parado ("idle") deixa
@@ -6676,6 +6734,27 @@ idiomaBtn.addEventListener('click', function(){
         });
       }, 3500);
     }catch(e){ /* reacoes com o site sao um bonus — nunca podem travar nada */ }
+  }
+
+  // Reacao quando a pessoa troca o skin do site (botao de design) -- os
+  // mascotes "percebem" que o cenario mudou de verdade, um susto rapido +
+  // faisca colorida, em vez de so o fundo trocar silenciosamente enquanto
+  // eles ficam alheios ao que aconteceu ao redor.
+  function reagirMudancaSkin(){
+    try{
+      var layer = document.querySelector('.mascot-layer');
+      if(!layer) return;
+      [document.querySelector('.mascot-ghost'), document.querySelector('.mascot-xiao')].forEach(function(m){
+        if(!m || m.classList.contains('segurado')) return;
+        var r = m.getBoundingClientRect();
+        var cor = m.classList.contains('mascot-xiao') ? '#ffd23d' : '#b98fff';
+        criarBurst(layer, r.left + r.width / 2, r.top + r.height / 2, cor);
+        if(m.classList.contains('idle')){
+          retriggerAnim(m, 'surpreso');
+          setTimeout(function(){ m.classList.remove('surpreso'); }, 520);
+        }
+      });
+    }catch(e){}
   }
 
   function iniciarMascotes(){
