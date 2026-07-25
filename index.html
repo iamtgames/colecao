@@ -513,6 +513,23 @@
     position:absolute; inset:0; z-index:4; pointer-events:none;
     background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,0.55) 100%);
   }
+  /* Shimmer enquanto a capa de verdade ainda esta carregando -- antes a tela
+     so ficava com o fundo vazio ate a imagem aparecer (ou o fallback, se
+     falhasse). A classe e removida assim que a <img> dispara onload/onerror,
+     entao isso nunca fica "preso" ligado. */
+  .cover-wrap.carregando-capa::before{
+    content:""; position:absolute; inset:0; z-index:-1; pointer-events:none;
+    background: linear-gradient(100deg, rgba(255,255,255,.03) 30%, rgba(255,255,255,.10) 50%, rgba(255,255,255,.03) 70%);
+    background-size: 200% 100%;
+    animation: shimmerCapa 1.3s ease-in-out infinite;
+  }
+  @keyframes shimmerCapa{ 0%{ background-position: 200% 0; } 100%{ background-position: -200% 0; } }
+  /* Navegacao por teclado: contorno visivel so quando o foco vem de verdade
+     do teclado (Tab/setas), sem aparecer feio em cliques de mouse. */
+  .cover-wrap:focus-visible{
+    outline: 2px solid var(--tema-accent, #2f8dff); outline-offset: 3px;
+  }
+  .cover-wrap:focus:not(:focus-visible){ outline: none; }
   .cover-wrap img, .cover-fallback{
     width:100%; height:100%; object-fit: cover;
     transition: transform .35s ease;
@@ -1221,6 +1238,18 @@
      Camada decorativa fixa, sem interacao, clique passa direto (pointer-events:none).
      Ambos ficam abaixo de modais (z-index >=100) e acima do conteudo normal. */
   .mascot-layer{ position:fixed; inset:0; z-index:95; pointer-events:none; overflow:hidden; }
+  .mascot-layer.pausado{ display:none; }
+  /* Ciclo dia/noite real: o fantasma fica mais luminoso a noite (seu
+     horario natural), o guerreiro ganha um brilho quente de sol de dia --
+     so um toque visual, transiciona suave quando o horario muda. */
+  .mascot-ghost .mascot-fxwrap{ transition: filter 1.2s ease; }
+  .mascot-xiao .mascot-fxwrap{ transition: filter 1.2s ease; }
+  body[data-turno-mascotes="noite"] .mascot-ghost .mascot-fxwrap{
+    filter: brightness(1.35) drop-shadow(0 0 10px rgba(185,143,255,.55));
+  }
+  body[data-turno-mascotes="dia"] .mascot-xiao .mascot-fxwrap{
+    filter: brightness(1.12) drop-shadow(0 0 8px rgba(255,210,61,.4));
+  }
   .mascot{ position:absolute; top:0; left:0; will-change: transform; pointer-events:auto; cursor:pointer; }
   .mascot:hover .mascot-fxwrap{ filter: brightness(1.18); }
   .mascot-sprite{ transition: transform .25s ease, opacity .25s ease; }
@@ -1837,6 +1866,7 @@
   <button id="paletaBtn" title="Alternar paleta de cores" aria-label="Alternar paleta de cores">🎨</button>
   <button id="skinBtn" title="Design atual: Moderno — clique para trocar" aria-label="Alternar design do site (PS3/Y2K)">🎮</button>
   <button id="crtBtn" title="Filtro CRT: desligado — clique para ligar" aria-label="Alternar filtro CRT">📺</button>
+  <button id="mascotesToggleBtn" title="Mascotes: ativos — clique para pausar" aria-label="Pausar ou ativar os mascotes do site">👻</button>
 </div>
 <div id="crtOverlay"></div>
 <div class="y2k-taskbar">
@@ -2897,13 +2927,13 @@ function render(){
     const capaUrl = capas[j.id];
     const inicial = j.n.charAt(0).toUpperCase();
     const coverInner = capaUrl
-      ? `<img src="${capaUrl}" alt="${j.n}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\\'cover-fallback\\'><span class=\\'ini\\'>${inicial}</span><span class=\\'tag\\'>capa indisponível</span></div>'">`
+      ? `<img src="${capaUrl}" alt="${j.n}" loading="lazy" onload="this.parentElement.classList.remove('carregando-capa')" onerror="this.parentElement.classList.remove('carregando-capa'); this.parentElement.innerHTML='<div class=\\'cover-fallback\\'><span class=\\'ini\\'>${inicial}</span><span class=\\'tag\\'>capa indisponível</span></div>'">`
       : `<div class="cover-fallback"><span class="ini">${inicial}</span><span class="tag">sem capa ainda</span></div>`;
     const valorPago = Math.round((j.col + j.bar) / 2);
 
     html += `
       <div class="card">
-        <div class="cover-wrap" data-open-id="${j.id}">
+        <div class="cover-wrap${capaUrl ? ' carregando-capa' : ''}" data-open-id="${j.id}">
           <span class="plat-chip">${j.plat}</span>
           <button class="fav-btn ${isFav}" data-id="${j.id}" aria-label="${t('favoritarTitle')} ${j.n}">⭐</button>
           <button class="compare-btn ${isComparando}" data-id="${j.id}" title="${t('compararTitle')}" aria-label="${t('compararTitle')} ${j.n}">⚖️</button>
@@ -2982,9 +3012,39 @@ function render(){
   });
 
   document.querySelectorAll('.cover-wrap').forEach(cw=>{
+    cw.setAttribute('tabindex', '0');
+    cw.setAttribute('role', 'button');
     cw.addEventListener('click', function(){
       const id = parseInt(this.dataset.openId);
       abrirModal(id);
+    });
+    // Navegacao por teclado na grade: setas movem o foco entre os cards
+    // (calculando quantas colunas tem por linha na hora, pra funcionar
+    // igual no modo grade e no modo lista), Enter/Espaco abre o modal --
+    // antes so dava pra usar a grade com o mouse.
+    cw.addEventListener('keydown', function(e){
+      if(e.key === 'Enter' || e.key === ' '){
+        e.preventDefault();
+        abrirModal(parseInt(this.dataset.openId));
+        return;
+      }
+      if(e.key !== 'ArrowUp' && e.key !== 'ArrowDown' && e.key !== 'ArrowLeft' && e.key !== 'ArrowRight') return;
+      e.preventDefault();
+      const todos = Array.from(document.querySelectorAll('.cover-wrap'));
+      const idx = todos.indexOf(this);
+      if(idx === -1) return;
+      let colunas = todos.length;
+      if(todos.length > 1){
+        const topoPrimeiro = todos[0].getBoundingClientRect().top;
+        const quebra = todos.findIndex((el, i) => i > 0 && Math.abs(el.getBoundingClientRect().top - topoPrimeiro) > 4);
+        if(quebra > 0) colunas = quebra;
+      }
+      let alvo = idx;
+      if(e.key === 'ArrowRight') alvo = idx + 1;
+      else if(e.key === 'ArrowLeft') alvo = idx - 1;
+      else if(e.key === 'ArrowDown') alvo = idx + colunas;
+      else if(e.key === 'ArrowUp') alvo = idx - colunas;
+      if(alvo >= 0 && alvo < todos.length) todos[alvo].focus();
     });
   });
 }
@@ -5187,6 +5247,12 @@ idiomaBtn.addEventListener('click', function(){
 
   var estado = { interagindo: false };
 
+  // Controle de pausa: a pessoa pode preferir o site sem os mascotes rodando
+  // o tempo todo -- diferente do "prefers-reduced-motion" (que e automatico
+  // do sistema operacional), esse e um botao de verdade que ela mesma liga
+  // e desliga, e a escolha fica salva.
+  var mascotesPausados = localStorage.getItem('mascotesPausados_ps4') === '1';
+
   // Referencia direta aos dois mascotes assim que sao criados -- varias
   // funcoes precisavam achar "o outro mascote" e faziam isso com um
   // document.querySelector('.mascot-ghost'/'.mascot-xiao') toda vez; agora
@@ -5483,12 +5549,35 @@ idiomaBtn.addEventListener('click', function(){
     'Essa coleção tem história.', 'Eu conheço todos os cantos daqui.', 'Psiu... segredo.',
     'Já vi essa capa antes...', 'As sombras guardam boas surpresas.'
   ];
+  // De vez em quando, em vez de uma frase generica fixa, o balao cita um
+  // jogo de verdade da propria colecao (usa todosJogos(), a mesma lista que
+  // alimenta a grade principal) -- deixa a fala muito mais viva e pessoal,
+  // em vez de sempre repetir as mesmas 8 frases prontas.
+  var MODELOS_FALA_JOGO_XIAO = [
+    'Já jogou %s? Recomendo!', 'Bora platinar %s de novo?', 'Tenho saudade de %s...',
+    '%s é um dos meus favoritos!'
+  ];
+  var MODELOS_FALA_JOGO_GHOST = [
+    'Eu vigio %s à noite...', 'Já vi %s antes, sabia?', 'Psiu... %s guarda segredos.'
+  ];
+  function fraseComJogoReal(tipo){
+    try{
+      var lista = typeof todosJogos === 'function' ? todosJogos() : null;
+      if(!lista || !lista.length) return null;
+      var jogo = lista[Math.floor(Math.random() * lista.length)];
+      if(!jogo || !jogo.n) return null;
+      var modelos = tipo === 'xiao' ? MODELOS_FALA_JOGO_XIAO : MODELOS_FALA_JOGO_GHOST;
+      var modelo = modelos[Math.floor(Math.random() * modelos.length)];
+      return modelo.replace('%s', jogo.n);
+    }catch(e){ return null; }
+  }
   function mostrarBalaoFala(el, tipo, textoForcado){
     try{
       var layer = el.parentElement;
       if(!layer) return;
       var falas = tipo === 'xiao' ? FALAS_XIAO : FALAS_GHOST;
-      var texto = textoForcado || falas[Math.floor(Math.random() * falas.length)];
+      var falaJogo = !textoForcado && Math.random() < 0.35 ? fraseComJogoReal(tipo) : null;
+      var texto = textoForcado || falaJogo || falas[Math.floor(Math.random() * falas.length)];
       var x = parseFloat(el.dataset.x) || 0, y = parseFloat(el.dataset.y) || 0;
       var balao = document.createElement('div');
       balao.className = 'mascot-fx mascot-balao ' + (tipo === 'xiao' ? 'balao-xiao' : 'balao-ghost');
@@ -6419,7 +6508,7 @@ idiomaBtn.addEventListener('click', function(){
 
   function tentarCena(layer, ghost, xiao){
     if(!document.body.contains(ghost) || !document.body.contains(xiao)) return;
-    if(estado.interagindo || !ghost.classList.contains('idle') || !xiao.classList.contains('idle')){
+    if(mascotesPausados || estado.interagindo || !ghost.classList.contains('idle') || !xiao.classList.contains('idle')){
       setTimeout(function(){ tentarCena(layer, ghost, xiao); }, 1500);
       return;
     }
@@ -6449,7 +6538,7 @@ idiomaBtn.addEventListener('click', function(){
   }
 
   function vagar(el, tipo){
-    if(!document.body.contains(el) || estado.interagindo) return;
+    if(!document.body.contains(el) || estado.interagindo || mascotesPausados) return;
     var acao = Math.random();
 
     // Cada um tem seu proprio trejeito especial (o Bytinho solta o combo de
@@ -6995,7 +7084,7 @@ idiomaBtn.addEventListener('click', function(){
       // agendarProximaCena.
       var ultimoAvistamento = 0;
       setInterval(function(){
-        if(estado.interagindo) return;
+        if(mascotesPausados || estado.interagindo) return;
         if(!ghost.classList.contains('idle') || !xiao.classList.contains('idle')) return;
         var agora = Date.now();
         if(agora - ultimoAvistamento < 14000) return;
@@ -7035,6 +7124,19 @@ idiomaBtn.addEventListener('click', function(){
     }catch(e){}
   }
 
+  // Ciclo dia/noite de verdade -- usa a hora real do aparelho (nao um
+  // ciclo fake por tempo de sessao) pra dar um brilho diferente a cada um:
+  // o fantasma fica mais luminoso/etereo de noite (seu horario natural), o
+  // guerreiro ganha um brilho quente de sol durante o dia. So visual, nao
+  // muda a fisica nem as probabilidades de nenhum dos dois.
+  function atualizarTurnoMascotes(){
+    try{
+      var h = new Date().getHours();
+      var noite = h >= 20 || h < 6;
+      document.body.setAttribute('data-turno-mascotes', noite ? 'noite' : 'dia');
+    }catch(e){}
+  }
+
   function iniciarMascotes(){
     try{
       if(document.querySelector('.mascot-layer')) return;
@@ -7046,9 +7148,38 @@ idiomaBtn.addEventListener('click', function(){
       var ghost = criarMascote(layer, 'ghost', GHOST_SVG);
       var xiao = criarMascote(layer, 'xiao', XIAO_SVG);
       _ghostRef = ghost; _xiaoRef = xiao;
+      if(mascotesPausados) layer.classList.add('pausado');
       setTimeout(function(){ vagar(ghost, 'ghost'); }, 800);
       setTimeout(function(){ vagar(xiao, 'xiao'); }, 1600);
       ligarReacoesDoSite(layer, ghost, xiao);
+
+      // Botao pra pausar/ativar os mascotes de vez -- diferente do
+      // reduzido (que e automatico do sistema operacional), essa e uma
+      // escolha manual da pessoa, e fica salva pra proxima visita.
+      var mascotesBtn = document.getElementById('mascotesToggleBtn');
+      if(mascotesBtn){
+        function atualizarBotaoMascotes(){
+          mascotesBtn.textContent = mascotesPausados ? '🚫' : '👻';
+          mascotesBtn.title = mascotesPausados
+            ? 'Mascotes: pausados — clique para ativar'
+            : 'Mascotes: ativos — clique para pausar';
+        }
+        atualizarBotaoMascotes();
+        mascotesBtn.addEventListener('click', function(){
+          mascotesPausados = !mascotesPausados;
+          localStorage.setItem('mascotesPausados_ps4', mascotesPausados ? '1' : '0');
+          layer.classList.toggle('pausado', mascotesPausados);
+          atualizarBotaoMascotes();
+          if(!mascotesPausados){
+            // Acordar de novo: vagar() nao tem um loop de retentativa proprio
+            // (ao contrario do tentarCena, que ja fica cutucando sozinho ate
+            // o mascotesPausados liberar), entao precisa ser chamado na mao
+            // aqui pra retomar o vaguear.
+            vagar(ghost, 'ghost');
+            vagar(xiao, 'xiao');
+          }
+        });
+      }
       // A camada dos mascotes e fixed (sempre no mesmo lugar da tela), mas
       // os cards/paineis de apoio rolam junto com a pagina -- sem isso, um
       // mascote pousado/escondido "descolava" do card no instante em que
@@ -7076,6 +7207,7 @@ idiomaBtn.addEventListener('click', function(){
       if(!reduzido){
         var _tickN = 0;
         setInterval(function(){
+          if(mascotesPausados) return;
           sincronizarSombras(ghost, xiao);
           _tickN++;
           if(_tickN % 2 !== 0) return; // rastro neon a ~140ms, sombra a ~70ms
@@ -7101,6 +7233,9 @@ idiomaBtn.addEventListener('click', function(){
       if(!reduzido){
         setTimeout(function(){ tentarCena(layer, ghost, xiao); }, 12000);
       }
+
+      atualizarTurnoMascotes();
+      setInterval(atualizarTurnoMascotes, 600000); // reconfere a cada 10min, custo irrisorio
     }catch(e){ /* mascotes sao só decoracao — nunca deve travar o site */ }
   }
 
