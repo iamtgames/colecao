@@ -453,6 +453,38 @@
   .stat .n{font-size:19px; font-weight:800; color:var(--white); width:100%;}
   .stat .l{font-size:10.5px; color:var(--ink-dim); margin-top:2px; text-transform:uppercase; letter-spacing:.4px; width:100%;}
 
+  /* RADAR DE ANIVERSARIO DE LANCAMENTO: banner discreto que so aparece quando
+     algum jogo da colecao faz aniversario de lancamento HOJE (checado no
+     navegador do visitante, comparando o dia/mes real de lancamento -- vindo
+     de dados reais da RAWG -- com a data de hoje). Fica escondido o resto do
+     tempo, sem ocupar espaco quando nao ha nada pra comemorar. */
+  #aniversarioWrap{ display:flex; flex-direction:column; gap:8px; margin-bottom:18px; }
+  .aniversario-banner{
+    display:flex; align-items:center; gap:12px;
+    background: linear-gradient(135deg, rgba(255,196,0,0.14), rgba(255,120,0,0.08));
+    border:1px solid rgba(255,196,0,0.4); border-radius:16px;
+    padding:12px 16px; animation: aniversarioPulso 2.5s ease-in-out infinite;
+    cursor:pointer;
+  }
+  .aniversario-banner .ico{ font-size:26px; flex-shrink:0; }
+  .aniversario-banner .txt{ flex:1; min-width:0; }
+  .aniversario-banner .txt b{ color:var(--white); }
+  .aniversario-banner .txt .sub{ font-size:11.5px; color:var(--ink-dim); }
+  @keyframes aniversarioPulso{
+    0%, 100%{ box-shadow: 0 0 0 rgba(255,196,0,0); }
+    50%{ box-shadow: 0 0 16px rgba(255,196,0,0.35); }
+  }
+
+  /* NARRACAO POR VOZ DO PERFIL: botao dentro do card de Perfil Colecionador,
+     usa a Web Speech API nativa do navegador (sem custo, sem API externa). */
+  .narrar-btn{
+    background: var(--overlay-glass); border:1px solid rgba(255,255,255,0.12);
+    color:var(--ink); border-radius:20px; padding:5px 12px; font-size:11.5px;
+    font-weight:700; cursor:pointer; margin-left:10px; transition:.15s;
+  }
+  .narrar-btn:hover{ border-color:var(--white); }
+  .narrar-btn.falando{ background: rgba(120,200,255,0.18); border-color: rgba(120,200,255,0.5); }
+
   /* TOOLS */
   .tools{
     display:flex; gap:12px; margin: 0 0 14px; flex-wrap:wrap; align-items:center;
@@ -1935,6 +1967,8 @@
     </div>
   </div>
 
+  <div id="aniversarioWrap"></div>
+
   <div class="tools" id="topActionsRow" style="margin-bottom:20px;">
     <button class="toggle-venda" id="vitrineBtn">🖼️ Modo Vitrine (tela cheia)</button>
     <button class="toggle-venda" id="cartaoResumoBtn">🎁 Cartão resumo (compartilhar)</button>
@@ -2637,6 +2671,36 @@ const anoDev = {
   223: { ano: "2015", dev: "Kojima Productions" }
 };
 
+// Datas de lancamento REAIS (ano-mes-dia), pesquisadas via API da RAWG por
+// jogo -- nao fabricadas. Usadas so pelo Radar de Aniversario de Lancamento,
+// pra saber se algum jogo da colecao faz aniversario de lancamento hoje.
+// Quando o jogo e uma seleta/colecao remasterizada (ex: Uncharted Nathan Drake
+// Collection), a data usada e a do lancamento dessa versao especifica no PS4,
+// nao a do jogo original -- e a data que faz sentido pra "aniversario" de quem
+// tem essa versao fisica. O id 170 (segunda copia fisica do Last of Us Part II,
+// id 148) fica de fora de proposito -- e o mesmo jogo, nao precisa duplicar o aviso.
+const dataLancamento = {
+  124: "2021-03-26", 125: "2016-03-01", 126: "2019-09-13", 127: "2018-10-12",
+  128: "2020-12-10", 129: "2016-04-11", 130: "2019-11-08", 131: "2018-05-25",
+  132: "2014-03-25", 133: "2018-03-27", 134: "2021-10-07", 135: "2015-09-22",
+  136: "2016-09-27", 137: "2018-09-28", 138: "2019-09-27", 139: "2020-10-06",
+  140: "2022-04-27", 141: "2020-07-17", 142: "2022-11-09", 143: "2017-01-20",
+  144: "2020-09-17", 145: "2010-02-17", 146: "2016-05-17", 147: "2020-12-03",
+  148: "2020-06-19", 149: "2014-03-18", 150: "2016-06-21", 151: "2017-02-03",
+  152: "2020-03-13", 153: "2024-01-18", 154: "2019-05-14", 155: "2018-10-26",
+  156: "2017-01-23", 157: "2020-07-28", 158: "2016-07-11", 159: "2017-03-31",
+  160: "2018-09-07", 161: "2020-11-12", 162: "2019-11-15", 163: "2015-11-17",
+  164: "2022-07-19", 165: "2017-09-27", 166: "2021-10-22", 167: "2020-10-30",
+  168: "2014-10-12", 169: "2016-10-25", 171: "2016-12-19",
+  172: "2015-09-29", 173: "2015-10-09", 174: "2016-05-10", 201: "2011-02-17",
+  202: "2010-01-28", 203: "2008-10-14", 204: "2013-08-06", 205: "2010-02-02",
+  206: "2011-06-09", 207: "2017-10-11", 208: "2017-09-26", 209: "2019-08-27",
+  210: "2018-08-30", 211: "2015-10-09", 212: "2015-10-09", 213: "2017-08-22",
+  214: "2019-02-15", 215: "2018-11-20", 216: "2022-05-27", 217: "2017-09-26",
+  218: "2013-09-23", 219: "2014-11-28", 220: "2014-05-22", 221: "2019-04-22",
+  222: "2018-04-20", 223: "2016-10-11"
+};
+
 // Radar de caca: jogos que ainda nao fazem parte da colecao mas estao no radar.
 // Selecionados a partir de materias sobre os jogos fisicos mais raros/valorizados de PS4 e PS3.
 // Formato: { n: "Nome do jogo", plat: "PS4"/"PS3", motivo: "por que quero (opcional)", capa: "URL opcional" }
@@ -2843,6 +2907,9 @@ const I18N = {
     aovivoJogosGratis: '🎮 Jogos grátis agora', aovivoNoticias: '📰 Notícias (Flow Games)',
     aovivoDescubra: '🎲 Descubra um jogo', sortearBtn: '🔀 Sortear jogo aleatório',
     aoVivoBadge: 'AO VIVO', estaAoVivo: 'está ao vivo agora',
+    ouvirPerfil: '🔊 Ouvir', pararNarracao: '⏹️ Parar', narracaoNaoSuportada: 'Narração por voz não é suportada neste navegador.',
+    aniversarioTitulo: (n, anos) => `🎉 ${n} faz ${anos} ano${anos===1?'':'s'} de lançamento hoje!`,
+    aniversarioSub: 'Clique pra ver o jogo na sua coleção',
   },
   en: {
     statJogos: 'Games', statValor: 'Total spent', statFav: 'Favorites ⭐',
@@ -2900,6 +2967,9 @@ const I18N = {
     aovivoJogosGratis: '🎮 Free games now', aovivoNoticias: '📰 News (Flow Games)',
     aovivoDescubra: '🎲 Discover a game', sortearBtn: '🔀 Draw random game',
     aoVivoBadge: 'LIVE', estaAoVivo: 'is live now',
+    ouvirPerfil: '🔊 Listen', pararNarracao: '⏹️ Stop', narracaoNaoSuportada: 'Voice narration is not supported in this browser.',
+    aniversarioTitulo: (n, anos) => `🎉 ${n} turns ${anos} year${anos===1?'':'s'} old today!`,
+    aniversarioSub: 'Click to see the game in your collection',
   }
 };
 function t(key){
@@ -3021,6 +3091,7 @@ function render(){
   renderPerfil();
   renderCategorias();
   renderConquistas();
+  renderAniversarioLancamento();
 
   document.querySelectorAll('.fav-btn').forEach(btn=>{
     btn.addEventListener('click', function(e){
@@ -4003,7 +4074,7 @@ function renderPerfil(){
   const platDominante = ps4 >= ps3 ? 'PS4' : 'PS3';
   const platPct = lista.length ? Math.round((Math.max(ps4, ps3) / lista.length) * 100) : 0;
 
-  let html = `<div class="rc-title">${t('rcPerfil')}</div>`;
+  let html = `<div class="rc-title">${t('rcPerfil')} <button id="narrarPerfilBtn" class="narrar-btn" type="button">${t('ouvirPerfil')}</button></div>`;
   html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">${t('categoriaFavorita')}</span><span class="rc-count" style="text-align:left; flex:1;">${catL(topCat[0])} (${topCat[1]} ${t('jogosSufixo')})</span></div>`;
   if(topDec){
     html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">${t('eraFavorita')}</span><span class="rc-count" style="text-align:left; flex:1;">${topDec[0]} (${topDec[1]} ${t('jogosSufixo')})</span></div>`;
@@ -4011,6 +4082,144 @@ function renderPerfil(){
   html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">${t('platPredominante')}</span><span class="rc-count" style="text-align:left; flex:1;">${platDominante} (${platPct}% ${t('daColecao')})</span></div>`;
 
   el.innerHTML = html;
+  const btnNarrar = document.getElementById('narrarPerfilBtn');
+  if(btnNarrar) btnNarrar.addEventListener('click', narrarPerfil);
+}
+
+// NARRACAO POR VOZ DO PERFIL: usa a Web Speech API nativa do navegador
+// (SpeechSynthesis), sem depender de nenhuma API externa nem custo. Monta uma
+// frase curta a partir dos MESMOS dados reais ja calculados no perfil/
+// conquistas (nada fabricado), le em voz alta, e vira um botao de "Parar".
+function montarTextoNarracaoPerfil(){
+  const lista = todosJogos();
+  if(!lista.length) return idioma === 'en' ? 'Your collection has no games yet.' : 'Sua coleção ainda não tem jogos cadastrados.';
+
+  const catCount = {};
+  lista.forEach(j => { catCount[j.cat] = (catCount[j.cat] || 0) + 1; });
+  const topCat = Object.entries(catCount).sort((a,b) => b[1]-a[1])[0];
+
+  const decCount = {};
+  lista.forEach(j => {
+    const info = anoDev[j.id] || {};
+    const ano = info.ano || j.ano;
+    if(!ano) return;
+    const dec = `${Math.floor(parseInt(ano, 10) / 10) * 10}s`;
+    decCount[dec] = (decCount[dec] || 0) + 1;
+  });
+  const topDecEntries = Object.entries(decCount).sort((a,b) => b[1]-a[1]);
+  const topDec = topDecEntries.length ? topDecEntries[0] : null;
+
+  const ps4 = lista.filter(j => j.plat === 'PS4').length;
+  const ps3 = lista.filter(j => j.plat === 'PS3').length;
+  const platDominante = ps4 >= ps3 ? 'PS4' : 'PS3';
+  const platPct = lista.length ? Math.round((Math.max(ps4, ps3) / lista.length) * 100) : 0;
+
+  let totalPago = 0;
+  lista.forEach(j => { totalPago += Math.round((j.col + j.bar) / 2); });
+
+  const raros = lista.filter(j => j.rar === 'raro' || j.rar === 'muito').length;
+  const avaliados = Object.values(notas || {}).filter(n => n > 0).length;
+  const LIMITE_GRANDE = 50, LIMITE_RARIDADE = 5, LIMITE_CATEGORIA = 15,
+        LIMITE_CURADOR = 3, LIMITE_CRITICO = 3, LIMITE_COFRE = 5000;
+  let conquistas = 0;
+  if(lista.length >= LIMITE_GRANDE) conquistas++;
+  if(raros >= LIMITE_RARIDADE) conquistas++;
+  if(topCat[1] >= LIMITE_CATEGORIA) conquistas++;
+  if(ps4 > 0 && ps3 > 0) conquistas++;
+  if((favoritos || []).length >= LIMITE_CURADOR) conquistas++;
+  if(avaliados >= LIMITE_CRITICO) conquistas++;
+  if(totalPago >= LIMITE_COFRE) conquistas++;
+
+  const partes = [];
+  if(idioma === 'en'){
+    partes.push(`Your collection has ${lista.length} games.`);
+    partes.push(`Your favorite category is ${catL(topCat[0])}, with ${topCat[1]} games.`);
+    if(topDec) partes.push(`Most of your games are from the ${topDec[0]}.`);
+    partes.push(`${platDominante} makes up ${platPct} percent of your collection.`);
+    partes.push(`You've spent about ${totalPago} reais building this collection.`);
+    partes.push(`You've unlocked ${conquistas} out of 7 achievements.`);
+  } else {
+    partes.push(`Sua coleção tem ${lista.length} jogos.`);
+    partes.push(`Sua categoria favorita é ${catL(topCat[0])}, com ${topCat[1]} jogos.`);
+    if(topDec) partes.push(`A maior parte dos seus jogos é dos anos ${topDec[0]}.`);
+    partes.push(`O ${platDominante} representa ${platPct} por cento da sua coleção.`);
+    partes.push(`Você já gastou cerca de ${totalPago} reais montando essa coleção.`);
+    partes.push(`Você já desbloqueou ${conquistas} de 7 conquistas.`);
+  }
+  return partes.join(' ');
+}
+
+function atualizarBotaoNarracao(falando){
+  const btn = document.getElementById('narrarPerfilBtn');
+  if(!btn) return;
+  btn.textContent = falando ? t('pararNarracao') : t('ouvirPerfil');
+  btn.classList.toggle('falando', !!falando);
+}
+
+function narrarPerfil(){
+  if(!('speechSynthesis' in window)){
+    alert(t('narracaoNaoSuportada'));
+    return;
+  }
+  if(window.speechSynthesis.speaking){
+    window.speechSynthesis.cancel();
+    atualizarBotaoNarracao(false);
+    return;
+  }
+  const texto = montarTextoNarracaoPerfil();
+  const utt = new SpeechSynthesisUtterance(texto);
+  utt.lang = idioma === 'en' ? 'en-US' : 'pt-BR';
+  utt.rate = 1;
+  utt.onend = () => atualizarBotaoNarracao(false);
+  utt.onerror = () => atualizarBotaoNarracao(false);
+  window.speechSynthesis.cancel();
+  window.speechSynthesis.speak(utt);
+  atualizarBotaoNarracao(true);
+}
+
+// RADAR DE ANIVERSARIO DE LANCAMENTO: roda so no navegador, comparando o
+// dia/mes de hoje (hora local de quem esta vendo o site) com as datas reais
+// de dataLancamento. So mostra banner quando ha um match de verdade -- nunca
+// inventa aniversario pra jogo sem data confirmada.
+function renderAniversarioLancamento(){
+  const wrap = document.getElementById('aniversarioWrap');
+  if(!wrap) return;
+  const hoje = new Date();
+  const mesDiaHoje = String(hoje.getMonth()+1).padStart(2,'0') + '-' + String(hoje.getDate()).padStart(2,'0');
+  const anoAtual = hoje.getFullYear();
+
+  const aniversariantes = [];
+  const vistos = new Set();
+  todosJogos().forEach(j => {
+    const data = dataLancamento[j.id];
+    if(!data) return;
+    const mesDia = data.slice(5); // "MM-DD"
+    if(mesDia !== mesDiaHoje) return;
+    const anoLancamento = parseInt(data.slice(0,4), 10);
+    const anos = anoAtual - anoLancamento;
+    if(anos <= 0) return; // evita "0 anos" se por acaso a data cair no mesmo ano
+    const chave = j.n + '|' + data; // evita duplicar (ex: "Copia 2" do mesmo jogo)
+    if(vistos.has(chave)) return;
+    vistos.add(chave);
+    aniversariantes.push({ jogo: j, anos });
+  });
+
+  if(!aniversariantes.length){ wrap.innerHTML = ''; return; }
+
+  wrap.innerHTML = aniversariantes.map(({jogo, anos}) => `
+    <div class="aniversario-banner" data-jogo-id="${jogo.id}" role="button" tabindex="0">
+      <span class="ico">🎂</span>
+      <div class="txt">
+        <div>${t('aniversarioTitulo')(escapeHtml(jogo.n), anos)}</div>
+        <div class="sub">${t('aniversarioSub')}</div>
+      </div>
+    </div>
+  `).join('');
+  wrap.querySelectorAll('.aniversario-banner').forEach(el => {
+    const abrir = () => abrirModal(parseInt(el.dataset.jogoId, 10));
+    el.addEventListener('click', abrir);
+    el.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrir(); } });
+  });
 }
 
 // Conquistas: badges calculados sozinhos a partir dos dados reais da colecao
