@@ -25,7 +25,7 @@
 <title>Controle Coleção iamT</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Space+Grotesk:wght@500;700;800&family=Rajdhani:wght@500;600;700&family=M+PLUS+Rounded+1c:wght@500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Space+Grotesk:wght@500;700;800&family=Rajdhani:wght@500;600;700&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Special+Elite&display=swap" rel="stylesheet">
 <style>
   :root{
     --bg: #0b0b0c;
@@ -473,6 +473,91 @@
   @keyframes aniversarioPulso{
     0%, 100%{ box-shadow: 0 0 0 rgba(255,196,0,0); }
     50%{ box-shadow: 0 0 16px rgba(255,196,0,0.35); }
+  }
+
+  /* CALENDARIO DE LANCAMENTOS FUTUROS: pensado como uma pagina arrancada de um
+     manual de instrucoes/guia de estrategia old-school -- papel envelhecido,
+     fita adesiva nos cantos, fonte de maquina de escrever, "carimbo" nos dias
+     com lancamento. Mostra jogos GRANDES ainda NAO lancados (dados reais,
+     pesquisados manualmente -- nunca inventados), marcados no dia previsto. */
+  .calendario-manual{
+    position:relative; margin-bottom:22px; padding:22px 20px 18px;
+    background: repeating-linear-gradient(0deg, #efe3c4 0px, #efe3c4 27px, #e9dcb8 28px),
+                linear-gradient(160deg, #f3e9cd, #e8dab0);
+    border:1px solid #cbb787; border-radius:6px;
+    box-shadow: 0 10px 26px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.25);
+    color:#4a3a20; transform: rotate(-0.35deg);
+  }
+  .calendario-manual::before{
+    content:''; position:absolute; inset:0; border-radius:6px; pointer-events:none;
+    box-shadow: inset 0 0 40px rgba(120,90,40,0.18);
+  }
+  .cal-tape{
+    position:absolute; width:64px; height:22px; background: rgba(255,255,255,0.55);
+    border:1px solid rgba(0,0,0,0.06); box-shadow:0 2px 4px rgba(0,0,0,0.2);
+  }
+  .cal-tape-left{ top:-10px; left:26px; transform: rotate(-8deg); }
+  .cal-tape-right{ top:-10px; right:26px; transform: rotate(6deg); }
+  .cal-header-manual{ text-align:center; margin-bottom:10px; }
+  .cal-header-manual h3{
+    font-family:'Special Elite', 'Courier New', monospace; font-size:19px; font-weight:400;
+    letter-spacing:.5px; color:#3a2c14; margin:0 0 4px;
+  }
+  .cal-header-manual p{ font-family:'Special Elite','Courier New',monospace; font-size:11.5px; color:#6b5730; margin:0; }
+  .cal-nav-row{ display:flex; align-items:center; justify-content:center; gap:16px; margin:12px 0 10px; }
+  .cal-nav-btn{
+    background:#3a2c14; color:#f3e9cd; border:none; border-radius:4px; width:30px; height:30px;
+    cursor:pointer; font-size:14px; font-weight:700; box-shadow:0 2px 0 rgba(0,0,0,0.3);
+  }
+  .cal-nav-btn:hover{ background:#54401d; }
+  .cal-mes-ano{
+    font-family:'Special Elite','Courier New',monospace; font-size:15px; font-weight:700;
+    color:#3a2c14; min-width:170px; text-align:center; text-transform:uppercase; letter-spacing:1px;
+  }
+  .cal-dias-semana{
+    display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:6px;
+  }
+  .cal-dias-semana span{
+    text-align:center; font-family:'Special Elite','Courier New',monospace; font-size:10px;
+    color:#7a6636; text-transform:uppercase;
+  }
+  .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .cal-dia{
+    position:relative; aspect-ratio:1/0.86; border:1px dashed #c9b585; border-radius:5px;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
+    padding:3px 2px; font-family:'Special Elite','Courier New',monospace; font-size:11px; color:#5c4a26;
+    background: rgba(255,255,255,0.18);
+  }
+  .cal-dia.cal-vazio{ border:none; background:none; }
+  .cal-dia.cal-hoje{ border:1.5px solid #b23b2e; background: rgba(178,59,46,0.08); }
+  .cal-dia.cal-hoje::after{
+    content:'hoje'; position:absolute; bottom:2px; font-size:7px; color:#b23b2e; letter-spacing:.5px;
+  }
+  .cal-dia.cal-tem-lancamento{ cursor:pointer; }
+  .cal-dia .cal-num{ font-weight:700; }
+  .cal-marcador{
+    margin-top:2px; width:20px; height:20px; border-radius:50%; background:#b23b2e; color:#fdf3df;
+    display:flex; align-items:center; justify-content:center; font-size:11px;
+    transform: rotate(-6deg); box-shadow:0 1px 2px rgba(0,0,0,0.35);
+    border:1px solid rgba(0,0,0,0.15);
+  }
+  .cal-dia.cal-tem-lancamento:hover .cal-marcador{ transform: rotate(-6deg) scale(1.12); }
+  .cal-lista-mes{ margin-top:14px; display:flex; flex-direction:column; gap:6px; }
+  .cal-lista-vazio{
+    font-family:'Special Elite','Courier New',monospace; font-size:11.5px; color:#8a7748;
+    text-align:center; padding:6px 0;
+  }
+  .cal-item{
+    display:flex; align-items:baseline; gap:8px; padding:6px 10px;
+    background: rgba(255,255,255,0.35); border:1px dashed #cbb787; border-radius:6px;
+    font-family:'Special Elite','Courier New',monospace; font-size:12px; color:#4a3a20;
+  }
+  .cal-item .cal-item-dia{ font-weight:700; color:#b23b2e; min-width:34px; }
+  .cal-item .cal-item-plat{ margin-left:auto; font-size:10px; color:#8a7748; }
+  @media (max-width: 600px){
+    .calendario-manual{ transform:none; padding:16px 10px 14px; }
+    .cal-dia{ font-size:9.5px; }
+    .cal-marcador{ width:16px; height:16px; font-size:9px; }
   }
 
   /* NARRACAO POR VOZ DO PERFIL: botao dentro do card de Perfil Colecionador,
@@ -1986,6 +2071,23 @@
 
   <div id="aniversarioWrap"></div>
 
+  <div class="calendario-manual" id="calendarioManualWrap">
+    <div class="cal-tape cal-tape-left"></div>
+    <div class="cal-tape cal-tape-right"></div>
+    <div class="cal-header-manual">
+      <h3 id="calendarioTituloEl">📆 Calendário de Lançamentos</h3>
+      <p id="calendarioSubEl">Grandes jogos por vir, anotados no caderno de campo</p>
+    </div>
+    <div class="cal-nav-row">
+      <button id="calPrevBtn" class="cal-nav-btn" type="button" aria-label="Mês anterior">◀</button>
+      <span id="calMesAnoEl" class="cal-mes-ano"></span>
+      <button id="calNextBtn" class="cal-nav-btn" type="button" aria-label="Próximo mês">▶</button>
+    </div>
+    <div class="cal-dias-semana" id="calDiasSemana"></div>
+    <div class="cal-grid" id="calGrid"></div>
+    <div class="cal-lista-mes" id="calListaMes"></div>
+  </div>
+
   <div class="tools" id="topActionsRow" style="margin-bottom:20px;">
     <button class="toggle-venda" id="vitrineBtn">🖼️ Modo Vitrine (tela cheia)</button>
     <button class="toggle-venda" id="cartaoResumoBtn">🎁 Cartão resumo (compartilhar)</button>
@@ -2718,6 +2820,47 @@ const dataLancamento = {
   222: "2018-04-20", 223: "2016-10-11"
 };
 
+// CALENDARIO DE LANCAMENTOS FUTUROS: grandes lancamentos de jogos ainda NAO
+// lancados (qualquer plataforma -- PS5, Xbox, Switch/Switch 2, PC -- ja que
+// aqui e sobre o cenario geral, nao so a colecao pessoal em PS4/PS3).
+// Pesquisado manualmente em fontes reais (VGC, GameSpot, GameRant, paginas
+// oficiais de editoras/plataformas) em julho de 2026 -- todas as datas abaixo
+// sao dia-a-dia confirmadas nas fontes, nunca estimadas. Quando uma fonte
+// tinha so "2026" ou "outono de 2026" sem dia exato, o jogo ficou de fora.
+const lancamentosFuturos = [
+  { data:"2026-08-04", n:"Beast of Reincarnation", plat:"PS5, Xbox, PC" },
+  { data:"2026-08-06", n:"Marvel Tokon: Fighting Souls", plat:"PS5, PC" },
+  { data:"2026-08-13", n:"Madden NFL 27", plat:"PS5, Xbox, Switch 2, PC" },
+  { data:"2026-08-14", n:"Grave Seasons", plat:"PC, Xbox, PS5, Switch" },
+  { data:"2026-08-27", n:"Metal Gear Solid: Master Collection Vol. 2", plat:"PS5, Switch, Switch 2, Xbox, PC" },
+  { data:"2026-08-27", n:"Star Wars: Zero Company", plat:"PS5, Xbox, PC" },
+  { data:"2026-09-03", n:"The Blood of the Dawnwalker", plat:"PC, PS5, Xbox" },
+  { data:"2026-09-04", n:"Onimusha: Way of the Sword", plat:"PS5, Xbox, Switch 2, PC" },
+  { data:"2026-09-04", n:"NBA 2K27", plat:"PS5, Xbox, Switch 2, PC" },
+  { data:"2026-09-08", n:"Halloween: The Game", plat:"PS5, Xbox, PC" },
+  { data:"2026-09-09", n:"Valheim (lançamento 1.0)", plat:"PC, PS5, Xbox, Switch 2" },
+  { data:"2026-09-15", n:"Destroy All Humans 2: Reprobed", plat:"Switch 2" },
+  { data:"2026-09-15", n:"Marvel's Wolverine", plat:"PS5" },
+  { data:"2026-09-17", n:"Fire Emblem: Fortune's Weave", plat:"Switch 2" },
+  { data:"2026-09-24", n:"Silent Hill: Townfall", plat:"PS5, PC" },
+  { data:"2026-09-24", n:"Control Resonant", plat:"PS5, Xbox, PC" },
+  { data:"2026-09-25", n:"EA Sports FC 27", plat:"PS5, Xbox, Switch 2, PC" },
+  { data:"2026-09-29", n:"Minecraft Dungeons 2", plat:"PS5, Xbox, Switch, Switch 2, PC" },
+  { data:"2026-10-02", n:"Ace Combat 8: Wings of Theve", plat:"PS5, Xbox, PC" },
+  { data:"2026-10-06", n:"Disney Epic Mickey: Rebrushed", plat:"Switch 2" },
+  { data:"2026-10-06", n:"Star Wars: Galactic Racer", plat:"PC, Xbox, PS5" },
+  { data:"2026-10-06", n:"Gears of War: E-Day", plat:"Xbox, PC" },
+  { data:"2026-10-08", n:"Kingdom Hearts Collection [I–III]", plat:"PS5, Xbox, Switch 2, PC" },
+  { data:"2026-10-13", n:"SpongeBob SquarePants: Titans of the Tide", plat:"Switch" },
+  { data:"2026-10-13", n:"Planet Zoo 2", plat:"PC, PS5, Xbox" },
+  { data:"2026-10-22", n:"Final Fantasy Resonance", plat:"PS5, Xbox, Switch, Switch 2, PC" },
+  { data:"2026-10-23", n:"Call of Duty: Modern Warfare 4", plat:"PS5, Xbox, Switch 2, PC" },
+  { data:"2026-10-29", n:"Phantom Blade Zero", plat:"PS5, PC" },
+  { data:"2026-11-19", n:"Grand Theft Auto 6", plat:"PS5, Xbox" },
+  { data:"2026-12-03", n:"Dragon Quest Monsters: The Withered World", plat:"PS5, Xbox, Switch, Switch 2, PC" },
+  { data:"2026-12-03", n:"Xenoblade Chronicles 3 — Nintendo Switch 2 Edition", plat:"Switch 2" },
+];
+
 // Radar de caca: jogos que ainda nao fazem parte da colecao mas estao no radar.
 // Selecionados a partir de materias sobre os jogos fisicos mais raros/valorizados de PS4 e PS3.
 // Formato: { n: "Nome do jogo", plat: "PS4"/"PS3", motivo: "por que quero (opcional)", capa: "URL opcional" }
@@ -2926,6 +3069,8 @@ const I18N = {
     aoVivoBadge: 'AO VIVO', estaAoVivo: 'está ao vivo agora',
     ouvirPerfil: '🔊 Ouvir', pararNarracao: '⏹️ Parar', narracaoNaoSuportada: 'Narração por voz não é suportada neste navegador.',
     ouvirCardTitle: 'Ouvir informações do jogo', ouvirSinopseTitle: 'Ouvir sinopse',
+    calendarioTitulo: '📆 Calendário de Lançamentos', calendarioSub: 'Grandes jogos por vir, anotados no caderno de campo',
+    calSemLancamentos: 'Nenhum lançamento grande confirmado pra este mês.',
     aniversarioTitulo: (n, anos) => `🎉 ${n} faz ${anos} ano${anos===1?'':'s'} de lançamento hoje!`,
     aniversarioSub: 'Clique pra ver o jogo na sua coleção',
   },
@@ -2987,6 +3132,8 @@ const I18N = {
     aoVivoBadge: 'LIVE', estaAoVivo: 'is live now',
     ouvirPerfil: '🔊 Listen', pararNarracao: '⏹️ Stop', narracaoNaoSuportada: 'Voice narration is not supported in this browser.',
     ouvirCardTitle: 'Listen to game info', ouvirSinopseTitle: 'Listen to synopsis',
+    calendarioTitulo: '📆 Release Calendar', calendarioSub: 'Big upcoming games, jotted down field-notebook style',
+    calSemLancamentos: 'No major releases confirmed for this month yet.',
     aniversarioTitulo: (n, anos) => `🎉 ${n} turns ${anos} year${anos===1?'':'s'} old today!`,
     aniversarioSub: 'Click to see the game in your collection',
   }
@@ -4185,6 +4332,33 @@ function montarTextoNarracaoPerfil(){
 // novo no MESMO botao que esta falando apenas para.
 let btnFalandoAtual = null;
 
+// ESCOLHA DE VOZ MAIS NATURAL: as vozes do navegador (via speechSynthesis)
+// carregam de forma assincrona e variam de maquina pra maquina. Aqui a gente
+// cacheia a lista assim que fica disponivel e prioriza vozes de qualidade
+// (Google costuma soar bem menos "robotica" que as vozes padrao da Microsoft
+// no Windows, por exemplo). Nunca inventa voz -- so escolhe entre as reais
+// que o navegador de quem esta acessando realmente oferece.
+let vozesCache = [];
+function carregarVozes(){
+  const v = window.speechSynthesis ? window.speechSynthesis.getVoices() : [];
+  if(v && v.length) vozesCache = v;
+}
+if('speechSynthesis' in window){
+  carregarVozes();
+  window.speechSynthesis.onvoiceschanged = carregarVozes;
+}
+
+function obterVozPreferida(lang){
+  if(!vozesCache.length) carregarVozes();
+  const prefixo = lang.slice(0,2); // "pt" ou "en"
+  const doIdioma = vozesCache.filter(v => v.lang && v.lang.toLowerCase().startsWith(prefixo));
+  if(!doIdioma.length) return null;
+  // Ordem de preferencia: vozes "Google" (mais naturais) > vozes "Natural"/"Online" >
+  // qualquer outra do idioma certo (ex.: vozes Microsoft locais do Windows).
+  const porNome = (regex) => doIdioma.find(v => regex.test(v.name));
+  return porNome(/google/i) || porNome(/natural|online|neural/i) || doIdioma[0];
+}
+
 function atualizarEstadoBotaoNarracao(btn, falando){
   if(!btn) return;
   btn.classList.toggle('falando', !!falando);
@@ -4214,8 +4388,15 @@ function narrarTexto(texto, btn){
   if(cliqueNoMesmoBotaoFalando) return;
 
   const utt = new SpeechSynthesisUtterance(texto);
-  utt.lang = idioma === 'en' ? 'en-US' : 'pt-BR';
-  utt.rate = 1;
+  const lang = idioma === 'en' ? 'en-US' : 'pt-BR';
+  utt.lang = lang;
+  const vozPreferida = obterVozPreferida(lang);
+  if(vozPreferida) utt.voice = vozPreferida;
+  // Rate/pitch levemente ajustados pra soar mais natural e menos "robotico"
+  // (mais lento e com uma pequena variacao de tom que a maioria das vozes
+  // sintetizadas ganha quando nao fica em 1.0/1.0 chapado).
+  utt.rate = 0.95;
+  utt.pitch = 1.03;
   utt.onend = () => { if(btnFalandoAtual === btn){ atualizarEstadoBotaoNarracao(btn, false); btnFalandoAtual = null; } };
   utt.onerror = () => { if(btnFalandoAtual === btn){ atualizarEstadoBotaoNarracao(btn, false); btnFalandoAtual = null; } };
   window.speechSynthesis.speak(utt);
@@ -4290,6 +4471,109 @@ function renderAniversarioLancamento(){
     el.addEventListener('click', abrir);
     el.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrir(); } });
   });
+}
+
+// CALENDARIO DE LANCAMENTOS FUTUROS: mes/ano que o calendario esta mostrando
+// agora. Comeca no mes do PROXIMO lancamento real (relativo a hoje) pra nao
+// abrir numa pagina vazia, mas o visitante pode navegar livremente com ◀ ▶.
+let calMesAtual, calAnoAtual;
+(function inicializarMesCalendario(){
+  const hoje = new Date();
+  const hojeSemHora = new Date(hoje.getFullYear(), hoje.getMonth(), hoje.getDate());
+  const proximos = lancamentosFuturos
+    .map(l => ({ ...l, dataObj: new Date(l.data + 'T00:00:00') }))
+    .filter(l => l.dataObj >= hojeSemHora)
+    .sort((a,b) => a.dataObj - b.dataObj);
+  if(proximos.length){
+    calMesAtual = proximos[0].dataObj.getMonth();
+    calAnoAtual = proximos[0].dataObj.getFullYear();
+  } else {
+    calMesAtual = hoje.getMonth();
+    calAnoAtual = hoje.getFullYear();
+  }
+})();
+
+const NOMES_MES_CAL = {
+  pt: ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'],
+  en: ['January','February','March','April','May','June','July','August','September','October','November','December'],
+};
+const DIAS_SEMANA_CAL = { pt: ['D','S','T','Q','Q','S','S'], en: ['S','M','T','W','T','F','S'] };
+
+function renderCalendarioLancamentos(){
+  const grid = document.getElementById('calGrid');
+  const mesAnoEl = document.getElementById('calMesAnoEl');
+  const diasSemanaEl = document.getElementById('calDiasSemana');
+  const listaEl = document.getElementById('calListaMes');
+  if(!grid || !mesAnoEl || !diasSemanaEl || !listaEl) return;
+
+  mesAnoEl.textContent = `${NOMES_MES_CAL[idioma][calMesAtual]} ${calAnoAtual}`;
+  diasSemanaEl.innerHTML = DIAS_SEMANA_CAL[idioma].map(d => `<span>${d}</span>`).join('');
+
+  const primeiroDiaSemana = new Date(calAnoAtual, calMesAtual, 1).getDay();
+  const totalDiasMes = new Date(calAnoAtual, calMesAtual + 1, 0).getDate();
+  const hoje = new Date();
+  const ehMesAtualReal = hoje.getFullYear() === calAnoAtual && hoje.getMonth() === calMesAtual;
+
+  // Agrupa os lancamentos reais deste mes/ano por dia
+  const porDia = {};
+  lancamentosFuturos.forEach(l => {
+    const [ano, mes, dia] = l.data.split('-').map(Number);
+    if(ano === calAnoAtual && (mes - 1) === calMesAtual){
+      if(!porDia[dia]) porDia[dia] = [];
+      porDia[dia].push(l);
+    }
+  });
+
+  let html = '';
+  for(let i=0; i<primeiroDiaSemana; i++){
+    html += `<div class="cal-dia cal-vazio"></div>`;
+  }
+  for(let dia=1; dia<=totalDiasMes; dia++){
+    const temLancamento = !!porDia[dia];
+    const ehHoje = ehMesAtualReal && hoje.getDate() === dia;
+    const tituloDia = temLancamento ? porDia[dia].map(l => l.n).join(', ') : '';
+    html += `<div class="cal-dia${temLancamento ? ' cal-tem-lancamento' : ''}${ehHoje ? ' cal-hoje' : ''}"${temLancamento ? ` data-dia="${dia}"` : ''}>
+      <span class="cal-num">${dia}</span>
+      ${temLancamento ? `<span class="cal-marcador" title="${escapeHtml(tituloDia)}">🎮</span>` : ''}
+    </div>`;
+  }
+  grid.innerHTML = html;
+
+  const diasComLancamento = Object.keys(porDia).map(Number).sort((a,b) => a-b);
+  if(!diasComLancamento.length){
+    listaEl.innerHTML = `<div class="cal-lista-vazio">${t('calSemLancamentos')}</div>`;
+  } else {
+    listaEl.innerHTML = diasComLancamento.map(dia => porDia[dia].map(l => `
+      <div class="cal-item">
+        <span class="cal-item-dia">${String(dia).padStart(2,'0')}</span>
+        <span>${escapeHtml(l.n)}</span>
+        <span class="cal-item-plat">${escapeHtml(l.plat)}</span>
+      </div>
+    `).join('')).join('');
+  }
+
+  grid.querySelectorAll('.cal-dia.cal-tem-lancamento').forEach(el => {
+    el.addEventListener('click', () => {
+      const dia = parseInt(el.dataset.dia, 10);
+      const alvo = listaEl.querySelector(`.cal-item-dia`);
+      listaEl.querySelectorAll('.cal-item').forEach(item => {
+        const itemDia = parseInt(item.querySelector('.cal-item-dia').textContent, 10);
+        item.style.outline = itemDia === dia ? '2px solid #b23b2e' : 'none';
+      });
+      listaEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    });
+  });
+}
+
+function calMesAnterior(){
+  calMesAtual--;
+  if(calMesAtual < 0){ calMesAtual = 11; calAnoAtual--; }
+  renderCalendarioLancamentos();
+}
+function calProximoMes(){
+  calMesAtual++;
+  if(calMesAtual > 11){ calMesAtual = 0; calAnoAtual++; }
+  renderCalendarioLancamentos();
 }
 
 // Conquistas: badges calculados sozinhos a partir dos dados reais da colecao
@@ -5625,6 +5909,8 @@ function aplicarIdiomaUI(){
   if(byId('modalShareBtn')) byId('modalShareBtn').textContent = t('compartilhar');
   if(byId('modalEtiquetaBtn')) byId('modalEtiquetaBtn').textContent = t('gerarEtiqueta');
   if(byId('modalNavHint')) byId('modalNavHint').textContent = t('navHint');
+  if(byId('calendarioTituloEl')) byId('calendarioTituloEl').textContent = t('calendarioTitulo');
+  if(byId('calendarioSubEl')) byId('calendarioSubEl').textContent = t('calendarioSub');
   if(byId('sinopseTituloEl')){
     const btnNarrarModal = byId('modalNarrarBtn');
     byId('sinopseTituloEl').firstChild.textContent = t('sinopseTitulo');
@@ -5648,10 +5934,15 @@ function aplicarIdiomaCompleto(){
   render();
   renderWishlist();
   renderLiveBalloon();
+  renderCalendarioLancamentos();
   const gridCanais = document.getElementById('gridCanais');
   if(gridCanais && gridCanais.style.display !== 'none') renderCanais();
 }
 aplicarIdiomaCompleto();
+
+// Calendario de lancamentos futuros: navegacao entre meses
+document.getElementById('calPrevBtn').addEventListener('click', calMesAnterior);
+document.getElementById('calNextBtn').addEventListener('click', calProximoMes);
 
 // Painel de lives: checa quem esta ao vivo agora (dados vem do canais_live.json,
 // atualizado sozinho pelo GitHub Actions a cada poucos minutos)
