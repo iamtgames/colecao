@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-26T04:30:19.296Z",
+  "updated": "2026-07-26T04:45:18.010Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "🟢 CHURRASCO VENDENDO VIDEOGAMES (AO VIVO)",
       "videoUrl": "https://www.youtube.com/watch?v=cpyJspx7AJg",
       "thumbnail": "https://i.ytimg.com/vi/cpyJspx7AJg/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilo /  Arc raiders",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
