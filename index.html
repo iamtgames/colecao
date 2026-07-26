@@ -247,7 +247,7 @@
   }
   /* barra de tarefas fixa no rodape (so aparece com esse skin ligado) */
   body[data-skin="y2k"]{ padding-bottom: 58px; }
-  body[data-skin="y2k"] #livePanelOverlay{ bottom: 52px; }
+  body[data-skin="y2k"] #livePanelsContainer{ bottom: 52px; }
   .y2k-taskbar{
     display:none; position:fixed; left:0; right:0; bottom:0; z-index:80;
     height:34px; align-items:center; gap:10px; padding:0 8px;
@@ -688,18 +688,20 @@
      Nao e mais um modal de tela cheia: fica ancorado no canto da tela,
      sem fundo escurecendo a pagina, pra dar pra continuar navegando/usando
      o site normalmente enquanto o video toca. */
-  #livePanelOverlay{
-    position: fixed; right:16px; bottom:16px; z-index: 70; display:none;
-    align-items:flex-end; justify-content:flex-end;
-    pointer-events:none; /* deixa clicar "atraves" do wrapper, so o cartao em si captura clique */
+  #livePanelsContainer{
+    position: fixed; right:16px; bottom:16px; z-index: 70;
+    display:flex; flex-direction: column-reverse; align-items:flex-end; gap:12px;
+    pointer-events:none; /* deixa clicar "atraves" do espaco vazio, so os cartoes captam clique */
+    max-height: calc(100vh - 32px); overflow-y:auto; overflow-x:visible;
   }
-  #livePanelOverlay.aberto{ display:flex; }
+  #livePanelsContainer::-webkit-scrollbar{ width:6px; }
+  #livePanelsContainer::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.25); border-radius:4px; }
   .live-panel{
     pointer-events:auto;
     width: min(340px, 88vw); perspective: 900px;
     background: rgba(18,10,10,0.97); border: 1px solid rgba(255,60,60,0.45);
     border-radius: 18px; overflow:hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.55);
-    transform-origin: bottom right;
+    transform-origin: bottom right; flex-shrink:0;
     animation: painelAbrir3D .4s cubic-bezier(.2,.9,.3,1.3) forwards;
   }
   /* Twitch: painel embutido roxo em vez de vermelho, pra combinar com a marca do canal */
@@ -711,7 +713,7 @@
     100%{ transform: perspective(900px) rotateX(0deg) scale(1); opacity:1; }
   }
   @media (max-width: 480px){
-    #livePanelOverlay{ right:8px; bottom:8px; left:8px; justify-content:center; }
+    #livePanelsContainer{ right:8px; bottom:8px; left:8px; align-items:center; }
     .live-panel{ width:100%; }
   }
   .live-panel-head{
@@ -1906,20 +1908,7 @@
   <div class="y2k-taskbar-clock" id="y2kClock">--:--</div>
 </div>
 <div id="liveBalloonWrap"></div>
-<div id="livePanelOverlay">
-  <div class="live-panel">
-    <div class="live-panel-head">
-      <div class="live-panel-title"><span class="dot"></span><span id="livePanelTitleTxt">Ao vivo</span></div>
-      <button class="live-panel-close" id="livePanelCloseBtn" aria-label="Fechar" title="Fechar">✕</button>
-    </div>
-    <div class="live-panel-video" id="livePanelVideo">
-      <div id="liveYtPlayer"></div>
-      <iframe id="livePanelPlainIframe" src="" style="display:none" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen frameborder="0" title="Player de vídeo ao vivo"></iframe>
-      <div class="live-panel-fallback" id="livePanelFallback"></div>
-    </div>
-    <div class="live-panel-hint" id="livePanelHint">🔇 Vídeo iniciou sem áudio — clique nele pra ativar o som</div>
-  </div>
-</div>
+<div id="livePanelsContainer"></div>
 <div class="side-dock">
   <a href="https://www.instagram.com/marioturbino/" target="_blank" rel="noopener noreferrer" title="Instagram pessoal" aria-label="Abrir Instagram pessoal">👤</a>
   <a href="https://www.instagram.com/iamtgames/" target="_blank" rel="noopener noreferrer" title="Instagram da coleção" aria-label="Abrir Instagram da coleção">📸</a>
@@ -3227,19 +3216,21 @@ async function carregarCanaisLive(){
   renderLiveBalloon();
   const gridCanais = document.getElementById('gridCanais');
   if(gridCanais && gridCanais.style.display !== 'none') renderCanais();
-  // se a live que esta aberta no painel acabou, fecha sozinho
-  if(livePanelCanalId !== null && !canaisLiveAtual.some(c => c.id === livePanelCanalId)){
-    fecharLivePanel();
-  }
+  // fecha sozinho qualquer painel aberto cuja live ja tenha acabado
+  // (agora pode haver varios paineis abertos ao mesmo tempo, entao checa todos)
+  Array.from(paineisLiveAbertos.keys()).forEach(id => {
+    if(!canaisLiveAtual.some(c => c.id === id)) fecharLivePanel(id);
+  });
 }
 
 // ---- PAINEL DA LIVE EMBUTIDO (YouTube IFrame API) ----
+// Suporta VARIOS paineis abertos ao mesmo tempo (um por canal ao vivo), em vez
+// de uma unica instancia que fecha a anterior. Cada canal aberto ganha seu
+// proprio card no #livePanelsContainer, com seu proprio <iframe>/player.
 let ytApiPronta = false;
 let ytApiCarregando = false;
-let ytPlayer = null;
-let livePanelCanalId = null;
-let livePanelPendente = null;
-let livePanelCanalAtual = null;
+const paineisLiveAbertos = new Map(); // id do canal -> { canal, el, ytPlayer }
+const ytPendentes = new Map(); // id do canal -> canal, aguardando a API do YouTube carregar
 
 function garantirYtApi(){
   if(ytApiPronta || ytApiCarregando) return;
@@ -3252,24 +3243,15 @@ function garantirYtApi(){
   // aviso pro usuario. Esse handler cobre esse caso.
   tag.onerror = function(){
     ytApiCarregando = false;
-    if(livePanelPendente){
-      const c = livePanelPendente;
-      livePanelPendente = null;
-      // A API JS falhou em carregar, mas isso nao significa que o video
-      // em si nao pode tocar: um <iframe> de embed direto do YouTube nao
-      // depende desse script e costuma funcionar mesmo quando a API falha.
-      usarIframeSimples(c);
-    }
+    ytPendentes.forEach(c => { if(paineisLiveAbertos.has(c.id)) usarIframeSimples(c); });
+    ytPendentes.clear();
   };
   document.head.appendChild(tag);
 }
 window.onYouTubeIframeAPIReady = function(){
   ytApiPronta = true;
-  if(livePanelPendente){
-    const c = livePanelPendente;
-    livePanelPendente = null;
-    criarOuTrocarPlayer(c);
-  }
+  ytPendentes.forEach(c => { if(paineisLiveAbertos.has(c.id)) criarOuTrocarPlayer(c); });
+  ytPendentes.clear();
 };
 
 // Player alternativo: <iframe> de embed direto do YouTube, sem depender da
@@ -3281,11 +3263,11 @@ window.onYouTubeIframeAPIReady = function(){
 // obrigatorio (regra de seguranca da Twitch) e precisa bater com o dominio
 // real onde o site esta hospedado -- aqui e sempre iamtgames.github.io.
 function usarIframeTwitch(c){
-  const fr = document.getElementById('livePanelPlainIframe');
-  const hint = document.getElementById('livePanelHint');
+  const fr = document.getElementById(`livePanelPlainIframe-${c.id}`);
+  const hint = document.getElementById(`livePanelHint-${c.id}`);
   if(!fr || !c || !c.login) return;
-  esconderFallbackLive();
-  const ytDiv = document.getElementById('liveYtPlayer');
+  esconderFallbackLive(c.id);
+  const ytDiv = document.getElementById(`liveYtPlayer-${c.id}`);
   if(ytDiv) ytDiv.style.display = 'none';
   fr.src = `https://player.twitch.tv/?channel=${encodeURIComponent(c.login)}&parent=iamtgames.github.io&autoplay=true&muted=true`;
   fr.style.display = 'block';
@@ -3293,49 +3275,51 @@ function usarIframeTwitch(c){
 }
 
 function usarIframeSimples(c){
-  const fr = document.getElementById('livePanelPlainIframe');
-  const hint = document.getElementById('livePanelHint');
+  const fr = document.getElementById(`livePanelPlainIframe-${c.id}`);
+  const hint = document.getElementById(`livePanelHint-${c.id}`);
   if(!fr || !c) return;
-  esconderFallbackLive();
-  if(ytPlayer && typeof ytPlayer.stopVideo === 'function'){
-    try{ ytPlayer.stopVideo(); }catch(err){}
+  esconderFallbackLive(c.id);
+  const info = paineisLiveAbertos.get(c.id);
+  if(info && info.ytPlayer && typeof info.ytPlayer.stopVideo === 'function'){
+    try{ info.ytPlayer.stopVideo(); }catch(err){}
   }
-  const ytDiv = document.getElementById('liveYtPlayer');
+  const ytDiv = document.getElementById(`liveYtPlayer-${c.id}`);
   if(ytDiv) ytDiv.style.display = 'none';
   fr.src = `https://www.youtube.com/embed/${encodeURIComponent(c.videoId)}?autoplay=1&mute=1&rel=0&modestbranding=1&playsinline=1`;
   fr.style.display = 'block';
   if(hint) hint.classList.add('show');
 }
-function esconderIframeSimples(){
-  const fr = document.getElementById('livePanelPlainIframe');
-  const hint = document.getElementById('livePanelHint');
-  const ytDiv = document.getElementById('liveYtPlayer');
+function esconderIframeSimples(id){
+  const fr = document.getElementById(`livePanelPlainIframe-${id}`);
+  const hint = document.getElementById(`livePanelHint-${id}`);
+  const ytDiv = document.getElementById(`liveYtPlayer-${id}`);
   if(fr){ fr.style.display = 'none'; fr.src = ''; }
   if(hint) hint.classList.remove('show');
   if(ytDiv) ytDiv.style.display = '';
 }
 
-function mostrarFallbackLive(){
-  const fb = document.getElementById('livePanelFallback');
-  const c = livePanelCanalAtual;
+function mostrarFallbackLive(c){
+  const fb = document.getElementById(`livePanelFallback-${c.id}`);
   if(!fb || !c) return;
   fb.innerHTML = `
-    <div>😕 Não foi possível abrir a live do <b>${c.n}</b> aqui — o canal desativou a incorporação deste vídeo.</div>
+    <div>😕 Não foi possível abrir a live do <b>${escapeHtml(c.n)}</b> aqui — o canal desativou a incorporação deste vídeo.</div>
     <a href="${escapeHtml(c.videoUrl)}" target="_blank" rel="noopener noreferrer">Assistir no YouTube ↗</a>
   `;
   fb.classList.add('show');
 }
-function esconderFallbackLive(){
-  const fb = document.getElementById('livePanelFallback');
+function esconderFallbackLive(id){
+  const fb = document.getElementById(`livePanelFallback-${id}`);
   if(fb){ fb.classList.remove('show'); fb.innerHTML = ''; }
 }
 
 function criarOuTrocarPlayer(c){
-  if(ytPlayer && typeof ytPlayer.loadVideoById === 'function'){
-    ytPlayer.loadVideoById(c.videoId);
+  const info = paineisLiveAbertos.get(c.id);
+  if(!info) return;
+  if(info.ytPlayer && typeof info.ytPlayer.loadVideoById === 'function'){
+    info.ytPlayer.loadVideoById(c.videoId);
     return;
   }
-  ytPlayer = new YT.Player('liveYtPlayer', {
+  info.ytPlayer = new YT.Player(`liveYtPlayer-${c.id}`, {
     videoId: c.videoId,
     playerVars: { autoplay: 1, rel: 0, modestbranding: 1, playsinline: 1 },
     events: {
@@ -3351,9 +3335,10 @@ function criarOuTrocarPlayer(c){
         // detecta isso por timeout e mostra um aviso com link pro YouTube.
         const videoIdChecado = e.target.getVideoData ? e.target.getVideoData().video_id : null;
         setTimeout(function(){
-          if(!ytPlayer || typeof ytPlayer.getPlayerState !== 'function') return;
-          const aindaEsseVideo = !videoIdChecado || (ytPlayer.getVideoData && ytPlayer.getVideoData().video_id === videoIdChecado);
-          const estado = ytPlayer.getPlayerState();
+          const infoAtual = paineisLiveAbertos.get(c.id);
+          if(!infoAtual || !infoAtual.ytPlayer || typeof infoAtual.ytPlayer.getPlayerState !== 'function') return;
+          const aindaEsseVideo = !videoIdChecado || (infoAtual.ytPlayer.getVideoData && infoAtual.ytPlayer.getVideoData().video_id === videoIdChecado);
+          const estado = infoAtual.ytPlayer.getPlayerState();
           if(aindaEsseVideo && (estado === -1 || estado === 5)){
             usarIframeSimples(c);
           }
@@ -3366,18 +3351,68 @@ function criarOuTrocarPlayer(c){
   });
 }
 
+// Monta o card DOM de um painel de live (um por canal), com ids unicos
+// sufixados pelo id do canal pra permitir varios abertos ao mesmo tempo.
+function criarPainelLiveDOM(c){
+  const div = document.createElement('div');
+  div.className = 'live-panel' + (c.plat === 'twitch' ? ' twitch' : '');
+  div.id = `livePanel-${c.id}`;
+  div.dataset.canalId = c.id;
+  div.innerHTML = `
+    <div class="live-panel-head">
+      <div class="live-panel-title"><span class="dot"></span><span id="livePanelTitleTxt-${c.id}">${escapeHtml(c.n)} — ${t('estaAoVivo')}</span></div>
+      <button class="live-panel-close" aria-label="Fechar" title="Fechar">✕</button>
+    </div>
+    <div class="live-panel-video">
+      <div id="liveYtPlayer-${c.id}"></div>
+      <iframe id="livePanelPlainIframe-${c.id}" src="" style="display:none" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen frameborder="0" title="Player de vídeo ao vivo"></iframe>
+      <div class="live-panel-fallback" id="livePanelFallback-${c.id}"></div>
+    </div>
+    <div class="live-panel-hint" id="livePanelHint-${c.id}">🔇 Vídeo iniciou sem áudio — clique nele pra ativar o som</div>
+  `;
+  return div;
+}
+
+// Restaura a posicao que o usuario deixou da ultima vez que arrastou o painel
+// desse canal especifico (com clamp pro caso da janela ter ficado menor
+// desde entao, ex: trocou pro celular). Cada canal guarda sua propria posicao.
+function aplicarPosicaoSalva(id, el){
+  try{
+    const salvo = JSON.parse(localStorage.getItem('livePanelPos-' + id) || 'null');
+    if(salvo && salvo.left && salvo.top){
+      const largura = 340, altura = 200;
+      const left = Math.max(4, Math.min(parseFloat(salvo.left) || 0, window.innerWidth - largura - 4));
+      const top = Math.max(4, Math.min(parseFloat(salvo.top) || 0, window.innerHeight - altura - 4));
+      el.style.left = left + 'px';
+      el.style.top = top + 'px';
+      el.style.right = 'auto';
+      el.style.bottom = 'auto';
+      el.style.position = 'fixed';
+    }
+  }catch(err){}
+}
+
 function abrirLivePanelPorId(id){
   const c = canaisLiveAtual.find(x => x.id === id);
   if(!c) return;
-  livePanelCanalId = id;
-  livePanelCanalAtual = c;
-  esconderFallbackLive();
-  esconderIframeSimples();
-  document.getElementById('livePanelTitleTxt').textContent = `${c.n} — ${t('estaAoVivo')}`;
-  const overlay = document.getElementById('livePanelOverlay');
-  overlay.classList.add('aberto');
-  const painel = overlay.querySelector('.live-panel');
-  if(painel) painel.classList.toggle('twitch', c.plat === 'twitch');
+  if(paineisLiveAbertos.has(id)){
+    // ja esta aberto: em vez de reabrir, so chama atencao pro painel existente
+    const info = paineisLiveAbertos.get(id);
+    if(info && info.el){
+      info.el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+      info.el.style.animation = 'none';
+      void info.el.offsetWidth; // forca reflow pra poder reiniciar a animacao
+      info.el.style.animation = '';
+    }
+    return;
+  }
+  const container = document.getElementById('livePanelsContainer');
+  if(!container) return;
+  const el = criarPainelLiveDOM(c);
+  container.appendChild(el);
+  paineisLiveAbertos.set(id, { canal: c, el, ytPlayer: null });
+  aplicarPosicaoSalva(id, el);
+
   if(c.plat === 'twitch'){
     usarIframeTwitch(c);
     return;
@@ -3386,95 +3421,94 @@ function abrirLivePanelPorId(id){
   if(ytApiPronta){
     criarOuTrocarPlayer(c);
   }else{
-    livePanelPendente = c;
+    ytPendentes.set(id, c);
     // Rede de seguranca: se em 7s a API do YouTube ainda nao respondeu
     // (script travou, respondeu com erro tipo 503, foi bloqueado por
     // extensao/adblock etc.), nao fica esperando pra sempre -- troca pro
     // iframe de embed direto, que nao depende dessa API pra funcionar.
     setTimeout(function(){
-      if(livePanelPendente === c && !ytApiPronta){
-        livePanelPendente = null;
-        usarIframeSimples(c);
+      if(ytPendentes.has(id) && !ytApiPronta){
+        ytPendentes.delete(id);
+        if(paineisLiveAbertos.has(id)) usarIframeSimples(c);
       }
     }, 7000);
   }
 }
 
-function fecharLivePanel(){
-  const overlay = document.getElementById('livePanelOverlay');
-  overlay.classList.remove('aberto');
-  livePanelCanalId = null;
-  livePanelPendente = null;
-  livePanelCanalAtual = null;
-  esconderFallbackLive();
-  esconderIframeSimples();
-  if(ytPlayer && typeof ytPlayer.stopVideo === 'function') ytPlayer.stopVideo();
+function fecharLivePanel(id){
+  const info = paineisLiveAbertos.get(id);
+  if(!info) return;
+  if(info.ytPlayer && typeof info.ytPlayer.stopVideo === 'function'){
+    try{ info.ytPlayer.stopVideo(); }catch(err){}
+  }
+  if(info.el && info.el.parentNode) info.el.parentNode.removeChild(info.el);
+  paineisLiveAbertos.delete(id);
+  ytPendentes.delete(id);
+}
+function fecharTodosLivePaineis(){
+  Array.from(paineisLiveAbertos.keys()).forEach(fecharLivePanel);
 }
 
-document.getElementById('livePanelCloseBtn').addEventListener('click', fecharLivePanel);
-document.getElementById('livePanelOverlay').addEventListener('click', function(e){
-  if(e.target === this) fecharLivePanel();
-});
-
-// Painel arrastavel: o usuario pode segurar o cabecalho e mover o painel
-// pra qualquer lugar da tela, pra nao atrapalhar o que tiver atras.
+// Delegacao de eventos no container (em vez de um listener por painel): assim
+// cobre automaticamente os cards criados dinamicamente depois.
 (function(){
-  const overlay = document.getElementById('livePanelOverlay');
-  const head = overlay ? overlay.querySelector('.live-panel-head') : null;
-  if(!overlay || !head) return;
-  let arrastando = false;
+  const container = document.getElementById('livePanelsContainer');
+  if(!container) return;
+
+  container.addEventListener('click', function(e){
+    const btn = e.target.closest('.live-panel-close');
+    if(!btn) return;
+    const painel = btn.closest('.live-panel');
+    if(painel) fecharLivePanel(parseInt(painel.dataset.canalId, 10));
+  });
+
+  // Painel arrastavel: o usuario pode segurar o cabecalho de QUALQUER painel
+  // aberto e move-lo pra qualquer lugar da tela, independente dos outros.
+  let arrastando = null; // elemento .live-panel sendo arrastado no momento
   let offX = 0, offY = 0;
 
   function aoMoverPonteiro(e){
     if(!arrastando) return;
-    const panel = overlay.querySelector('.live-panel');
-    const largura = panel ? panel.offsetWidth : 340;
-    const altura = panel ? panel.offsetHeight : 200;
+    const largura = arrastando.offsetWidth;
+    const altura = arrastando.offsetHeight;
     let novoLeft = e.clientX - offX;
     let novoTop = e.clientY - offY;
     novoLeft = Math.max(4, Math.min(novoLeft, window.innerWidth - largura - 4));
     novoTop = Math.max(4, Math.min(novoTop, window.innerHeight - altura - 4));
-    overlay.style.left = novoLeft + 'px';
-    overlay.style.top = novoTop + 'px';
-    overlay.style.right = 'auto';
-    overlay.style.bottom = 'auto';
+    arrastando.style.left = novoLeft + 'px';
+    arrastando.style.top = novoTop + 'px';
+    arrastando.style.right = 'auto';
+    arrastando.style.bottom = 'auto';
+    arrastando.style.position = 'fixed';
   }
   function aoSoltarPonteiro(){
     if(!arrastando) return;
-    arrastando = false;
-    head.classList.remove('arrastando');
+    const painel = arrastando;
+    const id = parseInt(painel.dataset.canalId, 10);
+    const head = painel.querySelector('.live-panel-head');
+    if(head) head.classList.remove('arrastando');
+    arrastando = null;
     document.removeEventListener('pointermove', aoMoverPonteiro);
     document.removeEventListener('pointerup', aoSoltarPonteiro);
     try{
-      localStorage.setItem('livePanelPos', JSON.stringify({ left: overlay.style.left, top: overlay.style.top }));
+      localStorage.setItem('livePanelPos-' + id, JSON.stringify({ left: painel.style.left, top: painel.style.top }));
     }catch(err){}
   }
-  head.addEventListener('pointerdown', function(e){
+  container.addEventListener('pointerdown', function(e){
     if(e.target.closest('.live-panel-close')) return; // clique no X nao inicia arraste
-    const rect = overlay.getBoundingClientRect();
+    const head = e.target.closest('.live-panel-head');
+    if(!head) return;
+    const painel = head.closest('.live-panel');
+    if(!painel) return;
+    const rect = painel.getBoundingClientRect();
     offX = e.clientX - rect.left;
     offY = e.clientY - rect.top;
-    arrastando = true;
+    arrastando = painel;
     head.classList.add('arrastando');
     document.addEventListener('pointermove', aoMoverPonteiro);
     document.addEventListener('pointerup', aoSoltarPonteiro);
     e.preventDefault();
   });
-
-  // restaura a posicao que o usuario deixou da ultima vez que arrastou o painel
-  // (com clamp pro caso da janela ter ficado menor desde entao, ex: trocou pro celular)
-  try{
-    const salvo = JSON.parse(localStorage.getItem('livePanelPos') || 'null');
-    if(salvo && salvo.left && salvo.top){
-      const largura = 340, altura = 200;
-      const left = Math.max(4, Math.min(parseFloat(salvo.left) || 0, window.innerWidth - largura - 4));
-      const top = Math.max(4, Math.min(parseFloat(salvo.top) || 0, window.innerHeight - altura - 4));
-      overlay.style.left = left + 'px';
-      overlay.style.top = top + 'px';
-      overlay.style.right = 'auto';
-      overlay.style.bottom = 'auto';
-    }
-  }catch(err){}
 })();
 
 // ---- MINI-PAINEIS 3D genericos (Ferramentas / Estatisticas) ----
@@ -3626,7 +3660,7 @@ document.getElementById('statsPanelOverlay').addEventListener('click', function(
 
 document.addEventListener('keydown', function(e){
   if(e.key !== 'Escape') return;
-  if(document.getElementById('livePanelOverlay').classList.contains('aberto')) fecharLivePanel();
+  if(paineisLiveAbertos.size) fecharTodosLivePaineis();
   if(document.getElementById('cmdkOverlay').classList.contains('aberto')) fecharCmdk();
   if(document.getElementById('scannerPanelOverlay').classList.contains('aberto')) fecharScanner();
   fecharTodosMiniPaineis();
