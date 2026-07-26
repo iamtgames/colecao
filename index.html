@@ -481,11 +481,12 @@
      com lancamento. Mostra jogos GRANDES ainda NAO lancados (dados reais,
      pesquisados manualmente -- nunca inventados), marcados no dia previsto. */
   .calendario-manual{
-    position:relative; margin-bottom:22px; padding:22px 20px 18px;
+    position:relative; margin:0 auto 22px; padding:14px 14px 12px;
+    max-width:380px;
     background: repeating-linear-gradient(0deg, #efe3c4 0px, #efe3c4 27px, #e9dcb8 28px),
                 linear-gradient(160deg, #f3e9cd, #e8dab0);
     border:1px solid #cbb787; border-radius:6px;
-    box-shadow: 0 10px 26px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.25);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.25);
     color:#4a3a20; transform: rotate(-0.35deg);
   }
   .calendario-manual::before{
@@ -493,71 +494,71 @@
     box-shadow: inset 0 0 40px rgba(120,90,40,0.18);
   }
   .cal-tape{
-    position:absolute; width:64px; height:22px; background: rgba(255,255,255,0.55);
+    position:absolute; width:46px; height:16px; background: rgba(255,255,255,0.55);
     border:1px solid rgba(0,0,0,0.06); box-shadow:0 2px 4px rgba(0,0,0,0.2);
   }
-  .cal-tape-left{ top:-10px; left:26px; transform: rotate(-8deg); }
-  .cal-tape-right{ top:-10px; right:26px; transform: rotate(6deg); }
-  .cal-header-manual{ text-align:center; margin-bottom:10px; }
+  .cal-tape-left{ top:-8px; left:18px; transform: rotate(-8deg); }
+  .cal-tape-right{ top:-8px; right:18px; transform: rotate(6deg); }
+  .cal-header-manual{ text-align:center; margin-bottom:6px; }
   .cal-header-manual h3{
-    font-family:'Special Elite', 'Courier New', monospace; font-size:19px; font-weight:400;
-    letter-spacing:.5px; color:#3a2c14; margin:0 0 4px;
+    font-family:'Special Elite', 'Courier New', monospace; font-size:14px; font-weight:400;
+    letter-spacing:.3px; color:#3a2c14; margin:0 0 2px;
   }
-  .cal-header-manual p{ font-family:'Special Elite','Courier New',monospace; font-size:11.5px; color:#6b5730; margin:0; }
-  .cal-nav-row{ display:flex; align-items:center; justify-content:center; gap:16px; margin:12px 0 10px; }
+  .cal-header-manual p{ font-family:'Special Elite','Courier New',monospace; font-size:9.5px; color:#6b5730; margin:0; }
+  .cal-nav-row{ display:flex; align-items:center; justify-content:center; gap:10px; margin:8px 0 6px; }
   .cal-nav-btn{
-    background:#3a2c14; color:#f3e9cd; border:none; border-radius:4px; width:30px; height:30px;
-    cursor:pointer; font-size:14px; font-weight:700; box-shadow:0 2px 0 rgba(0,0,0,0.3);
+    background:#3a2c14; color:#f3e9cd; border:none; border-radius:4px; width:22px; height:22px;
+    cursor:pointer; font-size:11px; font-weight:700; box-shadow:0 2px 0 rgba(0,0,0,0.3);
   }
   .cal-nav-btn:hover{ background:#54401d; }
   .cal-mes-ano{
-    font-family:'Special Elite','Courier New',monospace; font-size:15px; font-weight:700;
-    color:#3a2c14; min-width:170px; text-align:center; text-transform:uppercase; letter-spacing:1px;
+    font-family:'Special Elite','Courier New',monospace; font-size:11.5px; font-weight:700;
+    color:#3a2c14; min-width:120px; text-align:center; text-transform:uppercase; letter-spacing:.5px;
   }
   .cal-dias-semana{
-    display:grid; grid-template-columns:repeat(7,1fr); gap:4px; margin-bottom:6px;
+    display:grid; grid-template-columns:repeat(7,1fr); gap:2px; margin-bottom:4px;
   }
   .cal-dias-semana span{
-    text-align:center; font-family:'Special Elite','Courier New',monospace; font-size:10px;
+    text-align:center; font-family:'Special Elite','Courier New',monospace; font-size:8px;
     color:#7a6636; text-transform:uppercase;
   }
-  .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:4px; }
+  .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:2px; }
   .cal-dia{
-    position:relative; aspect-ratio:1/0.86; border:1px dashed #c9b585; border-radius:5px;
+    position:relative; aspect-ratio:1/0.86; border:1px dashed #c9b585; border-radius:4px;
     display:flex; flex-direction:column; align-items:center; justify-content:flex-start;
-    padding:3px 2px; font-family:'Special Elite','Courier New',monospace; font-size:11px; color:#5c4a26;
+    padding:2px 1px; font-family:'Special Elite','Courier New',monospace; font-size:8.5px; color:#5c4a26;
     background: rgba(255,255,255,0.18);
   }
   .cal-dia.cal-vazio{ border:none; background:none; }
   .cal-dia.cal-hoje{ border:1.5px solid #b23b2e; background: rgba(178,59,46,0.08); }
   .cal-dia.cal-hoje::after{
-    content:'hoje'; position:absolute; bottom:2px; font-size:7px; color:#b23b2e; letter-spacing:.5px;
+    content:'hoje'; position:absolute; bottom:1px; font-size:5.5px; color:#b23b2e; letter-spacing:.3px;
   }
   .cal-dia.cal-tem-lancamento{ cursor:pointer; }
   .cal-dia .cal-num{ font-weight:700; }
   .cal-marcador{
-    margin-top:2px; width:20px; height:20px; border-radius:50%; background:#b23b2e; color:#fdf3df;
-    display:flex; align-items:center; justify-content:center; font-size:11px;
+    margin-top:1px; width:14px; height:14px; border-radius:50%; background:#b23b2e; color:#fdf3df;
+    display:flex; align-items:center; justify-content:center; font-size:8px;
     transform: rotate(-6deg); box-shadow:0 1px 2px rgba(0,0,0,0.35);
     border:1px solid rgba(0,0,0,0.15);
   }
   .cal-dia.cal-tem-lancamento:hover .cal-marcador{ transform: rotate(-6deg) scale(1.12); }
-  .cal-lista-mes{ margin-top:14px; display:flex; flex-direction:column; gap:6px; }
+  .cal-lista-mes{ margin-top:10px; display:flex; flex-direction:column; gap:4px; max-height:180px; overflow-y:auto; }
   .cal-lista-vazio{
-    font-family:'Special Elite','Courier New',monospace; font-size:11.5px; color:#8a7748;
-    text-align:center; padding:6px 0;
+    font-family:'Special Elite','Courier New',monospace; font-size:10px; color:#8a7748;
+    text-align:center; padding:5px 0;
   }
   .cal-item{
-    display:flex; align-items:baseline; gap:8px; padding:6px 10px;
-    background: rgba(255,255,255,0.35); border:1px dashed #cbb787; border-radius:6px;
-    font-family:'Special Elite','Courier New',monospace; font-size:12px; color:#4a3a20;
+    display:flex; align-items:baseline; gap:6px; padding:4px 8px;
+    background: rgba(255,255,255,0.35); border:1px dashed #cbb787; border-radius:5px;
+    font-family:'Special Elite','Courier New',monospace; font-size:10.5px; color:#4a3a20;
   }
-  .cal-item .cal-item-dia{ font-weight:700; color:#b23b2e; min-width:34px; }
-  .cal-item .cal-item-plat{ margin-left:auto; font-size:10px; color:#8a7748; }
+  .cal-item .cal-item-dia{ font-weight:700; color:#b23b2e; min-width:28px; }
+  .cal-item .cal-item-plat{ margin-left:auto; font-size:9px; color:#8a7748; }
   @media (max-width: 600px){
-    .calendario-manual{ transform:none; padding:16px 10px 14px; }
-    .cal-dia{ font-size:9.5px; }
-    .cal-marcador{ width:16px; height:16px; font-size:9px; }
+    .calendario-manual{ transform:none; max-width:100%; padding:12px 10px 10px; }
+    .cal-dia{ font-size:8px; }
+    .cal-marcador{ width:13px; height:13px; font-size:7.5px; }
   }
 
   /* NARRACAO POR VOZ DO PERFIL: botao dentro do card de Perfil Colecionador,
@@ -2076,7 +2077,7 @@
     <div class="cal-tape cal-tape-right"></div>
     <div class="cal-header-manual">
       <h3 id="calendarioTituloEl">📆 Calendário de Lançamentos</h3>
-      <p id="calendarioSubEl">Grandes jogos por vir, anotados no caderno de campo</p>
+      <p id="calendarioSubEl">Grandes jogos por vir</p>
     </div>
     <div class="cal-nav-row">
       <button id="calPrevBtn" class="cal-nav-btn" type="button" aria-label="Mês anterior">◀</button>
@@ -3069,7 +3070,7 @@ const I18N = {
     aoVivoBadge: 'AO VIVO', estaAoVivo: 'está ao vivo agora',
     ouvirPerfil: '🔊 Ouvir', pararNarracao: '⏹️ Parar', narracaoNaoSuportada: 'Narração por voz não é suportada neste navegador.',
     ouvirCardTitle: 'Ouvir informações do jogo', ouvirSinopseTitle: 'Ouvir sinopse',
-    calendarioTitulo: '📆 Calendário de Lançamentos', calendarioSub: 'Grandes jogos por vir, anotados no caderno de campo',
+    calendarioTitulo: '📆 Calendário de Lançamentos', calendarioSub: 'Grandes jogos por vir',
     calSemLancamentos: 'Nenhum lançamento grande confirmado pra este mês.',
     aniversarioTitulo: (n, anos) => `🎉 ${n} faz ${anos} ano${anos===1?'':'s'} de lançamento hoje!`,
     aniversarioSub: 'Clique pra ver o jogo na sua coleção',
@@ -3132,7 +3133,7 @@ const I18N = {
     aoVivoBadge: 'LIVE', estaAoVivo: 'is live now',
     ouvirPerfil: '🔊 Listen', pararNarracao: '⏹️ Stop', narracaoNaoSuportada: 'Voice narration is not supported in this browser.',
     ouvirCardTitle: 'Listen to game info', ouvirSinopseTitle: 'Listen to synopsis',
-    calendarioTitulo: '📆 Release Calendar', calendarioSub: 'Big upcoming games, jotted down field-notebook style',
+    calendarioTitulo: '📆 Release Calendar', calendarioSub: 'Big upcoming games',
     calSemLancamentos: 'No major releases confirmed for this month yet.',
     aniversarioTitulo: (n, anos) => `🎉 ${n} turns ${anos} year${anos===1?'':'s'} old today!`,
     aniversarioSub: 'Click to see the game in your collection',
