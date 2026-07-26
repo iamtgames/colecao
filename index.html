@@ -480,14 +480,19 @@
      fita adesiva nos cantos, fonte de maquina de escrever, "carimbo" nos dias
      com lancamento. Mostra jogos GRANDES ainda NAO lancados (dados reais,
      pesquisados manualmente -- nunca inventados), marcados no dia previsto. */
+  .calendario-mini-body{ padding:16px 14px 14px !important; }
   .calendario-manual{
-    position:relative; margin:0 auto 22px; padding:14px 14px 12px;
-    max-width:380px;
+    position:relative; margin:8px auto 0; padding:14px 14px 12px;
+    max-width:100%;
     background: repeating-linear-gradient(0deg, #efe3c4 0px, #efe3c4 27px, #e9dcb8 28px),
                 linear-gradient(160deg, #f3e9cd, #e8dab0);
     border:1px solid #cbb787; border-radius:6px;
     box-shadow: 0 8px 20px rgba(0,0,0,0.35), inset 0 0 0 1px rgba(255,255,255,0.25);
     color:#4a3a20; transform: rotate(-0.35deg);
+  }
+  .cal-sub-standalone{
+    font-family:'Special Elite','Courier New',monospace; font-size:9.5px; color:#6b5730;
+    text-align:center; margin:2px 0 4px;
   }
   .calendario-manual::before{
     content:''; position:absolute; inset:0; border-radius:6px; pointer-events:none;
@@ -499,12 +504,6 @@
   }
   .cal-tape-left{ top:-8px; left:18px; transform: rotate(-8deg); }
   .cal-tape-right{ top:-8px; right:18px; transform: rotate(6deg); }
-  .cal-header-manual{ text-align:center; margin-bottom:6px; }
-  .cal-header-manual h3{
-    font-family:'Special Elite', 'Courier New', monospace; font-size:14px; font-weight:400;
-    letter-spacing:.3px; color:#3a2c14; margin:0 0 2px;
-  }
-  .cal-header-manual p{ font-family:'Special Elite','Courier New',monospace; font-size:9.5px; color:#6b5730; margin:0; }
   .cal-nav-row{ display:flex; align-items:center; justify-content:center; gap:10px; margin:8px 0 6px; }
   .cal-nav-btn{
     background:#3a2c14; color:#f3e9cd; border:none; border-radius:4px; width:22px; height:22px;
@@ -2072,27 +2071,11 @@
 
   <div id="aniversarioWrap"></div>
 
-  <div class="calendario-manual" id="calendarioManualWrap">
-    <div class="cal-tape cal-tape-left"></div>
-    <div class="cal-tape cal-tape-right"></div>
-    <div class="cal-header-manual">
-      <h3 id="calendarioTituloEl">📆 Calendário de Lançamentos</h3>
-      <p id="calendarioSubEl">Grandes jogos por vir</p>
-    </div>
-    <div class="cal-nav-row">
-      <button id="calPrevBtn" class="cal-nav-btn" type="button" aria-label="Mês anterior">◀</button>
-      <span id="calMesAnoEl" class="cal-mes-ano"></span>
-      <button id="calNextBtn" class="cal-nav-btn" type="button" aria-label="Próximo mês">▶</button>
-    </div>
-    <div class="cal-dias-semana" id="calDiasSemana"></div>
-    <div class="cal-grid" id="calGrid"></div>
-    <div class="cal-lista-mes" id="calListaMes"></div>
-  </div>
-
   <div class="tools" id="topActionsRow" style="margin-bottom:20px;">
     <button class="toggle-venda" id="vitrineBtn">🖼️ Modo Vitrine (tela cheia)</button>
     <button class="toggle-venda" id="cartaoResumoBtn">🎁 Cartão resumo (compartilhar)</button>
     <button class="toggle-venda" id="cmdkOpenBtn" title="Busca unificada (Ctrl+K)"><span id="cmdkBtnTxt">🔎 Busca rápida</span> <span class="cmdk-shortcut">Ctrl+K</span></button>
+    <button class="toggle-venda" id="calendarioToggleBtn">📆 Calendário de Lançamentos</button>
   </div>
 
   <div class="canais-toggle-card" id="canaisToggleCard">
@@ -2279,6 +2262,27 @@
       </div>
       <div class="rarity-chart" id="perfilChart"></div>
       <div class="rarity-chart" id="conquistasChart" style="margin-bottom:0;"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-panel-overlay" id="calendarioPanelOverlay">
+  <div class="mini-panel">
+    <div class="mini-panel-head"><h3 id="calendarioTituloEl">📆 Calendário de Lançamentos</h3><button class="mini-panel-close" id="calendarioPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body calendario-mini-body">
+      <div class="calendario-manual" id="calendarioManualWrap">
+        <div class="cal-tape cal-tape-left"></div>
+        <div class="cal-tape cal-tape-right"></div>
+        <p id="calendarioSubEl" class="cal-sub-standalone">Grandes jogos por vir</p>
+        <div class="cal-nav-row">
+          <button id="calPrevBtn" class="cal-nav-btn" type="button" aria-label="Mês anterior">◀</button>
+          <span id="calMesAnoEl" class="cal-mes-ano"></span>
+          <button id="calNextBtn" class="cal-nav-btn" type="button" aria-label="Próximo mês">▶</button>
+        </div>
+        <div class="cal-dias-semana" id="calDiasSemana"></div>
+        <div class="cal-grid" id="calGrid"></div>
+        <div class="cal-lista-mes" id="calListaMes"></div>
+      </div>
     </div>
   </div>
 </div>
@@ -3905,6 +3909,12 @@ document.getElementById('statsToggleCard').addEventListener('click', () => abrir
 document.getElementById('statsPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('statsPanelOverlay'));
 document.getElementById('statsPanelOverlay').addEventListener('click', function(e){
   if(e.target === this) fecharMiniPanel('statsPanelOverlay');
+});
+
+document.getElementById('calendarioToggleBtn').addEventListener('click', () => abrirMiniPanel('calendarioPanelOverlay'));
+document.getElementById('calendarioPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('calendarioPanelOverlay'));
+document.getElementById('calendarioPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharMiniPanel('calendarioPanelOverlay');
 });
 
 document.addEventListener('keydown', function(e){
