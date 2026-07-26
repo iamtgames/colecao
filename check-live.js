@@ -34,6 +34,23 @@ const fs = require('fs');
 
 const API_KEY = process.env.YOUTUBE_API_KEY;
 
+// TWITCH (adicionado 26/07/2026): mesmo esquema de aviso "AO VIVO" que os
+// canais de YouTube ja tem, so que via Twitch Helix API. Precisa de um app
+// registrado em https://dev.twitch.tv/console/apps (Client ID + Client
+// Secret guardados como secrets do GitHub Actions: TWITCH_CLIENT_ID e
+// TWITCH_CLIENT_SECRET -- nunca aparecem no codigo nem no site). Fluxo:
+// 1) pega um "app access token" via OAuth client credentials
+//    (POST id.twitch.tv/oauth2/token) -- token de app, nao precisa de login
+//    de usuario nem de refresh manual, a Twitch renova sozinha a cada chamada.
+// 2) consulta GET helix/streams?user_login=... -- se o canal aparecer na
+//    resposta, esta ao vivo agora; se nao aparecer, esta offline.
+const TWITCH_CLIENT_ID = process.env.TWITCH_CLIENT_ID;
+const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET;
+
+const CANAIS_TWITCH = [
+  { id: 13, n: 'PELEHZADA', login: 'pelehzada' },
+];
+
 // Mesmos ids/nomes do array "canais" no index.html — mantenha em sincronia
 // ao adicionar/remover canais de YouTube na aba Vendedores/Lives/Leiloes.
 // channelId (UC...) resolvido uma vez via API (channels.list?forHandle=) e
@@ -82,43 +99,137 @@ async function pegarVideosRecentes(canal) {
   }
 }
 
-async function main() {
+// Le o canais_live.json atual (se existir) pra servir de rede de seguranca:
+// se uma das duas plataformas falhar nessa execucao, mantemos o ultimo
+// estado conhecido dela em vez de apagar por engano, mas continuamos
+// atualizando normalmente a plataforma que funcionou.
+function lerEstadoAnterior() {
+  try {
+    const bruto = fs.readFileSync('canais_live.json', 'utf8');
+    const data = JSON.parse(bruto);
+    return Array.isArray(data.live) ? data.live : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+async function checarYoutubeLive() {
   if (!API_KEY) {
-    throw new Error('YOUTUBE_API_KEY nao configurada (secret do GitHub Actions ausente).');
+    console.warn('Aviso: YOUTUBE_API_KEY nao configurada -- pulando checagem do YouTube.');
+    return null;
   }
+  try {
+    const listasPorCanal = await Promise.all(CANAIS_YOUTUBE.map(pegarVideosRecentes));
+    const candidatos = listasPorCanal.flat();
 
-  const listasPorCanal = await Promise.all(CANAIS_YOUTUBE.map(pegarVideosRecentes));
-  const candidatos = listasPorCanal.flat();
+    if (!candidatos.length) {
+      console.warn('Aviso: nenhum video encontrado via playlistItems pra nenhum canal do YouTube -- mantendo estado anterior desses canais.');
+      return null;
+    }
 
-  if (!candidatos.length) {
-    throw new Error('Nenhum video encontrado via playlistItems pra nenhum canal — abortando pra nao sobrescrever canais_live.json com lista vazia por engano.');
+    const idParaCanal = {};
+    candidatos.forEach(c => { idParaCanal[c.videoId] = c.canal; });
+    const idsUnicos = Object.keys(idParaCanal);
+
+    const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${idsUnicos.join(',')}&key=${API_KEY}`;
+    const res = await fetch(url);
+    const data = await res.json();
+
+    if (data.error) {
+      console.warn(`Aviso: erro da API do YouTube: ${data.error.message} -- mantendo estado anterior desses canais.`);
+      return null;
+    }
+
+    const live = (data.items || [])
+      .filter(v => v.snippet.liveBroadcastContent === 'live')
+      .map(v => {
+        const canal = idParaCanal[v.id];
+        return {
+          id: canal.id,
+          n: canal.n,
+          plat: 'youtube',
+          videoId: v.id,
+          videoTitle: v.snippet.title,
+          videoUrl: `https://www.youtube.com/watch?v=${v.id}`,
+          thumbnail: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`
+        };
+      });
+    console.log(`YouTube: ${idsUnicos.length} videos checados via API, ${live.length} canal(is) ao vivo agora.`);
+    return live;
+  } catch (e) {
+    console.warn(`Aviso: falha checando o YouTube: ${e.message} -- mantendo estado anterior desses canais.`);
+    return null;
   }
+}
 
-  const idParaCanal = {};
-  candidatos.forEach(c => { idParaCanal[c.videoId] = c.canal; });
-  const idsUnicos = Object.keys(idParaCanal);
-
-  const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${idsUnicos.join(',')}&key=${API_KEY}`;
-  const res = await fetch(url);
+async function pegarTokenTwitch() {
+  const url = `https://id.twitch.tv/oauth2/token?client_id=${TWITCH_CLIENT_ID}&client_secret=${TWITCH_CLIENT_SECRET}&grant_type=client_credentials`;
+  const res = await fetch(url, { method: 'POST' });
   const data = await res.json();
-
-  if (data.error) {
-    throw new Error(`Erro da API do YouTube: ${data.error.message}`);
+  if (!data.access_token) {
+    throw new Error(data.message || 'Twitch nao retornou access_token.');
   }
+  return data.access_token;
+}
 
-  const live = (data.items || [])
-    .filter(v => v.snippet.liveBroadcastContent === 'live')
-    .map(v => {
-      const canal = idParaCanal[v.id];
+async function checarTwitchLive() {
+  if (!TWITCH_CLIENT_ID || !TWITCH_CLIENT_SECRET) {
+    console.warn('Aviso: TWITCH_CLIENT_ID/TWITCH_CLIENT_SECRET nao configurados -- pulando checagem da Twitch.');
+    return null;
+  }
+  try {
+    const token = await pegarTokenTwitch();
+    const query = CANAIS_TWITCH.map(c => `user_login=${encodeURIComponent(c.login)}`).join('&');
+    const res = await fetch(`https://api.twitch.tv/helix/streams?${query}`, {
+      headers: { 'Client-Id': TWITCH_CLIENT_ID, 'Authorization': `Bearer ${token}` }
+    });
+    const data = await res.json();
+    if (data.error) {
+      console.warn(`Aviso: erro da API da Twitch: ${data.message || data.error} -- mantendo estado anterior desses canais.`);
+      return null;
+    }
+    const live = (data.data || []).map(stream => {
+      const canal = CANAIS_TWITCH.find(c => c.login.toLowerCase() === stream.user_login.toLowerCase());
+      if (!canal) return null;
       return {
         id: canal.id,
         n: canal.n,
-        videoId: v.id,
-        videoTitle: v.snippet.title,
-        videoUrl: `https://www.youtube.com/watch?v=${v.id}`,
-        thumbnail: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`
+        plat: 'twitch',
+        login: canal.login,
+        videoTitle: stream.title,
+        videoUrl: `https://www.twitch.tv/${canal.login}`,
+        thumbnail: (stream.thumbnail_url || '').replace('{width}', '440').replace('{height}', '248')
       };
-    });
+    }).filter(Boolean);
+    console.log(`Twitch: ${CANAIS_TWITCH.length} canal(is) checado(s), ${live.length} ao vivo agora.`);
+    return live;
+  } catch (e) {
+    console.warn(`Aviso: falha checando a Twitch: ${e.message} -- mantendo estado anterior desses canais.`);
+    return null;
+  }
+}
+
+async function main() {
+  const anterior = lerEstadoAnterior();
+  const idsYoutube = new Set(CANAIS_YOUTUBE.map(c => c.id));
+  const idsTwitch = new Set(CANAIS_TWITCH.map(c => c.id));
+
+  const [liveYoutube, liveTwitch] = await Promise.all([
+    checarYoutubeLive(),
+    checarTwitchLive(),
+  ]);
+
+  // null = a checagem dessa plataforma falhou nessa execucao -> mantem o que
+  // já estava salvo pros canais dela, em vez de apagar por causa de uma
+  // falha temporaria da API/rede.
+  const resultadoYoutube = liveYoutube !== null ? liveYoutube : anterior.filter(c => idsYoutube.has(c.id));
+  const resultadoTwitch = liveTwitch !== null ? liveTwitch : anterior.filter(c => idsTwitch.has(c.id));
+
+  if (liveYoutube === null && liveTwitch === null && !anterior.length) {
+    throw new Error('YouTube e Twitch falharam e nao ha estado anterior pra reaproveitar -- abortando pra nao gravar canais_live.json vazio por engano.');
+  }
+
+  const live = [...resultadoYoutube, ...resultadoTwitch];
 
   const payload = {
     updated: new Date().toISOString(),
@@ -126,7 +237,7 @@ async function main() {
   };
 
   fs.writeFileSync('canais_live.json', JSON.stringify(payload, null, 2) + '\n');
-  console.log(`OK: ${idsUnicos.length} videos checados via API, ${live.length} canal(is) ao vivo agora.`);
+  console.log(`OK: ${live.length} canal(is) ao vivo agora (YouTube + Twitch).`);
   live.forEach(c => console.log(` - ${c.n}: ${c.videoTitle}`));
 }
 

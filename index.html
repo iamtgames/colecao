@@ -617,6 +617,7 @@
   .canal-plat-badge.youtube{background:#ff0000;}
   .canal-plat-badge.instagram{background: linear-gradient(45deg,#f09433,#e6683c,#dc2743,#cc2366,#bc1888);}
   .canal-plat-badge.loja{background:#ffa733; color:#0b0b0c;}
+  .canal-plat-badge.twitch{background:#9146ff;}
   .canal-dia-badge{
     position:absolute; top:10px; right:10px; z-index:6;
     font-size:9.5px; font-weight:800; background: rgba(0,0,0,0.7); color:#fff;
@@ -2751,6 +2752,7 @@ const canais = [
   { id:10, n:"Maicon Games", plat:"loja", link:"https://www.maicongames.com.br/", instagram:"https://www.instagram.com/loja_maicon_games/", avatarUrlOverride:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnVqWl7Qh2y9WnWSHo0SPuCNoRJBlGWWwmA_UjRdB2JuZmhMtC", horario:"🌐 Loja online", dias:[], nota:"Foco: loja de jogos e consoles diversos." },
   { id:11, n:"Silvio Play Games", plat:"loja", link:"https://silvioplay-games.lojaintegrada.com.br/ps4", instagram:"https://www.instagram.com/silvioinnocenzi/", avatarUrlOverride:"https://yt3.googleusercontent.com/ytc/AIdro_mfsadq9lN0bbGoU8nrCuJNiQjeZ3OSEArw_HahY2XYgA=s900-c-k-c0x00ffffff-no-rj", horario:"🌐 Loja online", dias:[], nota:"Foco: loja especializada em jogos de PS4." },
   { id:12, n:"VG Invest", plat:"youtube", link:"https://www.youtube.com/@vginvest", horario:"📺 Lives de empreendedorismo em games", dias:[], nota:"Foco: empreendedorismo e investimento no mercado de games." },
+  { id:13, n:"PELEHZADA", plat:"twitch", link:"https://www.twitch.tv/pelehzada", avatarHandle:"pelehzada", avatarUrlOverride:"https://static-cdn.jtvnw.net/jtv_user_pictures/7d3bc0f0-8bcc-49c7-b6d2-ccc7a60e1575-profile_image-300x300.png", horario:"📅 Lives todos os dias após 18h", dias:[], nota:"Foco: gameplay FPS em terceira pessoa, GTA RP." },
 ];
 
 let canaisLiveAtual = [];
@@ -3097,6 +3099,10 @@ function avatarUrl(c){
     const handle = c.avatarHandle || c.link.split('instagram.com/')[1]?.replace(/\/$/, '');
     return `https://unavatar.io/instagram/${handle}`;
   }
+  if(plat === 'twitch'){
+    const handle = c.avatarHandle || c.link.split('twitch.tv/')[1]?.replace(/\/$/, '');
+    return `https://unavatar.io/twitch/${handle}`;
+  }
   return '';
 }
 
@@ -3106,7 +3112,7 @@ function renderCanais(){
   const grid = document.getElementById('gridCanais');
   if(!grid) return;
   let html = '';
-  const platLabels = { youtube:"YouTube", instagram:"Instagram", loja:"Loja Online" };
+  const platLabels = { youtube:"YouTube", instagram:"Instagram", loja:"Loja Online", twitch:"Twitch" };
   const nomesDias = ["", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
 
   let lista = [...canais];
@@ -3254,6 +3260,22 @@ window.onYouTubeIframeAPIReady = function(){
 // API JS (que pode falhar por instabilidade, bloqueio de rede, adblock etc).
 // E o que garante que o video realmente toca na maioria dos casos, em vez
 // de so mostrar um link pra sair do site.
+// Player da Twitch: usa o mesmo <iframe> generico do fallback do YouTube,
+// só que apontando pro embed oficial da Twitch. O parametro "parent" e
+// obrigatorio (regra de seguranca da Twitch) e precisa bater com o dominio
+// real onde o site esta hospedado -- aqui e sempre iamtgames.github.io.
+function usarIframeTwitch(c){
+  const fr = document.getElementById('livePanelPlainIframe');
+  const hint = document.getElementById('livePanelHint');
+  if(!fr || !c || !c.login) return;
+  esconderFallbackLive();
+  const ytDiv = document.getElementById('liveYtPlayer');
+  if(ytDiv) ytDiv.style.display = 'none';
+  fr.src = `https://player.twitch.tv/?channel=${encodeURIComponent(c.login)}&parent=iamtgames.github.io&autoplay=true&muted=true`;
+  fr.style.display = 'block';
+  if(hint) hint.classList.remove('show');
+}
+
 function usarIframeSimples(c){
   const fr = document.getElementById('livePanelPlainIframe');
   const hint = document.getElementById('livePanelHint');
@@ -3338,6 +3360,10 @@ function abrirLivePanelPorId(id){
   document.getElementById('livePanelTitleTxt').textContent = `${c.n} — ${t('estaAoVivo')}`;
   const overlay = document.getElementById('livePanelOverlay');
   overlay.classList.add('aberto');
+  if(c.plat === 'twitch'){
+    usarIframeTwitch(c);
+    return;
+  }
   garantirYtApi();
   if(ytApiPronta){
     criarOuTrocarPlayer(c);
