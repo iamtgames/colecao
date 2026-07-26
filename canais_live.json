@@ -1,6 +1,15 @@
 {
-  "updated": "2026-07-26T18:00:20.814Z",
+  "updated": "2026-07-26T18:15:15.556Z",
   "live": [
+    {
+      "id": 6,
+      "n": "Jotape Arcade",
+      "plat": "youtube",
+      "videoId": "qxpyS9uly3k",
+      "videoTitle": "Como usar o Wiiflow Batocera Edition",
+      "videoUrl": "https://www.youtube.com/watch?v=qxpyS9uly3k",
+      "thumbnail": "https://i.ytimg.com/vi/qxpyS9uly3k/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
