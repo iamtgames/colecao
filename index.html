@@ -1190,7 +1190,7 @@
   .modal-img-col .modal-img-wrap{aspect-ratio: 3/4;}
   .modal-info-col{flex:1; display:flex; flex-direction:column; gap:8px; text-align:left; padding-top:6px;}
   .modal-info-col h3{font-size:19px; font-weight:800; color:var(--white);}
-  .modal-sinopse-title{font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink-dim); font-weight:700; margin-top:6px;}
+  .modal-sinopse-title{font-size:11px; text-transform:uppercase; letter-spacing:.5px; color:var(--ink-dim); font-weight:700; margin-top:6px; display:flex; align-items:center; gap:8px;}
   .modal-rating{display:flex; gap:3px; font-size:16px;}
   .modal-rating .star{cursor:pointer; color: rgba(255,255,255,0.2); transition:.15s;}
   .modal-rating .star.filled{color:#ffa733;}
@@ -1203,6 +1203,23 @@
     display:flex; align-items:center; justify-content:center; backdrop-filter: blur(6px);
   }
   .compare-btn.active{background:#ffa733; color:#0b0b0c; border-color:#ffa733;}
+
+  /* NARRACAO POR VOZ NOS CARDS: mesmo estilo circular do fav-btn/compare-btn,
+     so que no canto inferior esquerdo. Usa a Web Speech API do navegador. */
+  .narrar-card-btn{
+    position:absolute; bottom:10px; left:10px; z-index:6;
+    background: rgba(0,0,0,0.55); border:1px solid rgba(255,255,255,0.25); border-radius:50%;
+    width:28px; height:28px; cursor:pointer; font-size:12px; color: rgba(255,255,255,0.7);
+    display:flex; align-items:center; justify-content:center; backdrop-filter: blur(6px);
+  }
+  .narrar-card-btn.falando{ background: rgba(120,200,255,0.35); border-color: rgba(120,200,255,0.7); color:#fff; }
+  .modal-narrar-btn{
+    background: var(--overlay-glass); border:1px solid rgba(255,255,255,0.12);
+    color:var(--ink); border-radius:20px; padding:4px 11px; font-size:11px;
+    font-weight:700; cursor:pointer; margin-left:8px; transition:.15s; display:inline-flex; align-items:center; gap:4px;
+  }
+  .modal-narrar-btn:hover{ border-color:var(--white); }
+  .modal-narrar-btn.falando{ background: rgba(120,200,255,0.18); border-color: rgba(120,200,255,0.5); }
   .compare-table{width:100%; border-collapse:collapse; font-size:12px; margin-top:10px;}
   .compare-table th, .compare-table td{padding:8px; border-bottom:1px solid var(--line-soft); text-align:left;}
   .compare-table th{color:var(--ink-dim); font-weight:700; font-size:10.5px; text-transform:uppercase;}
@@ -2219,7 +2236,7 @@
         <h3 id="modalTitle"></h3>
         <div class="modal-rating" id="modalRating"></div>
         <div class="modal-extra" id="modalAnoDev" style="font-weight:700;"></div>
-        <div class="modal-sinopse-title" id="sinopseTituloEl">Sinopse</div>
+        <div class="modal-sinopse-title" id="sinopseTituloEl">Sinopse<button class="modal-narrar-btn" id="modalNarrarBtn" type="button">🔊</button></div>
         <p class="modal-extra" id="modalSinopse">Sinopse não disponível ainda.</p>
       </div>
     </div>
@@ -2908,6 +2925,7 @@ const I18N = {
     aovivoDescubra: '🎲 Descubra um jogo', sortearBtn: '🔀 Sortear jogo aleatório',
     aoVivoBadge: 'AO VIVO', estaAoVivo: 'está ao vivo agora',
     ouvirPerfil: '🔊 Ouvir', pararNarracao: '⏹️ Parar', narracaoNaoSuportada: 'Narração por voz não é suportada neste navegador.',
+    ouvirCardTitle: 'Ouvir informações do jogo', ouvirSinopseTitle: 'Ouvir sinopse',
     aniversarioTitulo: (n, anos) => `🎉 ${n} faz ${anos} ano${anos===1?'':'s'} de lançamento hoje!`,
     aniversarioSub: 'Clique pra ver o jogo na sua coleção',
   },
@@ -2968,6 +2986,7 @@ const I18N = {
     aovivoDescubra: '🎲 Discover a game', sortearBtn: '🔀 Draw random game',
     aoVivoBadge: 'LIVE', estaAoVivo: 'is live now',
     ouvirPerfil: '🔊 Listen', pararNarracao: '⏹️ Stop', narracaoNaoSuportada: 'Voice narration is not supported in this browser.',
+    ouvirCardTitle: 'Listen to game info', ouvirSinopseTitle: 'Listen to synopsis',
     aniversarioTitulo: (n, anos) => `🎉 ${n} turns ${anos} year${anos===1?'':'s'} old today!`,
     aniversarioSub: 'Click to see the game in your collection',
   }
@@ -3047,6 +3066,7 @@ function render(){
           <span class="plat-chip">${j.plat}</span>
           <button class="fav-btn ${isFav}" data-id="${j.id}" aria-label="${t('favoritarTitle')} ${j.n}">⭐</button>
           <button class="compare-btn ${isComparando}" data-id="${j.id}" title="${t('compararTitle')}" aria-label="${t('compararTitle')} ${j.n}">⚖️</button>
+          <button class="narrar-card-btn" data-id="${j.id}" title="${t('ouvirCardTitle')}" aria-label="${t('ouvirCardTitle')} ${j.n}">🔊</button>
           ${coverInner}
         </div>
         <div class="card-body">
@@ -3122,6 +3142,16 @@ function render(){
       sessionStorage.setItem('comparando_ps4', JSON.stringify(comparando));
       tocarSom('comparar');
       render();
+    });
+  });
+
+  document.querySelectorAll('.narrar-card-btn').forEach(btn=>{
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      const id = parseInt(this.dataset.id);
+      const j = todosJogos().find(x => x.id === id);
+      if(!j) return;
+      narrarTexto(montarTextoNarracaoCard(j), this);
     });
   });
 
@@ -4149,32 +4179,72 @@ function montarTextoNarracaoPerfil(){
   return partes.join(' ');
 }
 
-function atualizarBotaoNarracao(falando){
-  const btn = document.getElementById('narrarPerfilBtn');
+// NARRACAO POR VOZ GENERICA: motor unico usado pelo botao do perfil, pelos
+// botoes de cada card e pelo botao de sinopse no modal. Garante que so um
+// audio toca por vez -- clicar em outro botao cancela o anterior; clicar de
+// novo no MESMO botao que esta falando apenas para.
+let btnFalandoAtual = null;
+
+function atualizarEstadoBotaoNarracao(btn, falando){
   if(!btn) return;
-  btn.textContent = falando ? t('pararNarracao') : t('ouvirPerfil');
   btn.classList.toggle('falando', !!falando);
+  if(btn.id === 'narrarPerfilBtn'){
+    btn.textContent = falando ? t('pararNarracao') : t('ouvirPerfil');
+  } else if(btn.id === 'modalNarrarBtn'){
+    btn.textContent = falando ? '⏹️' : '🔊';
+    btn.title = falando ? t('pararNarracao') : t('ouvirSinopseTitle');
+  }
 }
 
-function narrarPerfil(){
+function pararNarracaoAtual(){
+  if(window.speechSynthesis) window.speechSynthesis.cancel();
+  if(btnFalandoAtual){
+    atualizarEstadoBotaoNarracao(btnFalandoAtual, false);
+    btnFalandoAtual = null;
+  }
+}
+
+function narrarTexto(texto, btn){
   if(!('speechSynthesis' in window)){
     alert(t('narracaoNaoSuportada'));
     return;
   }
-  if(window.speechSynthesis.speaking){
-    window.speechSynthesis.cancel();
-    atualizarBotaoNarracao(false);
-    return;
-  }
-  const texto = montarTextoNarracaoPerfil();
+  const cliqueNoMesmoBotaoFalando = btnFalandoAtual === btn && window.speechSynthesis.speaking;
+  pararNarracaoAtual();
+  if(cliqueNoMesmoBotaoFalando) return;
+
   const utt = new SpeechSynthesisUtterance(texto);
   utt.lang = idioma === 'en' ? 'en-US' : 'pt-BR';
   utt.rate = 1;
-  utt.onend = () => atualizarBotaoNarracao(false);
-  utt.onerror = () => atualizarBotaoNarracao(false);
-  window.speechSynthesis.cancel();
+  utt.onend = () => { if(btnFalandoAtual === btn){ atualizarEstadoBotaoNarracao(btn, false); btnFalandoAtual = null; } };
+  utt.onerror = () => { if(btnFalandoAtual === btn){ atualizarEstadoBotaoNarracao(btn, false); btnFalandoAtual = null; } };
   window.speechSynthesis.speak(utt);
-  atualizarBotaoNarracao(true);
+  atualizarEstadoBotaoNarracao(btn, true);
+  btnFalandoAtual = btn;
+}
+
+function narrarPerfil(){
+  narrarTexto(montarTextoNarracaoPerfil(), document.getElementById('narrarPerfilBtn'));
+}
+
+// Monta um texto curto e real (mesmos dados do card) pra narrar um jogo
+// especifico -- usado pelos botoes 🔊 dos cards e como fallback no modal
+// quando ainda nao ha sinopse cadastrada.
+function montarTextoNarracaoCard(j){
+  const info = anoDev[j.id] || {};
+  const ano = info.ano || j.ano;
+  const dev = info.dev || j.dev;
+  const partes = [];
+  if(idioma === 'en'){
+    partes.push(`${j.n}.`);
+    partes.push(`Platform ${j.plat}, category ${catL(j.cat)}.`);
+    if(ano) partes.push(`Released in ${ano}${dev ? ' by ' + dev : ''}.`);
+  } else {
+    partes.push(`${j.n}.`);
+    partes.push(`Plataforma ${j.plat}, categoria ${catL(j.cat)}.`);
+    if(ano) partes.push(`Lançado em ${ano}${dev ? ' pela ' + dev : ''}.`);
+  }
+  return partes.join(' ');
 }
 
 // RADAR DE ANIVERSARIO DE LANCAMENTO: roda so no navegador, comparando o
@@ -4599,7 +4669,8 @@ function abrirModal(id){
 
   // Sinopse
   const sinopseEl = document.getElementById('modalSinopse');
-  sinopseEl.textContent = sinopses[id] || j.sinopse || t('sinopseIndisponivel');
+  const textoSinopse = sinopses[id] || j.sinopse || t('sinopseIndisponivel');
+  sinopseEl.textContent = textoSinopse;
 
   // Ano de lançamento e desenvolvedora
   const anoDevEl = document.getElementById('modalAnoDev');
@@ -4610,6 +4681,16 @@ function abrirModal(id){
   if(ano) partes.push(ano);
   if(dev) partes.push(dev);
   anoDevEl.textContent = partes.length ? partes.join(' · ') : '';
+
+  // Botão de narração da sinopse (reutiliza a mesma engine do perfil/cards)
+  const narrarModalBtn = document.getElementById('modalNarrarBtn');
+  if(narrarModalBtn){
+    narrarModalBtn.onclick = function(){
+      const temSinopseReal = textoSinopse && textoSinopse !== t('sinopseIndisponivel');
+      const textoParaFalar = temSinopseReal ? `${j.n}. ${textoSinopse}` : montarTextoNarracaoCard(j);
+      narrarTexto(textoParaFalar, this);
+    };
+  }
 
   // Nota (estrelas clicáveis, salvas localmente)
   const ratingEl = document.getElementById('modalRating');
@@ -4639,6 +4720,8 @@ function fecharModal(){
   if(location.hash.startsWith('#jogo-')){
     history.replaceState(null, '', location.pathname + location.search);
   }
+  const narrarModalBtn = document.getElementById('modalNarrarBtn');
+  if(btnFalandoAtual === narrarModalBtn) pararNarracaoAtual();
 }
 
 let debounceBusca = null;
@@ -5542,7 +5625,11 @@ function aplicarIdiomaUI(){
   if(byId('modalShareBtn')) byId('modalShareBtn').textContent = t('compartilhar');
   if(byId('modalEtiquetaBtn')) byId('modalEtiquetaBtn').textContent = t('gerarEtiqueta');
   if(byId('modalNavHint')) byId('modalNavHint').textContent = t('navHint');
-  if(byId('sinopseTituloEl')) byId('sinopseTituloEl').textContent = t('sinopseTitulo');
+  if(byId('sinopseTituloEl')){
+    const btnNarrarModal = byId('modalNarrarBtn');
+    byId('sinopseTituloEl').firstChild.textContent = t('sinopseTitulo');
+    if(btnNarrarModal && !btnNarrarModal.classList.contains('falando')) btnNarrarModal.title = t('ouvirSinopseTitle');
+  }
   if(byId('vitrineSairTxt')) byId('vitrineSairTxt').textContent = t('vitrineSair');
   if(byId('aovivoTituloEl')) byId('aovivoTituloEl').textContent = t('aovivoTitulo');
   if(byId('aovivoSubEl')) byId('aovivoSubEl').textContent = t('aovivoSub');
