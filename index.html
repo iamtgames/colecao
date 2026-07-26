@@ -1013,6 +1013,20 @@
   .stats-extra-row{display:flex; gap:14px; flex-wrap:wrap; margin: 4px 0 18px;}
   .stats-extra-row .rarity-chart{flex:1; min-width:260px; margin:0;}
 
+  /* CONQUISTAS / BADGES DA COLECAO */
+  .conquistas-grid{display:flex; flex-wrap:wrap; gap:10px; margin-top:6px;}
+  .conquista-badge{
+    display:flex; align-items:center; gap:8px; padding:8px 12px;
+    border-radius:10px; border:1px solid rgba(255,255,255,0.08);
+    background:rgba(255,255,255,0.03); font-size:11.5px; font-weight:700;
+    cursor:default; transition: transform .15s ease, background .2s ease;
+  }
+  .conquista-badge.unlocked{background:rgba(255,167,51,0.12); border-color:rgba(255,167,51,0.3); color:var(--white);}
+  .conquista-badge.unlocked:hover{transform: translateY(-2px); background:rgba(255,167,51,0.2);}
+  .conquista-badge.locked{color:var(--ink-dim); filter:grayscale(1); opacity:.55;}
+  .conquista-icon{font-size:16px; line-height:1;}
+  .conquista-badge.locked .conquista-icon{filter:grayscale(1);}
+
   /* DESTAQUE DA COLECAO */
   .destaque-card{
     display:flex; gap:22px; align-items:stretch;
@@ -1867,6 +1881,7 @@
   <button id="skinBtn" title="Design atual: Moderno — clique para trocar" aria-label="Alternar design do site (PS3/Y2K)">🎮</button>
   <button id="crtBtn" title="Filtro CRT: desligado — clique para ligar" aria-label="Alternar filtro CRT">📺</button>
   <button id="mascotesToggleBtn" title="Mascotes: ativos — clique para pausar" aria-label="Pausar ou ativar os mascotes do site">👻</button>
+  <button id="somBtn" title="Efeitos sonoros: desligados — clique para ligar" aria-label="Ligar ou desligar efeitos sonoros">🔇</button>
 </div>
 <div id="crtOverlay"></div>
 <div class="y2k-taskbar">
@@ -2103,7 +2118,8 @@
         <div class="rarity-chart" id="decadaChart"></div>
         <div class="rarity-chart" id="devChart"></div>
       </div>
-      <div class="rarity-chart" id="perfilChart" style="margin-bottom:0;"></div>
+      <div class="rarity-chart" id="perfilChart"></div>
+      <div class="rarity-chart" id="conquistasChart" style="margin-bottom:0;"></div>
     </div>
   </div>
 </div>
@@ -2805,6 +2821,15 @@ const I18N = {
     rcPerfil: 'Perfil colecionador',
     categoriaFavorita: 'Categoria favorita', eraFavorita: 'Era favorita', platPredominante: 'Plataforma predominante',
     jogosSufixo: 'jogos', daColecao: 'da coleção',
+    rcConquistas: 'Conquistas',
+    conqGrandeTitulo: 'Grande Colecionador', conqGrandeDesc: (n) => `Alcançou ${n}+ jogos na coleção.`,
+    conqRaridadeTitulo: 'Caçador de Raridades', conqRaridadeDesc: (n) => `Possui ${n}+ jogos raros ou muito raros.`,
+    conqCategoriaDesc: (n) => `Tem ${n}+ jogos na categoria favorita.`,
+    conqDuasGeracoesTitulo: 'Duas Gerações', conqDuasGeracoesDesc: 'Tem jogos de PS4 e PS3 na coleção.',
+    conqCuradorTitulo: 'Curador', conqCuradorDesc: (n) => `Marcou ${n}+ jogos como favoritos.`,
+    conqCriticoTitulo: 'Crítico de Plantão', conqCriticoDesc: (n) => `Avaliou ${n}+ jogos com estrelas.`,
+    conqCofreTitulo: 'Cofre Recheado', conqCofreDesc: (v) => `Coleção avaliada em R$ ${v}+.`,
+    conqBloqueada: 'Ainda não desbloqueada',
     vitrineSair: 'ESC ou ✕ para sair',
     temaToggleTitle: 'Alternar tema claro/escuro', paletaToggleTitle: 'Alternar paleta de cores',
     idiomaToggleTitle: 'Switch to English',
@@ -2853,6 +2878,15 @@ const I18N = {
     rcPerfil: 'Collector profile',
     categoriaFavorita: 'Favorite category', eraFavorita: 'Favorite era', platPredominante: 'Dominant platform',
     jogosSufixo: 'games', daColecao: 'of the collection',
+    rcConquistas: 'Achievements',
+    conqGrandeTitulo: 'Big Collector', conqGrandeDesc: (n) => `Reached ${n}+ games in the collection.`,
+    conqRaridadeTitulo: 'Rarity Hunter', conqRaridadeDesc: (n) => `Owns ${n}+ rare or very rare games.`,
+    conqCategoriaDesc: (n) => `Has ${n}+ games in the favorite category.`,
+    conqDuasGeracoesTitulo: 'Two Generations', conqDuasGeracoesDesc: 'Has both PS4 and PS3 games in the collection.',
+    conqCuradorTitulo: 'Curator', conqCuradorDesc: (n) => `Marked ${n}+ games as favorites.`,
+    conqCriticoTitulo: 'Resident Critic', conqCriticoDesc: (n) => `Rated ${n}+ games with stars.`,
+    conqCofreTitulo: 'Full Vault', conqCofreDesc: (v) => `Collection valued at R$ ${v}+.`,
+    conqBloqueada: 'Not unlocked yet',
     vitrineSair: 'ESC or ✕ to exit',
     temaToggleTitle: 'Toggle light/dark theme', paletaToggleTitle: 'Toggle color palette',
     idiomaToggleTitle: 'Mudar para Português',
@@ -2980,6 +3014,7 @@ function render(){
   renderRaioX();
   renderPerfil();
   renderCategorias();
+  renderConquistas();
 
   document.querySelectorAll('.fav-btn').forEach(btn=>{
     btn.addEventListener('click', function(e){
@@ -2988,6 +3023,7 @@ function render(){
       const idx = favoritos.indexOf(id);
       if(idx>-1) favoritos.splice(idx,1); else favoritos.push(id);
       localStorage.setItem('favoritos_ps4', JSON.stringify(favoritos));
+      tocarSom('favorito');
       render();
     });
   });
@@ -3007,6 +3043,7 @@ function render(){
         comparando.push(id);
       }
       sessionStorage.setItem('comparando_ps4', JSON.stringify(comparando));
+      tocarSom('comparar');
       render();
     });
   });
@@ -3898,6 +3935,49 @@ function renderPerfil(){
   el.innerHTML = html;
 }
 
+// Conquistas: badges calculados sozinhos a partir dos dados reais da colecao
+// (nada fixo/fabricado -- cada uma reavalia a colecao a cada render, entao
+// desbloqueia/bloqueia conforme os dados mudam de verdade).
+function renderConquistas(){
+  const el = document.getElementById('conquistasChart');
+  if(!el) return;
+  const lista = todosJogos();
+  if(!lista.length){ el.innerHTML = ''; return; }
+
+  const catCount = {};
+  lista.forEach(j => { catCount[j.cat] = (catCount[j.cat] || 0) + 1; });
+  const topCat = Object.entries(catCount).sort((a,b) => b[1]-a[1])[0];
+
+  const raros = lista.filter(j => j.rar === 'raro' || j.rar === 'muito').length;
+  const ps4 = lista.filter(j => j.plat === 'PS4').length;
+  const ps3 = lista.filter(j => j.plat === 'PS3').length;
+  let totalPago = 0;
+  lista.forEach(j => { totalPago += Math.round((j.col + j.bar) / 2); });
+  const avaliados = Object.values(notas || {}).filter(n => n > 0).length;
+
+  const LIMITE_GRANDE = 50, LIMITE_RARIDADE = 5, LIMITE_CATEGORIA = 15,
+        LIMITE_CURADOR = 3, LIMITE_CRITICO = 3, LIMITE_COFRE = 5000;
+
+  const badges = [
+    { icon:'🏆', titulo: t('conqGrandeTitulo'), desc: t('conqGrandeDesc')(LIMITE_GRANDE), unlocked: lista.length >= LIMITE_GRANDE },
+    { icon:'💎', titulo: t('conqRaridadeTitulo'), desc: t('conqRaridadeDesc')(LIMITE_RARIDADE), unlocked: raros >= LIMITE_RARIDADE },
+    { icon:'🎮', titulo: catL(topCat[0]), desc: t('conqCategoriaDesc')(LIMITE_CATEGORIA), unlocked: topCat[1] >= LIMITE_CATEGORIA },
+    { icon:'🕹️', titulo: t('conqDuasGeracoesTitulo'), desc: t('conqDuasGeracoesDesc'), unlocked: ps4 > 0 && ps3 > 0 },
+    { icon:'⭐', titulo: t('conqCuradorTitulo'), desc: t('conqCuradorDesc')(LIMITE_CURADOR), unlocked: favoritos.length >= LIMITE_CURADOR },
+    { icon:'📝', titulo: t('conqCriticoTitulo'), desc: t('conqCriticoDesc')(LIMITE_CRITICO), unlocked: avaliados >= LIMITE_CRITICO },
+    { icon:'💰', titulo: t('conqCofreTitulo'), desc: t('conqCofreDesc')(LIMITE_COFRE), unlocked: totalPago >= LIMITE_COFRE },
+  ];
+
+  let html = `<div class="rc-title">${t('rcConquistas')}</div><div class="conquistas-grid">`;
+  badges.forEach(b => {
+    const tituloSeguro = escapeHtml(b.titulo);
+    const descSeguro = escapeHtml(b.unlocked ? b.desc : `${b.desc} (${t('conqBloqueada')})`);
+    html += `<div class="conquista-badge ${b.unlocked ? 'unlocked' : 'locked'}" title="${descSeguro}"><span class="conquista-icon">${b.icon}</span><span>${tituloSeguro}</span></div>`;
+  });
+  html += `</div>`;
+  el.innerHTML = html;
+}
+
 function wrapCanvasText(ctx, text, x, y, maxWidth, lineHeight){
   const words = text.split(' ');
   let line = '';
@@ -4186,6 +4266,7 @@ function renderWishlist(){
 function abrirModal(id){
   const j = todosJogos().find(x => x.id === id);
   if(!j) return;
+  tocarSom('abrir');
   const frente = capas[id];
   const verso = capasVerso[id];
 
@@ -4483,6 +4564,44 @@ crtBtn.addEventListener('click', function(){
   const ligado = !document.body.classList.contains('crt-on');
   localStorage.setItem('crt_ps4', ligado ? 'on' : 'off');
   aplicarCrt(ligado);
+});
+
+// EFEITOS SONOROS OPCIONAIS (sintetizados na hora via Web Audio, sem arquivo de audio --
+// assim nao depende de nenhum asset externo). Desligado por padrao, pra nao incomodar
+// quem nao pediu; fica salvo no localStorage depois que a pessoa liga.
+let somAtivo = localStorage.getItem('sons_ps4') === '1';
+let audioCtxSons = null;
+function tocarSom(tipo){
+  if(!somAtivo) return;
+  try{
+    if(!audioCtxSons) audioCtxSons = new (window.AudioContext || window.webkitAudioContext)();
+    if(audioCtxSons.state === 'suspended') audioCtxSons.resume();
+    const osc = audioCtxSons.createOscillator();
+    const gain = audioCtxSons.createGain();
+    osc.connect(gain);
+    gain.connect(audioCtxSons.destination);
+    const freqs = { click: 520, favorito: 740, abrir: 380, comparar: 620 };
+    osc.type = 'sine';
+    osc.frequency.value = freqs[tipo] || 500;
+    const agora = audioCtxSons.currentTime;
+    gain.gain.setValueAtTime(0.0001, agora);
+    gain.gain.exponentialRampToValueAtTime(0.12, agora + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.0001, agora + 0.14);
+    osc.start(agora);
+    osc.stop(agora + 0.15);
+  }catch(e){}
+}
+const somBtn = document.getElementById('somBtn');
+function atualizarBotaoSom(){
+  somBtn.textContent = somAtivo ? '🔊' : '🔇';
+  somBtn.title = somAtivo ? 'Efeitos sonoros: ligados — clique para desligar' : 'Efeitos sonoros: desligados — clique para ligar';
+}
+atualizarBotaoSom();
+somBtn.addEventListener('click', function(){
+  somAtivo = !somAtivo;
+  localStorage.setItem('sons_ps4', somAtivo ? '1' : '0');
+  atualizarBotaoSom();
+  if(somAtivo) tocarSom('click'); // feedback imediato de que ligou
 });
 
 // ESTANTE VIRTUAL 3D (tilt leve nas capas, só em telas com mouse de verdade)
