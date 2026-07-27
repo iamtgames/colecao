@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-27T02:30:21.042Z",
+  "updated": "2026-07-27T02:45:14.774Z",
   "live": [
     {
       "id": 7,
@@ -9,15 +9,6 @@
       "videoTitle": "🟢 LEILÃO VIDEOGAMES (AO VIVO)",
       "videoUrl": "https://www.youtube.com/watch?v=Xuj860-JD24",
       "thumbnail": "https://i.ytimg.com/vi/Xuj860-JD24/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Vem tranquilo /  Arc raiders",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
