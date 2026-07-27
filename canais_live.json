@@ -1,6 +1,15 @@
 {
-  "updated": "2026-07-27T22:45:21.961Z",
+  "updated": "2026-07-27T23:00:31.289Z",
   "live": [
+    {
+      "id": 3,
+      "n": "Garimpo dos Games",
+      "plat": "youtube",
+      "videoId": "szN8-TSMk3c",
+      "videoTitle": "Garimpo dos games  está ao vivo!",
+      "videoUrl": "https://www.youtube.com/watch?v=szN8-TSMk3c",
+      "thumbnail": "https://i.ytimg.com/vi/szN8-TSMk3c/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
