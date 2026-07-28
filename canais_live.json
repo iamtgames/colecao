@@ -1,4 +1,14 @@
 {
-  "updated": "2026-07-28T12:45:16.893Z",
-  "live": []
+  "updated": "2026-07-28T13:00:34.120Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "pU1HJa0WRh4",
+      "videoTitle": "🟢 (AO VIVO) ULTIMO LEILÃO DE VIDEOGAMES",
+      "videoUrl": "https://www.youtube.com/watch?v=pU1HJa0WRh4",
+      "thumbnail": "https://i.ytimg.com/vi/pU1HJa0WRh4/hqdefault.jpg"
+    }
+  ]
 }
