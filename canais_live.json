@@ -1,15 +1,6 @@
 {
-  "updated": "2026-07-29T03:30:18.661Z",
+  "updated": "2026-07-29T03:45:14.955Z",
   "live": [
-    {
-      "id": 2,
-      "n": "Antec.r",
-      "plat": "youtube",
-      "videoId": "NTmeieHrSqo",
-      "videoTitle": "GAME PLAY GTA 5",
-      "videoUrl": "https://www.youtube.com/watch?v=NTmeieHrSqo",
-      "thumbnail": "https://i.ytimg.com/vi/NTmeieHrSqo/hqdefault.jpg"
-    },
     {
       "id": 5,
       "n": "DJ Games Retro",
@@ -27,15 +18,6 @@
       "videoTitle": "🟢 CANSEII... LIVE RETRO (AO VIVO)",
       "videoUrl": "https://www.youtube.com/watch?v=YWzXedMLPGA",
       "thumbnail": "https://i.ytimg.com/vi/YWzXedMLPGA/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Vem tranquilo /  Arc raiders",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
