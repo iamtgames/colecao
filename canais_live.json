@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-29T22:30:27.793Z",
+  "updated": "2026-07-29T22:45:17.929Z",
   "live": [
     {
       "id": 2,
@@ -9,15 +9,6 @@
       "videoTitle": "LIVE VENDAS GEEK 3D E MAIS 1* LIVE",
       "videoUrl": "https://www.youtube.com/watch?v=6qbh1UQyZJU",
       "thumbnail": "https://i.ytimg.com/vi/6qbh1UQyZJU/hqdefault.jpg"
-    },
-    {
-      "id": 12,
-      "n": "VG Invest",
-      "plat": "youtube",
-      "videoId": "PzywDS5S4sk",
-      "videoTitle": "Live 20 - Os Bastidores dos Maiores Eventos de Games do Brasil",
-      "videoUrl": "https://www.youtube.com/watch?v=PzywDS5S4sk",
-      "thumbnail": "https://i.ytimg.com/vi/PzywDS5S4sk/hqdefault.jpg"
     }
   ]
 }
