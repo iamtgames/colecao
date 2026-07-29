@@ -633,24 +633,31 @@
 
   /* GRID DE JOGOS */
   .grid{
-    display:grid; grid-template-columns: repeat(auto-fill, minmax(260px,1fr));
-    gap: 18px;
+    display:grid; grid-template-columns: repeat(auto-fill, minmax(198px,1fr));
+    gap: 15px;
   }
   .card{
     background: var(--card-glass);
     backdrop-filter: blur(18px) saturate(140%);
     -webkit-backdrop-filter: blur(18px) saturate(140%);
-    border:1px solid rgba(255,255,255,0.08); border-radius: 18px;
-    overflow: hidden; display:flex; flex-direction:column; transition: border-color .2s, transform .2s, box-shadow .2s;
+    border:1px solid rgba(255,255,255,0.08); border-radius: 14px;
+    overflow: hidden; display:flex; flex-direction:column;
+    transition: border-color .25s ease, transform .3s cubic-bezier(.2,.8,.3,1.1), box-shadow .3s ease;
     box-shadow: 0 4px 18px rgba(0,0,0,0.25);
+    will-change: transform;
   }
-  .card:hover{border-color: rgba(255,255,255,0.4); transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.5);}
+  .card:hover{
+    border-color: var(--tema-accent, rgba(120,190,255,0.55));
+    transform: translateY(-5px) scale(1.035);
+    box-shadow: 0 22px 44px rgba(0,0,0,0.55), 0 0 0 1px var(--tema-accent, rgba(120,190,255,0.35)), 0 0 26px -4px var(--tema-accent, rgba(120,190,255,0.45));
+    z-index: 3;
+  }
 
   .cover-wrap{
     position: relative; width:100%; aspect-ratio: 3/4; overflow: hidden;
     background: linear-gradient(160deg, rgba(255,255,255,0.05), rgba(255,255,255,0.01));
     cursor: zoom-in;
-    border-radius: 18px 18px 0 0;
+    border-radius: 14px 14px 0 0;
     transition: transform .3s ease;
     transform-style: preserve-3d;
     will-change: transform;
@@ -679,10 +686,10 @@
   .cover-wrap:focus:not(:focus-visible){ outline: none; }
   .cover-wrap img, .cover-fallback{
     width:100%; height:100%; object-fit: cover;
-    transition: transform .35s ease;
+    transition: transform .4s ease;
   }
   .cover-wrap:hover img, .cover-wrap:hover .cover-fallback{
-    transform: scale(1.3);
+    transform: scale(1.08);
     z-index: 5;
   }
   .cover-fallback{
@@ -708,10 +715,10 @@
   }
   .fav-btn.active{color: var(--white); border-color: var(--white);}
 
-  .card-body{padding: 13px 15px 15px; display:flex; flex-direction:column; gap:8px; flex:1;}
-  .card-body h3{font-size: 15px; font-weight:700; line-height:1.3; min-height: 39px; color:var(--white);}
-  .badges{display:flex; gap:5px; flex-wrap:wrap;}
-  .badge{font-size:9.5px; padding:3px 9px; border-radius:20px; font-weight:700; border:1px solid var(--line);}
+  .card-body{padding: 11px 12px 12px; display:flex; flex-direction:column; gap:6px; flex:1;}
+  .card-body h3{font-size: 13.5px; font-weight:700; line-height:1.3; min-height: 35px; color:var(--white);}
+  .badges{display:flex; gap:4px; flex-wrap:wrap;}
+  .badge{font-size:9px; padding:2px 8px; border-radius:20px; font-weight:700; border:1px solid var(--line);}
   .b-comum{background:transparent; color:var(--ink-dim);}
   .b-pouco{background:transparent; color:var(--ink);}
   .b-raro{background:var(--white); color:var(--bg-inverse); border-color:var(--white);}
@@ -2574,80 +2581,80 @@ const jogos = [
 
 // Espaço para capas reais: preencha { id: "URL_DA_CAPA" } conforme for pesquisando
 const capas = {
-  124: "https://cdn.thegamesdb.net/images/original/boxart/front/84146-1.jpg",
+  124: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2xxs.jpg",
   125: "https://cdn.thegamesdb.net/images/original/boxart/front/35042-1.jpg",
-  126: "https://cdn.thegamesdb.net/images/original/boxart/front/69213-1.jpg",
-  127: "https://cdn.thegamesdb.net/images/original/boxart/front/55248-1.jpg",
-  128: "https://cdn.thegamesdb.net/images/original/boxart/front/22722-1.jpg",
-  129: "https://cdn.thegamesdb.net/images/original/boxart/front/103252-1.jpg",
-  130: "https://cdn.thegamesdb.net/images/original/boxart/front/131054-1.jpg",
-  131: "https://cdn.thegamesdb.net/images/original/boxart/front/87924-1.jpg",
-  132: "https://cdn.thegamesdb.net/images/original/boxart/front/98756-1.jpg",
-  133: "https://cdn.thegamesdb.net/images/original/boxart/front/68242-1.jpg",
-  134: "https://cdn.thegamesdb.net/images/original/boxart/front/116099-1.jpg",
-  135: "https://cdn.thegamesdb.net/images/original/boxart/front/29277-1.jpg",
-  136: "https://cdn.thegamesdb.net/images/original/boxart/front/75308-1.jpg",
-  137: "https://cdn.thegamesdb.net/images/original/boxart/front/75954-1.jpg",
-  138: "https://cdn.thegamesdb.net/images/original/boxart/front/77060-1.jpg",
-  139: "https://cdn.thegamesdb.net/images/original/boxart/front/79674-1.jpg",
-  140: "https://cdn.thegamesdb.net/images/original/boxart/front/107378-1.jpg",
-  141: "https://cdn.thegamesdb.net/images/original/boxart/front/55760-1.jpg",
-  142: "https://cdn.thegamesdb.net/images/original/boxart/front/107164-1.jpg",
-  143: "https://cdn.thegamesdb.net/images/original/boxart/front/42385-1.jpg",
-  144: "https://lojaarenagames.com.br/wp-content/uploads/2022/11/Hades-Ps4-1989048019.jpg",
-  145: "https://cdn.thegamesdb.net/images/original/boxart/front/35042-1.jpg",
-  146: "https://cdn.thegamesdb.net/images/original/boxart/front/20847-1.jpg",
-  147: "https://cdn.thegamesdb.net/images/original/boxart/front/79965-1.jpg",
-  148: "https://cdn.thegamesdb.net/images/original/boxart/front/73838-1.jpg",
-  149: "https://cdn.thegamesdb.net/images/original/boxart/front/79032-1.jpg",
-  150: "https://cdn.thegamesdb.net/images/original/boxart/front/35161-1.jpg",
-  151: "https://cdn.thegamesdb.net/images/original/boxart/front/43902-1.jpg",
-  152: "https://cdn.thegamesdb.net/images/original/boxart/front/60158-1.jpg",
-  153: "https://lojaarenagames.com.br/wp-content/uploads/2025/03/Prince-Of-Persia-The-Lost-Crown-Ps4-308984553.jpg",
-  154: "https://cdn.thegamesdb.net/images/original/boxart/front/55462-1.jpg",
-  155: "https://cdn.thegamesdb.net/images/original/boxart/front/111651-1.jpg",
-  156: "https://cdn.thegamesdb.net/images/original/boxart/front/52435-1.jpg",
-  157: "https://cdn.thegamesdb.net/images/original/boxart/front/75619-1.jpg",
-  158: "https://cdn.thegamesdb.net/images/original/boxart/front/37516-1.jpg",
-  159: "https://cdn.thegamesdb.net/images/original/boxart/front/112420-1.jpg",
-  160: "https://lojaarenagames.com.br/wp-content/uploads/2024/04/Marvel-Spider-Man-Ps4-1-1227270714.jpg",
-  161: "https://cdn.thegamesdb.net/images/original/boxart/front/92660-1.jpg",
-  162: "https://cdn.thegamesdb.net/images/original/boxart/front/64909-1.jpg",
-  163: "https://cdn.thegamesdb.net/images/original/boxart/front/27208-1.jpg",
-  164: "https://cdn.awsli.com.br/800x800/53/53761/produto/183968398/5785a2367f.jpg",
-  165: "https://cdn.thegamesdb.net/images/original/boxart/front/50155-1.jpg",
-  166: "https://cdn.thegamesdb.net/images/original/boxart/front/94171-1.jpg",
-  167: "https://cdn.thegamesdb.net/images/original/boxart/front/73288-1.jpg",
-  168: "https://cdn.thegamesdb.net/images/original/boxart/front/69186-1.jpg",
-  169: "https://cdn.thegamesdb.net/images/original/boxart/front/34990-1.jpg",
-  170: "https://cdn.thegamesdb.net/images/original/boxart/front/113238-1.jpg",
-  171: "https://cdn.awsli.com.br/800x800/138/138431/produto/27133285/27024b4d89.jpg",
-  172: "https://cdn.thegamesdb.net/images/original/boxart/front/76868-1.jpg",
-  173: "https://cdn.thegamesdb.net/images/original/boxart/front/41080-1.jpg",
-  174: "https://cdn.thegamesdb.net/images/original/boxart/front/21416-1.jpg",
-  201: "https://cdn.thegamesdb.net/images/original/boxart/front/11988-1.jpg",
-  202: "https://cdn.thegamesdb.net/images/original/boxart/front/886-1.jpg",
-  203: "https://cdn.thegamesdb.net/images/original/boxart/front/6606-1.jpg",
-  204: "https://cdn.awsli.com.br/800x800/138/138431/produto/8937681/3d7347f165.jpg",
-  205: "https://cdn.awsli.com.br/800x800/138/138431/produto/7988454/d533752f71.jpg",
-  206: "https://cdn.awsli.com.br/800x800/138/138431/produto/13526968/06afc748b6.jpg",
-  207: "https://cdn.thegamesdb.net/images/original/boxart/front/70304-1.jpg",
-  208: "https://cdn.thegamesdb.net/images/original/boxart/front/61642-1.jpg",
-  209: "https://cdn.thegamesdb.net/images/original/boxart/front/69257-1.jpg",
-  210: "https://cdn.thegamesdb.net/images/original/boxart/front/60934-1.jpg",
-  211: "https://cdn.thegamesdb.net/images/original/boxart/front/41079-1.jpg",
-  212: "https://cdn.thegamesdb.net/images/original/boxart/front/41078-1.png",
-  213: "https://cdn.awsli.com.br/800x800/138/138431/produto/21494330/d0d260e3be.jpg",
-  214: "https://cdn.thegamesdb.net/images/original/boxart/front/62516-1.jpg",
-  215: "https://cdn.thegamesdb.net/images/original/boxart/front/55757-1.jpg",
-  216: "https://cdn.thegamesdb.net/images/original/boxart/front/100856-1.jpg",
-  217: "https://cdn.thegamesdb.net/images/original/boxart/front/75952-1.jpg",
-  218: "https://cdn.thegamesdb.net/images/original/boxart/front/18865-1.jpg",
-  219: "https://cdn.thegamesdb.net/images/original/boxart/front/52841-1.jpg",
-  220: "https://cdn.thegamesdb.net/images/original/boxart/front/43929-1.jpg",
-  221: "https://cdn.thegamesdb.net/images/original/boxart/front/62524-1.jpg",
-  222: "https://cdn.thegamesdb.net/images/original/boxart/front/109035-1.jpg",
-  223: "https://cdn.thegamesdb.net/images/original/boxart/front/40202-1.jpg"
+  126: "https://images.igdb.com/igdb/image/upload/t_cover_big/co20r3.jpg",
+  127: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1wkf.jpg",
+  128: "https://images.igdb.com/igdb/image/upload/t_cover_big/coaih8.jpg",
+  129: "https://images.igdb.com/igdb/image/upload/t_cover_big/cob9ed.jpg",
+  130: "https://images.igdb.com/igdb/image/upload/t_cover_big/cobksf.jpg",
+  131: "https://images.igdb.com/igdb/image/upload/t_cover_big/co6mzf.jpg",
+  132: "https://images.igdb.com/igdb/image/upload/t_cover_big/co3irp.jpg",
+  133: "https://images.igdb.com/igdb/image/upload/t_cover_big/co21a6.jpg",
+  134: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2npg.jpg",
+  135: "https://images.igdb.com/igdb/image/upload/t_cover_big/co206v.jpg",
+  136: "https://images.igdb.com/igdb/image/upload/t_cover_big/co206t.jpg",
+  137: "https://images.igdb.com/igdb/image/upload/t_cover_big/co206s.jpg",
+  138: "https://images.igdb.com/igdb/image/upload/t_cover_big/co206p.jpg",
+  139: "https://images.igdb.com/igdb/image/upload/t_cover_big/co3wm2.jpg",
+  140: "https://images.igdb.com/igdb/image/upload/t_cover_big/co4zw5.jpg",
+  141: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2crj.jpg",
+  142: "https://images.igdb.com/igdb/image/upload/t_cover_big/coba3d.jpg",
+  143: "https://images.igdb.com/igdb/image/upload/t_cover_big/coaxyt.jpg",
+  144: "https://images.igdb.com/igdb/image/upload/t_cover_big/cob9kr.jpg",
+  145: "https://images.igdb.com/igdb/image/upload/t_cover_big/coaajv.jpg",
+  146: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1ksh.jpg",
+  147: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9kcb.jpg",
+  148: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5ziw.jpg",
+  149: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1v88.jpg",
+  150: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2ia0.jpg",
+  151: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1v70.jpg",
+  152: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1sh7.jpg",
+  153: "https://images.igdb.com/igdb/image/upload/t_cover_big/co6lli.jpg",
+  154: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1rbm.jpg",
+  155: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1q1f.jpg",
+  156: "https://images.igdb.com/igdb/image/upload/t_cover_big/cobtwh.jpg",
+  157: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2eqw.jpg",
+  158: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2rck.jpg",
+  159: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1v8w.jpg",
+  160: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1r77.jpg",
+  161: "https://images.igdb.com/igdb/image/upload/t_cover_big/cobg1j.jpg",
+  162: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1rbi.jpg",
+  163: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2res.jpg",
+  164: "https://images.igdb.com/igdb/image/upload/t_cover_big/co4tt2.jpg",
+  165: "https://images.igdb.com/igdb/image/upload/t_cover_big/co20pq.jpg",
+  166: "https://images.igdb.com/igdb/image/upload/t_cover_big/coamyk.jpg",
+  167: "https://images.igdb.com/igdb/image/upload/t_cover_big/co20xn.jpg",
+  168: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5wgs.jpg",
+  169: "https://images.igdb.com/igdb/image/upload/t_cover_big/co271e.jpg",
+  170: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5ziw.jpg",
+  171: "https://images.igdb.com/igdb/image/upload/t_cover_big/co27bk.jpg",
+  172: "https://images.igdb.com/igdb/image/upload/t_cover_big/co271z.jpg",
+  173: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tpr.jpg",
+  174: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1r7h.jpg",
+  201: "https://images.igdb.com/igdb/image/upload/t_cover_big/co244u.jpg",
+  202: "https://images.igdb.com/igdb/image/upload/t_cover_big/co25vu.jpg",
+  203: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5x8e.jpg",
+  204: "https://images.igdb.com/igdb/image/upload/t_cover_big/co25yn.jpg",
+  205: "https://images.igdb.com/igdb/image/upload/t_cover_big/co8kzz.jpg",
+  206: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5xqj.jpg",
+  207: "https://images.igdb.com/igdb/image/upload/t_cover_big/co5wgu.jpg",
+  208: "https://images.igdb.com/igdb/image/upload/t_cover_big/co8hus.jpg",
+  209: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2evj.jpg",
+  210: "https://images.igdb.com/igdb/image/upload/t_cover_big/fwx6dgszjzxuyxegltlh.jpg",
+  211: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tnb.jpg",
+  212: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1un2.jpg",
+  213: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1tp9.jpg",
+  214: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1vpg.jpg",
+  215: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1xbv.jpg",
+  216: "https://images.igdb.com/igdb/image/upload/t_cover_big/co4smp.jpg",
+  217: "https://images.igdb.com/igdb/image/upload/t_cover_big/co1uxd.jpg",
+  218: "https://images.igdb.com/igdb/image/upload/t_cover_big/co206x.jpg",
+  219: "https://images.igdb.com/igdb/image/upload/t_cover_big/co3ixb.jpg",
+  220: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2acd.jpg",
+  221: "https://images.igdb.com/igdb/image/upload/t_cover_big/co20mh.jpg",
+  222: "https://images.igdb.com/igdb/image/upload/t_cover_big/cobkt6.jpg",
+  223: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2ats.jpg"
 };
 
 const capasVerso = {
