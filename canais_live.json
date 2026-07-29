@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-29T00:09:27.171Z",
+  "updated": "2026-07-29T00:15:16.636Z",
   "live": [
     {
       "id": 5,
@@ -9,6 +9,15 @@
       "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 28/07/2026",
       "videoUrl": "https://www.youtube.com/watch?v=jch1jhCs82w",
       "thumbnail": "https://i.ytimg.com/vi/jch1jhCs82w/hqdefault.jpg"
+    },
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "YWzXedMLPGA",
+      "videoTitle": "🟢 CANSEII... VOU VENDER TUDO",
+      "videoUrl": "https://www.youtube.com/watch?v=YWzXedMLPGA",
+      "thumbnail": "https://i.ytimg.com/vi/YWzXedMLPGA/hqdefault.jpg"
     },
     {
       "id": 9,
