@@ -1,6 +1,15 @@
 {
-  "updated": "2026-07-29T21:30:21.132Z",
+  "updated": "2026-07-29T21:45:18.922Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "6qbh1UQyZJU",
+      "videoTitle": "LIVE VENDAS GEEK 3D E MAIS 1* LIVE",
+      "videoUrl": "https://www.youtube.com/watch?v=6qbh1UQyZJU",
+      "thumbnail": "https://i.ytimg.com/vi/6qbh1UQyZJU/hqdefault.jpg"
+    },
     {
       "id": 12,
       "n": "VG Invest",
