@@ -164,12 +164,60 @@
     background: linear-gradient(180deg, #4cc93f 0%, #2f9e26 50%, #1f7a1a 100%);
     border-radius: 6px; font-weight:800; font-size:12px; flex-shrink:0;
     box-shadow: inset 0 1px 0 rgba(255,255,255,.5), 0 1px 3px rgba(0,0,0,.4);
+    cursor:pointer; user-select:none; border:none; font-family:inherit; color:#fff;
+  }
+  .y2k-start:hover{ filter:brightness(1.08); }
+  .y2k-start.active, .y2k-start:active{
+    box-shadow: inset 0 1px 3px rgba(0,0,0,.5); filter:brightness(.95);
   }
   .y2k-taskbar-sep{ flex:1; }
   .y2k-taskbar-clock{
     background: rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.15); border-radius:4px;
     padding: 5px 10px; font-variant-numeric: tabular-nums; flex-shrink:0;
   }
+  .y2k-tray{
+    display:flex; align-items:center; gap:6px;
+    background: rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.15); border-radius:4px;
+    padding: 3px 6px; flex-shrink:0;
+  }
+  .y2k-tray-icon{
+    display:flex; align-items:center; justify-content:center;
+    width:20px; height:20px; font-size:13px; border-radius:3px; cursor:pointer;
+    position:relative; border:none; background:transparent; padding:0;
+    transition: transform .15s;
+  }
+  .y2k-tray-icon:hover{ background: rgba(255,255,255,.18); }
+  .y2k-tray-icon.on{ background: rgba(120,220,150,.35); }
+  .y2k-tray-icon .y2k-tray-dot{
+    position:absolute; top:-1px; right:-1px; width:7px; height:7px; border-radius:50%;
+    background:#ff3b3b; box-shadow:0 0 4px 1px rgba(255,59,59,.9); display:none;
+  }
+  .y2k-tray-icon .y2k-tray-dot.show{ display:block; }
+  /* Menu Iniciar (popup estilo Windows) */
+  .y2k-start-menu{
+    display:none; position:fixed; left:6px; bottom:38px; z-index:90;
+    width:250px; max-height:70vh; overflow-y:auto;
+    background: linear-gradient(180deg, #eaf3ff 0%, #dcebff 100%);
+    border:1px solid #6cb0ff; border-radius:8px 8px 4px 4px;
+    box-shadow: 0 6px 24px rgba(0,20,60,.5), inset 0 1px 0 rgba(255,255,255,.7);
+    font-family:'Tahoma','Segoe UI',sans-serif; color:#123;
+    padding:6px;
+  }
+  .y2k-start-menu.open{ display:block; }
+  .y2k-start-menu-title{
+    font-size:10px; font-weight:700; color:#3a6ea5; text-transform:uppercase;
+    letter-spacing:.03em; padding:4px 8px 2px;
+  }
+  .y2k-start-menu button{
+    display:flex; align-items:center; gap:8px; width:100%;
+    background:transparent; border:none; border-radius:4px;
+    padding:7px 8px; font-size:12.5px; font-family:inherit; color:#123;
+    text-align:left; cursor:pointer;
+  }
+  .y2k-start-menu button:hover{
+    background: linear-gradient(180deg, #4f9df0 0%, #1e6fd9 100%); color:#fff;
+  }
+  .y2k-start-menu hr{ border:none; border-top:1px solid rgba(0,60,140,.15); margin:4px 2px; }
   .fx-rastro-neon{
     width:7px; height:7px; border-radius:2px;
     background:#39ff88; box-shadow:0 0 6px 2px rgba(57,255,136,.8);
@@ -1893,8 +1941,31 @@
 </div>
 <div id="crtOverlay"></div>
 <div class="y2k-taskbar">
-  <div class="y2k-start">🏁 <span>iniciar</span></div>
+  <button class="y2k-start" id="y2kStartBtn" aria-haspopup="true" aria-expanded="false" title="Menu Iniciar">🏁 <span>iniciar</span></button>
+  <div class="y2k-start-menu" id="y2kStartMenu" role="menu">
+    <div class="y2k-start-menu-title">Ir para</div>
+    <button data-y2k-action="cmdk">🔎 Busca rápida <span style="margin-left:auto;opacity:.6;font-size:10px;">Ctrl+K</span></button>
+    <button data-y2k-action="calendario">📅 Calendário de Lançamentos</button>
+    <button data-y2k-action="stats">📊 Estatísticas</button>
+    <button data-y2k-action="scanner">📷 Scanner de Código de Barras</button>
+    <button data-y2k-action="ferramentas">🛠️ Ferramentas</button>
+    <hr>
+    <button data-y2k-action="vitrine">🖼️ Modo Vitrine</button>
+    <button data-y2k-action="cartao">🎁 Cartão Resumo</button>
+    <hr>
+    <button data-y2k-action="canais">🛒 Vendedores, Lives e Leilões</button>
+    <button data-y2k-action="wishlist">🎯 Radar de Caça</button>
+    <button data-y2k-action="aovivo">📰 Notícias Gamer e Jogos Grátis</button>
+    <hr>
+    <button data-y2k-action="topo">⬆️ Voltar ao topo</button>
+  </div>
   <div class="y2k-taskbar-sep"></div>
+  <div class="y2k-tray">
+    <button class="y2k-tray-icon" id="y2kTraySom" title="Efeitos sonoros">🔇</button>
+    <button class="y2k-tray-icon" id="y2kTrayMascotes" title="Mascotes">👻</button>
+    <button class="y2k-tray-icon" id="y2kTrayCrt" title="Filtro CRT">📺</button>
+    <button class="y2k-tray-icon" id="y2kTrayLive" title="Nenhum canal ao vivo agora">📡<span class="y2k-tray-dot" id="y2kTrayLiveDot"></span></button>
+  </div>
   <div class="y2k-taskbar-clock" id="y2kClock">--:--</div>
 </div>
 <div id="liveBalloonWrap"></div>
@@ -5030,6 +5101,143 @@ function atualizarRelogioY2k(){
 }
 atualizarRelogioY2k();
 setInterval(atualizarRelogioY2k, 15000);
+
+// MENU INICIAR da barra de tarefas Y2K: popup com atalhos reais pras
+// funcoes que ja existem no site (nao inventa nada novo, so da acesso rapido).
+(function(){
+  const startBtn = document.getElementById('y2kStartBtn');
+  const menu = document.getElementById('y2kStartMenu');
+  if(!startBtn || !menu) return;
+
+  function abrirCard(cardId, gridId){
+    const card = document.getElementById(cardId);
+    if(!card) return;
+    const grid = gridId ? document.getElementById(gridId) : null;
+    const jaAberto = grid && grid.style.display !== 'none';
+    if(!jaAberto) card.click();
+    card.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  const acoes = {
+    cmdk: () => document.getElementById('cmdkOpenBtn') && document.getElementById('cmdkOpenBtn').click(),
+    calendario: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('calendarioPanelOverlay'),
+    stats: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('statsPanelOverlay'),
+    scanner: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('scannerPanelOverlay'),
+    ferramentas: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('toolsPanelOverlay'),
+    vitrine: () => document.getElementById('vitrineBtn') && document.getElementById('vitrineBtn').click(),
+    cartao: () => document.getElementById('cartaoResumoBtn') && document.getElementById('cartaoResumoBtn').click(),
+    canais: () => abrirCard('canaisToggleCard', 'gridCanais'),
+    wishlist: () => abrirCard('wishlistToggleCard', 'gridWishlist'),
+    aovivo: () => abrirCard('aovivoToggleCard', 'aovivoWrap'),
+    topo: () => window.scrollTo({ top:0, behavior:'smooth' })
+  };
+
+  function fecharMenu(){
+    menu.classList.remove('open');
+    startBtn.classList.remove('active');
+    startBtn.setAttribute('aria-expanded', 'false');
+  }
+  function abrirMenu(){
+    menu.classList.add('open');
+    startBtn.classList.add('active');
+    startBtn.setAttribute('aria-expanded', 'true');
+  }
+
+  startBtn.addEventListener('click', function(e){
+    e.stopPropagation();
+    if(menu.classList.contains('open')) fecharMenu(); else abrirMenu();
+  });
+  menu.addEventListener('click', function(e){
+    const btn = e.target.closest('button[data-y2k-action]');
+    if(!btn) return;
+    const acao = acoes[btn.getAttribute('data-y2k-action')];
+    if(acao) acao();
+    fecharMenu();
+  });
+  document.addEventListener('click', function(e){
+    if(menu.classList.contains('open') && !menu.contains(e.target) && e.target !== startBtn) fecharMenu();
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key === 'Escape') fecharMenu();
+  });
+})();
+
+// BANDEJA da barra de tarefas Y2K: icones que espelham estados reais ja
+// existentes no site (som, mascotes, CRT, canal ao vivo), clicaveis pra
+// alternar o mesmo estado que os botoes originais da barra superior.
+(function(){
+  const traySom = document.getElementById('y2kTraySom');
+  const trayMascotes = document.getElementById('y2kTrayMascotes');
+  const trayCrt = document.getElementById('y2kTrayCrt');
+  const trayLive = document.getElementById('y2kTrayLive');
+  const trayLiveDot = document.getElementById('y2kTrayLiveDot');
+
+  function sincronizarTray(){
+    const btnSom = document.getElementById('somBtn');
+    const btnCrt = document.getElementById('crtBtn');
+    const btnMascotes = document.getElementById('mascotesToggleBtn');
+    if(traySom && btnSom){
+      const ligado = btnSom.textContent.trim() === '🔊';
+      traySom.textContent = ligado ? '🔊' : '🔇';
+      traySom.classList.toggle('on', ligado);
+      traySom.title = btnSom.title;
+    }
+    if(trayCrt && btnCrt){
+      const ligado = document.body.classList.contains('crt-on');
+      trayCrt.classList.toggle('on', ligado);
+      trayCrt.title = btnCrt.title;
+    }
+    if(trayMascotes && btnMascotes){
+      const pausado = btnMascotes.textContent.trim() === '🚫';
+      trayMascotes.textContent = pausado ? '🚫' : '👻';
+      trayMascotes.classList.toggle('on', !pausado);
+      trayMascotes.title = btnMascotes.title;
+    }
+    if(trayLive && trayLiveDot){
+      const aoVivo = typeof canaisLiveAtual !== 'undefined' && canaisLiveAtual.length > 0;
+      trayLiveDot.classList.toggle('show', aoVivo);
+      trayLive.title = aoVivo
+        ? `${canaisLiveAtual.length} canal(is) ao vivo agora — clique pra ver`
+        : 'Nenhum canal ao vivo agora';
+    }
+  }
+
+  if(traySom) traySom.addEventListener('click', function(){
+    const btnSom = document.getElementById('somBtn');
+    if(btnSom) btnSom.click();
+    sincronizarTray();
+  });
+  if(trayCrt) trayCrt.addEventListener('click', function(){
+    const btnCrt = document.getElementById('crtBtn');
+    if(btnCrt) btnCrt.click();
+    sincronizarTray();
+  });
+  if(trayMascotes) trayMascotes.addEventListener('click', function(){
+    const btnMascotes = document.getElementById('mascotesToggleBtn');
+    if(btnMascotes) btnMascotes.click();
+    sincronizarTray();
+  });
+  if(trayLive) trayLive.addEventListener('click', function(){
+    const aoVivo = typeof canaisLiveAtual !== 'undefined' && canaisLiveAtual.length > 0;
+    if(aoVivo){
+      abrirCardOuScroll('canaisToggleCard', 'gridCanais');
+    }else{
+      // sem canal ao vivo agora: pequeno feedback visual (o title ja explica o motivo)
+      trayLive.style.transform = 'scale(1.25)';
+      setTimeout(() => { trayLive.style.transform = ''; }, 180);
+    }
+  });
+  function abrirCardOuScroll(cardId, gridId){
+    const card = document.getElementById(cardId);
+    if(!card) return;
+    const grid = document.getElementById(gridId);
+    if(grid && grid.style.display === 'none') card.click();
+    card.scrollIntoView({ behavior:'smooth', block:'start' });
+  }
+
+  sincronizarTray();
+  setInterval(sincronizarTray, 5000);
+})();
 
 // FILTRO CRT (scanlines/vinheta decorativos, nao mexe em nenhuma funcionalidade)
 const crtBtn = document.getElementById('crtBtn');
