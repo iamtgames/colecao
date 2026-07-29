@@ -104,7 +104,7 @@
     --skin-glow: rgba(80,170,255,.6);
   }
   .stat, .search-box input, .filters button, .toggle-venda,
-  .card, .top-controls-bar button, .side-dock a, .side-dock button{
+  .card, .top-controls-bar button{
     font-family: var(--skin-font);
     background-image: var(--skin-surface-bg);
     border: 1px solid var(--skin-border-color) !important;
@@ -121,7 +121,7 @@
   }
   .stat, .search-box input,
   .filters button, .toggle-venda,
-  .top-controls-bar button, .side-dock a, .side-dock button{
+  .top-controls-bar button{
     border-radius: 999px !important;
   }
   .card{
@@ -331,7 +331,7 @@
     background-attachment: fixed;
     color: var(--ink);
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    padding: 28px clamp(20px, 8vw, 96px) 128px clamp(16px, 4vw, 32px);
+    padding: 64px clamp(20px, 8vw, 96px) 128px clamp(16px, 4vw, 32px);
     position: relative;
   }
   /* Papel de parede "colina verde + ceu azul" (o famoso Bliss do Windows XP) --
@@ -945,7 +945,7 @@
   /* BARRA SUPERIOR: controles de tema/paleta/skin retro/crt (tirados da
      barra lateral a pedido, pra ficar mais visivel logo no topo do site) */
   .top-controls-bar{
-    position: sticky; top:0; z-index: 65;
+    position: fixed; top:0; left:0; right:0; width:100%; z-index: 65;
     display:flex; align-items:center; justify-content:flex-end; gap:8px;
     padding: 8px 20px; background: var(--overlay-glass); backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--line-soft);
@@ -962,35 +962,6 @@
     .top-controls-bar{ padding:6px 10px; gap:6px; justify-content:center; }
     .top-controls-bar button{ width:30px; height:30px; font-size:13px; }
   }
-
-  /* BARRA LATERAL FLUTUANTE */
-  .side-dock{
-    position: fixed; right: 22px; top: 50%; transform: translateY(-50%);
-    display:flex; flex-direction:column; align-items:center; gap:14px;
-    background: rgba(19,19,20,0.75);
-    backdrop-filter: blur(14px);
-    border: 1px solid var(--line);
-    border-radius: 24px;
-    padding: 18px 12px;
-    z-index: 50;
-  }
-  .side-dock a, .side-dock button{
-    width:40px; height:40px; border-radius:50%;
-    display:flex; align-items:center; justify-content:center;
-    background: var(--bg-card); border:1px solid var(--line);
-    color: var(--ink); text-decoration:none; font-size:17px;
-    transition: .2s; cursor:pointer;
-  }
-  .side-dock a:hover, .side-dock button:hover{background:var(--white); color:var(--bg-inverse); border-color:var(--white); transform: scale(1.08);}
-  .side-dock .divider{width:26px; height:1px; background:var(--line); margin: 2px 0;}
-  .side-dock .sell{
-    width:auto; height:auto; border-radius:14px; padding: 10px 8px;
-    display:flex; flex-direction:column; align-items:center; gap:3px;
-    font-size:9.5px; font-weight:700; letter-spacing:.3px; text-align:center; line-height:1.2;
-    background: #8f12e0; color:#ffffff; border-color:#8f12e0;
-  }
-  .side-dock .sell:hover{background:#a233f0; border-color:#a233f0;}
-  .side-dock .sell .ico{font-size:16px;}
 
   /* MODAL FRENTE/VERSO */
   .modal-overlay{
@@ -1148,7 +1119,7 @@
   #printArea{display:none;}
 
   @media print{
-    body::before, .side-dock, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay, .top-controls-bar, #crtOverlay{
+    body::before, .y2k-taskbar, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay, .top-controls-bar, #crtOverlay{
       display:none !important;
     }
     body{background:#fff !important; padding:0; color:#111;}
@@ -1284,7 +1255,7 @@
     .modal-img-col{width:100%;}
     .grid.list-view .card{flex-direction:column; align-items:stretch;}
     .grid.list-view .cover-wrap{width:100%; height:auto; aspect-ratio:3/4;}
-    body{padding: 22px 16px 100px;}
+    body{padding: 64px 16px 100px;}
     .topbar{flex-direction:column; align-items:flex-start; gap:14px;}
     .stat-row{width:100%; gap:8px;}
     .stat{flex:1; min-width: 0; padding:9px 12px;}
@@ -1293,18 +1264,7 @@
     .grid{grid-template-columns: repeat(auto-fill, minmax(190px,1fr)); gap:14px;}
     .card-body h3{font-size:12.5px; min-height:32px;}
     .prices .v{font-size:12.5px;}
-    .side-dock{
-      right: 50%; top:auto; bottom:14px; transform: translateX(50%);
-      flex-direction:row; border-radius:20px; padding:8px 10px;
-      max-width: calc(100vw - 24px); overflow-x:auto; -webkit-overflow-scrolling:touch;
-      scrollbar-width: none;
-    }
-    .side-dock::-webkit-scrollbar{display:none;}
-    .side-dock .divider{width:1px; height:22px; margin:0 4px; flex-shrink:0;}
-    .side-dock a, .side-dock button{width:34px; height:34px; font-size:14px; flex-shrink:0;}
-    .side-dock .sell{flex-shrink:0;}
     #wishlistPager{flex-wrap:wrap; gap:10px !important;}
-    body{padding-bottom: 116px;}
   }
   @media (max-width: 480px){
     .topbar h1{font-size:24px;}
@@ -1313,9 +1273,6 @@
     .grid{grid-template-columns: repeat(auto-fill, minmax(150px,1fr)); gap:10px;}
     .filters button{padding:7px 12px; font-size:11px;}
     .search-box input{font-size:13px; padding:10px 14px 10px 36px;}
-    .side-dock a, .side-dock button{width:32px; height:32px; font-size:13px;}
-    .side-dock .sell span:last-child{display:none;}
-    .side-dock .sell{padding:8px;}
     .toggle-venda{font-size:11.5px; padding:9px 12px;}
     #wishlistPageInfo{font-size:11.5px !important;}
   }
@@ -1935,11 +1892,12 @@
 <div class="top-controls-bar" id="topControlsBar">
   <button id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
   <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
-  <button id="crtBtn" title="Filtro CRT: desligado — clique para ligar" aria-label="Alternar filtro CRT">📺</button>
-  <button id="mascotesToggleBtn" title="Mascotes: ativos — clique para pausar" aria-label="Pausar ou ativar os mascotes do site">👻</button>
-  <button id="somBtn" title="Efeitos sonoros: desligados — clique para ligar" aria-label="Ligar ou desligar efeitos sonoros">🔇</button>
 </div>
 <div id="crtOverlay"></div>
+<!-- Gatilhos escondidos: nao aparecem mais soltos na tela, sao acionados
+     pelos itens do menu Iniciar da barra de tarefas Y2K la embaixo. -->
+<button id="contatoBtn" style="display:none;" aria-hidden="true" tabindex="-1"></button>
+<button id="adminBtn" style="display:none;" aria-hidden="true" tabindex="-1">🛠️</button>
 <div class="y2k-taskbar">
   <button class="y2k-start" id="y2kStartBtn" aria-haspopup="true" aria-expanded="false" title="Menu Iniciar">🏁 <span>iniciar</span></button>
   <div class="y2k-start-menu" id="y2kStartMenu" role="menu">
@@ -1957,6 +1915,13 @@
     <button data-y2k-action="wishlist">🎯 Radar de Caça</button>
     <button data-y2k-action="aovivo">📰 Notícias Gamer e Jogos Grátis</button>
     <hr>
+    <div class="y2k-start-menu-title">Redes e contato</div>
+    <button data-y2k-action="instaPessoal">👤 Instagram pessoal</button>
+    <button data-y2k-action="instaColecao">📸 Instagram da coleção</button>
+    <button data-y2k-action="contato">✉️ Sugestão / parceria</button>
+    <button data-y2k-action="olx">🏷️ Perfil de vendas (OLX)</button>
+    <button data-y2k-action="admin" id="y2kMenuAdmin" style="display:none;">🛠️ Painel de admin</button>
+    <hr>
     <button data-y2k-action="topo">⬆️ Voltar ao topo</button>
   </div>
   <div class="y2k-taskbar-sep"></div>
@@ -1970,17 +1935,6 @@
 </div>
 <div id="liveBalloonWrap"></div>
 <div id="livePanelsContainer"></div>
-<div class="side-dock">
-  <a href="https://www.instagram.com/marioturbino/" target="_blank" rel="noopener noreferrer" title="Instagram pessoal" aria-label="Abrir Instagram pessoal">👤</a>
-  <a href="https://www.instagram.com/iamtgames/" target="_blank" rel="noopener noreferrer" title="Instagram da coleção" aria-label="Abrir Instagram da coleção">📸</a>
-  <div class="divider"></div>
-  <button id="contatoBtn" title="Enviar sugestão / parceria" aria-label="Enviar sugestão ou parceria">✉️</button>
-  <button id="adminBtn" title="Painel de admin" style="display:none;" aria-label="Abrir painel de admin">🛠️</button>
-  <a class="sell" href="https://www.olx.com.br/perfil/mario-t-34b3680f" target="_blank" rel="noopener noreferrer" title="Perfil de vendas OLX">
-    <span class="ico">🏷️</span>
-    <span>OLX</span>
-  </a>
-</div>
 
 <div class="wrap">
 
@@ -5129,6 +5083,11 @@ setInterval(atualizarRelogioY2k, 15000);
     canais: () => abrirCard('canaisToggleCard', 'gridCanais'),
     wishlist: () => abrirCard('wishlistToggleCard', 'gridWishlist'),
     aovivo: () => abrirCard('aovivoToggleCard', 'aovivoWrap'),
+    instaPessoal: () => window.open('https://www.instagram.com/marioturbino/', '_blank', 'noopener,noreferrer'),
+    instaColecao: () => window.open('https://www.instagram.com/iamtgames/', '_blank', 'noopener,noreferrer'),
+    contato: () => document.getElementById('contatoBtn') && document.getElementById('contatoBtn').click(),
+    olx: () => window.open('https://www.olx.com.br/perfil/mario-t-34b3680f', '_blank', 'noopener,noreferrer'),
+    admin: () => document.getElementById('adminBtn') && document.getElementById('adminBtn').click(),
     topo: () => window.scrollTo({ top:0, behavior:'smooth' })
   };
 
@@ -5162,92 +5121,53 @@ setInterval(atualizarRelogioY2k, 15000);
   });
 })();
 
-// BANDEJA da barra de tarefas Y2K: icones que espelham estados reais ja
-// existentes no site (som, mascotes, CRT, canal ao vivo), clicaveis pra
-// alternar o mesmo estado que os botoes originais da barra superior.
+// BANDEJA da barra de tarefas Y2K: indicador de canal ao vivo (le o mesmo
+// canaisLiveAtual que alimenta o selo AO VIVO dos canais, sem inventar estado).
 (function(){
-  const traySom = document.getElementById('y2kTraySom');
-  const trayMascotes = document.getElementById('y2kTrayMascotes');
-  const trayCrt = document.getElementById('y2kTrayCrt');
   const trayLive = document.getElementById('y2kTrayLive');
   const trayLiveDot = document.getElementById('y2kTrayLiveDot');
+  if(!trayLive || !trayLiveDot) return;
 
-  function sincronizarTray(){
-    const btnSom = document.getElementById('somBtn');
-    const btnCrt = document.getElementById('crtBtn');
-    const btnMascotes = document.getElementById('mascotesToggleBtn');
-    if(traySom && btnSom){
-      const ligado = btnSom.textContent.trim() === '🔊';
-      traySom.textContent = ligado ? '🔊' : '🔇';
-      traySom.classList.toggle('on', ligado);
-      traySom.title = btnSom.title;
-    }
-    if(trayCrt && btnCrt){
-      const ligado = document.body.classList.contains('crt-on');
-      trayCrt.classList.toggle('on', ligado);
-      trayCrt.title = btnCrt.title;
-    }
-    if(trayMascotes && btnMascotes){
-      const pausado = btnMascotes.textContent.trim() === '🚫';
-      trayMascotes.textContent = pausado ? '🚫' : '👻';
-      trayMascotes.classList.toggle('on', !pausado);
-      trayMascotes.title = btnMascotes.title;
-    }
-    if(trayLive && trayLiveDot){
-      const aoVivo = typeof canaisLiveAtual !== 'undefined' && canaisLiveAtual.length > 0;
-      trayLiveDot.classList.toggle('show', aoVivo);
-      trayLive.title = aoVivo
-        ? `${canaisLiveAtual.length} canal(is) ao vivo agora — clique pra ver`
-        : 'Nenhum canal ao vivo agora';
-    }
+  function sincronizarTrayLive(){
+    const aoVivo = typeof canaisLiveAtual !== 'undefined' && canaisLiveAtual.length > 0;
+    trayLiveDot.classList.toggle('show', aoVivo);
+    trayLive.title = aoVivo
+      ? `${canaisLiveAtual.length} canal(is) ao vivo agora — clique pra ver`
+      : 'Nenhum canal ao vivo agora';
   }
 
-  if(traySom) traySom.addEventListener('click', function(){
-    const btnSom = document.getElementById('somBtn');
-    if(btnSom) btnSom.click();
-    sincronizarTray();
-  });
-  if(trayCrt) trayCrt.addEventListener('click', function(){
-    const btnCrt = document.getElementById('crtBtn');
-    if(btnCrt) btnCrt.click();
-    sincronizarTray();
-  });
-  if(trayMascotes) trayMascotes.addEventListener('click', function(){
-    const btnMascotes = document.getElementById('mascotesToggleBtn');
-    if(btnMascotes) btnMascotes.click();
-    sincronizarTray();
-  });
-  if(trayLive) trayLive.addEventListener('click', function(){
+  trayLive.addEventListener('click', function(){
     const aoVivo = typeof canaisLiveAtual !== 'undefined' && canaisLiveAtual.length > 0;
     if(aoVivo){
-      abrirCardOuScroll('canaisToggleCard', 'gridCanais');
+      const card = document.getElementById('canaisToggleCard');
+      const grid = document.getElementById('gridCanais');
+      if(card){
+        if(grid && grid.style.display === 'none') card.click();
+        card.scrollIntoView({ behavior:'smooth', block:'start' });
+      }
     }else{
       // sem canal ao vivo agora: pequeno feedback visual (o title ja explica o motivo)
       trayLive.style.transform = 'scale(1.25)';
       setTimeout(() => { trayLive.style.transform = ''; }, 180);
     }
   });
-  function abrirCardOuScroll(cardId, gridId){
-    const card = document.getElementById(cardId);
-    if(!card) return;
-    const grid = document.getElementById(gridId);
-    if(grid && grid.style.display === 'none') card.click();
-    card.scrollIntoView({ behavior:'smooth', block:'start' });
-  }
 
-  sincronizarTray();
-  setInterval(sincronizarTray, 5000);
+  sincronizarTrayLive();
+  setInterval(sincronizarTrayLive, 5000);
 })();
 
 // FILTRO CRT (scanlines/vinheta decorativos, nao mexe em nenhuma funcionalidade)
-const crtBtn = document.getElementById('crtBtn');
+// -- agora controlado direto pelo icone da bandeja da barra de tarefas Y2K.
+const crtBtn = document.getElementById('y2kTrayCrt');
 function aplicarCrt(ligado){
   document.body.classList.toggle('crt-on', ligado);
-  crtBtn.classList.toggle('ativo', ligado);
-  crtBtn.title = ligado ? 'Filtro CRT: ligado — clique para desligar' : 'Filtro CRT: desligado — clique para ligar';
+  if(crtBtn){
+    crtBtn.classList.toggle('on', ligado);
+    crtBtn.title = ligado ? 'Filtro CRT: ligado — clique para desligar' : 'Filtro CRT: desligado — clique para ligar';
+  }
 }
 aplicarCrt(localStorage.getItem('crt_ps4') === 'on');
-crtBtn.addEventListener('click', function(){
+if(crtBtn) crtBtn.addEventListener('click', function(){
   const ligado = !document.body.classList.contains('crt-on');
   localStorage.setItem('crt_ps4', ligado ? 'on' : 'off');
   aplicarCrt(ligado);
@@ -5278,13 +5198,16 @@ function tocarSom(tipo){
     osc.stop(agora + 0.15);
   }catch(e){}
 }
-const somBtn = document.getElementById('somBtn');
+// -- agora controlado direto pelo icone da bandeja da barra de tarefas Y2K.
+const somBtn = document.getElementById('y2kTraySom');
 function atualizarBotaoSom(){
+  if(!somBtn) return;
   somBtn.textContent = somAtivo ? '🔊' : '🔇';
+  somBtn.classList.toggle('on', somAtivo);
   somBtn.title = somAtivo ? 'Efeitos sonoros: ligados — clique para desligar' : 'Efeitos sonoros: desligados — clique para ligar';
 }
 atualizarBotaoSom();
-somBtn.addEventListener('click', function(){
+if(somBtn) somBtn.addEventListener('click', function(){
   somAtivo = !somAtivo;
   localStorage.setItem('sons_ps4', somAtivo ? '1' : '0');
   atualizarBotaoSom();
@@ -5477,6 +5400,8 @@ function renderAdminLista(){
 
 if(ehAdmin()){
   document.getElementById('adminBtn').style.display = 'flex';
+  const menuAdmin = document.getElementById('y2kMenuAdmin');
+  if(menuAdmin) menuAdmin.style.display = 'flex';
 }
 
 document.getElementById('adminBtn')?.addEventListener('click', function(){
@@ -7435,7 +7360,7 @@ idiomaBtn.addEventListener('click', function(){
       pousaveis.push({ left:r.left, right:r.right, y:r.top, el:el, kind:kind });
       solidos.push(r);
     });
-    Array.prototype.forEach.call(document.querySelectorAll('.top-controls-bar button, .side-dock a, .side-dock button, .filters button'), function(el){
+    Array.prototype.forEach.call(document.querySelectorAll('.top-controls-bar button, .y2k-start, .y2k-tray-icon, .filters button'), function(el){
       var r = ver(el); if(!r) return;
       pousaveis.push({ left:r.left, right:r.right, y:r.top, el:el, kind:'botao' });
     });
@@ -7946,10 +7871,11 @@ idiomaBtn.addEventListener('click', function(){
       // Botao pra pausar/ativar os mascotes de vez -- diferente do
       // reduzido (que e automatico do sistema operacional), essa e uma
       // escolha manual da pessoa, e fica salva pra proxima visita.
-      var mascotesBtn = document.getElementById('mascotesToggleBtn');
+      var mascotesBtn = document.getElementById('y2kTrayMascotes');
       if(mascotesBtn){
         function atualizarBotaoMascotes(){
           mascotesBtn.textContent = mascotesPausados ? '🚫' : '👻';
+          mascotesBtn.classList.toggle('on', !mascotesPausados);
           mascotesBtn.title = mascotesPausados
             ? 'Mascotes: pausados — clique para ativar'
             : 'Mascotes: ativos — clique para pausar';
