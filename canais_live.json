@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-29T23:30:17.056Z",
+  "updated": "2026-07-29T23:45:20.798Z",
   "live": [
     {
       "id": 2,
@@ -9,6 +9,15 @@
       "videoTitle": "LIVE VENDAS GEEK 3D E MAIS 1* LIVE",
       "videoUrl": "https://www.youtube.com/watch?v=6qbh1UQyZJU",
       "thumbnail": "https://i.ytimg.com/vi/6qbh1UQyZJU/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilo /  Arc raiders",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
