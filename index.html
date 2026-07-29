@@ -2,11 +2,12 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="description" content="Controle Coleção iamT — catálogo pessoal de jogos PS4 e PS3 com preços, capas e raridade.">
 <meta name="keywords" content="coleção de jogos PS4, coleção de jogos PS3, catálogo de jogos físicos, colecionador de jogos, coleção iamT">
 <meta name="robots" content="index, follow">
 <meta name="author" content="iamT">
+<meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="canonical" href="https://iamtgames.github.io/colecao/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Controle Coleção iamT">
@@ -56,6 +57,11 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Russo+One&family=Space+Grotesk:wght@500;700;800&family=Rajdhani:wght@500;600;700&family=M+PLUS+Rounded+1c:wght@500;700;800&family=Special+Elite&display=swap" rel="stylesheet">
+<!-- Aquece a conexao com origens externas usadas depois na pagina (avatares
+     dos canais e o widget de comentarios), sem bloquear o carregamento inicial. -->
+<link rel="preconnect" href="https://unavatar.io" crossorigin>
+<link rel="dns-prefetch" href="https://unavatar.io">
+<link rel="dns-prefetch" href="https://giscus.app">
 <style>
   :root{
     --bg: #0b0b0c;
@@ -151,14 +157,21 @@
     background-repeat: no-repeat;
   }
   /* barra de tarefas fixa no rodape (agora sempre visivel, ja que e o unico design) */
-  #livePanelsContainer{ bottom: 52px; }
+  #livePanelsContainer{ bottom: calc(52px + env(safe-area-inset-bottom, 0px)); }
   .y2k-taskbar{
     display:flex; position:fixed; left:0; right:0; bottom:0; z-index:80;
-    height:34px; align-items:center; gap:10px; padding:0 8px;
+    height: calc(34px + env(safe-area-inset-bottom, 0px));
+    align-items:center; gap:10px; padding:0 8px;
+    padding-bottom: env(safe-area-inset-bottom, 0px);
     background: linear-gradient(180deg, #2a7bdc 0%, #1557b0 55%, #0d3f8a 100%);
     border-top: 1px solid #6cb0ff; box-shadow: 0 -2px 10px rgba(0,0,0,.45);
     font-family: 'Tahoma','Segoe UI',sans-serif; font-size:11px; color:#fff;
+    /* em telas estreitas o conteudo pode nao caber todo -- em vez de cortar
+       ou espremer os icones, deixa rolar na horizontal (mesmo padrao usado
+       antes na side-dock mobile), sem quebrar o layout. */
+    overflow-x:auto; overflow-y:hidden; -webkit-overflow-scrolling:touch; scrollbar-width:none;
   }
+  .y2k-taskbar::-webkit-scrollbar{ display:none; }
   .y2k-start{
     display:flex; align-items:center; gap:5px; height:26px; padding:0 12px 0 8px;
     background: linear-gradient(180deg, #4cc93f 0%, #2f9e26 50%, #1f7a1a 100%);
@@ -176,15 +189,16 @@
     padding: 5px 10px; font-variant-numeric: tabular-nums; flex-shrink:0;
   }
   .y2k-tray{
-    display:flex; align-items:center; gap:6px;
+    display:flex; align-items:center; gap:4px;
     background: rgba(0,0,0,.18); border:1px solid rgba(255,255,255,.15); border-radius:4px;
-    padding: 3px 6px; flex-shrink:0;
+    padding: 2px 4px; flex-shrink:0;
   }
   .y2k-tray-icon{
     display:flex; align-items:center; justify-content:center;
-    width:20px; height:20px; font-size:13px; border-radius:3px; cursor:pointer;
+    width:26px; height:26px; font-size:13px; border-radius:3px; cursor:pointer;
     position:relative; border:none; background:transparent; padding:0;
     transition: transform .15s;
+    -webkit-tap-highlight-color: transparent;
   }
   .y2k-tray-icon:hover{ background: rgba(255,255,255,.18); }
   .y2k-tray-icon.on{ background: rgba(120,220,150,.35); }
@@ -195,7 +209,7 @@
   .y2k-tray-icon .y2k-tray-dot.show{ display:block; }
   /* Menu Iniciar (popup estilo Windows) */
   .y2k-start-menu{
-    display:none; position:fixed; left:6px; bottom:38px; z-index:90;
+    display:none; position:fixed; left:6px; bottom: calc(38px + env(safe-area-inset-bottom, 0px)); z-index:90;
     width:250px; max-height:70vh; overflow-y:auto;
     background: linear-gradient(180deg, #eaf3ff 0%, #dcebff 100%);
     border:1px solid #6cb0ff; border-radius:8px 8px 4px 4px;
@@ -331,7 +345,7 @@
     background-attachment: fixed;
     color: var(--ink);
     font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-    padding: 64px clamp(20px, 8vw, 96px) 128px clamp(16px, 4vw, 32px);
+    padding: 64px clamp(20px, 8vw, 96px) calc(128px + env(safe-area-inset-bottom, 0px)) clamp(16px, 4vw, 32px);
     position: relative;
   }
   /* Papel de parede "colina verde + ceu azul" (o famoso Bliss do Windows XP) --
@@ -957,7 +971,6 @@
     color: var(--ink); font-size:15px; cursor:pointer; transition:.2s;
   }
   .top-controls-bar button:hover{ background: var(--white); color:var(--bg-inverse); transform: scale(1.08); }
-  .top-controls-bar button.ativo{ background: var(--tema-accent, #2f8dff); color:#fff; border-color: var(--tema-accent, #2f8dff); }
   @media (max-width: 480px){
     .top-controls-bar{ padding:6px 10px; gap:6px; justify-content:center; }
     .top-controls-bar button{ width:30px; height:30px; font-size:13px; }
@@ -1240,7 +1253,7 @@
   .grid.list-view .card-foot{margin-top:0;}
 
   #topBtn{
-    position: fixed; bottom: 24px; left: 24px; z-index: 45;
+    position: fixed; bottom: calc(44px + env(safe-area-inset-bottom, 0px)); left: 24px; z-index: 45;
     width:44px; height:44px; border-radius:50%;
     background: var(--bg-card); border:1px solid var(--line); color:var(--ink);
     font-size:18px; cursor:pointer; display:flex; align-items:center; justify-content:center;
@@ -1255,7 +1268,7 @@
     .modal-img-col{width:100%;}
     .grid.list-view .card{flex-direction:column; align-items:stretch;}
     .grid.list-view .cover-wrap{width:100%; height:auto; aspect-ratio:3/4;}
-    body{padding: 64px 16px 100px;}
+    body{padding: 64px 16px calc(100px + env(safe-area-inset-bottom, 0px));}
     .topbar{flex-direction:column; align-items:flex-start; gap:14px;}
     .stat-row{width:100%; gap:8px;}
     .stat{flex:1; min-width: 0; padding:9px 12px;}
@@ -1275,6 +1288,13 @@
     .search-box input{font-size:13px; padding:10px 14px 10px 36px;}
     .toggle-venda{font-size:11.5px; padding:9px 12px;}
     #wishlistPageInfo{font-size:11.5px !important;}
+    /* Barra de tarefas Y2K em tela pequena: encolhe o texto do Iniciar (mantem
+       a bandeira, que ja identifica o botao) e aperta os espacamentos pra
+       sobrar mais lugar pros icones da bandeja sem precisar rolar. */
+    .y2k-start span{ display:none; }
+    .y2k-start{ padding:0 10px 0 8px; }
+    .y2k-taskbar{ gap:6px; padding:0 6px; }
+    .y2k-taskbar-clock{ font-size:10px; padding:5px 7px; }
   }
 
   /* ===== Mascotes autonomos (Fantasminha 8-bit + Xiaoxiao) =====
@@ -3086,10 +3106,14 @@ function render(){
 
     const isFav = favoritos.includes(j.id) ? 'active' : '';
     const isComparando = comparando.includes(j.id) ? 'active' : '';
-    const capaUrl = capas[j.id];
-    const inicial = j.n.charAt(0).toUpperCase();
+    // capas[j.id] pode vir de um jogo adicionado via painel de admin (texto livre
+    // digitado a mao) -- escapamos antes de jogar em innerHTML pra nao permitir
+    // que uma URL de capa colada sem cuidado quebre o atributo/injete HTML.
+    const capaUrl = escapeHtml(capas[j.id] || '');
+    const nomeSeguro = escapeHtml(j.n);
+    const inicial = escapeHtml(j.n.charAt(0).toUpperCase());
     const coverInner = capaUrl
-      ? `<img src="${capaUrl}" alt="${j.n}" loading="lazy" onload="this.parentElement.classList.remove('carregando-capa')" onerror="this.parentElement.classList.remove('carregando-capa'); this.parentElement.innerHTML='<div class=\\'cover-fallback\\'><span class=\\'ini\\'>${inicial}</span><span class=\\'tag\\'>capa indisponível</span></div>'">`
+      ? `<img src="${capaUrl}" alt="${nomeSeguro}" loading="lazy" onload="this.parentElement.classList.remove('carregando-capa')" onerror="this.parentElement.classList.remove('carregando-capa'); this.parentElement.innerHTML='<div class=\\'cover-fallback\\'><span class=\\'ini\\'>${inicial}</span><span class=\\'tag\\'>capa indisponível</span></div>'">`
       : `<div class="cover-fallback"><span class="ini">${inicial}</span><span class="tag">sem capa ainda</span></div>`;
     const valorPago = Math.round((j.col + j.bar) / 2);
 
@@ -3097,13 +3121,13 @@ function render(){
       <div class="card">
         <div class="cover-wrap${capaUrl ? ' carregando-capa' : ''}" data-open-id="${j.id}">
           <span class="plat-chip">${j.plat}</span>
-          <button class="fav-btn ${isFav}" data-id="${j.id}" aria-label="${t('favoritarTitle')} ${j.n}">⭐</button>
-          <button class="compare-btn ${isComparando}" data-id="${j.id}" title="${t('compararTitle')}" aria-label="${t('compararTitle')} ${j.n}">⚖️</button>
-          <button class="narrar-card-btn" data-id="${j.id}" title="${t('ouvirCardTitle')}" aria-label="${t('ouvirCardTitle')} ${j.n}">🔊</button>
+          <button class="fav-btn ${isFav}" data-id="${j.id}" aria-label="${t('favoritarTitle')} ${nomeSeguro}">⭐</button>
+          <button class="compare-btn ${isComparando}" data-id="${j.id}" title="${t('compararTitle')}" aria-label="${t('compararTitle')} ${nomeSeguro}">⚖️</button>
+          <button class="narrar-card-btn" data-id="${j.id}" title="${t('ouvirCardTitle')}" aria-label="${t('ouvirCardTitle')} ${nomeSeguro}">🔊</button>
           ${coverInner}
         </div>
         <div class="card-body">
-          <h3>${j.n}</h3>
+          <h3>${nomeSeguro}</h3>
           <div class="badges">
             <span class="badge ${rarClass[j.rar]}">${rarL(j.rar)}</span>
             <span class="badge b-pouco">${catL(j.cat)}</span>
@@ -4743,9 +4767,10 @@ function renderWishlist(){
     : `${wishlist.length} jogos indicados (${ps4Count} PS4 / ${ps3Count} PS3) — 10 por vez`;
   let html = '';
   pageItems.forEach(w => {
-    const inicial = w.n.charAt(0).toUpperCase();
+    const nomeSeguro = escapeHtml(w.n);
+    const inicial = escapeHtml(w.n.charAt(0).toUpperCase());
     const coverInner = w.capa
-      ? `<img src="${w.capa}" alt="${w.n}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'cover-fallback\'><span class=\'ini\'>${inicial}</span><span class=\'tag\'>capa indisponível</span></div>'">`
+      ? `<img src="${escapeHtml(w.capa)}" alt="${nomeSeguro}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'cover-fallback\'><span class=\'ini\'>${inicial}</span><span class=\'tag\'>capa indisponível</span></div>'">`
       : `<div class="cover-fallback"><span class="ini">${inicial}</span><span class="tag">desejado</span></div>`;
     const infoPreco = precosWishlistAtual[`${w.n}|${w.plat}`];
     const precoBloco = infoPreco
@@ -4762,9 +4787,9 @@ function renderWishlist(){
           ${coverInner}
         </div>
         <div class="card-body">
-          <h3>${w.n}</h3>
+          <h3>${nomeSeguro}</h3>
           <div class="badges"><span class="badge b-pouco">${t('desejado')}</span></div>
-          ${w.motivo ? `<p class="modal-extra" style="margin:0;">${w.motivo}</p>` : ''}
+          ${w.motivo ? `<p class="modal-extra" style="margin:0;">${escapeHtml(w.motivo)}</p>` : ''}
           ${precoBloco}
           <div class="card-foot">
             <a href="${gerarLink(w.n, w.plat)}" target="_blank" rel="noopener noreferrer">${t('verMercadoLivre')}</a>
@@ -4958,7 +4983,7 @@ document.getElementById('imprimirBtn').addEventListener('click', function(){
     for(const j of lista){
       const valorPago = Math.round((j.col + j.bar) / 2);
       html += `<tr>
-        <td>${j.n}</td>
+        <td>${escapeHtml(j.n)}</td>
         <td>${catLabel[j.cat]}</td>
         <td><span class="print-rar">${rarLabel[j.rar]}</span></td>
         <td>R$ ${valorPago}</td>
@@ -4976,9 +5001,9 @@ document.getElementById('imprimirBtn').addEventListener('click', function(){
     </tr></thead><tbody>`;
     for(const w of wishlist.slice().sort((a,b)=>a.n.localeCompare(b.n))){
       html += `<tr>
-        <td>${w.n}</td>
+        <td>${escapeHtml(w.n)}</td>
         <td>${w.plat}</td>
-        <td style="font-size:10px;">${w.motivo || ''}</td>
+        <td style="font-size:10px;">${escapeHtml(w.motivo || '')}</td>
       </tr>`;
     }
     html += `</tbody></table>`;
@@ -5253,7 +5278,7 @@ document.getElementById('compararToggle').addEventListener('click', function(){
     const selecionados = todosJogos().filter(j => comparando.includes(j.id));
     let html = '<table class="compare-table"><thead><tr><th>Jogo</th><th>Plataforma</th><th>Raridade</th><th>Valor pago</th></tr></thead><tbody>';
     for(const j of selecionados){
-      html += `<tr><td>${j.n}</td><td>${j.plat}</td><td>${rarLabel[j.rar]}</td><td>R$ ${Math.round((j.col+j.bar)/2)}</td></tr>`;
+      html += `<tr><td>${escapeHtml(j.n)}</td><td>${j.plat}</td><td>${rarLabel[j.rar]}</td><td>R$ ${Math.round((j.col+j.bar)/2)}</td></tr>`;
     }
     html += '</tbody></table>';
     content.innerHTML = html;
@@ -5381,7 +5406,7 @@ function renderAdminLista(){
   let html = '<p class="modal-extra" style="margin-bottom:8px;">Jogos adicionados neste navegador:</p>';
   jogosExtra.forEach(j=>{
     html += `<div style="display:flex; justify-content:space-between; align-items:center; padding:6px 0; border-bottom:1px solid var(--line-soft); font-size:12px;">
-      <span>${j.n} (${j.plat})</span>
+      <span>${escapeHtml(j.n)} (${escapeHtml(j.plat)})</span>
       <button data-remove-id="${j.id}" class="modal-close" style="position:static; width:24px; height:24px; font-size:11px;">✕</button>
     </div>`;
   });
@@ -7971,6 +7996,7 @@ idiomaBtn.addEventListener('click', function(){
   data-input-position="bottom"
   data-theme="dark_dimmed"
   data-lang="pt"
+  data-loading="lazy"
   crossorigin="anonymous"
   async>
 </script>
