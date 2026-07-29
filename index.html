@@ -3084,9 +3084,6 @@ function render(){
             <span class="badge b-pouco">${catL(j.cat)}</span>
             ${j.v ? `<span class="badge" style="background:rgba(79,178,134,.2);color:#4fb286;">${t('precoVerificado')}</span>` : `<span class="badge" style="background:rgba(255,255,255,.06);color:var(--ink-dim);">${t('precoConfirmar')}</span>`}
           </div>
-          <div class="prices">
-            <div><span class="l">${t('valorPago')}</span><span class="v">R$ ${valorPago}</span></div>
-          </div>
           <div class="card-foot">
             <a href="${gerarLink(j.n, j.plat)}" target="_blank" rel="noopener noreferrer">${t('verMercadoLivre')}</a>
           </div>
