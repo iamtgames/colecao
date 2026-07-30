@@ -1,4 +1,14 @@
 {
-  "updated": "2026-07-30T21:30:21.566Z",
-  "live": []
+  "updated": "2026-07-30T21:45:25.189Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "g1yU9AueTkk",
+      "videoTitle": "🟢 (ao vivo) VENDAS +2 mil jogos",
+      "videoUrl": "https://www.youtube.com/watch?v=g1yU9AueTkk",
+      "thumbnail": "https://i.ytimg.com/vi/g1yU9AueTkk/hqdefault.jpg"
+    }
+  ]
 }
