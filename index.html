@@ -8834,7 +8834,7 @@ async function iniciarMascote3D(){
     var reduzido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     var BASE = './mascote3d/';
-    var ALTURA_PX = 75; // altura do personagem na tela, em pixels CSS (metade do tamanho original)
+    var ALTURA_PX = 115; // altura do personagem na tela, em pixels CSS (menor que o original de 150, mas visivel -- 75 ficou fino demais de perfil e sumia no fundo)
 
     var acoes = {};
     var mixer = null, personagem = null, acaoAtual = null;
@@ -8913,7 +8913,7 @@ async function iniciarMascote3D(){
       mixer = new THREE.AnimationMixer(modeloInterno);
       mixer.addEventListener('finished', aoTerminarAcao);
 
-      await Promise.all(CATALOGO.map(async function(item){
+      async function carregarAnimacao(item){
         try{
           var obj = await fbxLoader.loadAsync(BASE + 'animacoes/' + item.chave + '.fbx');
           if(obj.animations && obj.animations[0]){
@@ -8922,7 +8922,16 @@ async function iniciarMascote3D(){
             acoes[item.chave] = mixer.clipAction(clip);
           }
         }catch(errAnim){ /* uma animacao faltando nao derruba o resto */ }
-      }));
+      }
+      // So as animacoes de andar/parado precisam estar prontas logo -- as de
+      // gesto/reacao (mais raras, usadas so de vez em quando) baixam depois,
+      // em segundo plano, sem segurar o personagem pra aparecer nem competir
+      // por banda com o resto do site.
+      var CHAVES_ESSENCIAIS = ['idle', 'breatheIdle', 'startWalk', 'walk', 'jog'];
+      var essenciais = CATALOGO.filter(function(item){ return CHAVES_ESSENCIAIS.indexOf(item.chave) !== -1; });
+      var resto = CATALOGO.filter(function(item){ return CHAVES_ESSENCIAIS.indexOf(item.chave) === -1; });
+      await Promise.all(essenciais.map(carregarAnimacao));
+      Promise.all(resto.map(carregarAnimacao));
     }catch(erroCarregar){
       // Se o personagem nao carregar por qualquer motivo (rede, navegador
       // sem WebGL de verdade etc.), o mascote e so decoracao -- nunca pode
@@ -9133,8 +9142,20 @@ async function iniciarMascote3D(){
   }
 }
 
-if(document.readyState === 'complete'){ iniciarMascote3D(); }
-else { window.addEventListener('load', iniciarMascote3D); }
+// O personagem + as 16 animacoes somam varios MB -- comecar a baixar tudo
+// isso bem na hora do "load" faz o navegador continuar mostrando "carregando"
+// na aba por mais tempo, mesmo com o conteudo principal do site ja pronto.
+// Uma pequena folga aqui deixa o carregamento do site parecer terminado
+// primeiro; o mascote aparece um instante depois, sem pressa.
+function iniciarMascote3DComAtraso(){
+  function chamar(){
+    if('requestIdleCallback' in window){ requestIdleCallback(iniciarMascote3D, { timeout: 4000 }); }
+    else { setTimeout(iniciarMascote3D, 1500); }
+  }
+  setTimeout(chamar, 1200);
+}
+if(document.readyState === 'complete'){ iniciarMascote3DComAtraso(); }
+else { window.addEventListener('load', iniciarMascote3DComAtraso); }
 })();
 </script>
 
