@@ -8855,8 +8855,12 @@ async function iniciarMascote3D(){
     var camera = new THREE.OrthographicCamera(0, W, H, 0, -1000, 1000);
     camera.position.z = 500;
 
-    var renderer = new THREE.WebGLRenderer({ antialias:true, alpha:true });
-    renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+    // antialias desligado e resolucao limitada a 1x -- e um personagem
+    // pequeno de fundo, nao precisa da nitidez de uma cena principal, e
+    // antialiasing + tela cheia em telas de alta resolucao (retina/2x) e o
+    // que mais pesava, deixando o clique no Iniciar e nos icones travando.
+    var renderer = new THREE.WebGLRenderer({ antialias:false, alpha:true, powerPreference:'low-power' });
+    renderer.setPixelRatio(Math.min(devicePixelRatio, 1));
     renderer.setSize(W, H);
     renderer.domElement.style.cssText = 'position:fixed;inset:0;width:100%;height:100%;';
     wrap.appendChild(renderer.domElement);
@@ -8939,6 +8943,12 @@ async function iniciarMascote3D(){
       wrap.remove();
       return;
     }
+
+    // Precisa existir antes do loop de frame -- assim, quando pausado, o
+    // loop nem chega a montar a cena nem a chamar renderer.render, em vez
+    // de so esconder visualmente com CSS e continuar gastando GPU/CPU por
+    // baixo (o que deixava clique no Iniciar/icones lento).
+    var pausado = localStorage.getItem('mascotesPausados_ps4') === '1';
 
     // ---------- estado / posicao (tudo em pixels CSS, Y crescendo pra
     // cima -- convertemos pra/de coordenadas de tela, que crescem pra
@@ -9049,8 +9059,10 @@ async function iniciarMascote3D(){
     pararEsteticamente();
 
     var clock = new THREE.Clock();
+    var pularProximoRender = false;
     function frame(){
       requestAnimationFrame(frame);
+      if(pausado){ return; } // pausado de verdade: nem atualiza nem desenha nada
       var delta = Math.min(clock.getDelta(), 0.05);
       var agora = performance.now();
       var lim = limites();
@@ -9113,7 +9125,13 @@ async function iniciarMascote3D(){
       }
 
       if(mixer) mixer.update(delta);
-      renderer.render(scene, camera);
+      // Desenha em ~metade da taxa de atualizacao (30fps numa tela de
+      // 60Hz) -- a posicao/animacao continuam calculadas a cada frame real
+      // (sem serrilhado no movimento), so o desenho em si (a parte cara pra
+      // GPU) roda com metade da frequencia, que pra um personagem pequeno
+      // de fundo e imperceptivel.
+      pularProximoRender = !pularProximoRender;
+      if(!pularProximoRender) renderer.render(scene, camera);
     }
     frame();
 
@@ -9121,7 +9139,6 @@ async function iniciarMascote3D(){
     // pro mascote 2D, agora controlando a camada 3D.
     var mascotesBtn = document.getElementById('y2kTrayMascotes');
     if(mascotesBtn){
-      var pausado = localStorage.getItem('mascotesPausados_ps4') === '1';
       function atualizarBotao3D(){
         mascotesBtn.textContent = pausado ? '🚫' : '🥷';
         mascotesBtn.classList.toggle('on', !pausado);
@@ -9154,8 +9171,14 @@ function iniciarMascote3DComAtraso(){
   }
   setTimeout(chamar, 1200);
 }
-if(document.readyState === 'complete'){ iniciarMascote3DComAtraso(); }
-else { window.addEventListener('load', iniciarMascote3DComAtraso); }
+// Projeto do mascote 3D (Ch15) pausado -- mesmo padrao usado pro mascote 2D
+// logo acima: codigo mantido intacto, so nao inicializa mais. Site volta a
+// rodar sem nenhum mascote de fundo, mais leve.
+var MASCOTE_3D_ATIVO = false;
+if(MASCOTE_3D_ATIVO){
+  if(document.readyState === 'complete'){ iniciarMascote3DComAtraso(); }
+  else { window.addEventListener('load', iniciarMascote3DComAtraso); }
+}
 })();
 </script>
 
