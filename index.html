@@ -1598,54 +1598,79 @@
      mesmo esqueleto de classes de sempre (x-rig/x-armL/x-armR/x-legL/x-legR/
      x-lowerLegR/x-speed) pra reaproveitar todas as cenas de interacao ja
      prontas sem mexer no JS. */
-  .mascot-xiao svg{ width:56px; height:92px; }
-  /* Arte real (production sheet) -- imagem recortada, sem rig por partes.
-     O movimento fica por conta do motor (arco/curva/banking, tudo aplicado
-     no elemento inteiro) mais estas 2 animacoes leves no sprite inteiro:
-     respiracao parado, balanco/inclinacao andando -- da vida sem precisar
-     de bracos/pernas articulados. */
-  .mascot-xiao .iamt-img{
-    width:70px; height:auto; display:block; pointer-events:none;
-    filter: drop-shadow(0 3px 4px rgba(0,0,0,.45));
-  }
+  .mascot-xiao svg{ width:78px; height:91px; overflow:visible; }
+  .mascot-xiao image{ pointer-events:none; }
+  /* Rig real por partes: cabeca+tronco (estatico) mais 4 membros
+     recortados da propria arte do sheet (proporcoes reais, nao desenhadas),
+     cada um pivotando no proprio eixo (ombro/quadril) via transform-origin
+     -- mesmo esqueleto de classes de sempre (x-rig/x-armL/x-armR/x-legL/
+     x-legR/x-cape/x-speed) entao todo o motor de movimento (moverArco,
+     cenas, poses) continua funcionando sem mexer no JS de novo. A rotacao
+     estatica da base (-88/88deg) leva os bracos da pose-T do sheet para a
+     postura relaxada (pendurados ao lado do corpo); o ciclo de andar abaixo
+     balanca em cima desse repouso, nao do zero. */
   .mascot-xiao.idle .mascot-fxwrap{ animation: iamtBreathe 2.6s ease-in-out infinite; }
-  .mascot-xiao.walking .mascot-fxwrap{ animation: iamtWalkBob .5s ease-in-out infinite; }
-  @keyframes iamtBreathe{ 0%,100%{ transform: translateY(0) scale(1);} 50%{ transform: translateY(-2px) scale(1.015);} }
-  @keyframes iamtWalkBob{ 0%,100%{ transform: translateY(0) rotate(-3deg);} 50%{ transform: translateY(-6px) rotate(3deg);} }
-  .mascot-xiao .x-rig{ transform-origin: 30px 40px; }
-  .mascot-xiao .x-armL{ transform-origin: 8px 32px; }
-  .mascot-xiao .x-armR{ transform-origin: 52px 32px; }
-  .mascot-xiao .x-legL{ transform-origin: 23px 48px; }
-  .mascot-xiao .x-legR{ transform-origin: 37px 48px; }
-  .mascot-xiao .x-lowerLegR{ transform-origin: 37px 62px; }
-  .mascot-xiao .x-cape{ transform-origin: 30px 30px; }
+  @keyframes iamtBreathe{ 0%,100%{ transform: translateY(0) scale(1);} 50%{ transform: translateY(-1.5px) scale(1.012);} }
+  .mascot-xiao .x-rig{ transform-origin: 252px 150px; }
+  .mascot-xiao .x-armL{ transform-origin: 125px 115px; transform: rotate(-88deg); }
+  .mascot-xiao .x-armR{ transform-origin: 380px 115px; transform: rotate(88deg); }
+  .mascot-xiao .x-legL{ transform-origin: 222px 208px; }
+  .mascot-xiao .x-legR{ transform-origin: 280px 208px; }
+  .mascot-xiao .x-cape{ transform-origin: 285px 135px; }
   .mascot-xiao .x-speed{ opacity:0; }
-  /* Voo estilo super-heroi (substitui o antigo ciclo de passos): braço da
-     frente esticado pra frente feito soco de voo, braço de tras varrido pra
-     tras, pernas juntas arrastando, capa tremulando e rastro de velocidade
-     acendendo — tudo enquanto a classe .walking estiver ativa, ou seja,
-     sempre que o guerreiro estiver se deslocando de um ponto a outro. */
-  .mascot-xiao.walking .x-rig{ animation: xflyBob .5s ease-in-out infinite; }
-  .mascot-xiao.walking .x-armL{ animation: xflyArmL .6s ease-in-out infinite; }
-  .mascot-xiao.walking .x-armR{ animation: xflyArmR .6s ease-in-out infinite; }
-  .mascot-xiao.walking .x-legL{ animation: xflyLegL .6s ease-in-out infinite; }
-  .mascot-xiao.walking .x-legR{ animation: xflyLegR .6s ease-in-out infinite; }
-  .mascot-xiao.walking .x-lowerLegR{ animation: xflyLowerLegR .6s ease-in-out infinite; }
-  .mascot-xiao.walking .x-cape{ animation: xflyCape .5s ease-in-out infinite; }
-  .mascot-xiao.walking .x-speed{ animation: xflySpeed .25s steps(1) infinite; }
-  @keyframes xflyBob{ 0%,100%{ transform: rotate(-16deg) translateY(0);} 50%{ transform: rotate(-16deg) translateY(-4px);} }
-  @keyframes xflyArmL{ 0%,100%{ transform: rotate(50deg);} 50%{ transform: rotate(60deg);} }
-  @keyframes xflyArmR{ 0%,100%{ transform: rotate(-100deg);} 50%{ transform: rotate(-110deg);} }
-  @keyframes xflyLegL{ 0%,100%{ transform: rotate(16deg);} 50%{ transform: rotate(22deg);} }
-  @keyframes xflyLegR{ 0%,100%{ transform: rotate(20deg);} 50%{ transform: rotate(14deg);} }
-  @keyframes xflyLowerLegR{ 0%,100%{ transform: rotate(6deg);} 50%{ transform: rotate(12deg);} }
-  /* --bank e --velop sao atualizados quadro a quadro pelo motor de movimento
-     (moverArco) -- a capa reage de verdade a curva/inclinacao do voo (com
-     um leve atraso, feito pano puxado pelo ar) e o rastro de velocidade
-     acende mais forte quanto mais rapido o guerreiro estiver de verdade,
-     em vez de so piscar num ritmo fixo sempre igual. */
-  @keyframes xflyCape{ 0%,100%{ transform: rotate(var(--bank,0deg)) scaleX(1) translateY(0);} 50%{ transform: rotate(var(--bank,0deg)) scaleX(1.18) translateY(3px);} }
-  @keyframes xflySpeed{ 0%,100%{ opacity: calc(var(--velop,0.55) * 0.6);} 50%{ opacity: var(--velop,0.55);} }
+  /* Ciclo de caminhada real (substitui o antigo voo reto em T-pose): braco
+     e perna de lados opostos avancam juntos (marcha contralateral humana de
+     verdade), 5 paradas por keyframe (0/25/50/75/100%) aproximando uma
+     curva senoidal em vez de so ida-e-volta linear, e cubic-bezier organico
+     no lugar de ease-in-out generico -- sem arrancos secos. A duracao real
+     (--gaitDur) e escrita quadro a quadro pelo motor de movimento de acordo
+     com a velocidade real do deslocamento: passo mais rapido andando rapido,
+     mais lento andando devagar -- e nao um ciclo travado num tempo fixo. */
+  .mascot-xiao.walking .x-rig{ animation: xWalkRig var(--gaitDur,.62s) cubic-bezier(.45,0,.55,1) infinite; }
+  .mascot-xiao.walking .x-legL{ animation: xWalkLeg var(--gaitDur,.62s) cubic-bezier(.45,0,.55,1) infinite; }
+  .mascot-xiao.walking .x-legR{ animation: xWalkLeg var(--gaitDur,.62s) cubic-bezier(.45,0,.55,1) infinite; animation-delay: calc(var(--gaitDur,.62s) * -0.5); }
+  .mascot-xiao.walking .x-armR{ animation: xWalkArmR var(--gaitDur,.62s) cubic-bezier(.45,0,.55,1) infinite; }
+  .mascot-xiao.walking .x-armL{ animation: xWalkArmL var(--gaitDur,.62s) cubic-bezier(.45,0,.55,1) infinite; animation-delay: calc(var(--gaitDur,.62s) * -0.5); }
+  .mascot-xiao.walking .x-cape{ animation: xWalkCape var(--gaitDur,.62s) ease-in-out infinite; }
+  .mascot-xiao.walking .x-speed{ opacity:0; }
+  @keyframes xWalkRig{
+    0%{ transform: translateY(0) rotate(0deg); }
+    25%{ transform: translateY(-3px) rotate(1.1deg); }
+    50%{ transform: translateY(0) rotate(0deg); }
+    75%{ transform: translateY(-3px) rotate(-1.1deg); }
+    100%{ transform: translateY(0) rotate(0deg); }
+  }
+  @keyframes xWalkLeg{
+    0%{ transform: rotate(-25deg); }
+    25%{ transform: rotate(-4deg); }
+    50%{ transform: rotate(25deg); }
+    75%{ transform: rotate(-4deg); }
+    100%{ transform: rotate(-25deg); }
+  }
+  @keyframes xWalkArmL{
+    0%{ transform: rotate(-64deg); }
+    25%{ transform: rotate(-84deg); }
+    50%{ transform: rotate(-111deg); }
+    75%{ transform: rotate(-84deg); }
+    100%{ transform: rotate(-64deg); }
+  }
+  @keyframes xWalkArmR{
+    0%{ transform: rotate(64deg); }
+    25%{ transform: rotate(84deg); }
+    50%{ transform: rotate(111deg); }
+    75%{ transform: rotate(84deg); }
+    100%{ transform: rotate(64deg); }
+  }
+  /* --bank (agora bem mais sutil pro xiao, ver moverArco) da so uma leve
+     inclinacao real de quem esta correndo/subindo -- a espada nas costas
+     segue com atraso de verdade (capeLag, suavizacao exponencial quadro a
+     quadro no tempo real do sistema), feito peso puxado pelo movimento em
+     vez de grudado rigido nas costas. */
+  @keyframes xWalkCape{ 0%,100%{ transform: rotate(var(--bank,0deg)) translateY(0);} 50%{ transform: rotate(var(--bank,0deg)) translateY(2px);} }
+  .mascot-xiao.idle .x-armL{ animation: xIdleArmL 2.6s ease-in-out infinite; }
+  .mascot-xiao.idle .x-armR{ animation: xIdleArmR 2.6s ease-in-out infinite; }
+  @keyframes xIdleArmL{ 0%,100%{ transform: rotate(-88deg);} 50%{ transform: rotate(-83deg);} }
+  @keyframes xIdleArmR{ 0%,100%{ transform: rotate(88deg);} 50%{ transform: rotate(83deg);} }
   @keyframes fxImpulso{ 0%{ transform: scaleY(1) scaleX(1);} 55%{ transform: scaleY(0.82) scaleX(1.14);} 100%{ transform: scaleY(1) scaleX(1);} }
   .mascot.impulso .mascot-fxwrap{ animation: fxImpulso .13s ease-out; }
   /* Segurar o mascote com o mouse: cursor de "agarrado" + um leve
@@ -1664,8 +1689,8 @@
   .mascot-xiao.kicking .x-rig{ animation: xkLean 1.1s ease-in-out; }
   .mascot-xiao.kicking .x-speed{ animation: xkSpeed 1.1s ease-in-out; }
   @keyframes xkLean{ 0%,20%,100%{ transform: translateY(0);} 50%{ transform: translateY(-11px);} 75%{ transform: translateY(0);} }
-  @keyframes xkArmL{ 0%,20%,100%{ transform: rotate(24deg);} 50%{ transform: rotate(150deg);} 75%{ transform: rotate(24deg);} }
-  @keyframes xkArmR{ 0%,20%,100%{ transform: rotate(-24deg);} 50%{ transform: rotate(-150deg);} 75%{ transform: rotate(-24deg);} }
+  @keyframes xkArmL{ 0%,20%,100%{ transform: rotate(-88deg);} 50%{ transform: rotate(-55deg);} 75%{ transform: rotate(-88deg);} }
+  @keyframes xkArmR{ 0%,20%,100%{ transform: rotate(88deg);} 50%{ transform: rotate(12deg);} 75%{ transform: rotate(88deg);} }
   @keyframes xkLegL{ 0%,20%,100%{ transform: translateY(0);} 50%{ transform: translateY(-9px);} 75%{ transform: translateY(0);} }
   @keyframes xkLegR{ 0%,20%,100%{ transform: translateY(0);} 50%{ transform: translateY(-9px);} 75%{ transform: translateY(0);} }
   @keyframes xkLowerLegR{ 0%,20%,100%{ transform: rotate(0deg);} 50%{ transform: rotate(26deg);} 75%{ transform: rotate(0deg);} }
@@ -2025,7 +2050,7 @@
 
   @media (max-width: 600px){
     .mascot-ghost svg{ width:56px; height:64px; }
-    .mascot-xiao svg{ width:40px; height:68px; }
+    .mascot-xiao svg{ width:40px; height:47px; }
   }
 
   /* ===== Interacoes entre mascotes (perseguicao, briga, portal, buraco
@@ -2093,7 +2118,7 @@
      de verdade e "destruicao" cosmetica, 100% reversivel -- nada de dados
      apagados, so um efeito visual temporario no card). ===== */
   .mascot-xiao.carregando .x-armR{ animation: xCarregarBraco .7s ease-in-out infinite alternate; }
-  @keyframes xCarregarBraco{ 0%{ transform: rotate(-95deg);} 100%{ transform: rotate(-120deg);} }
+  @keyframes xCarregarBraco{ 0%{ transform: rotate(88deg);} 100%{ transform: rotate(48deg);} }
   .fx-carga{
     width:14px; height:14px; border-radius:50%;
     background: radial-gradient(circle, #fff, #ffd23d 55%, transparent 75%);
@@ -6618,7 +6643,23 @@ idiomaBtn.addEventListener('click', function(){
   // T frontal, fundo removido), nao mais um rig desenhado em SVG/CSS. O
   // motor de movimento/fisica (moverArco, sombra, arco de curva, banking,
   // colisao com icones/taskbar etc.) continua o mesmo, so o visual mudou.
-  var XIAO_SVG = '<img class="iamt-img" src="iamt-sprite.png" alt="" draggable="false">';
+  // Rig real por partes: cada pedaco (corpo, 2 bracos, 2 pernas, espada) e
+  // um recorte da propria arte do production sheet (proporcoes exatas,
+  // GrabCut + limpeza manual), montado num SVG com as coordenadas nativas
+  // do recorte original (505x374) -- entao body/armL/armR/legL/legR se
+  // encaixam sem costura visivel na pose de repouso, e cada <g> pivota no
+  // proprio eixo (ombro/quadril) marcado no CSS (.mascot-xiao .x-armL etc).
+  var XIAO_SVG = '<svg viewBox="85 -5 330 385" xmlns="http://www.w3.org/2000/svg">' +
+      '<g class="x-rig">' +
+        '<g class="x-cape"><image href="rig_sword.png" x="190" y="55" width="190" height="160"></image></g>' +
+        '<g class="x-legL"><image href="rig_legL.png" x="138" y="205" width="114" height="169"></image></g>' +
+        '<g class="x-legR"><image href="rig_legR.png" x="250" y="205" width="114" height="169"></image></g>' +
+        '<image href="rig_body.png" x="128" y="0" width="250" height="220"></image>' +
+        '<g class="x-armL"><image href="rig_armL.png" x="0" y="92" width="148" height="148"></image></g>' +
+        '<g class="x-armR"><image href="rig_armR.png" x="357" y="92" width="148" height="148"></image></g>' +
+        '<g class="x-speed"></g>' +
+      '</g>' +
+    '</svg>';
 
   function areaSegura(){
     return {
@@ -6824,7 +6865,12 @@ idiomaBtn.addEventListener('click', function(){
             var esticado = Math.min(0.16, velTotal * 0.55);
             var stretchCss = 'scale(' + (1 + esticado) + ',' + (1 - esticado * 0.5) + ')';
             if(bancar){
-              var bank = Math.max(-22, Math.min(22, -vy0 * 2.2));
+              // O xiao agora e um personagem andando, nao um super-heroi
+              // voando -- inclinacao bem mais sutil (leve lean de quem
+              // corre/sobe), nao a banking de aviao de antes.
+              var bankMax = tipo === 'xiao' ? 8 : 22;
+              var bankMul = tipo === 'xiao' ? 1.1 : 2.2;
+              var bank = Math.max(-bankMax, Math.min(bankMax, -vy0 * bankMul));
               sprite.style.transform = 'scaleX(' + (flipAtivo ? -1 : 1) + ') rotate(' + bank + 'deg) ' + stretchCss;
               if(cape){
                 capeLag += (bank * 0.8 - capeLag) * 0.25;
@@ -6872,6 +6918,16 @@ idiomaBtn.addEventListener('click', function(){
     });
   }
 
+  // Ritmo de passada real: em vez de um ciclo de andar sempre no mesmo
+  // tempo fixo, a duracao do keyframe (--gaitDur) e calculada a partir da
+  // velocidade real do deslocamento que esta prestes a acontecer -- passo
+  // mais curto/rapido quando anda rapido, mais largo/lento quando anda
+  // devagar, feito um andador de verdade e nao um GIF em loop constante.
+  function definirRitmoAndar(el, velocidadePx){
+    var gait = clampeia(0.62 - ((velocidadePx || 95) - 95) * 0.0014, 0.34, 0.85);
+    el.style.setProperty('--gaitDur', gait.toFixed(3) + 's');
+  }
+
   function moverElementoPromise(el, destX, destY, velocidade){
     var atualX = parseFloat(el.dataset.x) || 0;
     var atualY = parseFloat(el.dataset.y) || 0;
@@ -6879,6 +6935,7 @@ idiomaBtn.addEventListener('click', function(){
     var vel = (velocidade || 95) * (0.88 + Math.random() * 0.24);
     var duracao = Math.max(0.4, dist / vel);
     var tipo = el.classList.contains('mascot-xiao') ? 'xiao' : 'ghost';
+    if(tipo === 'xiao'){ definirRitmoAndar(el, vel); }
     el._anexo = null;
     el.classList.remove('idle', 'hiding', 'peeking', 'kicking', 'sumindo', 'surgindo', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
     el.classList.add('walking');
@@ -8248,7 +8305,7 @@ idiomaBtn.addEventListener('click', function(){
     el._anexo = null;
     el.classList.remove('idle', 'hiding', 'peeking', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
     el.classList.add('walking');
-    if(tipo === 'xiao'){ aplicarVarianteVoo(el); talvezFazerTruque(el); }
+    if(tipo === 'xiao'){ definirRitmoAndar(el, baseVel); }
     if(cardAlvo){ cardAlvo.classList.add('card--oclui-mascote'); }
 
     // Fisica diferente por personagem: o guerreiro e solido de verdade e
@@ -8351,7 +8408,7 @@ idiomaBtn.addEventListener('click', function(){
     el._anexo = null;
     el.classList.remove('idle', 'hiding', 'peeking', 'perched', 'espreguicando', 'olhando', 'acenando', 'descansando', 'assustando', 'surpreso');
     el.classList.add('walking');
-    if(tipo === 'xiao'){ aplicarVarianteVoo(el); talvezFazerTruque(el); }
+    if(tipo === 'xiao'){ definirRitmoAndar(el, baseVel); }
 
     moverArco(el, destX, destY, duracao * 1000, tipo).then(function(){
       el.classList.remove('walking');
