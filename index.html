@@ -1599,6 +1599,19 @@
      x-lowerLegR/x-speed) pra reaproveitar todas as cenas de interacao ja
      prontas sem mexer no JS. */
   .mascot-xiao svg{ width:56px; height:92px; }
+  /* Arte real (production sheet) -- imagem recortada, sem rig por partes.
+     O movimento fica por conta do motor (arco/curva/banking, tudo aplicado
+     no elemento inteiro) mais estas 2 animacoes leves no sprite inteiro:
+     respiracao parado, balanco/inclinacao andando -- da vida sem precisar
+     de bracos/pernas articulados. */
+  .mascot-xiao .iamt-img{
+    width:70px; height:auto; display:block; pointer-events:none;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,.45));
+  }
+  .mascot-xiao.idle .mascot-fxwrap{ animation: iamtBreathe 2.6s ease-in-out infinite; }
+  .mascot-xiao.walking .mascot-fxwrap{ animation: iamtWalkBob .5s ease-in-out infinite; }
+  @keyframes iamtBreathe{ 0%,100%{ transform: translateY(0) scale(1);} 50%{ transform: translateY(-2px) scale(1.015);} }
+  @keyframes iamtWalkBob{ 0%,100%{ transform: translateY(0) rotate(-3deg);} 50%{ transform: translateY(-6px) rotate(3deg);} }
   .mascot-xiao .x-rig{ transform-origin: 30px 40px; }
   .mascot-xiao .x-armL{ transform-origin: 8px 32px; }
   .mascot-xiao .x-armR{ transform-origin: 52px 32px; }
@@ -6601,70 +6614,11 @@ idiomaBtn.addEventListener('click', function(){
     + '<rect x="90" y="120" width="20" height="6" fill="#0d0a1a"/>'
     + '</g></svg>';
 
-  // Mascote "iamT" -- reskin completo do rig do guerreiro (mesmos nomes de
-  // classe/pontos de articulacao do XIAO original) usando a production sheet
-  // do personagem: capuz branco, vazio preto no rosto, oculos redondos com
-  // "X" na lente direita, jaqueta preta com friso roxo neon, luvas brancas,
-  // tenis com sola azul eletrico, espada pixelada nas costas (no lugar da
-  // capa antiga -- herda de graca toda a fisica/balanco ja calibrados nela).
-  var XIAO_SVG = '<svg viewBox="0 0 60 70"><g class="x-rig">'
-    + '<g class="x-cape">'
-    + '<rect x="33" y="25" width="6" height="6" fill="#eaf3ff"/>'
-    + '<rect x="29" y="31" width="6" height="6" fill="#eaf3ff"/>'
-    + '<rect x="25" y="37" width="6" height="6" fill="#bcd6ff"/>'
-    + '<rect x="21" y="43" width="6" height="6" fill="#bcd6ff"/>'
-    + '<rect x="18" y="49" width="8" height="6" fill="#8b2fe0"/>'
-    + '<rect x="16" y="54" width="5" height="9" fill="#2a1046"/>'
-    + '</g>'
-    + '<rect x="15" y="2" width="30" height="16" rx="8" fill="#f5f6f8"/>'
-    + '<rect x="15" y="12" width="30" height="7" rx="4" fill="#e3e6ea"/>'
-    + '<rect x="19" y="7" width="22" height="11" rx="5" fill="#0a0a0d"/>'
-    + '<circle cx="24" cy="12.5" r="4" fill="#17181d" stroke="#3a3d46" stroke-width="1"/>'
-    + '<circle cx="36" cy="12.5" r="4" fill="#17181d" stroke="#3a3d46" stroke-width="1"/>'
-    + '<g stroke="#ffffff" stroke-width="1.2">'
-    + '<line x1="34.2" y1="10.7" x2="37.8" y2="14.3"/>'
-    + '<line x1="37.8" y1="10.7" x2="34.2" y2="14.3"/>'
-    + '</g>'
-    + '<rect x="17" y="19" width="26" height="6" rx="2" fill="#141417"/>'
-    + '<rect x="28" y="19" width="4" height="6" fill="#8b2fe0"/>'
-    + '<rect x="15" y="29" width="30" height="19" rx="4" fill="#141417"/>'
-    + '<rect x="15" y="29" width="3" height="19" fill="#8b2fe0"/>'
-    + '<rect x="42" y="29" width="3" height="19" fill="#8b2fe0"/>'
-    + '<circle cx="30" cy="36" r="4" fill="#8b2fe0"/>'
-    + '<rect x="15" y="44" width="30" height="5" fill="#0a0a0d"/>'
-    + '<circle cx="30" cy="46" r="2.2" fill="#7fd8ff"/>'
-    + '<g class="x-armL">'
-    + '<rect x="6" y="31" width="11" height="9" rx="2" fill="#141417"/>'
-    + '<rect x="4" y="38" width="8" height="14" rx="2" fill="#141417"/>'
-    + '<rect x="4" y="45" width="8" height="2" fill="#8b2fe0"/>'
-    + '<rect x="3" y="50" width="9" height="7" rx="2" fill="#f5f6f8"/>'
-    + '</g>'
-    + '<g class="x-armR">'
-    + '<rect x="43" y="31" width="11" height="9" rx="2" fill="#141417"/>'
-    + '<rect x="48" y="38" width="8" height="14" rx="2" fill="#141417"/>'
-    + '<rect x="48" y="45" width="8" height="2" fill="#8b2fe0"/>'
-    + '<rect x="48" y="50" width="9" height="7" rx="2" fill="#f5f6f8"/>'
-    + '</g>'
-    + '<g class="x-legL">'
-    + '<rect x="18" y="48" width="11" height="13" rx="2" fill="#141417"/>'
-    + '<rect x="17" y="61" width="13" height="6" rx="2" fill="#1c1c21"/>'
-    + '<rect x="16" y="66" width="14" height="4" rx="1" fill="#0a0a0d"/>'
-    + '<rect x="16" y="68" width="14" height="2" rx="1" fill="#7fd8ff" opacity="0.85"/>'
-    + '</g>'
-    + '<g class="x-legR">'
-    + '<rect x="32" y="48" width="11" height="13" rx="2" fill="#141417"/>'
-    + '<g class="x-lowerLegR">'
-    + '<rect x="32" y="61" width="11" height="6" rx="2" fill="#1c1c21"/>'
-    + '<rect x="31" y="66" width="13" height="4" rx="1" fill="#0a0a0d"/>'
-    + '<rect x="31" y="68" width="13" height="2" rx="1" fill="#7fd8ff" opacity="0.85"/>'
-    + '</g>'
-    + '</g>'
-    + '<g class="x-speed" stroke="#7fd8ff" stroke-width="1.6">'
-    + '<line x1="44" y1="30" x2="57" y2="26"/>'
-    + '<line x1="44" y1="38" x2="58" y2="40"/>'
-    + '<line x1="43" y1="46" x2="56" y2="50"/>'
-    + '</g>'
-    + '</g></svg>';
+  // Mascote "iamT" -- a arte de verdade da production sheet do usuario (pose
+  // T frontal, fundo removido), nao mais um rig desenhado em SVG/CSS. O
+  // motor de movimento/fisica (moverArco, sombra, arco de curva, banking,
+  // colisao com icones/taskbar etc.) continua o mesmo, so o visual mudou.
+  var XIAO_SVG = '<img class="iamt-img" src="iamt-sprite.png" alt="" draggable="false">';
 
   function areaSegura(){
     return {
@@ -6721,7 +6675,7 @@ idiomaBtn.addEventListener('click', function(){
       if(!sombra) return;
       var x = parseFloat(m.dataset.x) || 0, y = parseFloat(m.dataset.y) || 0;
       var noChao = m.classList.contains('idle') || m.classList.contains('perched') || m.classList.contains('hiding') || m.classList.contains('peeking');
-      var alturaPes = m.classList.contains('mascot-xiao') ? 90 : 84;
+      var alturaPes = m.classList.contains('mascot-xiao') ? 66 : 84;
       sombra.style.transform = 'translate(' + (x + 6) + 'px,' + (y + alturaPes) + 'px) scale(' + (noChao ? 1 : 0.55) + ')';
       sombra.style.opacity = noChao ? '0.38' : '0.08';
     });
