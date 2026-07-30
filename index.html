@@ -817,6 +817,10 @@
     animation: painelAbrir3D .45s cubic-bezier(.2,.9,.3,1.3) forwards;
   }
   .mini-panel.mini-panel-wide{ width: min(760px, 94vw); }
+  /* Janelas que precisam de bem mais espaco horizontal (grade de jogos,
+     grade de canais/radar, colunas de noticias) -- Coleção, Vendedores,
+     Radar de Caça e Notícias usam essa variante mais larga. */
+  .mini-panel.mini-panel-xwide{ width: min(1180px, 96vw); }
   .mini-panel-head{
     display:flex; align-items:center; justify-content:space-between; gap:8px;
     padding: 14px 18px; background: rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.06);
@@ -859,25 +863,31 @@
     background-image: linear-gradient(180deg, #4f9df0 0%, #1e5fc4 45%, #123f8f 100%);
   }
 
-  /* Icones "de area de trabalho" -- ficam logo abaixo do cabecalho, em fila,
-     pra dar a sensacao de pastas/arquivos clicaveis sem depender de posicao
-     fixa (evita sobrepor qualquer coisa no mobile). */
+  /* "Area de trabalho": os icones agora sao posicionados livremente (estilo
+     Windows, coluna a coluna) e podem ser arrastados e soltos em qualquer
+     lugar dessa area pelo usuario -- a posicao escolhida fica salva. */
   .y2k-desktop{
-    display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px;
-    padding:10px 8px; border-radius:10px;
+    position:relative; height:270px; margin-bottom:18px;
+    padding:10px; border-radius:10px;
     background: rgba(0,20,60,0.18); border:1px solid rgba(255,255,255,0.08);
   }
   .y2k-icon{
     display:flex; flex-direction:column; align-items:center; gap:4px;
-    width:78px; padding:8px 4px 6px; border-radius:6px; cursor:pointer;
+    width:82px; padding:8px 4px 6px; border-radius:6px; cursor:pointer;
     background:transparent; border:1px solid transparent; color:#fff;
     font-family:'Tahoma','Segoe UI',sans-serif;
-    -webkit-tap-highlight-color:transparent;
+    -webkit-tap-highlight-color:transparent; user-select:none;
+  }
+  /* Dentro da area de trabalho especificamente, os icones sao posicionados
+     livremente (arrastar-e-soltar) em vez de fluir num flex normal. */
+  .y2k-desktop .y2k-icon{
+    position:absolute; top:10px; left:10px; cursor:grab; touch-action:none;
   }
   .y2k-icon:hover{ background: rgba(120,170,255,0.18); border-color: rgba(140,190,255,0.3); }
   .y2k-icon:active, .y2k-icon.selecionado{
     background: rgba(70,130,220,0.4); border-color: rgba(140,190,255,0.55);
   }
+  .y2k-icon.arrastando{ cursor:grabbing; background: rgba(70,130,220,0.5); border-color: rgba(140,190,255,0.7); z-index:5; }
   .y2k-icon .y2k-icon-glyph{
     width:34px; height:34px; display:flex; align-items:center; justify-content:center;
     font-size:22px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5));
@@ -886,6 +896,9 @@
     font-size:10.5px; line-height:1.2; text-align:center; color:#fff;
     text-shadow:0 1px 2px rgba(0,0,0,.85), 0 0 4px rgba(0,0,0,.6);
     max-width:76px; word-break:break-word;
+  }
+  @media (max-width: 640px){
+    .y2k-desktop{ height:315px; }
   }
 
   /* Pasta "Colecao" -> subpastas PS4/PS3 */
@@ -930,6 +943,31 @@
   }
   .destaque-card.pptx-mode .destaque-pptx-progress{ animation: destaquePptxBarra 6s linear infinite; }
   @keyframes destaquePptxBarra{ from{ width:0%; } to{ width:100%; } }
+
+  /* Tirinha de filme (sprocket holes) nas bordas do destaque, pra parecer
+     mais um projetor de slides/filminho antigo do que um card comum. */
+  .destaque-filmstrip{
+    height:10px; background:#1a1a1a;
+    background-image: repeating-linear-gradient(90deg,
+      transparent 0, transparent 6px,
+      rgba(0,0,0,.85) 6px, rgba(0,0,0,.85) 14px);
+    position:relative;
+  }
+  .destaque-filmstrip::before{
+    content:''; position:absolute; inset:2px 0; margin:0 4px;
+    background-image: repeating-linear-gradient(90deg,
+      transparent 0, transparent 6px,
+      var(--bg-panel, #14161c) 6px, var(--bg-panel, #14161c) 12px);
+  }
+  .destaque-filmstrip-top{ border-radius: 12px 12px 0 0; }
+  .destaque-filmstrip-bottom{ border-radius: 0 0 12px 12px; }
+  .destaque-card.pptx-mode .destaque-filmstrip{ background:#000; }
+
+  /* Troca de slide com fade suave em vez de trocar o conteudo seco -- reforca
+     a sensacao de "passando o slide" de uma apresentacao de verdade. */
+  .destaque-img, .destaque-info{ transition: opacity .35s ease; }
+  .destaque-card.destaque-fade .destaque-img,
+  .destaque-card.destaque-fade .destaque-info{ opacity:0; }
 
   /* "Media player" (Winamp/WMP) pros Vendedores/Lives/Leiloes */
   .canais-player-bar{
@@ -1095,6 +1133,13 @@
   .aovivo-updated{font-size:10px; color:var(--ink-dim); text-align:right; margin-top:auto;}
 
   .footer{margin-top:50px; text-align:center; color:var(--ink-dim); font-size:12px; border-top:1px solid var(--line); padding-top:20px;}
+
+  /* Livro de visitas (Giscus): ocupa a largura toda do conteudo (mesma
+     largura do rodape) e com uma altura minima maior que o padrao do
+     placeholder do proprio Giscus, pra nao parecer uma caixinha pequena. */
+  #giscus-comments{ width:100%; }
+  #giscus-comments .giscus{ width:100%; min-height:460px; }
+  #giscus-comments iframe.giscus-frame{ width:100% !important; min-height:460px; }
 
   /* BARRA SUPERIOR: controles de tema/paleta/skin retro/crt (tirados da
      barra lateral a pedido, pra ficar mais visivel logo no topo do site) */
@@ -2115,14 +2160,15 @@
 
   <div id="aniversarioWrap"></div>
 
-  <div class="tools" id="topActionsRow" style="margin-bottom:20px;">
+  <div class="tools" id="topActionsRow" style="display:none;">
     <button class="toggle-venda" id="vitrineBtn">🖼️ Modo Vitrine (tela cheia)</button>
     <button class="toggle-venda" id="cartaoResumoBtn">🎁 Cartão resumo (compartilhar)</button>
-    <!-- Busca rapida e calendario viraram icones da bandeja da barra de tarefas
-         (lupa do lado do Iniciar / icone 📅). Os botoes continuam existindo,
-         so escondidos, porque o resto do codigo dispara clique neles. -->
-    <button class="toggle-venda" id="cmdkOpenBtn" title="Busca unificada (Ctrl+K)" style="display:none;" aria-hidden="true" tabindex="-1"><span id="cmdkBtnTxt">🔎 Busca rápida</span> <span class="cmdk-shortcut">Ctrl+K</span></button>
-    <button class="toggle-venda" id="calendarioToggleBtn" style="display:none;" aria-hidden="true" tabindex="-1">📆 Calendário de Lançamentos</button>
+    <!-- Modo Vitrine e Cartao Resumo ja vivem no menu Iniciar; Busca rapida e
+         calendario viraram icones da bandeja (lupa do lado do Iniciar / icone
+         📅). Esses botoes continuam existindo, so escondidos, porque o resto
+         do codigo dispara clique neles. -->
+    <button class="toggle-venda" id="cmdkOpenBtn" title="Busca unificada (Ctrl+K)" aria-hidden="true" tabindex="-1"><span id="cmdkBtnTxt">🔎 Busca rápida</span> <span class="cmdk-shortcut">Ctrl+K</span></button>
+    <button class="toggle-venda" id="calendarioToggleBtn" aria-hidden="true" tabindex="-1">📆 Calendário de Lançamentos</button>
   </div>
 
   <div class="y2k-desktop" id="y2kDesktopIcons">
@@ -2141,141 +2187,18 @@
     <button class="y2k-icon" data-y2k-action="ferramentas" title="Painel de Controle">
       <span class="y2k-icon-glyph">🛠️</span><span class="y2k-icon-label">Ferramentas</span>
     </button>
+    <button class="y2k-icon" data-y2k-action="stats" title="Estatísticas da coleção">
+      <span class="y2k-icon-glyph">📊</span><span class="y2k-icon-label">Estatísticas</span>
+    </button>
     <button class="y2k-icon" data-y2k-action="segredo" title="???">
       <span class="y2k-icon-glyph">📝</span><span class="y2k-icon-label">codigos_secretos.txt</span>
     </button>
   </div>
 
-  <div class="canais-toggle-card" id="canaisToggleCard">
-    <div class="canais-toggle-left">
-      <span class="canais-toggle-icon">📺</span>
-      <div>
-        <h3 id="canaisTituloEl">Vendedores, Lives e Leilões</h3>
-        <p id="canaisSubEl">12 canais indicados — clique pra ver</p>
-      </div>
-    </div>
-    <span class="canais-toggle-arrow" id="canaisToggleArrow">▾</span>
-  </div>
-  <div id="canaisSortWrap" style="display:none; margin: 0 0 14px;">
-    <button class="toggle-venda" id="ordenarDiaBtn">📅 Ordenar por dia da semana</button>
-  </div>
-  <div class="canais-player-bar" id="canaisPlayerBar" style="display:none;">
-    <div class="canais-eq"><span></span><span></span><span></span><span></span></div>
-    <span id="canaisPlayerBarTxt">vendedores_player.exe</span>
-  </div>
-  <div class="grid" id="gridCanais" style="display:none; margin-bottom:30px;"></div>
-
-  <div class="canais-toggle-card" id="wishlistToggleCard" style="margin-bottom:14px;">
-    <div class="canais-toggle-left">
-      <span class="canais-toggle-icon">🎯</span>
-      <div>
-        <h3 id="radarTituloEl">Radar de Caça</h3>
-        <p id="wishlistSubtitle">Jogos que ainda não tenho, mas estou de olho</p>
-      </div>
-    </div>
-    <span class="canais-toggle-arrow" id="wishlistToggleArrow">▾</span>
-  </div>
-  <div class="grid" id="gridWishlist" style="display:none; margin-bottom:14px;"></div>
-  <div id="wishlistPager" style="display:none; align-items:center; justify-content:center; gap:16px; margin-bottom:30px;">
-    <button class="toggle-venda" id="wishlistPrevBtn" aria-label="Página anterior do radar de caça">◀ Anterior</button>
-    <span id="wishlistPageInfo" style="font-size:13px; color:#9a9a9e; font-weight:700;"></span>
-    <button class="toggle-venda" id="wishlistNextBtn" aria-label="Próxima página do radar de caça">Próxima ▶</button>
-  </div>
-
-  <div class="canais-toggle-card" id="aovivoToggleCard" style="margin-bottom:14px;">
-    <div class="canais-toggle-left">
-      <span class="canais-toggle-icon">📰</span>
-      <div>
-        <h3 id="aovivoTituloEl">Notícias Gamer, Jogos Grátis e Dica de Jogos</h3>
-        <p id="aovivoSubEl">Descobertas do mundo dos games — atualiza sozinho</p>
-      </div>
-    </div>
-    <span class="canais-toggle-arrow" id="aovivoToggleArrow">▾</span>
-  </div>
-  <div id="aovivoWrap" style="display:none; margin-bottom:30px;">
-    <div class="aovivo-grid">
-      <div class="aovivo-col">
-        <h4 id="aovivoJogosGratisTitulo">🎮 Jogos grátis agora</h4>
-        <div id="freeGamesList" class="aovivo-list"><p class="aovivo-loading" id="freeGamesLoading">Carregando…</p></div>
-      </div>
-      <div class="aovivo-col">
-        <h4 id="aovivoNoticiasTitulo">📰 Notícias (Flow Games)</h4>
-        <div id="newsList" class="aovivo-list"><p class="aovivo-loading" id="newsLoading">Carregando…</p></div>
-      </div>
-      <div class="aovivo-col">
-        <h4 id="aovivoDescubraTitulo">🎲 Descubra um jogo</h4>
-        <div id="randomGameBox" class="aovivo-list">
-          <button class="toggle-venda" id="randomGameBtn">🔀 Sortear jogo aleatório</button>
-          <div id="randomGameResult"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="tools">
-    <div class="search-box">
-      <span class="ico">🔍</span>
-      <input type="text" id="searchInput" placeholder="Buscar jogo...">
-    </div>
-    <select class="sort-select" id="sortSelect">
-      <option value="none">Ordenar por...</option>
-      <option value="nome-az">Nome (A-Z)</option>
-      <option value="nome-za">Nome (Z-A)</option>
-      <option value="valor-desc">Valor (maior primeiro)</option>
-      <option value="valor-asc">Valor (menor primeiro)</option>
-      <option value="raridade">Raridade</option>
-    </select>
-    <button class="toggle-venda" id="viewToggle">📋 Ver em lista</button>
-    <button class="toggle-venda" id="compararToggle">⚖️ Comparar</button>
-    <button class="toggle-venda" id="roletaBtn">🎲 O que jogar hoje?</button>
-    <button class="toggle-venda" id="filtrosToggleBtn">🔽 Filtros</button>
-    <button class="toggle-venda" id="scannerBtn">📷 Scanner</button>
-  </div>
-
-  <div class="filters-dropdown" id="filtrosDropdown" style="display:none;">
-    <div class="filters-dropdown-group">
-      <span class="filters-dropdown-label" id="filtrosCategoriaLabel">Categoria</span>
-      <div class="filters" id="filterContainer">
-        <button class="active" data-filter="all">Todos</button>
-        <button data-filter="exclusivo">Exclusivos</button>
-        <button data-filter="aaa">AAA</button>
-        <button data-filter="fps">FPS</button>
-        <button data-filter="survival">Survival</button>
-        <button data-filter="esporte">Esporte</button>
-        <button data-filter="infantil">Infantil</button>
-        <button data-filter="raro">Raro</button>
-      </div>
-    </div>
-    <div class="filters-dropdown-group">
-      <span class="filters-dropdown-label" id="filtrosPlataformaLabel">Plataforma</span>
-      <div class="filters" id="platContainer">
-        <button class="active" data-plat="all">Todas plataformas</button>
-        <button data-plat="PS4">PS4</button>
-        <button data-plat="PS3">PS3</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="grid" id="grid"></div>
-  <div class="result-count" id="resultCount"></div>
-  <div class="views-count" id="viewsCount">
-    <img src="https://visitor-badge.laobi.icu/badge?page_id=iamtgames.colecao&style=flat&color=222327&text=Visitas" alt="Contador de visitas" style="height:20px; vertical-align:middle; border-radius:6px;">
-  </div>
-
-  <div class="canais-toggle-card" id="ferramentasToggleCard" style="margin-top:18px;">
-    <div class="canais-toggle-left">
-      <span class="canais-toggle-icon">🛠️</span>
-      <div>
-        <h3>Ferramentas</h3>
-        <p>Exportar, imprimir e QR code</p>
-      </div>
-    </div>
-    <span class="canais-toggle-arrow">▾</span>
-  </div>
-
   <div class="destaque-card" id="destaqueCard" style="display:none; margin-top:18px;">
     <div class="destaque-pptx-bar">📽️ destaques.pptx</div>
     <div class="destaque-pptx-progress" id="destaquePptxProgress"></div>
+    <div class="destaque-filmstrip destaque-filmstrip-top" aria-hidden="true"></div>
     <div class="destaque-img" id="destaqueImg"></div>
     <div class="destaque-info">
       <div class="destaque-eyebrow" id="destaqueEyebrow">✨ Destaque da coleção</div>
@@ -2286,27 +2209,141 @@
         <button class="modal-toggle-btn" id="apresentacaoBtn" style="align-self:flex-start; margin-top:6px;">▶️ Modo apresentação</button>
       </div>
     </div>
+    <div class="destaque-filmstrip destaque-filmstrip-bottom" aria-hidden="true"></div>
   </div>
 
   <div class="stat-row" id="highlightRow" style="margin: 30px 0 16px;"></div>
-
-  <div class="canais-toggle-card" id="statsToggleCard" style="margin-bottom:14px;">
-    <div class="canais-toggle-left">
-      <span class="canais-toggle-icon">📊</span>
-      <div>
-        <h3>Estatísticas da coleção</h3>
-        <p>Raridade, categoria, década, devs e perfil</p>
-      </div>
-    </div>
-    <span class="canais-toggle-arrow">▾</span>
-  </div>
 
   <div id="giscus-comments" style="margin: 10px 0 30px;">
     <div class="section-title" id="livroVisitasTitulo" style="margin-bottom:14px;">💬 Livro de visitas</div>
     <div class="giscus"></div>
   </div>
 
-  <div class="footer">Controle Coleção iamT<br><span id="atualizadoEm" style="font-size:10.5px; opacity:.7;"></span></div>
+  <div class="footer">
+    Controle Coleção iamT<br><span id="atualizadoEm" style="font-size:10.5px; opacity:.7;"></span>
+    <div class="views-count" id="viewsCount" style="margin-top:10px;">
+      <img src="https://visitor-badge.laobi.icu/badge?page_id=iamtgames.colecao&style=flat&color=222327&text=Visitas" alt="Contador de visitas" style="height:20px; vertical-align:middle; border-radius:6px;">
+    </div>
+  </div>
+</div>
+
+<!-- Estas quatro "janelas" ficam totalmente fora do fluxo da pagina inicial --
+     so existem quando abertas pelo icone correspondente na area de trabalho
+     (ou pelo menu Iniciar), igual qualquer outro mini-panel do site. -->
+<div class="mini-panel-overlay" id="canaisPanelOverlay">
+  <div class="mini-panel mini-panel-xwide">
+    <div class="win-titlebar">vendedores_player.exe</div>
+    <div class="mini-panel-head"><h3 id="canaisTituloEl">🛒 Vendedores, Lives e Leilões</h3><button class="mini-panel-close" id="canaisPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body">
+      <p id="canaisSubEl" style="font-size:12.5px; color:var(--ink-dim); margin:0 0 4px;">12 canais indicados</p>
+      <div id="canaisSortWrap" style="margin: 0 0 14px;">
+        <button class="toggle-venda" id="ordenarDiaBtn">📅 Ordenar por dia da semana</button>
+      </div>
+      <div class="canais-player-bar" id="canaisPlayerBar">
+        <div class="canais-eq"><span></span><span></span><span></span><span></span></div>
+        <span id="canaisPlayerBarTxt">vendedores_player.exe</span>
+      </div>
+      <div class="grid" id="gridCanais"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-panel-overlay" id="wishlistPanelOverlay">
+  <div class="mini-panel mini-panel-xwide">
+    <div class="win-titlebar">radar.exe</div>
+    <div class="mini-panel-head"><h3 id="radarTituloEl">🎯 Radar de Caça</h3><button class="mini-panel-close" id="wishlistPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body">
+      <p id="wishlistSubtitle" style="font-size:12.5px; color:var(--ink-dim); margin:0 0 4px;">Jogos que ainda não tenho, mas estou de olho</p>
+      <div class="grid" id="gridWishlist"></div>
+      <div id="wishlistPager" style="display:none; align-items:center; justify-content:center; gap:16px; margin-top:14px;">
+        <button class="toggle-venda" id="wishlistPrevBtn" aria-label="Página anterior do radar de caça">◀ Anterior</button>
+        <span id="wishlistPageInfo" style="font-size:13px; color:#9a9a9e; font-weight:700;"></span>
+        <button class="toggle-venda" id="wishlistNextBtn" aria-label="Próxima página do radar de caça">Próxima ▶</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-panel-overlay" id="aovivoPanelOverlay">
+  <div class="mini-panel mini-panel-xwide">
+    <div class="win-titlebar">noticias.exe</div>
+    <div class="mini-panel-head"><h3 id="aovivoTituloEl">📰 Notícias Gamer, Jogos Grátis e Dica de Jogos</h3><button class="mini-panel-close" id="aovivoPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body">
+      <p id="aovivoSubEl" style="font-size:12.5px; color:var(--ink-dim); margin:0 0 4px;">Descobertas do mundo dos games — atualiza sozinho</p>
+      <div class="aovivo-grid">
+        <div class="aovivo-col">
+          <h4 id="aovivoJogosGratisTitulo">🎮 Jogos grátis agora</h4>
+          <div id="freeGamesList" class="aovivo-list"><p class="aovivo-loading" id="freeGamesLoading">Carregando…</p></div>
+        </div>
+        <div class="aovivo-col">
+          <h4 id="aovivoNoticiasTitulo">📰 Notícias (Flow Games)</h4>
+          <div id="newsList" class="aovivo-list"><p class="aovivo-loading" id="newsLoading">Carregando…</p></div>
+        </div>
+        <div class="aovivo-col">
+          <h4 id="aovivoDescubraTitulo">🎲 Descubra um jogo</h4>
+          <div id="randomGameBox" class="aovivo-list">
+            <button class="toggle-venda" id="randomGameBtn">🔀 Sortear jogo aleatório</button>
+            <div id="randomGameResult"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-panel-overlay" id="colecaoGridPanelOverlay">
+  <div class="mini-panel mini-panel-xwide">
+    <div class="win-titlebar" id="colecaoGridTitlebar">colecao.exe</div>
+    <div class="mini-panel-head"><h3 id="colecaoGridTitulo">📁 Coleção</h3><button class="mini-panel-close" id="colecaoGridPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body">
+      <div class="tools">
+        <div class="search-box">
+          <span class="ico">🔍</span>
+          <input type="text" id="searchInput" placeholder="Buscar jogo...">
+        </div>
+        <select class="sort-select" id="sortSelect">
+          <option value="none">Ordenar por...</option>
+          <option value="nome-az">Nome (A-Z)</option>
+          <option value="nome-za">Nome (Z-A)</option>
+          <option value="valor-desc">Valor (maior primeiro)</option>
+          <option value="valor-asc">Valor (menor primeiro)</option>
+          <option value="raridade">Raridade</option>
+        </select>
+        <button class="toggle-venda" id="viewToggle">📋 Ver em lista</button>
+        <button class="toggle-venda" id="compararToggle">⚖️ Comparar</button>
+        <button class="toggle-venda" id="roletaBtn">🎲 O que jogar hoje?</button>
+        <button class="toggle-venda" id="filtrosToggleBtn">🔽 Filtros</button>
+        <button class="toggle-venda" id="scannerBtn">📷 Scanner</button>
+      </div>
+
+      <div class="filters-dropdown" id="filtrosDropdown" style="display:none;">
+        <div class="filters-dropdown-group">
+          <span class="filters-dropdown-label" id="filtrosCategoriaLabel">Categoria</span>
+          <div class="filters" id="filterContainer">
+            <button class="active" data-filter="all">Todos</button>
+            <button data-filter="exclusivo">Exclusivos</button>
+            <button data-filter="aaa">AAA</button>
+            <button data-filter="fps">FPS</button>
+            <button data-filter="survival">Survival</button>
+            <button data-filter="esporte">Esporte</button>
+            <button data-filter="infantil">Infantil</button>
+            <button data-filter="raro">Raro</button>
+          </div>
+        </div>
+        <div class="filters-dropdown-group">
+          <span class="filters-dropdown-label" id="filtrosPlataformaLabel">Plataforma</span>
+          <div class="filters" id="platContainer">
+            <button class="active" data-plat="all">Todas plataformas</button>
+            <button data-plat="PS4">PS4</button>
+            <button data-plat="PS3">PS3</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid" id="grid"></div>
+      <div class="result-count" id="resultCount"></div>
+    </div>
+  </div>
 </div>
 
 <div class="mini-panel-overlay" id="toolsPanelOverlay">
@@ -4022,13 +4059,13 @@ function fecharTodosMiniPaineis(){
   document.querySelectorAll('.mini-panel-overlay.aberto').forEach(ov => ov.classList.remove('aberto'));
 }
 
-document.getElementById('ferramentasToggleCard').addEventListener('click', () => abrirMiniPanel('toolsPanelOverlay'));
+// Ferramentas e Estatisticas nao tem mais card fixo na tela inicial -- so
+// abrem pelo icone da area de trabalho ou pelo menu Iniciar (window.y2kAcoes).
 document.getElementById('toolsPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('toolsPanelOverlay'));
 document.getElementById('toolsPanelOverlay').addEventListener('click', function(e){
   if(e.target === this) fecharMiniPanel('toolsPanelOverlay');
 });
 
-document.getElementById('statsToggleCard').addEventListener('click', () => abrirMiniPanel('statsPanelOverlay'));
 document.getElementById('statsPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('statsPanelOverlay'));
 document.getElementById('statsPanelOverlay').addEventListener('click', function(e){
   if(e.target === this) fecharMiniPanel('statsPanelOverlay');
@@ -4256,7 +4293,23 @@ function renderRarityChart(){
   el.innerHTML = html;
 }
 
+// Troca o slide com um fade suave quando ja existe um destaque na tela (em
+// vez de so trocar o conteudo seco) -- reforca a sensacao de apresentacao de
+// slides de verdade. No primeiro carregamento da pagina nao tem o que
+// esmaecer, entao ele so acontece nas trocas seguintes.
 function renderDestaque(){
+  const card = document.getElementById('destaqueCard');
+  if(!card) return;
+  const jaVisivel = card.style.display === 'flex';
+  if(!jaVisivel){ renderDestaqueImediato(); return; }
+  card.classList.add('destaque-fade');
+  setTimeout(() => {
+    renderDestaqueImediato();
+    requestAnimationFrame(() => card.classList.remove('destaque-fade'));
+  }, 200);
+}
+
+function renderDestaqueImediato(){
   const card = document.getElementById('destaqueCard');
   if(!card) return;
   const pool = todosJogos().filter(j => j.rar === 'raro' || j.rar === 'muito');
@@ -5341,15 +5394,6 @@ setInterval(atualizarRelogioY2k, 15000);
   const menu = document.getElementById('y2kStartMenu');
   if(!startBtn || !menu) return;
 
-  function abrirCard(cardId, gridId){
-    const card = document.getElementById(cardId);
-    if(!card) return;
-    const grid = gridId ? document.getElementById(gridId) : null;
-    const jaAberto = grid && grid.style.display !== 'none';
-    if(!jaAberto) card.click();
-    card.scrollIntoView({ behavior:'smooth', block:'start' });
-  }
-
   const acoes = {
     cmdk: () => document.getElementById('cmdkOpenBtn') && document.getElementById('cmdkOpenBtn').click(),
     calendario: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('calendarioPanelOverlay'),
@@ -5360,9 +5404,9 @@ setInterval(atualizarRelogioY2k, 15000);
     segredo: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('segredoPanelOverlay'),
     vitrine: () => document.getElementById('vitrineBtn') && document.getElementById('vitrineBtn').click(),
     cartao: () => document.getElementById('cartaoResumoBtn') && document.getElementById('cartaoResumoBtn').click(),
-    canais: () => abrirCard('canaisToggleCard', 'gridCanais'),
-    wishlist: () => abrirCard('wishlistToggleCard', 'gridWishlist'),
-    aovivo: () => abrirCard('aovivoToggleCard', 'aovivoWrap'),
+    canais: () => typeof abrirCanaisPanel === 'function' && abrirCanaisPanel(),
+    wishlist: () => typeof abrirWishlistPanel === 'function' && abrirWishlistPanel(),
+    aovivo: () => typeof abrirAovivoPanel === 'function' && abrirAovivoPanel(),
     instaPessoal: () => window.open('https://www.instagram.com/marioturbino/', '_blank', 'noopener,noreferrer'),
     instaColecao: () => window.open('https://www.instagram.com/iamtgames/', '_blank', 'noopener,noreferrer'),
     contato: () => document.getElementById('contatoBtn') && document.getElementById('contatoBtn').click(),
@@ -5404,11 +5448,96 @@ setInterval(atualizarRelogioY2k, 15000);
   });
 })();
 
-// ICONES DE "AREA DE TRABALHO": mesma logica de menu Iniciar (window.y2kAcoes),
-// so que reaproveitada num ponto fixo da pagina em vez de dentro do popup.
+// ICONES DE "AREA DE TRABALHO": alinhados em coluna (estilo Windows) e
+// arrastaveis -- a pessoa pode segurar e soltar cada icone onde quiser
+// dentro da area, e essa posicao fica salva pra proxima visita.
 (function(){
   const desktop = document.getElementById('y2kDesktopIcons');
   if(!desktop) return;
+  const icones = Array.from(desktop.querySelectorAll('.y2k-icon'));
+  const CEL_W = 92, CEL_H = 90, PAD = 10;
+
+  function layoutPadrao(){
+    const alturaUtil = Math.max(desktop.clientHeight - PAD * 2, CEL_H);
+    const porColuna = Math.max(1, Math.floor(alturaUtil / CEL_H));
+    icones.forEach((el, i) => {
+      const col = Math.floor(i / porColuna);
+      const row = i % porColuna;
+      el.style.left = (PAD + col * CEL_W) + 'px';
+      el.style.top = (PAD + row * CEL_H) + 'px';
+    });
+  }
+
+  function restaurarPosicoesSalvas(){
+    icones.forEach(el => {
+      const chave = 'y2kIconPos-' + el.getAttribute('data-y2k-action');
+      try{
+        const salvo = JSON.parse(localStorage.getItem(chave) || 'null');
+        if(salvo && Number.isFinite(salvo.left) && Number.isFinite(salvo.top)){
+          el.style.left = Math.max(0, Math.min(salvo.left, desktop.clientWidth - el.offsetWidth)) + 'px';
+          el.style.top = Math.max(0, Math.min(salvo.top, desktop.clientHeight - el.offsetHeight)) + 'px';
+        }
+      }catch(err){}
+    });
+  }
+
+  layoutPadrao();
+  restaurarPosicoesSalvas();
+
+  // Arrastar-e-soltar: distingue "clique" de "arraste" por deslocamento minimo,
+  // pra nao abrir a pasta sem querer so porque a pessoa tentou mover o icone.
+  let arrastando = null, offX = 0, offY = 0, startX = 0, startY = 0, moveu = false;
+  const LIMIAR = 6;
+
+  function aoMoverPonteiro(e){
+    if(!arrastando) return;
+    const dx = e.clientX - startX, dy = e.clientY - startY;
+    if(!moveu && (Math.abs(dx) > LIMIAR || Math.abs(dy) > LIMIAR)) moveu = true;
+    if(!moveu) return;
+    const rectPai = desktop.getBoundingClientRect();
+    let novoLeft = e.clientX - rectPai.left - offX;
+    let novoTop = e.clientY - rectPai.top - offY;
+    novoLeft = Math.max(0, Math.min(novoLeft, desktop.clientWidth - arrastando.offsetWidth));
+    novoTop = Math.max(0, Math.min(novoTop, desktop.clientHeight - arrastando.offsetHeight));
+    arrastando.style.left = novoLeft + 'px';
+    arrastando.style.top = novoTop + 'px';
+    arrastando.classList.add('arrastando');
+  }
+  function suprimirProximoClique(el){
+    const bloquear = function(ev){ ev.stopPropagation(); ev.preventDefault(); };
+    el.addEventListener('click', bloquear, { capture:true, once:true });
+  }
+  function aoSoltarPonteiro(){
+    if(!arrastando) return;
+    const el = arrastando;
+    el.classList.remove('arrastando');
+    document.removeEventListener('pointermove', aoMoverPonteiro);
+    document.removeEventListener('pointerup', aoSoltarPonteiro);
+    if(moveu){
+      try{
+        localStorage.setItem('y2kIconPos-' + el.getAttribute('data-y2k-action'), JSON.stringify({
+          left: parseFloat(el.style.left), top: parseFloat(el.style.top)
+        }));
+      }catch(err){}
+      suprimirProximoClique(el);
+    }
+    arrastando = null;
+  }
+  desktop.addEventListener('pointerdown', function(e){
+    const el = e.target.closest('.y2k-icon');
+    if(!el) return;
+    const rect = el.getBoundingClientRect();
+    offX = e.clientX - rect.left;
+    offY = e.clientY - rect.top;
+    startX = e.clientX; startY = e.clientY;
+    moveu = false;
+    arrastando = el;
+    document.addEventListener('pointermove', aoMoverPonteiro);
+    document.addEventListener('pointerup', aoSoltarPonteiro);
+  });
+
+  // Clique (sem arraste) continua abrindo a pasta/janela correspondente,
+  // reaproveitando as mesmas acoes do menu Iniciar.
   desktop.addEventListener('click', function(e){
     const btn = e.target.closest('button[data-y2k-action]');
     if(!btn) return;
@@ -5437,8 +5566,9 @@ setInterval(atualizarRelogioY2k, 15000);
 })();
 
 // PASTA "COLECAO": abre as subpastas PS4/PS3; clicar numa delas aplica o
-// mesmo filtro de plataforma que ja existe no dropdown de Filtros e rola
-// ate a grade principal -- nao reinventa nenhuma logica de renderizacao.
+// mesmo filtro de plataforma que ja existe no dropdown de Filtros e abre a
+// janela da coleção (busca, ordenar, comparar, filtros e a grade) -- nada
+// disso fica solto na tela inicial, so aparece dentro dessa janela.
 (function(){
   const overlay = document.getElementById('colecaoPanelOverlay');
   if(!overlay) return;
@@ -5454,14 +5584,24 @@ setInterval(atualizarRelogioY2k, 15000);
   if(lblPS4 && nPS4 !== null) lblPS4.textContent = `PS4 (${nPS4})`;
   if(lblPS3 && nPS3 !== null) lblPS3.textContent = `PS3 (${nPS3})`;
 
+  const gridOverlay = document.getElementById('colecaoGridPanelOverlay');
+  const gridTitulo = document.getElementById('colecaoGridTitulo');
+  const gridTitlebar = document.getElementById('colecaoGridTitlebar');
+  document.getElementById('colecaoGridPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('colecaoGridPanelOverlay'));
+  gridOverlay.addEventListener('click', function(e){ if(e.target === gridOverlay) fecharMiniPanel('colecaoGridPanelOverlay'); });
+
+  function abrirColecaoGrid(plat){
+    fecharMiniPanel('colecaoPanelOverlay');
+    const platBtn = document.querySelector(`#platContainer button[data-plat="${plat}"]`);
+    if(platBtn) platBtn.click();
+    if(gridTitulo) gridTitulo.textContent = `📁 Coleção — ${plat}`;
+    if(gridTitlebar) gridTitlebar.textContent = `colecao_${plat.toLowerCase()}.exe`;
+    abrirMiniPanel('colecaoGridPanelOverlay');
+  }
+
   overlay.querySelectorAll('[data-colecao-plat]').forEach(function(btn){
     btn.addEventListener('click', function(){
-      const plat = btn.getAttribute('data-colecao-plat');
-      fecharMiniPanel('colecaoPanelOverlay');
-      const platBtn = document.querySelector(`#platContainer button[data-plat="${plat}"]`);
-      if(platBtn) platBtn.click();
-      const grid = document.getElementById('grid');
-      if(grid) setTimeout(() => grid.scrollIntoView({ behavior:'smooth', block:'start' }), 60);
+      abrirColecaoGrid(btn.getAttribute('data-colecao-plat'));
     });
   });
 })();
@@ -5502,12 +5642,7 @@ document.querySelectorAll('.ctrlpanel-item[role="button"]').forEach(function(el)
   trayLive.addEventListener('click', function(){
     const aoVivo = typeof canaisLiveAtual !== 'undefined' && canaisLiveAtual.length > 0;
     if(aoVivo){
-      const card = document.getElementById('canaisToggleCard');
-      const grid = document.getElementById('gridCanais');
-      if(card){
-        if(grid && grid.style.display === 'none') card.click();
-        card.scrollIntoView({ behavior:'smooth', block:'start' });
-      }
+      if(typeof abrirCanaisPanel === 'function') abrirCanaisPanel();
     }else{
       // sem canal ao vivo agora: pequeno feedback visual (o title ja explica o motivo)
       trayLive.style.transform = 'scale(1.25)';
@@ -5915,17 +6050,15 @@ function abrirSalaSecreta(){
   }
 })();
 
-document.getElementById('canaisToggleCard').addEventListener('click', function(){
-  const grid = document.getElementById('gridCanais');
-  const sortWrap = document.getElementById('canaisSortWrap');
-  const arrow = document.getElementById('canaisToggleArrow');
-  const playerBar = document.getElementById('canaisPlayerBar');
-  const aberto = grid.style.display !== 'none';
-  grid.style.display = aberto ? 'none' : 'grid';
-  sortWrap.style.display = aberto ? 'none' : 'block';
-  if(playerBar) playerBar.style.display = aberto ? 'none' : 'flex';
-  arrow.classList.toggle('open', !aberto);
-  if(!aberto) renderCanais(); // reabrindo: atualiza selo AO VIVO com dados mais recentes
+// "Vendedores, Lives e Leiloes" agora e uma janela (mini-panel) que so existe
+// quando aberta pelo icone da area de trabalho / menu Iniciar / bandeja.
+function abrirCanaisPanel(){
+  renderCanais(); // atualiza selo AO VIVO com dados mais recentes toda vez que abre
+  abrirMiniPanel('canaisPanelOverlay');
+}
+document.getElementById('canaisPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('canaisPanelOverlay'));
+document.getElementById('canaisPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharMiniPanel('canaisPanelOverlay');
 });
 
 document.getElementById('ordenarDiaBtn').addEventListener('click', function(){
@@ -5953,16 +6086,15 @@ document.addEventListener('keydown', function(e){
   }
 });
 
-// "Radar de Caca" (lista de desejos)
+// "Radar de Caca" (lista de desejos) -- tambem virou janela propria.
 renderWishlist();
-document.getElementById('wishlistToggleCard').addEventListener('click', function(){
-  const grid = document.getElementById('gridWishlist');
-  const pager = document.getElementById('wishlistPager');
-  const arrow = document.getElementById('wishlistToggleArrow');
-  const aberto = grid.style.display !== 'none';
-  grid.style.display = aberto ? 'none' : 'grid';
-  if(pager) pager.style.display = aberto ? 'none' : (Math.ceil(wishlist.length / WISHLIST_PAGE_SIZE) > 1 ? 'flex' : 'none');
-  arrow.classList.toggle('open', !aberto);
+function abrirWishlistPanel(){
+  renderWishlist();
+  abrirMiniPanel('wishlistPanelOverlay');
+}
+document.getElementById('wishlistPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('wishlistPanelOverlay'));
+document.getElementById('wishlistPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharMiniPanel('wishlistPanelOverlay');
 });
 document.getElementById('wishlistPrevBtn').addEventListener('click', function(){
   wishlistPage--;
@@ -5973,18 +6105,19 @@ document.getElementById('wishlistNextBtn').addEventListener('click', function(){
   renderWishlist();
 });
 
-// Painel Ao Vivo: jogos gratis (GamerPower), noticias (Flow Games via news.json) e sorteio (RAWG)
-document.getElementById('aovivoToggleCard').addEventListener('click', function(){
-  const wrap = document.getElementById('aovivoWrap');
-  const arrow = document.getElementById('aovivoToggleArrow');
-  const aberto = wrap.style.display !== 'none';
-  wrap.style.display = aberto ? 'none' : 'block';
-  arrow.classList.toggle('open', !aberto);
-  if(!aberto && !window.__aovivoCarregado){
+// Painel Ao Vivo: jogos gratis (GamerPower), noticias (Flow Games via news.json)
+// e sorteio (RAWG) -- agora tambem so aparece quando a janela e aberta.
+function abrirAovivoPanel(){
+  abrirMiniPanel('aovivoPanelOverlay');
+  if(!window.__aovivoCarregado){
     window.__aovivoCarregado = true;
     carregarJogosGratis();
     carregarNoticias();
   }
+}
+document.getElementById('aovivoPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('aovivoPanelOverlay'));
+document.getElementById('aovivoPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharMiniPanel('aovivoPanelOverlay');
 });
 
 async function carregarJogosGratis(){
