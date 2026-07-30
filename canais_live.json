@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-30T04:00:27.428Z",
+  "updated": "2026-07-30T04:15:16.853Z",
   "live": [
     {
       "id": 7,
@@ -9,15 +9,6 @@
       "videoTitle": "🟢 ON - lotei o carro de jogos vem ver",
       "videoUrl": "https://www.youtube.com/watch?v=Vxmm6nlp72s",
       "thumbnail": "https://i.ytimg.com/vi/Vxmm6nlp72s/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Vem tranquilo /  Arc raiders",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
