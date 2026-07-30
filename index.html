@@ -836,6 +836,146 @@
   }
   .mini-panel-body .toggle-venda{ width:100%; text-align:left; }
 
+  /* ===================================================================
+     METAFORA DE DESKTOP: barrinha de titulo generica (mesmo estilo do
+     ::before dos cards "jogo.exe") reutilizada em qualquer mini-panel pra
+     virar uma "janela" de verdade -- pasta, painel de controle, bloco de
+     notas, apresentacao. Fica sempre como primeiro filho do .mini-panel. */
+  .win-titlebar{
+    display:flex; align-items:center; gap:8px;
+    height:24px; padding:0 10px;
+    font-family:'Tahoma','Segoe UI',sans-serif; font-size:10.5px; font-weight:700; color:#fff;
+    text-shadow:0 1px 1px rgba(0,0,0,.4);
+    background-image:
+      radial-gradient(circle, #ff5f57 45%, transparent 46%),
+      radial-gradient(circle, #ffbd2e 45%, transparent 46%),
+      radial-gradient(circle, #28c93f 45%, transparent 46%),
+      linear-gradient(180deg, #4f9df0 0%, #1e5fc4 45%, #123f8f 100%);
+    background-size: 10px 10px, 10px 10px, 10px 10px, 100% 100%;
+    background-position: calc(100% - 12px) 50%, calc(100% - 26px) 50%, calc(100% - 40px) 50%, 0 0;
+    background-repeat:no-repeat;
+  }
+  .win-titlebar.notepad{
+    background-image: linear-gradient(180deg, #4f9df0 0%, #1e5fc4 45%, #123f8f 100%);
+  }
+
+  /* Icones "de area de trabalho" -- ficam logo abaixo do cabecalho, em fila,
+     pra dar a sensacao de pastas/arquivos clicaveis sem depender de posicao
+     fixa (evita sobrepor qualquer coisa no mobile). */
+  .y2k-desktop{
+    display:flex; flex-wrap:wrap; gap:6px; margin-bottom:18px;
+    padding:10px 8px; border-radius:10px;
+    background: rgba(0,20,60,0.18); border:1px solid rgba(255,255,255,0.08);
+  }
+  .y2k-icon{
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+    width:78px; padding:8px 4px 6px; border-radius:6px; cursor:pointer;
+    background:transparent; border:1px solid transparent; color:#fff;
+    font-family:'Tahoma','Segoe UI',sans-serif;
+    -webkit-tap-highlight-color:transparent;
+  }
+  .y2k-icon:hover{ background: rgba(120,170,255,0.18); border-color: rgba(140,190,255,0.3); }
+  .y2k-icon:active, .y2k-icon.selecionado{
+    background: rgba(70,130,220,0.4); border-color: rgba(140,190,255,0.55);
+  }
+  .y2k-icon .y2k-icon-glyph{
+    width:34px; height:34px; display:flex; align-items:center; justify-content:center;
+    font-size:22px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5));
+  }
+  .y2k-icon .y2k-icon-label{
+    font-size:10.5px; line-height:1.2; text-align:center; color:#fff;
+    text-shadow:0 1px 2px rgba(0,0,0,.85), 0 0 4px rgba(0,0,0,.6);
+    max-width:76px; word-break:break-word;
+  }
+
+  /* Pasta "Colecao" -> subpastas PS4/PS3 */
+  .colecao-subpastas{ display:flex; gap:18px; flex-wrap:wrap; justify-content:center; padding:6px 0 4px; }
+
+  /* Painel de Controle (Ferramentas): grid de icones em vez de lista de botoes */
+  .ctrlpanel-grid{
+    display:grid; grid-template-columns:repeat(auto-fill, minmax(96px,1fr)); gap:10px;
+  }
+  .ctrlpanel-item{
+    display:flex; flex-direction:column; align-items:center; gap:6px;
+    padding:12px 6px; border-radius:10px; cursor:pointer; text-align:center;
+    background: rgba(255,255,255,0.04); border:1px solid rgba(255,255,255,0.08);
+    color:var(--ink); font-size:11.5px; font-weight:600;
+    transition: background .15s, border-color .15s;
+  }
+  .ctrlpanel-item:hover{ background: rgba(120,170,255,0.14); border-color: rgba(140,190,255,0.4); }
+  .ctrlpanel-item .ico{ font-size:26px; }
+
+  /* Bloco de notas do arquivo de codigos secretos */
+  .notepad-body{
+    background:#fffef2; color:#2a2a2a; font-family:'Courier New', monospace;
+    font-size:13px; line-height:1.65; padding:16px 18px; border-radius:0 0 8px 8px;
+    white-space:pre-wrap;
+  }
+  .notepad-body b{ color:#0b3d91; }
+
+  /* Modo apresentacao (Destaques) com moldura tipo PowerPoint */
+  .destaque-card{ position:relative; }
+  .destaque-pptx-bar{
+    display:flex; align-items:center; gap:8px; height:24px; padding:0 10px; margin:-18px -18px 14px;
+    font-family:'Tahoma','Segoe UI',sans-serif; font-size:10.5px; font-weight:700; color:#fff;
+    background: linear-gradient(180deg,#e2792e 0%,#c85a10 55%,#9c4308 100%);
+    text-shadow:0 1px 1px rgba(0,0,0,.4);
+  }
+  .destaque-card.pptx-mode{
+    border:2px solid #e2792e !important; box-shadow:0 0 0 1px rgba(226,121,46,.35), 0 12px 30px rgba(0,0,0,.4) !important;
+  }
+  .destaque-pptx-progress{
+    position:absolute; left:0; bottom:0; height:3px; background:#ffcf8a;
+    width:0%; transition:width linear;
+  }
+  .destaque-card.pptx-mode .destaque-pptx-progress{ animation: destaquePptxBarra 6s linear infinite; }
+  @keyframes destaquePptxBarra{ from{ width:0%; } to{ width:100%; } }
+
+  /* "Media player" (Winamp/WMP) pros Vendedores/Lives/Leiloes */
+  .canais-player-bar{
+    display:flex; align-items:center; gap:8px; padding:6px 10px; margin-bottom:10px;
+    border-radius:8px; background: linear-gradient(180deg,#3a1d5c 0%,#241040 100%);
+    border:1px solid rgba(180,120,255,0.35); color:#e9d9ff; font-size:11px; font-weight:700;
+    font-family:'Tahoma','Segoe UI',sans-serif;
+  }
+  .canais-eq{ display:flex; align-items:flex-end; gap:2px; height:14px; }
+  .canais-eq span{ width:3px; height:3px; background:#c98bff; border-radius:1px; }
+  .canais-player-bar.tocando .canais-eq span{ animation: canaisEqBounce .8s ease-in-out infinite; }
+  .canais-player-bar.tocando .canais-eq span:nth-child(2){ animation-delay:.15s; }
+  .canais-player-bar.tocando .canais-eq span:nth-child(3){ animation-delay:.3s; }
+  .canais-player-bar.tocando .canais-eq span:nth-child(4){ animation-delay:.45s; }
+  @keyframes canaisEqBounce{ 0%,100%{ height:3px; } 50%{ height:13px; } }
+  /* variante usada dentro do titulo dos paineis flutuantes de live (esses so
+     existem enquanto o canal esta mesmo ao vivo, entao anima sempre) */
+  .live-eq{ height:12px; margin-left:auto; margin-right:6px; }
+  .live-eq span{ animation: canaisEqBounce .8s ease-in-out infinite; background:#fff; opacity:.85; }
+  .live-eq span:nth-child(2){ animation-delay:.15s; }
+  .live-eq span:nth-child(3){ animation-delay:.3s; }
+  .live-eq span:nth-child(4){ animation-delay:.45s; }
+
+  /* Balao de notificacao estilo Windows (bandeja) -- usado pro lembrete de
+     aniversario de lancamento em vez do banner fixo no topo da pagina.
+     #aniversarioWrap vira o "empilhador" fixo perto da bandeja; cada
+     .y2k-balloon dentro dele e so o cartao visual, sem posicao propria. */
+  #aniversarioWrap.y2k-balloon-stack{
+    position:fixed; z-index:95; right:10px; bottom: calc(42px + env(safe-area-inset-bottom,0px));
+    display:flex; flex-direction:column; gap:8px; width:min(300px,88vw); margin-bottom:0 !important;
+  }
+  .y2k-balloon{
+    width:100%; background: linear-gradient(180deg,#fffde8 0%,#fff6c2 100%);
+    border:1px solid #d8b400; border-radius:8px 8px 8px 2px;
+    box-shadow:0 10px 26px rgba(0,0,0,.4);
+    padding:10px 12px; color:#4a3a00; font-family:'Tahoma','Segoe UI',sans-serif;
+    animation: balloonEntra .3s ease-out;
+    cursor:pointer;
+  }
+  @keyframes balloonEntra{ from{ transform:translateY(14px); opacity:0; } to{ transform:translateY(0); opacity:1; } }
+  .y2k-balloon .y2k-balloon-head{ display:flex; align-items:center; gap:6px; font-weight:800; font-size:12px; margin-bottom:4px; }
+  .y2k-balloon .y2k-balloon-close{
+    margin-left:auto; background:transparent; border:none; cursor:pointer; font-size:12px; color:#8a7000;
+  }
+  .y2k-balloon .y2k-balloon-txt{ font-size:11.5px; line-height:1.35; }
+
   .scanner-hint{ font-size:13px; color:var(--ink-dim); margin:0; }
   .scanner-video-wrap{
     position:relative; width:100%; aspect-ratio:4/3; background:#000;
@@ -1920,6 +2060,7 @@
 <button id="adminBtn" style="display:none;" aria-hidden="true" tabindex="-1">🛠️</button>
 <div class="y2k-taskbar">
   <button class="y2k-start" id="y2kStartBtn" aria-haspopup="true" aria-expanded="false" title="Menu Iniciar">🏁 <span>iniciar</span></button>
+  <button class="y2k-tray-icon" id="y2kSearchIcon" title="Busca rápida (Ctrl+K)">🔎</button>
   <div class="y2k-start-menu" id="y2kStartMenu" role="menu">
     <div class="y2k-start-menu-title">Ir para</div>
     <button data-y2k-action="cmdk">🔎 Busca rápida <span style="margin-left:auto;opacity:.6;font-size:10px;">Ctrl+K</span></button>
@@ -1946,6 +2087,8 @@
   </div>
   <div class="y2k-taskbar-sep"></div>
   <div class="y2k-tray">
+    <button class="y2k-tray-icon" id="y2kTrayAniversario" title="Nenhum aniversário de lançamento hoje" style="display:none;">🎂<span class="y2k-tray-dot" id="y2kTrayAniversarioDot"></span></button>
+    <button class="y2k-tray-icon" id="y2kTrayCalendario" title="Calendário de Lançamentos">📅</button>
     <button class="y2k-tray-icon" id="y2kTraySom" title="Efeitos sonoros">🔇</button>
     <button class="y2k-tray-icon" id="y2kTrayMascotes" title="Mascotes">👻</button>
     <button class="y2k-tray-icon" id="y2kTrayCrt" title="Filtro CRT">📺</button>
@@ -1975,8 +2118,32 @@
   <div class="tools" id="topActionsRow" style="margin-bottom:20px;">
     <button class="toggle-venda" id="vitrineBtn">🖼️ Modo Vitrine (tela cheia)</button>
     <button class="toggle-venda" id="cartaoResumoBtn">🎁 Cartão resumo (compartilhar)</button>
-    <button class="toggle-venda" id="cmdkOpenBtn" title="Busca unificada (Ctrl+K)"><span id="cmdkBtnTxt">🔎 Busca rápida</span> <span class="cmdk-shortcut">Ctrl+K</span></button>
-    <button class="toggle-venda" id="calendarioToggleBtn">📆 Calendário de Lançamentos</button>
+    <!-- Busca rapida e calendario viraram icones da bandeja da barra de tarefas
+         (lupa do lado do Iniciar / icone 📅). Os botoes continuam existindo,
+         so escondidos, porque o resto do codigo dispara clique neles. -->
+    <button class="toggle-venda" id="cmdkOpenBtn" title="Busca unificada (Ctrl+K)" style="display:none;" aria-hidden="true" tabindex="-1"><span id="cmdkBtnTxt">🔎 Busca rápida</span> <span class="cmdk-shortcut">Ctrl+K</span></button>
+    <button class="toggle-venda" id="calendarioToggleBtn" style="display:none;" aria-hidden="true" tabindex="-1">📆 Calendário de Lançamentos</button>
+  </div>
+
+  <div class="y2k-desktop" id="y2kDesktopIcons">
+    <button class="y2k-icon" data-y2k-action="colecao" title="Abrir pasta Coleção">
+      <span class="y2k-icon-glyph">📁</span><span class="y2k-icon-label">Coleção</span>
+    </button>
+    <button class="y2k-icon" data-y2k-action="canais" title="Vendedores, Lives e Leilões">
+      <span class="y2k-icon-glyph">📺</span><span class="y2k-icon-label">Vendedores &amp; Lives</span>
+    </button>
+    <button class="y2k-icon" data-y2k-action="wishlist" title="Radar de Caça">
+      <span class="y2k-icon-glyph">🎯</span><span class="y2k-icon-label">radar.txt</span>
+    </button>
+    <button class="y2k-icon" data-y2k-action="aovivo" title="Notícias Gamer e Jogos Grátis">
+      <span class="y2k-icon-glyph">📰</span><span class="y2k-icon-label">noticias.txt</span>
+    </button>
+    <button class="y2k-icon" data-y2k-action="ferramentas" title="Painel de Controle">
+      <span class="y2k-icon-glyph">🛠️</span><span class="y2k-icon-label">Ferramentas</span>
+    </button>
+    <button class="y2k-icon" data-y2k-action="segredo" title="???">
+      <span class="y2k-icon-glyph">📝</span><span class="y2k-icon-label">codigos_secretos.txt</span>
+    </button>
   </div>
 
   <div class="canais-toggle-card" id="canaisToggleCard">
@@ -1991,6 +2158,10 @@
   </div>
   <div id="canaisSortWrap" style="display:none; margin: 0 0 14px;">
     <button class="toggle-venda" id="ordenarDiaBtn">📅 Ordenar por dia da semana</button>
+  </div>
+  <div class="canais-player-bar" id="canaisPlayerBar" style="display:none;">
+    <div class="canais-eq"><span></span><span></span><span></span><span></span></div>
+    <span id="canaisPlayerBarTxt">vendedores_player.exe</span>
   </div>
   <div class="grid" id="gridCanais" style="display:none; margin-bottom:30px;"></div>
 
@@ -2103,6 +2274,8 @@
   </div>
 
   <div class="destaque-card" id="destaqueCard" style="display:none; margin-top:18px;">
+    <div class="destaque-pptx-bar">📽️ destaques.pptx</div>
+    <div class="destaque-pptx-progress" id="destaquePptxProgress"></div>
     <div class="destaque-img" id="destaqueImg"></div>
     <div class="destaque-info">
       <div class="destaque-eyebrow" id="destaqueEyebrow">✨ Destaque da coleção</div>
@@ -2138,14 +2311,52 @@
 
 <div class="mini-panel-overlay" id="toolsPanelOverlay">
   <div class="mini-panel">
+    <div class="win-titlebar">painel_de_controle.exe</div>
     <div class="mini-panel-head"><h3>🛠️ Ferramentas</h3><button class="mini-panel-close" id="toolsPanelCloseBtn" aria-label="Fechar">✕</button></div>
     <div class="mini-panel-body">
-      <button class="toggle-venda" id="exportarBtn">⬇️ Exportar lista (.txt)</button>
-      <button class="toggle-venda" id="exportarJsonBtn">🗂️ Exportar JSON</button>
-      <button class="toggle-venda" id="exportarCsvBtn">📊 Exportar CSV</button>
-      <button class="toggle-venda" id="imprimirBtn">🖨️ Imprimir / Gerar PDF</button>
-      <button class="toggle-venda" id="qrBtn">📱 QR Code do site</button>
+      <div class="ctrlpanel-grid">
+        <div class="ctrlpanel-item" id="exportarBtn" role="button" tabindex="0"><span class="ico">⬇️</span><span class="lbl">Exportar lista (.txt)</span></div>
+        <div class="ctrlpanel-item" id="exportarJsonBtn" role="button" tabindex="0"><span class="ico">🗂️</span><span class="lbl">Exportar JSON</span></div>
+        <div class="ctrlpanel-item" id="exportarCsvBtn" role="button" tabindex="0"><span class="ico">📊</span><span class="lbl">Exportar CSV</span></div>
+        <div class="ctrlpanel-item" id="imprimirBtn" role="button" tabindex="0"><span class="ico">🖨️</span><span class="lbl">Imprimir / Gerar PDF</span></div>
+        <div class="ctrlpanel-item" id="qrBtn" role="button" tabindex="0"><span class="ico">📱</span><span class="lbl">QR Code do site</span></div>
+      </div>
     </div>
+  </div>
+</div>
+
+<div class="mini-panel-overlay" id="colecaoPanelOverlay">
+  <div class="mini-panel">
+    <div class="win-titlebar">colecao.exe</div>
+    <div class="mini-panel-head"><h3>📁 Coleção</h3><button class="mini-panel-close" id="colecaoPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body">
+      <p style="font-size:12.5px; color:var(--ink-dim); margin:0 0 4px;">Escolha uma plataforma pra abrir a coleção filtrada:</p>
+      <div class="colecao-subpastas">
+        <button class="y2k-icon" data-colecao-plat="PS4" style="color:var(--ink);">
+          <span class="y2k-icon-glyph">📁</span><span class="y2k-icon-label" id="colecaoPastaPS4Label" style="color:var(--ink); text-shadow:none;">PS4</span>
+        </button>
+        <button class="y2k-icon" data-colecao-plat="PS3" style="color:var(--ink);">
+          <span class="y2k-icon-glyph">📁</span><span class="y2k-icon-label" id="colecaoPastaPS3Label" style="color:var(--ink); text-shadow:none;">PS3</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-panel-overlay" id="segredoPanelOverlay">
+  <div class="mini-panel">
+    <div class="win-titlebar notepad">codigos_secretos.txt — Bloco de Notas</div>
+    <div class="mini-panel-head"><h3>📝 codigos_secretos.txt</h3><button class="mini-panel-close" id="segredoPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="notepad-body">Se voce achou esse arquivo, parabens -- ele nao aparece no menu normal do site.
+
+Codigo Konami classico, direto do controle:
+  <b>↑ ↑ ↓ ↓ ← → ← → B A</b>
+
+Como usar: digite essa sequencia no teclado em qualquer lugar da pagina
+(sem clicar em nenhum campo de texto antes). Se acertar a ordem certinha,
+uma Sala Secreta se abre com curiosidades reais da colecao.
+
+-- iamT</div>
   </div>
 </div>
 
@@ -3271,6 +3482,14 @@ let ordenarPorDia = false;
 function renderCanais(){
   const grid = document.getElementById('gridCanais');
   if(!grid) return;
+  const playerBar = document.getElementById('canaisPlayerBar');
+  const playerBarTxt = document.getElementById('canaisPlayerBarTxt');
+  if(playerBarTxt){
+    playerBarTxt.textContent = canaisLiveAtual.length
+      ? `▶️ tocando agora: ${canaisLiveAtual.length} canal${canaisLiveAtual.length > 1 ? 'is' : ''} ao vivo`
+      : 'vendedores_player.exe — playlist parada';
+  }
+  if(playerBar) playerBar.classList.toggle('tocando', canaisLiveAtual.length > 0);
   let html = '';
   const platLabels = { youtube:"YouTube", instagram:"Instagram", loja:"Loja Online", twitch:"Twitch" };
   const nomesDias = ["", "Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
@@ -3517,6 +3736,7 @@ function criarPainelLiveDOM(c){
   div.innerHTML = `
     <div class="live-panel-head">
       <div class="live-panel-title"><span class="dot"></span><span id="livePanelTitleTxt-${c.id}">${escapeHtml(c.n)} — ${t('estaAoVivo')}</span></div>
+      <div class="canais-eq live-eq"><span></span><span></span><span></span><span></span></div>
       <button class="live-panel-close" aria-label="Fechar" title="Fechar">✕</button>
     </div>
     <div class="live-panel-video">
@@ -4369,22 +4589,54 @@ function renderAniversarioLancamento(){
     aniversariantes.push({ jogo: j, anos });
   });
 
-  if(!aniversariantes.length){ wrap.innerHTML = ''; return; }
+  // O lembrete agora sai como notificacao (balao) perto do icone 🎂 da
+  // bandeja da barra de tarefas, estilo Windows, em vez de banner fixo no
+  // topo da pagina -- a logica de QUAIS jogos fazem aniversario e a mesma
+  // de sempre, so muda onde isso aparece na tela.
+  const trayIcon = document.getElementById('y2kTrayAniversario');
+  const trayDot = document.getElementById('y2kTrayAniversarioDot');
 
-  wrap.innerHTML = aniversariantes.map(({jogo, anos}) => `
-    <div class="aniversario-banner" data-jogo-id="${jogo.id}" role="button" tabindex="0">
-      <span class="ico">🎂</span>
-      <div class="txt">
-        <div>${t('aniversarioTitulo')(escapeHtml(jogo.n), anos)}</div>
-        <div class="sub">${t('aniversarioSub')}</div>
+  if(!aniversariantes.length){
+    wrap.innerHTML = '';
+    wrap.classList.remove('y2k-balloon-stack');
+    if(trayIcon){ trayIcon.style.display = 'none'; }
+    if(trayDot) trayDot.classList.remove('show');
+    return;
+  }
+
+  if(trayIcon){
+    trayIcon.style.display = 'flex';
+    trayIcon.title = aniversariantes.length === 1
+      ? `${aniversariantes[0].jogo.n} faz aniversário de lançamento hoje — clique pra ver`
+      : `${aniversariantes.length} jogos fazem aniversário de lançamento hoje — clique pra ver`;
+  }
+  if(trayDot) trayDot.classList.add('show');
+
+  function montarBaloes(){
+    wrap.classList.add('y2k-balloon-stack');
+    wrap.innerHTML = aniversariantes.map(({jogo, anos}) => `
+      <div class="y2k-balloon" data-jogo-id="${jogo.id}" role="button" tabindex="0">
+        <div class="y2k-balloon-head"><span>🎂</span><span>${t('aniversarioTitulo')(escapeHtml(jogo.n), anos)}</span><button class="y2k-balloon-close" aria-label="Fechar" data-fechar-balao>✕</button></div>
+        <div class="y2k-balloon-txt">${t('aniversarioSub')}</div>
       </div>
-    </div>
-  `).join('');
-  wrap.querySelectorAll('.aniversario-banner').forEach(el => {
-    const abrir = () => abrirModal(parseInt(el.dataset.jogoId, 10));
-    el.addEventListener('click', abrir);
-    el.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrir(); } });
-  });
+    `).join('');
+    wrap.querySelectorAll('.y2k-balloon').forEach(el => {
+      const abrir = () => abrirModal(parseInt(el.dataset.jogoId, 10));
+      el.addEventListener('click', e => {
+        if(e.target.closest('[data-fechar-balao]')){ e.stopPropagation(); el.remove(); return; }
+        abrir();
+      });
+      el.addEventListener('keydown', e => { if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); abrir(); } });
+    });
+  }
+  montarBaloes();
+
+  if(trayIcon && !trayIcon.dataset.wired){
+    trayIcon.dataset.wired = '1';
+    trayIcon.addEventListener('click', function(){
+      if(wrap.children.length){ wrap.innerHTML = ''; } else { montarBaloes(); }
+    });
+  }
 }
 
 // CALENDARIO DE LANCAMENTOS FUTUROS: mes/ano que o calendario esta mostrando
@@ -5104,6 +5356,8 @@ setInterval(atualizarRelogioY2k, 15000);
     stats: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('statsPanelOverlay'),
     scanner: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('scannerPanelOverlay'),
     ferramentas: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('toolsPanelOverlay'),
+    colecao: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('colecaoPanelOverlay'),
+    segredo: () => typeof abrirMiniPanel === 'function' && abrirMiniPanel('segredoPanelOverlay'),
     vitrine: () => document.getElementById('vitrineBtn') && document.getElementById('vitrineBtn').click(),
     cartao: () => document.getElementById('cartaoResumoBtn') && document.getElementById('cartaoResumoBtn').click(),
     canais: () => abrirCard('canaisToggleCard', 'gridCanais'),
@@ -5116,6 +5370,9 @@ setInterval(atualizarRelogioY2k, 15000);
     admin: () => document.getElementById('adminBtn') && document.getElementById('adminBtn').click(),
     topo: () => window.scrollTo({ top:0, behavior:'smooth' })
   };
+  // Exposto pra reaproveitar essas mesmas acoes nos icones de "area de
+  // trabalho" (pasta Colecao, Ferramentas, Radar, etc.) sem duplicar logica.
+  window.y2kAcoes = acoes;
 
   function fecharMenu(){
     menu.classList.remove('open');
@@ -5146,6 +5403,86 @@ setInterval(atualizarRelogioY2k, 15000);
     if(e.key === 'Escape') fecharMenu();
   });
 })();
+
+// ICONES DE "AREA DE TRABALHO": mesma logica de menu Iniciar (window.y2kAcoes),
+// so que reaproveitada num ponto fixo da pagina em vez de dentro do popup.
+(function(){
+  const desktop = document.getElementById('y2kDesktopIcons');
+  if(!desktop) return;
+  desktop.addEventListener('click', function(e){
+    const btn = e.target.closest('button[data-y2k-action]');
+    if(!btn) return;
+    btn.classList.add('selecionado');
+    setTimeout(() => btn.classList.remove('selecionado'), 250);
+    const acao = window.y2kAcoes && window.y2kAcoes[btn.getAttribute('data-y2k-action')];
+    if(acao) acao();
+  });
+})();
+
+// LUPA da barra de tarefas: mesmo atalho de sempre (Ctrl+K / #cmdkOpenBtn),
+// so que agora com um icone dedicado do lado do Iniciar em vez de um botao
+// grande no meio da pagina.
+(function(){
+  const icon = document.getElementById('y2kSearchIcon');
+  const alvo = document.getElementById('cmdkOpenBtn');
+  if(icon && alvo) icon.addEventListener('click', () => alvo.click());
+})();
+
+// CALENDARIO na bandeja: mesmo painel de sempre, so que acionado por um
+// icone fixo da barra de tarefas em vez de um botao solto na pagina.
+(function(){
+  const icon = document.getElementById('y2kTrayCalendario');
+  const alvo = document.getElementById('calendarioToggleBtn');
+  if(icon && alvo) icon.addEventListener('click', () => alvo.click());
+})();
+
+// PASTA "COLECAO": abre as subpastas PS4/PS3; clicar numa delas aplica o
+// mesmo filtro de plataforma que ja existe no dropdown de Filtros e rola
+// ate a grade principal -- nao reinventa nenhuma logica de renderizacao.
+(function(){
+  const overlay = document.getElementById('colecaoPanelOverlay');
+  if(!overlay) return;
+  document.getElementById('colecaoPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('colecaoPanelOverlay'));
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) fecharMiniPanel('colecaoPanelOverlay'); });
+
+  function contarPlat(plat){
+    try{ return (typeof jogos !== 'undefined' ? jogos : []).filter(j => j.plat === plat).length; }catch(err){ return null; }
+  }
+  const nPS4 = contarPlat('PS4'), nPS3 = contarPlat('PS3');
+  const lblPS4 = document.getElementById('colecaoPastaPS4Label');
+  const lblPS3 = document.getElementById('colecaoPastaPS3Label');
+  if(lblPS4 && nPS4 !== null) lblPS4.textContent = `PS4 (${nPS4})`;
+  if(lblPS3 && nPS3 !== null) lblPS3.textContent = `PS3 (${nPS3})`;
+
+  overlay.querySelectorAll('[data-colecao-plat]').forEach(function(btn){
+    btn.addEventListener('click', function(){
+      const plat = btn.getAttribute('data-colecao-plat');
+      fecharMiniPanel('colecaoPanelOverlay');
+      const platBtn = document.querySelector(`#platContainer button[data-plat="${plat}"]`);
+      if(platBtn) platBtn.click();
+      const grid = document.getElementById('grid');
+      if(grid) setTimeout(() => grid.scrollIntoView({ behavior:'smooth', block:'start' }), 60);
+    });
+  });
+})();
+
+// ARQUIVO "codigos_secretos.txt": so um bloco de notas com as instrucoes do
+// easter egg do Konami Code -- nao mexe no listener de teclado em si.
+(function(){
+  const overlay = document.getElementById('segredoPanelOverlay');
+  if(!overlay) return;
+  document.getElementById('segredoPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('segredoPanelOverlay'));
+  overlay.addEventListener('click', function(e){ if(e.target === overlay) fecharMiniPanel('segredoPanelOverlay'); });
+})();
+
+// Acessibilidade: os itens do Painel de Controle (Ferramentas) agora sao
+// <div role="button"> pra caber no grid de icones -- precisam responder a
+// Enter/Espaco igual um botao de verdade responderia.
+document.querySelectorAll('.ctrlpanel-item[role="button"]').forEach(function(el){
+  el.addEventListener('keydown', function(e){
+    if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); el.click(); }
+  });
+});
 
 // BANDEJA da barra de tarefas Y2K: indicador de canal ao vivo (le o mesmo
 // canaisLiveAtual que alimenta o selo AO VIVO dos canais, sem inventar estado).
@@ -5582,9 +5919,11 @@ document.getElementById('canaisToggleCard').addEventListener('click', function()
   const grid = document.getElementById('gridCanais');
   const sortWrap = document.getElementById('canaisSortWrap');
   const arrow = document.getElementById('canaisToggleArrow');
+  const playerBar = document.getElementById('canaisPlayerBar');
   const aberto = grid.style.display !== 'none';
   grid.style.display = aberto ? 'none' : 'grid';
   sortWrap.style.display = aberto ? 'none' : 'block';
+  if(playerBar) playerBar.style.display = aberto ? 'none' : 'flex';
   arrow.classList.toggle('open', !aberto);
   if(!aberto) renderCanais(); // reabrindo: atualiza selo AO VIVO com dados mais recentes
 });
@@ -5764,16 +6103,21 @@ document.getElementById('roletaBtn').addEventListener('click', function(){
   });
 });
 
-// Modo apresentacao: troca o destaque da colecao automaticamente
+// Modo apresentacao: troca o destaque da colecao automaticamente, com a
+// moldura visual de "apresentacao.pptx" (barra de progresso de 6s) ligada
+// junto, so pra reforcar a metafora de slideshow enquanto esta tocando.
 let apresentacaoInterval = null;
 document.getElementById('apresentacaoBtn').addEventListener('click', function(){
+  const card = document.getElementById('destaqueCard');
   if(apresentacaoInterval){
     clearInterval(apresentacaoInterval);
     apresentacaoInterval = null;
     this.textContent = t('apresentacaoPlay');
+    if(card) card.classList.remove('pptx-mode');
   } else {
     apresentacaoInterval = setInterval(renderDestaque, 6000);
     this.textContent = t('apresentacaoStop');
+    if(card) card.classList.add('pptx-mode');
   }
 });
 
@@ -5880,11 +6224,18 @@ function aplicarIdiomaUI(){
   });
   const platAll = document.querySelector('#platContainer button[data-plat="all"]');
   if(platAll) platAll.textContent = t('todasPlataformas');
-  if(byId('exportarBtn')) byId('exportarBtn').textContent = t('exportarTxt');
-  if(byId('exportarJsonBtn')) byId('exportarJsonBtn').textContent = t('exportarJson');
-  if(byId('exportarCsvBtn')) byId('exportarCsvBtn').textContent = t('exportarCsv');
-  if(byId('imprimirBtn')) byId('imprimirBtn').textContent = t('imprimir');
-  if(byId('qrBtn')) byId('qrBtn').textContent = t('qrSite');
+  // ctrlpanel-item agora tem <span class="ico"> + <span class="lbl">; so o
+  // rotulo e traduzido, senao apagaria o icone (era so texto antes, virou
+  // grade de icones do "Painel de Controle").
+  const setLbl = (id, chave) => {
+    const el = byId(id); const lbl = el && el.querySelector('.lbl');
+    if(lbl) lbl.textContent = t(chave); else if(el) el.textContent = t(chave);
+  };
+  setLbl('exportarBtn', 'exportarTxt');
+  setLbl('exportarJsonBtn', 'exportarJson');
+  setLbl('exportarCsvBtn', 'exportarCsv');
+  setLbl('imprimirBtn', 'imprimir');
+  setLbl('qrBtn', 'qrSite');
   if(byId('vitrineBtn')) byId('vitrineBtn').textContent = t('vitrineModo');
   if(byId('cartaoResumoBtn')) byId('cartaoResumoBtn').textContent = t('cartaoResumo');
   if(byId('wishlistPrevBtn')) byId('wishlistPrevBtn').textContent = t('anterior');
