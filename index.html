@@ -2119,6 +2119,23 @@
      apagados, so um efeito visual temporario no card). ===== */
   .mascot-xiao.carregando .x-armR{ animation: xCarregarBraco .7s ease-in-out infinite alternate; }
   @keyframes xCarregarBraco{ 0%{ transform: rotate(45deg);} 100%{ transform: rotate(18deg);} }
+
+  /* ===== Rig de membros DESATIVADO a pedido: partes recortadas girando
+     continuavam parecendo coladas em varios angulos/poses mesmo apos os
+     ajustes de zona segura. Ate integrar uma ferramenta de animacao 2D
+     de verdade (Rive ou DragonBones), o corpo fica estatico na pose de
+     repouso ja validada (braco 45deg, perna reta) -- especificidade
+     inflada de proposito (5x .mascot-xiao) pra vencer toda variante
+     walking/kicking/trickando/carregando/fv-*/t-* acima, nao so a base. */
+  .mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao .x-rig,
+  .mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao .x-armL,
+  .mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao .x-armR,
+  .mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao .x-legL,
+  .mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao .x-legR,
+  .mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao .x-lowerLegR,
+  .mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao.mascot-xiao .x-cape{
+    animation: none !important;
+  }
   .fx-carga{
     width:14px; height:14px; border-radius:50%;
     background: radial-gradient(circle, #fff, #ffd23d 55%, transparent 75%);
