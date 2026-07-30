@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-30T23:00:23.751Z",
+  "updated": "2026-07-30T23:15:22.721Z",
   "live": [
     {
       "id": 2,
@@ -9,6 +9,15 @@
       "videoTitle": "LIVE VENDAS ANTEC RETRO",
       "videoUrl": "https://www.youtube.com/watch?v=jK6BZm7ocpg",
       "thumbnail": "https://i.ytimg.com/vi/jK6BZm7ocpg/hqdefault.jpg"
+    },
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "MNQJgpSNy_4",
+      "videoTitle": "LIVE DE VENDAS... JOGOS E CONSOLES BARATOS !",
+      "videoUrl": "https://www.youtube.com/watch?v=MNQJgpSNy_4",
+      "thumbnail": "https://i.ytimg.com/vi/MNQJgpSNy_4/hqdefault.jpg"
     },
     {
       "id": 7,
