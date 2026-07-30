@@ -8834,7 +8834,7 @@ async function iniciarMascote3D(){
     var reduzido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     var BASE = './mascote3d/';
-    var ALTURA_PX = 150; // altura do personagem na tela, em pixels CSS
+    var ALTURA_PX = 75; // altura do personagem na tela, em pixels CSS (metade do tamanho original)
 
     var acoes = {};
     var mixer = null, personagem = null, acaoAtual = null;
@@ -8891,6 +8891,15 @@ async function iniciarMascote3D(){
       modeloInterno.position.x -= centro.x;
       modeloInterno.position.z -= centro.z;
       modeloInterno.position.y -= bbox.min.y; // pes em y=0
+      // O personagem nasce de frente pra camera (encara +Z). Como a "camera"
+      // aqui e uma ortografica fixa olhando so de frente, deixar ele de
+      // frente faz o ciclo de andar (que avanca no eixo local Z, pra frente
+      // do personagem) ficar de lado pra tela -- ai ele so desliza no X sem
+      // parecer andar. Girando 90 graus ele fica de perfil, entao "andar pra
+      // frente" da animacao passa a coincidir com "andar pra direita" na
+      // tela; o espelhamento (scale.x) mais abaixo cuida de virar pra
+      // esquerda quando o alvo fica atras dele.
+      modeloInterno.rotation.y = Math.PI / 2;
       modeloInterno.traverse(function(o){
         if(o.isMesh || o.isSkinnedMesh){ o.frustumCulled = false; }
       });
@@ -8984,6 +8993,15 @@ async function iniciarMascote3D(){
         estado = 'andando'; emTransicaoInicio = false;
       } else if(chaveTerminada === 'startWalk'){
         emTransicaoInicio = false;
+        // Sem isto, o proximo frame via ver acaoAtual ainda como "startWalk"
+        // (diferente de "walk") e reagendava o proprio startWalk de novo --
+        // um loop que nunca chegava no ciclo continuo de andar, e cada
+        // reset() no meio do crossfade deixava o esqueleto piscar pra pose
+        // de descanso (T-pose). Ao terminar a transicao, troca direto pro
+        // ciclo continuo certo.
+        if(estado === 'andando' || estado === 'trotando'){
+          trocarAcao(trotandoNestePasseio ? 'jog' : 'walk');
+        }
       } else if(VARIANTES_GESTO.indexOf(chaveTerminada) !== -1){
         pararEsteticamente();
       }
@@ -9068,7 +9086,7 @@ async function iniciarMascote3D(){
               pos.x = tentativaX; pos.y = tentativaY;
               if(Math.abs(dirX) > 0.05) direcaoFlip = dirX >= 0 ? 1 : -1;
               estado = trotandoNestePasseio ? 'trotando' : 'andando';
-              if(!trotandoNestePasseio && acoes.startWalk && !emTransicaoInicio && acaoAtual !== acoes.walk){
+              if(!trotandoNestePasseio && acoes.startWalk && !emTransicaoInicio && acaoAtual !== acoes.walk && acaoAtual !== acoes.startWalk){
                 emTransicaoInicio = true;
                 trocarAcao('startWalk', true);
               } else if(!emTransicaoInicio){
