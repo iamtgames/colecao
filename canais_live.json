@@ -1,6 +1,15 @@
 {
-  "updated": "2026-07-30T22:15:18.262Z",
+  "updated": "2026-07-30T22:30:26.541Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "jK6BZm7ocpg",
+      "videoTitle": "LIVE VENDAS ANTEC RETRO",
+      "videoUrl": "https://www.youtube.com/watch?v=jK6BZm7ocpg",
+      "thumbnail": "https://i.ytimg.com/vi/jK6BZm7ocpg/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
