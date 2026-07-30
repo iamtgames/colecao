@@ -8827,8 +8827,11 @@ var REACOES_QUE_LEVANTAM = ['trip', 'stumble', 'bigHit', 'scared'];
 async function iniciarMascote3D(){
   try{
     if(document.querySelector('.mascot3d-layer')) return;
+    // Igual ao mascote 2D antigo: "reduzir movimento" nao apaga o mascote
+    // inteiro, so evita ficar forcando cenas/gestos mais intensos pra quem
+    // pediu isso no sistema -- ele continua existindo como pet de fundo,
+    // so mais comportado (usado mais abaixo, nas variantes de gesto).
     var reduzido = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if(reduzido) return; // mesma decisao ja tomada pro mascote antigo
 
     var BASE = './mascote3d/';
     var ALTURA_PX = 150; // altura do personagem na tela, em pixels CSS
@@ -9028,7 +9031,7 @@ async function iniciarMascote3D(){
       var travado = estado === 'tropecando' || estado === 'levantando' || agora < travadoAte;
       if(!travado){
         if(estado === 'parado'){
-          if(agora >= proximoGestoEm){
+          if(!reduzido && agora >= proximoGestoEm){
             var chaveGesto = escolherVariante(VARIANTES_GESTO);
             if(chaveGesto) trocarAcao(chaveGesto, true);
             agendarProximoGesto();
