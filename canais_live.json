@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-30T00:15:22.032Z",
+  "updated": "2026-07-30T00:30:19.991Z",
   "live": [
     {
       "id": 2,
@@ -9,6 +9,15 @@
       "videoTitle": "LIVE VENDAS GEEK 3D E MAIS 1* LIVE",
       "videoUrl": "https://www.youtube.com/watch?v=6qbh1UQyZJU",
       "thumbnail": "https://i.ytimg.com/vi/6qbh1UQyZJU/hqdefault.jpg"
+    },
+    {
+      "id": 14,
+      "n": "tofogames10",
+      "plat": "twitch",
+      "login": "tofogames10",
+      "videoTitle": "Live de Vendas",
+      "videoUrl": "https://www.twitch.tv/tofogames10",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
     },
     {
       "id": 13,
