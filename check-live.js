@@ -49,6 +49,7 @@ const TWITCH_CLIENT_SECRET = process.env.TWITCH_CLIENT_SECRET;
 
 const CANAIS_TWITCH = [
   { id: 13, n: 'PELEHZADA', login: 'pelehzada' },
+  { id: 14, n: 'tofogames10', login: 'tofogames10' },
 ];
 
 // Mesmos ids/nomes do array "canais" no index.html — mantenha em sincronia
