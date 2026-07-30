@@ -183,6 +183,22 @@
   .y2k-start.active, .y2k-start:active{
     box-shadow: inset 0 1px 3px rgba(0,0,0,.5); filter:brightness(.95);
   }
+  /* Nome do site na barra de tarefas, logo depois da lupa -- como se fosse o
+     nome do usuario "logado" no Windows. O h1 de verdade continua existindo
+     na pagina (classe .visually-hidden), so que escondido visualmente. */
+  .y2k-taskbar-user{
+    display:flex; align-items:center; gap:5px; flex-shrink:1; min-width:0;
+    font-size:12px; font-weight:700; color:#fff; white-space:nowrap;
+    overflow:hidden; text-overflow:ellipsis; max-width:260px;
+    text-shadow:0 1px 1px rgba(0,0,0,.4);
+  }
+  @media (max-width: 480px){
+    .y2k-taskbar-user{ max-width:110px; font-size:11px; }
+  }
+  .visually-hidden{
+    position:absolute !important; width:1px; height:1px; padding:0; margin:-1px;
+    overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0;
+  }
   .y2k-taskbar-sep{ flex:1; }
   .y2k-taskbar-clock{
     background: rgba(0,0,0,.22); border:1px solid rgba(255,255,255,.15); border-radius:4px;
@@ -2158,6 +2174,7 @@
 <div class="y2k-taskbar">
   <button class="y2k-start" id="y2kStartBtn" aria-haspopup="true" aria-expanded="false" title="Menu Iniciar">🏁 <span>iniciar</span></button>
   <button class="y2k-tray-icon" id="y2kSearchIcon" title="Busca rápida (Ctrl+K)">🔎</button>
+  <span class="y2k-taskbar-user" id="y2kTaskbarUser" title="Controle Coleção iamT">👤 Controle Coleção iamT</span>
   <div class="y2k-start-menu" id="y2kStartMenu" role="menu">
     <div class="y2k-start-menu-title">Ir para</div>
     <button data-y2k-action="cmdk">🔎 Busca rápida <span style="margin-left:auto;opacity:.6;font-size:10px;">Ctrl+K</span></button>
@@ -2198,9 +2215,10 @@
 
 <div class="wrap">
 
-  <div class="topbar">
-    <h1>Controle Coleção iamT</h1>
-  </div>
+  <!-- O nome do site agora mora na barra de tarefas (igual o nome do usuario
+       do Windows, logo depois da lupa) -- o h1 continua existindo aqui, so
+       que visualmente escondido, pra manter o SEO/acessibilidade intactos. -->
+  <h1 class="visually-hidden">Controle Coleção iamT</h1>
 
   <div id="aniversarioWrap"></div>
 
@@ -5567,6 +5585,22 @@ setInterval(atualizarRelogioY2k, 15000);
       }catch(err){}
     });
   }
+
+  // A area de trabalho virou tela cheia nesta rodada (antes era uma caixinha
+  // pequena) -- qualquer posicao arrastada e salva ANTES dessa mudanca nao
+  // faz mais sentido no novo espaco. Por isso, na primeira visita apos essa
+  // atualizacao, zera as posicoes salvas uma unica vez, pra todo mundo comecar
+  // com os icones alinhados certinho no canto superior esquerdo (padrao
+  // Windows). Depois disso, arrastar continua salvando normalmente.
+  const VERSAO_LAYOUT = '2';
+  try{
+    if(localStorage.getItem('y2kDesktopLayoutVersion') !== VERSAO_LAYOUT){
+      Object.keys(localStorage)
+        .filter(k => k.indexOf('y2kIconPos-') === 0)
+        .forEach(k => localStorage.removeItem(k));
+      localStorage.setItem('y2kDesktopLayoutVersion', VERSAO_LAYOUT);
+    }
+  }catch(err){}
 
   layoutPadrao();
   restaurarPosicoesSalvas();
