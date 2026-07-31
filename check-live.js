@@ -51,6 +51,7 @@ const CANAIS_TWITCH = [
   { id: 13, n: 'PELEHZADA', login: 'pelehzada' },
   { id: 14, n: 'tofogames10', login: 'tofogames10' },
   { id: 15, n: 'corvofps', login: 'corvofps' },
+  { id: 16, n: 'gianzao', login: 'gianzao' },
 ];
 
 // Mesmos ids/nomes do array "canais" no index.html — mantenha em sincronia
