@@ -572,13 +572,25 @@
   }
   .card{
     background: var(--card-glass);
-    backdrop-filter: blur(18px) saturate(140%);
-    -webkit-backdrop-filter: blur(18px) saturate(140%);
+    /* Blur mais leve que o original (era 18px): cada card com vidro fosco
+       compõe sua propria camada de GPU, e paineis grandes tipo Radar de
+       Caca/Colecao renderizam varios cards de uma vez -- 10px+saturate
+       mantem o visual "vidro" mas custa bem menos pra compositar,
+       principalmente notavel em paineis mini-panel-xwide. */
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
     border:1px solid rgba(255,255,255,0.08); border-radius: 14px;
     overflow: hidden; display:flex; flex-direction:column;
     transition: border-color .25s ease, transform .3s cubic-bezier(.2,.8,.3,1.1), box-shadow .3s ease;
     box-shadow: 0 4px 18px rgba(0,0,0,0.25);
-    will-change: transform;
+    /* content-visibility deixa o navegador pular layout/paint de cards fora
+       da area visivel (por exemplo, linhas mais abaixo dentro do scroll do
+       mini-panel-body) ate a pessoa rolar ate eles -- grande ganho em
+       grades com muitos itens, como o Radar de Caca. contain-intrinsic-size
+       reserva um espaco aproximado pra nao "pular" o scroll quando o card
+       ainda nao foi medido de verdade. */
+    content-visibility: auto;
+    contain-intrinsic-size: 260px 360px;
   }
   .card:hover{
     border-color: var(--tema-accent, rgba(120,190,255,0.55));
@@ -593,8 +605,6 @@
     cursor: zoom-in;
     border-radius: 14px 14px 0 0;
     transition: transform .3s ease;
-    transform-style: preserve-3d;
-    will-change: transform;
   }
   .cover-wrap::after{
     content:"";
@@ -786,7 +796,7 @@
   #livePanelsContainer::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.25); border-radius:4px; }
   .live-panel{
     pointer-events:auto;
-    width: min(340px, 88vw); perspective: 900px;
+    width: min(408px, 92vw); perspective: 900px;
     background: rgba(18,10,10,0.97); border: 1px solid rgba(255,60,60,0.45);
     border-radius: 18px; overflow:hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.55);
     transform-origin: bottom right; flex-shrink:0;
@@ -3562,7 +3572,7 @@ function render(){
     const nomeSeguro = escapeHtml(j.n);
     const inicial = escapeHtml(j.n.charAt(0).toUpperCase());
     const coverInner = capaUrl
-      ? `<img src="${capaUrl}" alt="${nomeSeguro}" loading="lazy" onload="this.parentElement.classList.remove('carregando-capa')" onerror="this.parentElement.classList.remove('carregando-capa'); this.parentElement.innerHTML='<div class=\\'cover-fallback\\'><span class=\\'ini\\'>${inicial}</span><span class=\\'tag\\'>capa indisponível</span></div>'">`
+      ? `<img src="${capaUrl}" alt="${nomeSeguro}" loading="lazy" decoding="async" onload="this.parentElement.classList.remove('carregando-capa')" onerror="this.parentElement.classList.remove('carregando-capa'); this.parentElement.innerHTML='<div class=\\'cover-fallback\\'><span class=\\'ini\\'>${inicial}</span><span class=\\'tag\\'>capa indisponível</span></div>'">`
       : `<div class="cover-fallback"><span class="ini">${inicial}</span><span class="tag">sem capa ainda</span></div>`;
     const valorPago = Math.round((j.col + j.bar) / 2);
 
@@ -3758,7 +3768,7 @@ function renderCanais(){
           <span class="canal-plat-badge ${c.plat}">${platLabel}</span>
           ${diaBadge}
           ${liveBadge}
-          <img src="${avatar}" alt="${c.n}" loading="lazy" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ini',textContent:'${inicial}'}))">
+          <img src="${avatar}" alt="${c.n}" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ini',textContent:'${inicial}'}))">
         </div>
         <div class="canal-body">
           <h3>${c.n}</h3>
@@ -3992,7 +4002,7 @@ function aplicarPosicaoSalva(id, el){
   try{
     const salvo = JSON.parse(localStorage.getItem('livePanelPos-' + id) || 'null');
     if(salvo && salvo.left && salvo.top){
-      const largura = 340, altura = 200;
+      const largura = 408, altura = 260; // painel 20% maior (era 340x200)
       const left = Math.max(4, Math.min(parseFloat(salvo.left) || 0, window.innerWidth - largura - 4));
       const top = Math.max(4, Math.min(parseFloat(salvo.top) || 0, window.innerHeight - altura - 4));
       el.style.left = left + 'px';
@@ -5307,8 +5317,11 @@ function renderWishlist(){
   if(wishlistPage < 0) wishlistPage = 0;
   const start = wishlistPage * WISHLIST_PAGE_SIZE;
   const pageItems = wishlist.slice(start, start + WISHLIST_PAGE_SIZE);
-  const ps4Count = wishlist.filter(w => w.plat === 'PS4').length;
-  const ps3Count = wishlist.filter(w => w.plat === 'PS3').length;
+  // Uma unica passada pelos ~100 itens em vez de duas (.filter + .filter)
+  // pra contar PS4/PS3 -- resultado identico, so evita percorrer o array
+  // duas vezes toda vez que o radar renderiza (troca de pagina, idioma etc).
+  let ps4Count = 0, ps3Count = 0;
+  for(const w of wishlist){ if(w.plat === 'PS4') ps4Count++; else if(w.plat === 'PS3') ps3Count++; }
   if(subtitle) subtitle.textContent = idioma === 'en'
     ? `${wishlist.length} games listed (${ps4Count} PS4 / ${ps3Count} PS3) — 10 at a time`
     : `${wishlist.length} jogos indicados (${ps4Count} PS4 / ${ps3Count} PS3) — 10 por vez`;
@@ -5317,7 +5330,7 @@ function renderWishlist(){
     const nomeSeguro = escapeHtml(w.n);
     const inicial = escapeHtml(w.n.charAt(0).toUpperCase());
     const coverInner = w.capa
-      ? `<img src="${escapeHtml(w.capa)}" alt="${nomeSeguro}" loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'cover-fallback\'><span class=\'ini\'>${inicial}</span><span class=\'tag\'>capa indisponível</span></div>'">`
+      ? `<img src="${escapeHtml(w.capa)}" alt="${nomeSeguro}" loading="lazy" decoding="async" onerror="this.parentElement.innerHTML='<div class=\'cover-fallback\'><span class=\'ini\'>${inicial}</span><span class=\'tag\'>capa indisponível</span></div>'">`
       : `<div class="cover-fallback"><span class="ini">${inicial}</span><span class="tag">desejado</span></div>`;
     const infoPreco = precosWishlistAtual[`${w.n}|${w.plat}`];
     const precoBloco = infoPreco
@@ -6332,8 +6345,10 @@ function abrirSalaSecreta(){
 // "Vendedores, Lives e Leiloes" agora e uma janela (mini-panel) que so existe
 // quando aberta pelo icone da area de trabalho / menu Iniciar / bandeja.
 function abrirCanaisPanel(){
-  renderCanais(); // atualiza selo AO VIVO com dados mais recentes toda vez que abre
+  // Mesmo truque do Radar de Caca: abre a janela primeiro, desenha a lista
+  // de canais so no frame seguinte, pra abertura nao competir com o render.
   abrirMiniPanel('canaisPanelOverlay');
+  requestAnimationFrame(renderCanais); // atualiza selo AO VIVO com dados mais recentes toda vez que abre
 }
 document.getElementById('canaisPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('canaisPanelOverlay'));
 document.getElementById('canaisPanelOverlay').addEventListener('click', function(e){
@@ -6368,8 +6383,13 @@ document.addEventListener('keydown', function(e){
 // "Radar de Caca" (lista de desejos) -- tambem virou janela propria.
 renderWishlist();
 function abrirWishlistPanel(){
-  renderWishlist();
+  // Abre a janela primeiro (a animacao de abrir comeca imediatamente) e so
+  // no proximo frame monta a grade de 10 cards -- assim o navegador nao
+  // tenta animar a janela grande E desenhar/compositar varios cards com
+  // vidro fosco ao mesmo tempo. O painel "abre na hora", o conteudo aparece
+  // um piscar de olhos depois, mas o movimento em si fica instantaneo.
   abrirMiniPanel('wishlistPanelOverlay');
+  requestAnimationFrame(renderWishlist);
 }
 document.getElementById('wishlistPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('wishlistPanelOverlay'));
 document.getElementById('wishlistPanelOverlay').addEventListener('click', function(e){
@@ -6444,7 +6464,7 @@ async function carregarJogosGratis(){
     const itens = data.slice(0, 6);
     list.innerHTML = itens.map(g => `
       <a class="aovivo-item" href="${escapeHtml(g.open_giveaway_url || g.gamerpower_url)}" target="_blank" rel="noopener noreferrer">
-        <img src="${escapeHtml(g.thumbnail)}" alt="" loading="lazy">
+        <img src="${escapeHtml(g.thumbnail)}" alt="" loading="lazy" decoding="async">
         <div>
           <div class="aovivo-item-title">${escapeHtml(g.title)}</div>
           <div class="aovivo-item-sub">${escapeHtml(g.platforms || '')}</div>
@@ -6466,7 +6486,7 @@ async function carregarNoticias(){
     if(!itens.length) throw new Error('sem itens');
     list.innerHTML = itens.map(n => `
       <a class="aovivo-item" href="${escapeHtml(n.link)}" target="_blank" rel="noopener noreferrer">
-        ${n.image ? `<img src="${escapeHtml(n.image)}" alt="" loading="lazy">` : ''}
+        ${n.image ? `<img src="${escapeHtml(n.image)}" alt="" loading="lazy" decoding="async">` : ''}
         <div>
           <div class="aovivo-item-title">${escapeHtml(n.title)}</div>
           <div class="aovivo-item-sub">${n.pubDate ? new Date(n.pubDate).toLocaleDateString('pt-BR') : ''}</div>
