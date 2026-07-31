@@ -2248,6 +2248,7 @@
     <button class="y2k-tray-icon" id="y2kTrayMascotes" title="Mascotes">👻</button>
     <button class="y2k-tray-icon" id="y2kTrayCrt" title="Filtro CRT">📺</button>
     <button class="y2k-tray-icon" id="y2kTrayLive" title="Nenhum canal ao vivo agora">📡<span class="y2k-tray-dot" id="y2kTrayLiveDot"></span></button>
+    <button class="y2k-tray-icon" id="y2kTrayAlinhar" title="Alinhar ícones da área de trabalho">▦</button>
     <button class="y2k-tray-icon" id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
     <button class="y2k-tray-icon" id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
   </div>
@@ -5744,6 +5745,23 @@ setInterval(atualizarRelogioY2k, 15000);
 
   layoutPadrao();
   restaurarPosicoesSalvas();
+
+  // Botao "Alinhar icones" na bandeja: reorganiza tudo na grade padrao
+  // (canto superior esquerdo, em coluna) e limpa as posicoes arrastadas
+  // salvas, pra ficar alinhado tambem nas proximas visitas.
+  const btnAlinhar = document.getElementById('y2kTrayAlinhar');
+  if(btnAlinhar){
+    btnAlinhar.addEventListener('click', function(){
+      try{
+        Object.keys(localStorage)
+          .filter(k => k.indexOf('y2kIconPos-') === 0)
+          .forEach(k => localStorage.removeItem(k));
+      }catch(err){}
+      layoutPadrao();
+      btnAlinhar.classList.add('on');
+      setTimeout(() => btnAlinhar.classList.remove('on'), 350);
+    });
+  }
 
   // Arrastar-e-soltar: distingue "clique" de "arraste" por deslocamento minimo,
   // pra nao abrir a pasta sem querer so porque a pessoa tentou mover o icone.
