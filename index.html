@@ -24,7 +24,7 @@
      de dominios variados (TheGamesDB, lojas, RAWG, YouTube, etc.) que mudam
      conforme jogos/canais sao adicionados. script/frame/connect ficam restritos
      aos servicos que o site realmente usa. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://giscus.app https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io; frame-src https://www.youtube.com https://giscus.app https://player.twitch.tv; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://giscus.app https://unpkg.com https://v8.js-dos.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://v8.js-dos.com; font-src https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io https://v8.js-dos.com; worker-src 'self' blob:; frame-src https://www.youtube.com https://giscus.app https://player.twitch.tv; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230b0b0c'/%3E%3Ctext x='50' y='66' font-size='55' font-family='Arial' font-weight='900' fill='white' text-anchor='middle'%3EiT%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.json">
 <title>Controle Coleção iamT</title>
@@ -2313,6 +2313,9 @@
     <button class="y2k-icon" data-y2k-action="resumoXlsx" title="Resumo Rápido">
       <span class="y2k-icon-glyph">📗</span><span class="y2k-icon-label">resumo.xlsx</span>
     </button>
+    <button class="y2k-icon" data-y2k-action="doom" title="DOOM (shareware oficial, id Software)">
+      <span class="y2k-icon-glyph">🔫</span><span class="y2k-icon-label">DOOM.EXE</span>
+    </button>
   </div>
 
   <div class="footer" style="position:fixed; right:12px; bottom:calc(40px + env(safe-area-inset-bottom, 0px)); z-index:2; margin:0; border:none; padding:0; text-align:right; font-size:9.5px; opacity:.55; pointer-events:none;">
@@ -2493,6 +2496,24 @@
         </div>
         <div class="stat" style="width:100%; min-width:0;"><div class="n" id="statFav">0</div><div class="l" id="lblStatFav">Favoritos ⭐</div></div>
       </div>
+    </div>
+  </div>
+</div>
+
+<!-- DOOM: shareware oficial (episodio 1, liberado de graca pela id Software
+     desde os anos 90) rodando via js-dos (DOSBox em WebAssembly, projeto
+     open-source). O script do js-dos e o bundle do jogo (uns poucos MB) so
+     sao baixados quando o usuario realmente abre essa janela -- ver
+     abrirDoomPanel() -- pra nao pesar o carregamento normal do site pra quem
+     nunca abre o Doom. Janela pequena de propósito (mini-panel-wide, nao
+     xwide), pra nao tomar a tela toda. -->
+<div class="mini-panel-overlay" id="doomPanelOverlay">
+  <div class="mini-panel mini-panel-wide">
+    <div class="win-titlebar">DOOM.EXE</div>
+    <div class="mini-panel-head"><h3>🔫 DOOM (shareware oficial)</h3><button class="mini-panel-close" id="doomPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body" style="padding:0;">
+      <div id="doomDosLoading" style="padding:30px 18px; text-align:center; font-size:13px; opacity:.75;">Carregando DOOM (shareware)...</div>
+      <div id="doomDosContainer" style="width:100%; aspect-ratio:4/3; background:#000;"></div>
     </div>
   </div>
 </div>
@@ -4092,6 +4113,36 @@ function fecharMiniPanel(id){
   const ov = document.getElementById(id);
   if(ov) ov.classList.remove('aberto');
 }
+// ---- DOOM (shareware oficial) via js-dos, carregado sob demanda ----
+// So baixamos o js-dos (CSS+JS) e o bundle do jogo (.jsdos) quando o
+// usuario realmente abre essa janela, pra nao pesar o carregamento normal
+// do site pra quem nunca clica no icone.
+let doomCarregado = false;
+function abrirDoomPanel(){
+  abrirMiniPanel('doomPanelOverlay');
+  if(doomCarregado) return;
+  doomCarregado = true;
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = 'https://v8.js-dos.com/latest/js-dos.css';
+  document.head.appendChild(link);
+  const script = document.createElement('script');
+  script.src = 'https://v8.js-dos.com/latest/js-dos.js';
+  script.onload = function(){
+    const loading = document.getElementById('doomDosLoading');
+    if(loading) loading.style.display = 'none';
+    try{
+      Dos(document.getElementById('doomDosContainer'), { url: 'https://v8.js-dos.com/bundles/doom.jsdos' });
+    }catch(e){
+      if(loading){ loading.style.display=''; loading.textContent = 'Nao foi possivel carregar o DOOM agora. Tente novamente mais tarde.'; }
+    }
+  };
+  script.onerror = function(){
+    const loading = document.getElementById('doomDosLoading');
+    if(loading) loading.textContent = 'Nao foi possivel carregar o DOOM agora. Tente novamente mais tarde.';
+  };
+  document.head.appendChild(script);
+}
 // ---- Scanner de codigo de barras: "ja tenho esse jogo?" ----
 // Nao usa nenhuma API externa de busca por codigo de barras (testamos o
 // UPCitemdb e o servidor deles bloqueia chamada direta do navegador via CORS,
@@ -5557,6 +5608,7 @@ setInterval(atualizarRelogioY2k, 15000);
     visitas: () => typeof abrirVisitasPanel === 'function' && abrirVisitasPanel(),
     destaques: () => typeof abrirDestaquesPanel === 'function' && abrirDestaquesPanel(),
     resumoXlsx: () => typeof abrirResumoXlsxPanel === 'function' && abrirResumoXlsxPanel(),
+    doom: () => typeof abrirDoomPanel === 'function' && abrirDoomPanel(),
     instaPessoal: () => window.open('https://www.instagram.com/marioturbino/', '_blank', 'noopener,noreferrer'),
     instaColecao: () => window.open('https://www.instagram.com/iamtgames/', '_blank', 'noopener,noreferrer'),
     contato: () => document.getElementById('contatoBtn') && document.getElementById('contatoBtn').click(),
@@ -6307,6 +6359,11 @@ function abrirResumoXlsxPanel(){ abrirMiniPanel('resumoXlsxPanelOverlay'); }
 document.getElementById('resumoXlsxPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('resumoXlsxPanelOverlay'));
 document.getElementById('resumoXlsxPanelOverlay').addEventListener('click', function(e){
   if(e.target === this) fecharMiniPanel('resumoXlsxPanelOverlay');
+});
+
+document.getElementById('doomPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('doomPanelOverlay'));
+document.getElementById('doomPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharMiniPanel('doomPanelOverlay');
 });
 
 async function carregarJogosGratis(){
