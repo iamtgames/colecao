@@ -110,7 +110,7 @@
     --skin-glow: rgba(80,170,255,.6);
   }
   .stat, .search-box input, .filters button, .toggle-venda,
-  .card, .top-controls-bar button{
+  .card{
     font-family: var(--skin-font);
     background-image: var(--skin-surface-bg);
     border: 1px solid var(--skin-border-color) !important;
@@ -126,8 +126,7 @@
     text-shadow: 0 1px 0 rgba(255,255,255,.5), 0 2px 6px rgba(0,60,140,.7), 0 0 22px var(--skin-glow);
   }
   .stat, .search-box input,
-  .filters button, .toggle-venda,
-  .top-controls-bar button{
+  .filters button, .toggle-venda{
     border-radius: 999px !important;
   }
   .card{
@@ -1219,23 +1218,6 @@
 
   /* BARRA SUPERIOR: controles de tema/paleta/skin retro/crt (tirados da
      barra lateral a pedido, pra ficar mais visivel logo no topo do site) */
-  .top-controls-bar{
-    position: fixed; top:0; left:0; right:0; width:100%; z-index: 65;
-    display:flex; align-items:center; justify-content:flex-end; gap:8px;
-    padding: 8px 20px; background: var(--overlay-glass); backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--line-soft);
-  }
-  .top-controls-bar button{
-    width:34px; height:34px; border-radius:50%; flex-shrink:0;
-    display:flex; align-items:center; justify-content:center;
-    background: var(--bg-card); border:1px solid var(--line);
-    color: var(--ink); font-size:15px; cursor:pointer; transition:.2s;
-  }
-  .top-controls-bar button:hover{ background: var(--white); color:var(--bg-inverse); transform: scale(1.08); }
-  @media (max-width: 480px){
-    .top-controls-bar{ padding:6px 10px; gap:6px; justify-content:center; }
-    .top-controls-bar button{ width:30px; height:30px; font-size:13px; }
-  }
 
   /* MODAL FRENTE/VERSO */
   .modal-overlay{
@@ -1393,7 +1375,7 @@
   #printArea{display:none;}
 
   @media print{
-    body::before, .y2k-taskbar, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay, .top-controls-bar, #crtOverlay{
+    body::before, .y2k-taskbar, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay, #crtOverlay{
       display:none !important;
     }
     body{background:#fff !important; padding:0; color:#111;}
@@ -2225,10 +2207,6 @@
 </style>
 </head>
 <body>
-<div class="top-controls-bar" id="topControlsBar">
-  <button id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
-  <button id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
-</div>
 <div id="crtOverlay"></div>
 <!-- Gatilhos escondidos: nao aparecem mais soltos na tela, sao acionados
      pelos itens do menu Iniciar da barra de tarefas Y2K la embaixo. -->
@@ -2270,6 +2248,8 @@
     <button class="y2k-tray-icon" id="y2kTrayMascotes" title="Mascotes">👻</button>
     <button class="y2k-tray-icon" id="y2kTrayCrt" title="Filtro CRT">📺</button>
     <button class="y2k-tray-icon" id="y2kTrayLive" title="Nenhum canal ao vivo agora">📡<span class="y2k-tray-dot" id="y2kTrayLiveDot"></span></button>
+    <button class="y2k-tray-icon" id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
+    <button class="y2k-tray-icon" id="temaBtn" title="Alternar tema claro/escuro" aria-label="Alternar tema claro/escuro">🌙</button>
   </div>
   <div class="y2k-taskbar-clock" id="y2kClock">--:--</div>
 </div>
