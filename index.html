@@ -2314,7 +2314,10 @@
       <span class="y2k-icon-glyph">📗</span><span class="y2k-icon-label">resumo.xlsx</span>
     </button>
     <button class="y2k-icon" data-y2k-action="doom" title="DOOM (shareware oficial, id Software)">
-      <span class="y2k-icon-glyph">🔫</span><span class="y2k-icon-label">DOOM.EXE</span>
+      <span class="y2k-icon-glyph"><img src="https://cdn2.steamgriddb.com/icon/c98399cf427813fcbe9bd5ad68d18f56.png" alt="" width="34" height="34" loading="lazy" style="width:100%;height:100%;object-fit:contain;"></span><span class="y2k-icon-label">DOOM.EXE</span>
+    </button>
+    <button class="y2k-icon" data-y2k-action="digger" title="Digger (1983, domínio público)">
+      <span class="y2k-icon-glyph"><img src="https://store-images.s-microsoft.com/image/apps.7038.13862130570822847.8b6ad891-ddb9-4d70-9398-d3dde4997dbf.70332996-2ee4-4b92-8319-bd4492fa8043?h=210" alt="" width="34" height="34" loading="lazy" style="width:100%;height:100%;object-fit:contain;"></span><span class="y2k-icon-label">DIGGER.EXE</span>
     </button>
   </div>
 
@@ -2514,6 +2517,21 @@
     <div class="mini-panel-body" style="padding:0;">
       <div id="doomDosLoading" style="padding:30px 18px; text-align:center; font-size:13px; opacity:.75;">Carregando DOOM (shareware)...</div>
       <div id="doomDosContainer" style="width:100%; aspect-ratio:4/3; background:#000;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Digger (1983): a versao de demo disk da Windmill Software foi liberada
+     em dominio publico pela propria desenvolvedora, e e o mesmo bundle
+     oficial que a equipe do js-dos hospeda como demo publica (mesmo esquema
+     de carregamento sob demanda do DOOM). -->
+<div class="mini-panel-overlay" id="diggerPanelOverlay">
+  <div class="mini-panel mini-panel-wide">
+    <div class="win-titlebar">DIGGER.EXE</div>
+    <div class="mini-panel-head"><h3>⛏️ Digger (1983)</h3><button class="mini-panel-close" id="diggerPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body" style="padding:0;">
+      <div id="diggerDosLoading" style="padding:30px 18px; text-align:center; font-size:13px; opacity:.75;">Carregando Digger...</div>
+      <div id="diggerDosContainer" style="width:100%; aspect-ratio:4/3; background:#000;"></div>
     </div>
   </div>
 </div>
@@ -4113,15 +4131,19 @@ function fecharMiniPanel(id){
   const ov = document.getElementById(id);
   if(ov) ov.classList.remove('aberto');
 }
-// ---- DOOM (shareware oficial) via js-dos, carregado sob demanda ----
-// So baixamos o js-dos (CSS+JS) e o bundle do jogo (.jsdos) quando o
-// usuario realmente abre essa janela, pra nao pesar o carregamento normal
-// do site pra quem nunca clica no icone.
-let doomCarregado = false;
-function abrirDoomPanel(){
-  abrirMiniPanel('doomPanelOverlay');
-  if(doomCarregado) return;
-  doomCarregado = true;
+// ---- Jogos DOS via js-dos, carregados sob demanda ----
+// So baixamos o motor js-dos (CSS+JS) e o bundle de cada jogo (.jsdos) quando
+// a pessoa realmente abre a janela correspondente, pra nao pesar o
+// carregamento normal do site pra quem nunca clica nesses icones. O motor
+// (CSS+JS) e compartilhado entre todos os jogos DOS e so baixa uma vez.
+let jsDosMotorCarregado = false;
+let jsDosMotorCarregando = false;
+const jsDosFilaEspera = [];
+function carregarJsDosMotor(aoPronto){
+  if(jsDosMotorCarregado){ aoPronto(); return; }
+  jsDosFilaEspera.push(aoPronto);
+  if(jsDosMotorCarregando) return;
+  jsDosMotorCarregando = true;
   const link = document.createElement('link');
   link.rel = 'stylesheet';
   link.href = 'https://v8.js-dos.com/latest/js-dos.css';
@@ -4129,19 +4151,39 @@ function abrirDoomPanel(){
   const script = document.createElement('script');
   script.src = 'https://v8.js-dos.com/latest/js-dos.js';
   script.onload = function(){
-    const loading = document.getElementById('doomDosLoading');
-    if(loading) loading.style.display = 'none';
-    try{
-      Dos(document.getElementById('doomDosContainer'), { url: 'https://v8.js-dos.com/bundles/doom.jsdos' });
-    }catch(e){
-      if(loading){ loading.style.display=''; loading.textContent = 'Nao foi possivel carregar o DOOM agora. Tente novamente mais tarde.'; }
-    }
+    jsDosMotorCarregado = true;
+    jsDosFilaEspera.splice(0).forEach(fn => fn());
   };
   script.onerror = function(){
-    const loading = document.getElementById('doomDosLoading');
-    if(loading) loading.textContent = 'Nao foi possivel carregar o DOOM agora. Tente novamente mais tarde.';
+    jsDosMotorCarregando = false;
+    jsDosFilaEspera.splice(0).forEach(fn => fn('erro'));
   };
   document.head.appendChild(script);
+}
+function abrirJogoDos(overlayId, containerId, loadingId, bundleUrl, nomeAmigavel){
+  abrirMiniPanel(overlayId);
+  const container = document.getElementById(containerId);
+  if(container.dataset.iniciado) return;
+  container.dataset.iniciado = '1';
+  carregarJsDosMotor(function(erro){
+    const loading = document.getElementById(loadingId);
+    if(erro){
+      if(loading){ loading.textContent = 'Nao foi possivel carregar ' + nomeAmigavel + ' agora. Tente novamente mais tarde.'; }
+      return;
+    }
+    if(loading) loading.style.display = 'none';
+    try{
+      Dos(container, { url: bundleUrl });
+    }catch(e){
+      if(loading){ loading.style.display=''; loading.textContent = 'Nao foi possivel carregar ' + nomeAmigavel + ' agora. Tente novamente mais tarde.'; }
+    }
+  });
+}
+function abrirDoomPanel(){
+  abrirJogoDos('doomPanelOverlay', 'doomDosContainer', 'doomDosLoading', 'https://v8.js-dos.com/bundles/doom.jsdos', 'o DOOM');
+}
+function abrirDiggerPanel(){
+  abrirJogoDos('diggerPanelOverlay', 'diggerDosContainer', 'diggerDosLoading', 'https://v8.js-dos.com/bundles/digger.jsdos', 'o Digger');
 }
 // ---- Scanner de codigo de barras: "ja tenho esse jogo?" ----
 // Nao usa nenhuma API externa de busca por codigo de barras (testamos o
@@ -5609,6 +5651,7 @@ setInterval(atualizarRelogioY2k, 15000);
     destaques: () => typeof abrirDestaquesPanel === 'function' && abrirDestaquesPanel(),
     resumoXlsx: () => typeof abrirResumoXlsxPanel === 'function' && abrirResumoXlsxPanel(),
     doom: () => typeof abrirDoomPanel === 'function' && abrirDoomPanel(),
+    digger: () => typeof abrirDiggerPanel === 'function' && abrirDiggerPanel(),
     instaPessoal: () => window.open('https://www.instagram.com/marioturbino/', '_blank', 'noopener,noreferrer'),
     instaColecao: () => window.open('https://www.instagram.com/iamtgames/', '_blank', 'noopener,noreferrer'),
     contato: () => document.getElementById('contatoBtn') && document.getElementById('contatoBtn').click(),
@@ -6364,6 +6407,11 @@ document.getElementById('resumoXlsxPanelOverlay').addEventListener('click', func
 document.getElementById('doomPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('doomPanelOverlay'));
 document.getElementById('doomPanelOverlay').addEventListener('click', function(e){
   if(e.target === this) fecharMiniPanel('doomPanelOverlay');
+});
+
+document.getElementById('diggerPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('diggerPanelOverlay'));
+document.getElementById('diggerPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharMiniPanel('diggerPanelOverlay');
 });
 
 async function carregarJogosGratis(){
