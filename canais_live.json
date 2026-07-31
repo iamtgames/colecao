@@ -1,6 +1,15 @@
 {
-  "updated": "2026-07-31T22:15:16.635Z",
+  "updated": "2026-07-31T22:30:25.091Z",
   "live": [
+    {
+      "id": 1,
+      "n": "Diego Sheth",
+      "plat": "youtube",
+      "videoId": "d_xSNueGBuA",
+      "videoTitle": "LIVE DE VENDAS !!!",
+      "videoUrl": "https://www.youtube.com/watch?v=d_xSNueGBuA",
+      "thumbnail": "https://i.ytimg.com/vi/d_xSNueGBuA/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
