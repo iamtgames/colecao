@@ -1,5 +1,5 @@
 {
-  "updated": "2026-07-31T03:00:23.591Z",
+  "updated": "2026-07-31T03:15:25.330Z",
   "live": [
     {
       "id": 4,
@@ -9,15 +9,6 @@
       "videoTitle": "LIVE DE VENDAS... JOGOS E CONSOLES BARATOS !",
       "videoUrl": "https://www.youtube.com/watch?v=MNQJgpSNy_4",
       "thumbnail": "https://i.ytimg.com/vi/MNQJgpSNy_4/hqdefault.jpg"
-    },
-    {
-      "id": 7,
-      "n": "Sigchap",
-      "plat": "youtube",
-      "videoId": "g1yU9AueTkk",
-      "videoTitle": "🟢 (ao vivo) VENDAS +2 mil jogos",
-      "videoUrl": "https://www.youtube.com/watch?v=g1yU9AueTkk",
-      "thumbnail": "https://i.ytimg.com/vi/g1yU9AueTkk/hqdefault.jpg"
     }
   ]
 }
