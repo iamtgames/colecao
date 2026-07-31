@@ -1,6 +1,15 @@
 {
-  "updated": "2026-07-31T05:15:26.301Z",
+  "updated": "2026-07-31T05:30:26.190Z",
   "live": [
+    {
+      "id": 16,
+      "n": "gianzao",
+      "plat": "twitch",
+      "login": "gianzao",
+      "videoTitle": "rerun fezes",
+      "videoUrl": "https://www.twitch.tv/gianzao",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_gianzao-440x248.jpg"
+    },
     {
       "id": 15,
       "n": "corvofps",
