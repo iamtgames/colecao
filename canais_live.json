@@ -1,4 +1,14 @@
 {
-  "updated": "2026-07-31T16:00:27.705Z",
-  "live": []
+  "updated": "2026-07-31T16:16:09.367Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "2tV1X4bKApg",
+      "videoTitle": "🟢 LIVE DE VENDAS (2 MIL JOGOS) / SIG CHAP / VIDEOGAMES e RETRO",
+      "videoUrl": "https://www.youtube.com/watch?v=2tV1X4bKApg",
+      "thumbnail": "https://i.ytimg.com/vi/2tV1X4bKApg/hqdefault.jpg"
+    }
+  ]
 }
