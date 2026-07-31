@@ -1,4 +1,14 @@
 {
-  "updated": "2026-07-31T20:44:13.253Z",
-  "live": []
+  "updated": "2026-07-31T20:49:24.068Z",
+  "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Upando meu Palla Rubinot  /  Arc raiders",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
