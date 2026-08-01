@@ -947,6 +947,13 @@
     width:34px; height:34px; display:flex; align-items:center; justify-content:center;
     font-size:22px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5));
   }
+  /* Icones que usam <img> (ICQ, DOOM.EXE, DIGGER.EXE) senao ficam "arrastaveis"
+     pelo proprio navegador (drag nativo de imagem), o que brigava com o
+     arrastar-e-soltar por pointer events feito em JS e travava o cursor no
+     meio do movimento. pointer-events:none joga o evento sempre pro botao pai. */
+  .y2k-icon .y2k-icon-glyph img{
+    -webkit-user-drag: none; user-drag: none; pointer-events: none;
+  }
   .y2k-icon .y2k-icon-label{
     font-size:10.5px; line-height:1.2; text-align:center; color:#fff;
     text-shadow:0 1px 2px rgba(0,0,0,.85), 0 0 4px rgba(0,0,0,.6);
@@ -1393,7 +1400,7 @@
   #printArea{display:none;}
 
   @media print{
-    body::before, .y2k-taskbar, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay, #crtOverlay{
+    body::before, .y2k-taskbar, .y2k-desktop, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay, .mini-panel-overlay, #crtOverlay{
       display:none !important;
     }
     body{background:#fff !important; padding:0; color:#111;}
@@ -2324,7 +2331,7 @@
       <span class="y2k-icon-glyph">📖</span><span class="y2k-icon-label">Livro de Visitas</span>
     </button>
     <button class="y2k-icon" data-y2k-action="contato" title="Sugestão / Parceria">
-      <span class="y2k-icon-glyph"><img src="https://w7.pngwing.com/pngs/728/281/png-transparent-windows-live-messenger-microsoft-messenger-service-msn-windows-messenger-microsoft-logo-sphere-microsoft.png" alt="" width="34" height="34" loading="lazy" decoding="async" style="width:100%;height:100%;object-fit:contain;"></span><span class="y2k-icon-label">MSN Sugestão</span>
+      <span class="y2k-icon-glyph"><img src="icq-icon.png" alt="" width="34" height="34" decoding="async" style="width:100%;height:100%;object-fit:contain;"></span><span class="y2k-icon-label">ICQ</span>
     </button>
     <button class="y2k-icon" data-y2k-action="destaques" title="Destaques da Coleção">
       <span class="y2k-icon-glyph">📽️</span><span class="y2k-icon-label">destaques.pptx</span>
@@ -2333,10 +2340,10 @@
       <span class="y2k-icon-glyph">📗</span><span class="y2k-icon-label">resumo.xlsx</span>
     </button>
     <button class="y2k-icon" data-y2k-action="doom" title="DOOM (shareware oficial, id Software)">
-      <span class="y2k-icon-glyph"><img src="https://cdn2.steamgriddb.com/icon/c98399cf427813fcbe9bd5ad68d18f56.png" alt="" width="34" height="34" loading="lazy" style="width:100%;height:100%;object-fit:contain;"></span><span class="y2k-icon-label">DOOM.EXE</span>
+      <span class="y2k-icon-glyph"><img src="https://cdn2.steamgriddb.com/icon/c98399cf427813fcbe9bd5ad68d18f56.png" alt="" width="34" height="34" decoding="async" style="width:100%;height:100%;object-fit:contain;"></span><span class="y2k-icon-label">DOOM.EXE</span>
     </button>
     <button class="y2k-icon" data-y2k-action="digger" title="Digger (1983, domínio público)">
-      <span class="y2k-icon-glyph"><img src="digger-icon-transparent.png" alt="" width="34" height="34" loading="lazy" style="width:100%;height:100%;object-fit:contain;"></span><span class="y2k-icon-label">DIGGER.EXE</span>
+      <span class="y2k-icon-glyph"><img src="digger-icon-transparent.png" alt="" width="34" height="34" decoding="async" style="width:100%;height:100%;object-fit:contain;"></span><span class="y2k-icon-label">DIGGER.EXE</span>
     </button>
   </div>
 
