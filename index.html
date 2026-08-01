@@ -3845,7 +3845,7 @@ function renderLiveBalloon(){
   wrap.innerHTML = canaisLiveAtual.map(c => `
     <div class="live-balloon${c.plat === 'twitch' ? ' twitch' : ''}" data-canal-id="${c.id}" role="button" tabindex="0">
       <span class="dot"></span>
-      <span class="txt"><b>${c.n}</b> ${t('estaAoVivo')}</span>
+      <span class="txt"><b>${escapeHtml(c.n)}</b> ${t('estaAoVivo')}</span>
     </div>
   `).join('');
   wrap.querySelectorAll('.live-balloon').forEach(el=>{
