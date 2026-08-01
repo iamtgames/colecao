@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-01T00:00:26.736Z",
+  "updated": "2026-08-01T00:13:31.896Z",
   "live": [
     {
       "id": 1,
@@ -9,6 +9,15 @@
       "videoTitle": "LIVE DE VENDAS !!!",
       "videoUrl": "https://www.youtube.com/watch?v=d_xSNueGBuA",
       "thumbnail": "https://i.ytimg.com/vi/d_xSNueGBuA/hqdefault.jpg"
+    },
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "ctmvj-pHkGU",
+      "videoTitle": "LIVE GAME PLAY GTA5",
+      "videoUrl": "https://www.youtube.com/watch?v=ctmvj-pHkGU",
+      "thumbnail": "https://i.ytimg.com/vi/ctmvj-pHkGU/hqdefault.jpg"
     },
     {
       "id": 7,
