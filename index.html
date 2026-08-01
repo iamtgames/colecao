@@ -1400,11 +1400,15 @@
   #printArea{display:none;}
 
   @media print{
-    /* .wrap cobre o balao/banner de aniversario e qualquer coisa nova que
-       entre nele; liveBalloonWrap/livePanelsContainer/topBtn sao elementos
-       soltos (position:fixed) fora do .wrap que tambem ficavam sobrepondo
-       a lista impressa -- nenhum desses tinha sido coberto antes. */
-    body::before, .y2k-taskbar, .y2k-desktop, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay, .mini-panel-overlay, #crtOverlay, .wrap, #liveBalloonWrap, #livePanelsContainer, #topBtn{
+    /* Allowlist em vez de denylist: ao inves de listar manualmente cada
+       elemento solto (position:fixed) que precisa sumir na impressao --
+       abordagem que provou ser fragil, pois qualquer elemento novo (balao
+       de live, painel, etc) ficava de fora e sobrepunha o PDF -- escondemos
+       TUDO que for filho direto do body, exceto o proprio #printArea.
+       Isso cobre automaticamente qualquer UI futura sem precisar lembrar
+       de atualizar esta regra. */
+    body::before{ display:none !important; }
+    body > *:not(#printArea){
       display:none !important;
     }
     body{background:#fff !important; padding:0; color:#111;}
