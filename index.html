@@ -5595,23 +5595,6 @@ document.getElementById('imprimirBtn').addEventListener('click', function(){
     html += `</tbody></table>`;
   }
 
-  if(wishlist.length){
-    const ps4W = wishlist.filter(w=>w.plat==='PS4').length;
-    const ps3W = wishlist.filter(w=>w.plat==='PS3').length;
-    html += `<div class="print-plat-title" style="margin-top:22px;">🎯 Radar de Caça — ${wishlist.length} jogos (${ps4W} PS4 / ${ps3W} PS3)</div>`;
-    html += `<table class="print-table"><thead><tr>
-      <th>Jogo</th><th>Plataforma</th><th>Por que é raro</th>
-    </tr></thead><tbody>`;
-    for(const w of wishlist.slice().sort((a,b)=>a.n.localeCompare(b.n))){
-      html += `<tr>
-        <td>${escapeHtml(w.n)}</td>
-        <td>${w.plat}</td>
-        <td style="font-size:10px;">${escapeHtml(w.motivo || '')}</td>
-      </tr>`;
-    }
-    html += `</tbody></table>`;
-  }
-
   html += `<div class="print-footer">Controle Coleção iamT — instagram.com/iamtgames</div>`;
 
   document.getElementById('printArea').innerHTML = html;
