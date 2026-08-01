@@ -2449,6 +2449,7 @@
             <button class="active" data-plat="all">Todas plataformas</button>
             <button data-plat="PS4">PS4</button>
             <button data-plat="PS3">PS3</button>
+            <button data-plat="PS5">PS5</button>
           </div>
         </div>
       </div>
@@ -2505,7 +2506,7 @@
         <div class="stat" style="width:100%; min-width:0;"><div class="n" id="statTotal">0</div><div class="l" id="lblStatJogos">Jogos</div></div>
         <div class="stat" style="width:100%; min-width:0;">
           <div class="n" id="statValor">R$ 0</div><div class="l" id="lblStatValor">Valor pago (total)</div>
-          <div class="plat-breakdown"><span>PS4: <b id="statValorPS4">R$0</b></span><span>PS3: <b id="statValorPS3">R$0</b></span></div>
+          <div class="plat-breakdown"><span>PS4: <b id="statValorPS4">R$0</b></span><span>PS3: <b id="statValorPS3">R$0</b></span><span>PS5: <b id="statValorPS5">R$0</b></span></div>
           <div class="valor-atualizado" id="valorAtualizadoEm"></div>
         </div>
         <div class="stat" style="width:100%; min-width:0;"><div class="n" id="statFav">0</div><div class="l" id="lblStatFav">Favoritos ⭐</div></div>
@@ -2575,6 +2576,9 @@
         </button>
         <button class="y2k-icon" data-colecao-plat="PS3" style="color:var(--ink);">
           <span class="y2k-icon-glyph">📁</span><span class="y2k-icon-label" id="colecaoPastaPS3Label" style="color:var(--ink); text-shadow:none;">PS3</span>
+        </button>
+        <button class="y2k-icon" data-colecao-plat="PS5" style="color:var(--ink);">
+          <span class="y2k-icon-glyph">📁</span><span class="y2k-icon-label" id="colecaoPastaPS5Label" style="color:var(--ink); text-shadow:none;">PS5</span>
         </button>
       </div>
     </div>
@@ -2755,6 +2759,7 @@ uma Sala Secreta se abre com curiosidades reais da colecao.
       <select id="admPlat" class="contato-input">
         <option value="PS4">PS4</option>
         <option value="PS3">PS3</option>
+        <option value="PS5">PS5</option>
       </select>
       <select id="admCat" class="contato-input">
         <option value="exclusivo">Exclusivo</option>
@@ -2895,7 +2900,8 @@ const jogos = [
   { id:203, n:"Golden Axe: Beast Rider", cat:"aaa", col:120, loj:95, bar:70, caro:190, rar:"pouco", v:false, plat:"PS3" , upc:"010086690064" },
   { id:204, n:"Tales of Xillia", cat:"raro", col:240, loj:190, bar:145, caro:380, rar:"raro", v:true, plat:"PS3" , upc:"722674111041" },
   { id:205, n:"White Knight Chronicles", cat:"aaa", col:140, loj:110, bar:80, caro:210, rar:"pouco", v:true, plat:"PS3" , upc:"711719814627" },
-  { id:206, n:"Yakuza: Dead Souls", cat:"survival", col:220, loj:175, bar:130, caro:350, rar:"raro", v:false, plat:"PS3" , upc:"010086690590" }
+  { id:206, n:"Yakuza: Dead Souls", cat:"survival", col:220, loj:175, bar:130, caro:350, rar:"raro", v:false, plat:"PS3" , upc:"010086690590" },
+  { id:224, n:"TAPE: Unveil the Memories", cat:"survival", col:110, loj:100, bar:90, caro:150, rar:"raro", v:true, plat:"PS5" , upc:"8437024411031" }
 
 ];
 
@@ -2974,7 +2980,8 @@ const capas = {
   220: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2acd.jpg",
   221: "https://images.igdb.com/igdb/image/upload/t_cover_big/co20mh.jpg",
   222: "https://images.igdb.com/igdb/image/upload/t_cover_big/cobkt6.jpg",
-  223: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2ats.jpg"
+  223: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2ats.jpg",
+  224: "https://storage.googleapis.com/images.pricecharting.com/zokc6yynp42eofsk/1600.jpg"
 };
 
 const capasVerso = {
@@ -3605,16 +3612,18 @@ function render(){
   document.getElementById('resultCount').textContent = I18N[idioma].resultCount(visiveis);
   document.getElementById('statTotal').textContent = todos.length;
 
-  let totalPago = 0, totalPS4 = 0, totalPS3 = 0;
+  let totalPago = 0, totalPS4 = 0, totalPS3 = 0, totalPS5 = 0;
   for(const j of todos){
     const v = Math.round((j.col + j.bar) / 2);
     totalPago += v;
     if(j.plat === 'PS4') totalPS4 += v;
     else if(j.plat === 'PS3') totalPS3 += v;
+    else if(j.plat === 'PS5') totalPS5 += v;
   }
   document.getElementById('statValor').textContent = `R$ ${totalPago}`;
   document.getElementById('statValorPS4').textContent = `R$${totalPS4}`;
   document.getElementById('statValorPS3').textContent = `R$${totalPS3}`;
+  document.getElementById('statValorPS5').textContent = `R$${totalPS5}`;
   document.getElementById('statFav').textContent = favoritos.length;
   document.getElementById('valorAtualizadoEm').textContent = t('valorAtualizadoEm')(PRECOS_ATUALIZADOS_EM);
 
@@ -4684,10 +4693,11 @@ function renderPerfil(){
   const topDecEntries = Object.entries(decCount).sort((a,b) => b[1]-a[1]);
   const topDec = topDecEntries.length ? topDecEntries[0] : null;
 
-  const ps4 = lista.filter(j => j.plat === 'PS4').length;
-  const ps3 = lista.filter(j => j.plat === 'PS3').length;
-  const platDominante = ps4 >= ps3 ? 'PS4' : 'PS3';
-  const platPct = lista.length ? Math.round((Math.max(ps4, ps3) / lista.length) * 100) : 0;
+  const platCountsPerfil = {};
+  lista.forEach(j => { platCountsPerfil[j.plat] = (platCountsPerfil[j.plat] || 0) + 1; });
+  const platEntriesPerfil = Object.entries(platCountsPerfil).sort((a,b) => b[1]-a[1]);
+  const platDominante = platEntriesPerfil.length ? platEntriesPerfil[0][0] : '';
+  const platPct = lista.length && platEntriesPerfil.length ? Math.round((platEntriesPerfil[0][1] / lista.length) * 100) : 0;
 
   let html = `<div class="rc-title">${t('rcPerfil')} <button id="narrarPerfilBtn" class="narrar-btn" type="button">${t('ouvirPerfil')}</button></div>`;
   html += `<div class="rc-row"><span class="rc-label" style="min-width:170px;">${t('categoriaFavorita')}</span><span class="rc-count" style="text-align:left; flex:1;">${catL(topCat[0])} (${topCat[1]} ${t('jogosSufixo')})</span></div>`;
@@ -4724,10 +4734,11 @@ function montarTextoNarracaoPerfil(){
   const topDecEntries = Object.entries(decCount).sort((a,b) => b[1]-a[1]);
   const topDec = topDecEntries.length ? topDecEntries[0] : null;
 
-  const ps4 = lista.filter(j => j.plat === 'PS4').length;
-  const ps3 = lista.filter(j => j.plat === 'PS3').length;
-  const platDominante = ps4 >= ps3 ? 'PS4' : 'PS3';
-  const platPct = lista.length ? Math.round((Math.max(ps4, ps3) / lista.length) * 100) : 0;
+  const platCountsNarr = {};
+  lista.forEach(j => { platCountsNarr[j.plat] = (platCountsNarr[j.plat] || 0) + 1; });
+  const platEntriesNarr = Object.entries(platCountsNarr).sort((a,b) => b[1]-a[1]);
+  const platDominante = platEntriesNarr.length ? platEntriesNarr[0][0] : '';
+  const platPct = lista.length && platEntriesNarr.length ? Math.round((platEntriesNarr[0][1] / lista.length) * 100) : 0;
 
   let totalPago = 0;
   lista.forEach(j => { totalPago += Math.round((j.col + j.bar) / 2); });
@@ -5060,8 +5071,7 @@ function renderConquistas(){
   const topCat = Object.entries(catCount).sort((a,b) => b[1]-a[1])[0];
 
   const raros = lista.filter(j => j.rar === 'raro' || j.rar === 'muito').length;
-  const ps4 = lista.filter(j => j.plat === 'PS4').length;
-  const ps3 = lista.filter(j => j.plat === 'PS3').length;
+  const geracoesPresentes = new Set(lista.map(j => j.plat)).size;
   let totalPago = 0;
   lista.forEach(j => { totalPago += Math.round((j.col + j.bar) / 2); });
   const avaliados = Object.values(notas || {}).filter(n => n > 0).length;
@@ -5073,7 +5083,7 @@ function renderConquistas(){
     { icon:'🏆', titulo: t('conqGrandeTitulo'), desc: t('conqGrandeDesc')(LIMITE_GRANDE), unlocked: lista.length >= LIMITE_GRANDE },
     { icon:'💎', titulo: t('conqRaridadeTitulo'), desc: t('conqRaridadeDesc')(LIMITE_RARIDADE), unlocked: raros >= LIMITE_RARIDADE },
     { icon:'🎮', titulo: catL(topCat[0]), desc: t('conqCategoriaDesc')(LIMITE_CATEGORIA), unlocked: topCat[1] >= LIMITE_CATEGORIA },
-    { icon:'🕹️', titulo: t('conqDuasGeracoesTitulo'), desc: t('conqDuasGeracoesDesc'), unlocked: ps4 > 0 && ps3 > 0 },
+    { icon:'🕹️', titulo: t('conqDuasGeracoesTitulo'), desc: t('conqDuasGeracoesDesc'), unlocked: geracoesPresentes >= 2 },
     { icon:'⭐', titulo: t('conqCuradorTitulo'), desc: t('conqCuradorDesc')(LIMITE_CURADOR), unlocked: favoritos.length >= LIMITE_CURADOR },
     { icon:'📝', titulo: t('conqCriticoTitulo'), desc: t('conqCriticoDesc')(LIMITE_CRITICO), unlocked: avaliados >= LIMITE_CRITICO },
     { icon:'💰', titulo: t('conqCofreTitulo'), desc: t('conqCofreDesc')(LIMITE_COFRE), unlocked: totalPago >= LIMITE_COFRE },
@@ -5201,8 +5211,9 @@ function gerarCartaoResumo(){
   ctx.fillText(`Resumo da coleção — ${new Date().getFullYear()}`, W / 2, 190);
 
   const totalValor = lista.reduce((s, j) => s + Math.round((j.col + j.bar) / 2), 0);
-  const ps4 = lista.filter(j => j.plat === 'PS4').length;
-  const ps3 = lista.filter(j => j.plat === 'PS3').length;
+  const platCountsCard = {};
+  lista.forEach(j => { platCountsCard[j.plat] = (platCountsCard[j.plat] || 0) + 1; });
+  const platResumoStr = Object.entries(platCountsCard).sort((a,b) => b[1]-a[1]).map(([p,n]) => `${n} ${p}`).join('  ·  ');
 
   ctx.fillStyle = '#ffffff';
   ctx.font = '900 180px Arial';
@@ -5219,7 +5230,7 @@ function gerarCartaoResumo(){
   ctx.stroke();
 
   const stats = [
-    [`${ps4} PS4  ·  ${ps3} PS3`, 'PLATAFORMAS'],
+    [platResumoStr, 'PLATAFORMAS'],
     [`R$ ${totalValor}`, 'VALOR TOTAL PAGO'],
   ];
   let y = 650;
@@ -5530,10 +5541,11 @@ document.getElementById('imprimirBtn').addEventListener('click', function(){
       <div><b>R$ ${totalValor}</b>Valor total pago</div>
       <div><b>${disponiveis.filter(j=>j.plat==='PS4').length}</b>PS4</div>
       <div><b>${disponiveis.filter(j=>j.plat==='PS3').length}</b>PS3</div>
+      <div><b>${disponiveis.filter(j=>j.plat==='PS5').length}</b>PS5</div>
     </div>
   `;
 
-  for(const plat of ['PS4','PS3']){
+  for(const plat of ['PS4','PS3','PS5']){
     const lista = disponiveis.filter(j=>j.plat===plat).sort((a,b)=>a.n.localeCompare(b.n));
     if(!lista.length) continue;
     html += `<div class="print-plat-title">${plat} — ${lista.length} jogos</div>`;
@@ -5579,7 +5591,7 @@ document.getElementById('exportarBtn').addEventListener('click', function(){
   let texto = "CONTROLE COLEÇÃO iamT\n";
   texto += "========================\n\n";
   const disponiveis = todosJogos();
-  for(const plat of ['PS4','PS3']){
+  for(const plat of ['PS4','PS3','PS5']){
     const lista = disponiveis.filter(j=>j.plat===plat).sort((a,b)=>a.n.localeCompare(b.n));
     if(!lista.length) continue;
     texto += `--- ${plat} ---\n`;
@@ -5870,11 +5882,13 @@ setInterval(atualizarRelogioY2k, 15000);
   function contarPlat(plat){
     try{ return (typeof jogos !== 'undefined' ? jogos : []).filter(j => j.plat === plat).length; }catch(err){ return null; }
   }
-  const nPS4 = contarPlat('PS4'), nPS3 = contarPlat('PS3');
+  const nPS4 = contarPlat('PS4'), nPS3 = contarPlat('PS3'), nPS5 = contarPlat('PS5');
   const lblPS4 = document.getElementById('colecaoPastaPS4Label');
   const lblPS3 = document.getElementById('colecaoPastaPS3Label');
+  const lblPS5 = document.getElementById('colecaoPastaPS5Label');
   if(lblPS4 && nPS4 !== null) lblPS4.textContent = `PS4 (${nPS4})`;
   if(lblPS3 && nPS3 !== null) lblPS3.textContent = `PS3 (${nPS3})`;
+  if(lblPS5 && nPS5 !== null) lblPS5.textContent = `PS5 (${nPS5})`;
 
   const gridOverlay = document.getElementById('colecaoGridPanelOverlay');
   const gridTitulo = document.getElementById('colecaoGridTitulo');
