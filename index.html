@@ -1400,7 +1400,11 @@
   #printArea{display:none;}
 
   @media print{
-    body::before, .y2k-taskbar, .y2k-desktop, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay, .mini-panel-overlay, #crtOverlay{
+    /* .wrap cobre o balao/banner de aniversario e qualquer coisa nova que
+       entre nele; liveBalloonWrap/livePanelsContainer/topBtn sao elementos
+       soltos (position:fixed) fora do .wrap que tambem ficavam sobrepondo
+       a lista impressa -- nenhum desses tinha sido coberto antes. */
+    body::before, .y2k-taskbar, .y2k-desktop, .topbar, .rarity-chart, .tools, .grid, .result-count, .footer, .modal-overlay, .mini-panel-overlay, #crtOverlay, .wrap, #liveBalloonWrap, #livePanelsContainer, #topBtn{
       display:none !important;
     }
     body{background:#fff !important; padding:0; color:#111;}
