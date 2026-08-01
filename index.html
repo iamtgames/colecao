@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="description" content="Controle Coleção iamT — catálogo pessoal de jogos PS4 e PS3 com preços, capas e raridade.">
-<meta name="keywords" content="coleção de jogos PS4, coleção de jogos PS3, catálogo de jogos físicos, colecionador de jogos, coleção iamT">
+<meta name="description" content="Controle Coleção iamT — catálogo pessoal de jogos PS4, PS3 e PS5 com preços, capas e raridade.">
+<meta name="keywords" content="coleção de jogos PS4, coleção de jogos PS3, coleção de jogos PS5, catálogo de jogos físicos, colecionador de jogos, coleção iamT">
 <meta name="robots" content="index, follow">
 <meta name="author" content="iamT">
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="canonical" href="https://iamtgames.github.io/colecao/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Controle Coleção iamT">
-<meta property="og:description" content="Catálogo pessoal de jogos PS4 e PS3 com preços, capas, sinopses e raridade.">
+<meta property="og:description" content="Catálogo pessoal de jogos PS4, PS3 e PS5 com preços, capas, sinopses e raridade.">
 <meta property="og:image" content="https://iamtgames.github.io/colecao/og-image.png">
 <meta property="og:url" content="https://iamtgames.github.io/colecao/">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Controle Coleção iamT">
-<meta name="twitter:description" content="Catálogo pessoal de jogos PS4 e PS3 com preços, capas, sinopses e raridade.">
+<meta name="twitter:description" content="Catálogo pessoal de jogos PS4, PS3 e PS5 com preços, capas, sinopses e raridade.">
 <meta name="twitter:image" content="https://iamtgames.github.io/colecao/og-image.png">
 <meta name="theme-color" content="#0b0b0c">
 <!-- CSP como camada extra de defesa (GitHub Pages nao permite headers reais).
@@ -36,7 +36,7 @@
   "@context": "https://schema.org",
   "@type": "CollectionPage",
   "name": "Controle Coleção iamT",
-  "description": "Catálogo pessoal de jogos PS4 e PS3 com preços, capas, sinopses e raridade.",
+  "description": "Catálogo pessoal de jogos PS4, PS3 e PS5 com preços, capas, sinopses e raridade.",
   "url": "https://iamtgames.github.io/colecao/",
   "inLanguage": "pt-BR",
   "isPartOf": {
@@ -696,10 +696,18 @@
   .section-title{font-size:18px; font-weight:400; color:var(--white); letter-spacing:-.3px; font-family:'Russo One','Space Grotesk','Segoe UI',sans-serif;}
 
   .canal-card{
-    background: var(--card-glass); backdrop-filter: blur(18px) saturate(140%);
+    background: var(--card-glass);
+    /* Mesmo ajuste feito no .card do grid principal: 16 canais renderizam
+       de uma vez no painel de Vendedores/Lives, e blur(18px) em todos ao
+       mesmo tempo pesava bastante pra compositar. 10px+saturate mantem o
+       visual "vidro" gastando bem menos GPU. */
+    backdrop-filter: blur(10px) saturate(130%);
+    -webkit-backdrop-filter: blur(10px) saturate(130%);
     border:1px solid rgba(255,255,255,0.08); border-radius: 18px;
     overflow:hidden; display:flex; flex-direction:column; cursor:pointer;
     transition: border-color .2s, transform .2s, box-shadow .2s;
+    content-visibility: auto;
+    contain-intrinsic-size: 280px 260px;
   }
   .canal-card:hover{border-color: rgba(255,255,255,0.4); transform: translateY(-3px); box-shadow: 0 16px 36px rgba(0,0,0,0.5);}
   .canal-top{
@@ -3429,7 +3437,7 @@ const I18N = {
     conqGrandeTitulo: 'Grande Colecionador', conqGrandeDesc: (n) => `Alcançou ${n}+ jogos na coleção.`,
     conqRaridadeTitulo: 'Caçador de Raridades', conqRaridadeDesc: (n) => `Possui ${n}+ jogos raros ou muito raros.`,
     conqCategoriaDesc: (n) => `Tem ${n}+ jogos na categoria favorita.`,
-    conqDuasGeracoesTitulo: 'Duas Gerações', conqDuasGeracoesDesc: 'Tem jogos de PS4 e PS3 na coleção.',
+    conqDuasGeracoesTitulo: 'Duas Gerações', conqDuasGeracoesDesc: 'Tem jogos de pelo menos duas plataformas diferentes na coleção.',
     conqCuradorTitulo: 'Curador', conqCuradorDesc: (n) => `Marcou ${n}+ jogos como favoritos.`,
     conqCriticoTitulo: 'Crítico de Plantão', conqCriticoDesc: (n) => `Avaliou ${n}+ jogos com estrelas.`,
     conqCofreTitulo: 'Cofre Recheado', conqCofreDesc: (v) => `Coleção avaliada em R$ ${v}+.`,
@@ -3492,7 +3500,7 @@ const I18N = {
     conqGrandeTitulo: 'Big Collector', conqGrandeDesc: (n) => `Reached ${n}+ games in the collection.`,
     conqRaridadeTitulo: 'Rarity Hunter', conqRaridadeDesc: (n) => `Owns ${n}+ rare or very rare games.`,
     conqCategoriaDesc: (n) => `Has ${n}+ games in the favorite category.`,
-    conqDuasGeracoesTitulo: 'Two Generations', conqDuasGeracoesDesc: 'Has both PS4 and PS3 games in the collection.',
+    conqDuasGeracoesTitulo: 'Two Generations', conqDuasGeracoesDesc: 'Has games from at least two different platforms in the collection.',
     conqCuradorTitulo: 'Curator', conqCuradorDesc: (n) => `Marked ${n}+ games as favorites.`,
     conqCriticoTitulo: 'Resident Critic', conqCriticoDesc: (n) => `Rated ${n}+ games with stars.`,
     conqCofreTitulo: 'Full Vault', conqCofreDesc: (v) => `Collection valued at R$ ${v}+.`,
@@ -3545,6 +3553,17 @@ function todosJogos(){
   return _todosJogosCache;
 }
 function invalidarTodosJogosCache(){ _todosJogosCache = null; }
+
+// Conta quantos jogos existem por plataforma (PS4/PS3/PS5/...) e devolve as
+// entradas ja ordenadas da mais comum pra menos comum -- usado em vários
+// lugares que precisam saber a "plataforma dominante" ou montar um resumo
+// tipo "70 PS4 · 30 PS3 · 1 PS5" (perfil, narração por voz, cartão resumo),
+// pra não repetir esse mesmo agrupamento em cada um deles.
+function contarPorPlataforma(lista){
+  const contagem = {};
+  lista.forEach(j => { contagem[j.plat] = (contagem[j.plat] || 0) + 1; });
+  return Object.entries(contagem).sort((a,b) => b[1]-a[1]);
+}
 
 function render(){
   const grid = document.getElementById('grid');
@@ -3761,30 +3780,31 @@ function renderCanais(){
   }
 
   for(const c of lista){
-    const inicial = c.n.charAt(0).toUpperCase();
+    const nomeSeguro = escapeHtml(c.n);
+    const inicial = escapeHtml(c.n.charAt(0).toUpperCase());
     const platLabel = platLabels[c.plat] || c.plat;
-    const avatar = avatarUrl(c);
+    const avatar = escapeHtml(avatarUrl(c));
     const instaLink = c.instagram
-      ? `<a href="${c.instagram}" target="_blank" rel="noopener noreferrer" class="canal-insta-link" onclick="event.stopPropagation()">📸 Instagram</a>`
+      ? `<a href="${escapeHtml(c.instagram)}" target="_blank" rel="noopener noreferrer" class="canal-insta-link" onclick="event.stopPropagation()">📸 Instagram</a>`
       : '';
     const diaBadge = (ordenarPorDia && c.dias.length)
-      ? `<span class="canal-dia-badge">${c.dias.map(d=>nomesDias[d]).join(' e ')}</span>`
+      ? `<span class="canal-dia-badge">${escapeHtml(c.dias.map(d=>nomesDias[d]).join(' e '))}</span>`
       : '';
     const liveInfo = canaisLiveAtual.find(l => l.id === c.id);
     const ehTwitchAoVivo = liveInfo && liveInfo.plat === 'twitch';
     const liveBadge = liveInfo ? `<span class="canal-live-badge${ehTwitchAoVivo ? ' twitch' : ''}">${ehTwitchAoVivo ? '🟣' : '🔴'} ${t('aoVivoBadge')}</span>` : '';
     html += `
-      <div class="canal-card${liveInfo ? ' canal-ao-vivo' : ''}${ehTwitchAoVivo ? ' canal-ao-vivo-twitch' : ''}" data-link="${liveInfo ? liveInfo.videoUrl : c.link}">
+      <div class="canal-card${liveInfo ? ' canal-ao-vivo' : ''}${ehTwitchAoVivo ? ' canal-ao-vivo-twitch' : ''}" data-link="${escapeHtml(liveInfo ? liveInfo.videoUrl : c.link)}">
         <div class="canal-top">
           <span class="canal-plat-badge ${c.plat}">${platLabel}</span>
           ${diaBadge}
           ${liveBadge}
-          <img src="${avatar}" alt="${c.n}" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ini',textContent:'${inicial}'}))">
+          <img src="${avatar}" alt="${nomeSeguro}" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ini',textContent:'${inicial}'}))">
         </div>
         <div class="canal-body">
-          <h3>${c.n}</h3>
-          <div class="canal-info"><b>${c.horario}</b></div>
-          <div class="canal-info">${c.nota}</div>
+          <h3>${nomeSeguro}</h3>
+          <div class="canal-info"><b>${escapeHtml(c.horario)}</b></div>
+          <div class="canal-info">${escapeHtml(c.nota)}</div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
             <div class="canal-cta">Abrir →</div>
             ${instaLink}
@@ -3796,7 +3816,7 @@ function renderCanais(){
   grid.innerHTML = html;
   grid.querySelectorAll('.canal-card').forEach(card=>{
     card.addEventListener('click', function(){
-      window.open(this.dataset.link, '_blank');
+      window.open(this.dataset.link, '_blank', 'noopener,noreferrer');
     });
   });
 }
@@ -4421,7 +4441,7 @@ function renderCmdkResultados(termo){
       const capa = capas[j.id];
       html += `
         <div class="cmdk-item" data-tipo="jogo" data-id="${j.id}">
-          ${capa ? `<img src="${escapeHtml(capa)}" alt="">` : `<div class="cmdk-item-ico">🎮</div>`}
+          ${capa ? `<img src="${escapeHtml(capa)}" alt="" loading="lazy" decoding="async">` : `<div class="cmdk-item-ico">🎮</div>`}
           <div class="cmdk-item-txt">
             <div class="cmdk-item-title">${escapeHtml(j.n)}</div>
             <div class="cmdk-item-sub">${escapeHtml(j.plat || '')}</div>
@@ -4435,7 +4455,7 @@ function renderCmdkResultados(termo){
       const avatar = avatarUrl(c);
       html += `
         <div class="cmdk-item" data-tipo="canal" data-id="${c.id}">
-          ${avatar ? `<img src="${escapeHtml(avatar)}" alt="">` : `<div class="cmdk-item-ico">📺</div>`}
+          ${avatar ? `<img src="${escapeHtml(avatar)}" alt="" loading="lazy" decoding="async">` : `<div class="cmdk-item-ico">📺</div>`}
           <div class="cmdk-item-txt">
             <div class="cmdk-item-title">${escapeHtml(c.n)}</div>
             <div class="cmdk-item-sub">${escapeHtml(c.horario || '')}</div>
@@ -4448,7 +4468,7 @@ function renderCmdkResultados(termo){
     resultado.noticias.forEach((n, i) => {
       html += `
         <div class="cmdk-item" data-tipo="noticia" data-idx="${i}" data-link="${escapeHtml(n.link || '')}">
-          ${n.image ? `<img src="${escapeHtml(n.image)}" alt="">` : `<div class="cmdk-item-ico">📰</div>`}
+          ${n.image ? `<img src="${escapeHtml(n.image)}" alt="" loading="lazy" decoding="async">` : `<div class="cmdk-item-ico">📰</div>`}
           <div class="cmdk-item-txt">
             <div class="cmdk-item-title">${escapeHtml(n.title || '')}</div>
             <div class="cmdk-item-sub">Flow Games</div>
@@ -4472,10 +4492,10 @@ function ativarItemCmdk(el){
     const id = parseInt(el.dataset.id, 10);
     const liveInfo = canaisLiveAtual.find(l => l.id === id);
     const c = canais.find(x => x.id === id);
-    window.open(liveInfo ? liveInfo.videoUrl : (c ? c.link : '#'), '_blank');
+    window.open(liveInfo ? liveInfo.videoUrl : (c ? c.link : '#'), '_blank', 'noopener,noreferrer');
   }else if(tipo === 'noticia'){
     fecharCmdk();
-    if(el.dataset.link) window.open(el.dataset.link, '_blank');
+    if(el.dataset.link) window.open(el.dataset.link, '_blank', 'noopener,noreferrer');
   }
 }
 
@@ -4695,9 +4715,7 @@ function renderPerfil(){
   const topDecEntries = Object.entries(decCount).sort((a,b) => b[1]-a[1]);
   const topDec = topDecEntries.length ? topDecEntries[0] : null;
 
-  const platCountsPerfil = {};
-  lista.forEach(j => { platCountsPerfil[j.plat] = (platCountsPerfil[j.plat] || 0) + 1; });
-  const platEntriesPerfil = Object.entries(platCountsPerfil).sort((a,b) => b[1]-a[1]);
+  const platEntriesPerfil = contarPorPlataforma(lista);
   const platDominante = platEntriesPerfil.length ? platEntriesPerfil[0][0] : '';
   const platPct = lista.length && platEntriesPerfil.length ? Math.round((platEntriesPerfil[0][1] / lista.length) * 100) : 0;
 
@@ -4736,9 +4754,7 @@ function montarTextoNarracaoPerfil(){
   const topDecEntries = Object.entries(decCount).sort((a,b) => b[1]-a[1]);
   const topDec = topDecEntries.length ? topDecEntries[0] : null;
 
-  const platCountsNarr = {};
-  lista.forEach(j => { platCountsNarr[j.plat] = (platCountsNarr[j.plat] || 0) + 1; });
-  const platEntriesNarr = Object.entries(platCountsNarr).sort((a,b) => b[1]-a[1]);
+  const platEntriesNarr = contarPorPlataforma(lista);
   const platDominante = platEntriesNarr.length ? platEntriesNarr[0][0] : '';
   const platPct = lista.length && platEntriesNarr.length ? Math.round((platEntriesNarr[0][1] / lista.length) * 100) : 0;
 
@@ -5213,9 +5229,7 @@ function gerarCartaoResumo(){
   ctx.fillText(`Resumo da coleção — ${new Date().getFullYear()}`, W / 2, 190);
 
   const totalValor = lista.reduce((s, j) => s + Math.round((j.col + j.bar) / 2), 0);
-  const platCountsCard = {};
-  lista.forEach(j => { platCountsCard[j.plat] = (platCountsCard[j.plat] || 0) + 1; });
-  const platResumoStr = Object.entries(platCountsCard).sort((a,b) => b[1]-a[1]).map(([p,n]) => `${n} ${p}`).join('  ·  ');
+  const platResumoStr = contarPorPlataforma(lista).map(([p,n]) => `${n} ${p}`).join('  ·  ');
 
   ctx.fillStyle = '#ffffff';
   ctx.font = '900 180px Arial';

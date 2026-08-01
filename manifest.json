@@ -1,7 +1,7 @@
 {
   "name": "Controle Coleção iamT",
   "short_name": "Coleção iamT",
-  "description": "Catálogo pessoal de jogos PS4 e PS3 com preços, capas, sinopses e raridade.",
+  "description": "Catálogo pessoal de jogos PS4, PS3 e PS5 com preços, capas, sinopses e raridade.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
