@@ -5360,14 +5360,18 @@ function renderWishlist(){
   if(wishlistPage < 0) wishlistPage = 0;
   const start = wishlistPage * WISHLIST_PAGE_SIZE;
   const pageItems = wishlist.slice(start, start + WISHLIST_PAGE_SIZE);
-  // Uma unica passada pelos ~100 itens em vez de duas (.filter + .filter)
-  // pra contar PS4/PS3 -- resultado identico, so evita percorrer o array
-  // duas vezes toda vez que o radar renderiza (troca de pagina, idioma etc).
-  let ps4Count = 0, ps3Count = 0;
-  for(const w of wishlist){ if(w.plat === 'PS4') ps4Count++; else if(w.plat === 'PS3') ps3Count++; }
+  // Uma unica passada pelos ~100 itens pra contar quantos jogos ha por
+  // plataforma -- generico (nao fixo em PS4/PS3) pra nao ficar desatualizado
+  // se o radar mudar de foco de plataforma no futuro (ex: virou 100% PS5).
+  const platCounts = {};
+  for(const w of wishlist){ platCounts[w.plat] = (platCounts[w.plat] || 0) + 1; }
+  const platBreakdown = Object.entries(platCounts)
+    .sort((a, b) => b[1] - a[1])
+    .map(([plat, count]) => `${count} ${plat}`)
+    .join(' / ');
   if(subtitle) subtitle.textContent = idioma === 'en'
-    ? `${wishlist.length} games listed (${ps4Count} PS4 / ${ps3Count} PS3) — 10 at a time`
-    : `${wishlist.length} jogos indicados (${ps4Count} PS4 / ${ps3Count} PS3) — 10 por vez`;
+    ? `${wishlist.length} games listed (${platBreakdown}) — 10 at a time`
+    : `${wishlist.length} jogos indicados (${platBreakdown}) — 10 por vez`;
   let html = '';
   pageItems.forEach(w => {
     const nomeSeguro = escapeHtml(w.n);
