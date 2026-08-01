@@ -999,7 +999,7 @@
     background: linear-gradient(180deg, #8ed13f 0%, #5da621 45%, #3c7d12 100%);
     border-bottom: 1px solid rgba(0,0,0,.2);
   }
-  .msn-titlebar-ico{ font-size:15px; }
+  .msn-titlebar-ico{ font-size:15px; display:flex; align-items:center; flex-shrink:0; }
   .msn-titlebar-txt{ flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .msn-status{ font-size:9.5px; font-weight:600; opacity:.9; white-space:nowrap; }
   .msn-close{
@@ -2755,7 +2755,7 @@ uma Sala Secreta se abre com curiosidades reais da colecao.
 <div class="modal-overlay" id="contatoOverlay">
   <div class="modal-box msn-window">
     <div class="msn-titlebar">
-      <span class="msn-titlebar-ico">🦋</span>
+      <span class="msn-titlebar-ico"><img src="icq-icon.png?v=3" alt="" width="18" height="18" decoding="async" style="display:block;width:18px;height:18px;object-fit:contain;"></span>
       <span class="msn-titlebar-txt">Sugestão / Parceria</span>
       <span class="msn-status">🟢 Online</span>
       <button class="msn-close" id="contatoClose" aria-label="Fechar">✕</button>
