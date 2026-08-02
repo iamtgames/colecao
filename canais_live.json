@@ -1,6 +1,15 @@
 {
-  "updated": "2026-08-02T22:15:22.708Z",
+  "updated": "2026-08-02T22:30:27.348Z",
   "live": [
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "sYVkj86dUrw",
+      "videoTitle": "TENTEI A SORTE COM ESSE LOTE DE PS2... SERÁ QUE SALVOU ALGUM????",
+      "videoUrl": "https://www.youtube.com/watch?v=sYVkj86dUrw",
+      "thumbnail": "https://i.ytimg.com/vi/sYVkj86dUrw/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
