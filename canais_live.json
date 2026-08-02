@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-02T07:15:22.843Z",
+  "updated": "2026-08-02T07:30:20.733Z",
   "live": [
     {
       "id": 7,
@@ -9,15 +9,6 @@
       "videoTitle": "🟢 LIVE ABRINDO COLEÇÃO DO POKEMON",
       "videoUrl": "https://www.youtube.com/watch?v=kqJMBZ-rSQI",
       "thumbnail": "https://i.ytimg.com/vi/kqJMBZ-rSQI/hqdefault.jpg"
-    },
-    {
-      "id": 15,
-      "n": "corvofps",
-      "plat": "twitch",
-      "login": "corvofps",
-      "videoTitle": "🟢 +18 VEM PARA FAZENDINHA!   !Historia1 !historia2 !historia3",
-      "videoUrl": "https://www.twitch.tv/corvofps",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_corvofps-440x248.jpg"
     }
   ]
 }
