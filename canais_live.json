@@ -1,12 +1,21 @@
 {
-  "updated": "2026-08-02T02:15:17.692Z",
+  "updated": "2026-08-02T02:32:09.022Z",
   "live": [
+    {
+      "id": 6,
+      "n": "Jotape Arcade",
+      "plat": "youtube",
+      "videoId": "fJuj4UrMa3A",
+      "videoTitle": "Xmen - Mutant Apocalypse BOR - Gamaplay",
+      "videoUrl": "https://www.youtube.com/watch?v=fJuj4UrMa3A",
+      "thumbnail": "https://i.ytimg.com/vi/fJuj4UrMa3A/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
       "plat": "youtube",
       "videoId": "kqJMBZ-rSQI",
-      "videoTitle": "🟢VENDENDO JOGO  A MODA ANTIGA",
+      "videoTitle": "🟢 LIVE VENDENDO JOGOS DE PSP",
       "videoUrl": "https://www.youtube.com/watch?v=kqJMBZ-rSQI",
       "thumbnail": "https://i.ytimg.com/vi/kqJMBZ-rSQI/hqdefault.jpg"
     }
