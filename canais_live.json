@@ -1,4 +1,14 @@
 {
-  "updated": "2026-08-02T18:00:23.336Z",
-  "live": []
+  "updated": "2026-08-02T18:15:18.395Z",
+  "live": [
+    {
+      "id": 6,
+      "n": "Jotape Arcade",
+      "plat": "youtube",
+      "videoId": "j2Jf7HdTlxM",
+      "videoTitle": "Live de vendas!",
+      "videoUrl": "https://www.youtube.com/watch?v=j2Jf7HdTlxM",
+      "thumbnail": "https://i.ytimg.com/vi/j2Jf7HdTlxM/hqdefault.jpg"
+    }
+  ]
 }
