@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-02T04:03:36.375Z",
+  "updated": "2026-08-02T04:18:05.446Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "🟢 LIVE VENDENDO JOGOS DE PSP",
       "videoUrl": "https://www.youtube.com/watch?v=kqJMBZ-rSQI",
       "thumbnail": "https://i.ytimg.com/vi/kqJMBZ-rSQI/hqdefault.jpg"
+    },
+    {
+      "id": 15,
+      "n": "corvofps",
+      "plat": "twitch",
+      "login": "corvofps",
+      "videoTitle": "🟢 +18 VEM PARA FAZENDINHA!   !Historia1 !historia2 !historia3",
+      "videoUrl": "https://www.twitch.tv/corvofps",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_corvofps-440x248.jpg"
     }
   ]
 }
