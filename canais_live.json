@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-02T20:15:22.736Z",
+  "updated": "2026-08-02T20:30:21.189Z",
   "live": [
     {
       "id": 6,
@@ -9,6 +9,15 @@
       "videoTitle": "Live de vendas!",
       "videoUrl": "https://www.youtube.com/watch?v=j2Jf7HdTlxM",
       "thumbnail": "https://i.ytimg.com/vi/j2Jf7HdTlxM/hqdefault.jpg"
+    },
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "SxKX9-0NsWc",
+      "videoTitle": "🟢 LIVE VENDENDOO COLEÇÃO DO POKEMON",
+      "videoUrl": "https://www.youtube.com/watch?v=SxKX9-0NsWc",
+      "thumbnail": "https://i.ytimg.com/vi/SxKX9-0NsWc/hqdefault.jpg"
     },
     {
       "id": 13,
