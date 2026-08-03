@@ -1,4 +1,14 @@
 {
-  "updated": "2026-08-03T21:00:32.700Z",
-  "live": []
+  "updated": "2026-08-03T21:15:22.484Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "K3UgqKCv0F0",
+      "videoTitle": "🟢 QUEIMA DE ESTOQUE AO VIVO - (PS3, PS4, XBOX, NINTENDO)",
+      "videoUrl": "https://www.youtube.com/watch?v=K3UgqKCv0F0",
+      "thumbnail": "https://i.ytimg.com/vi/K3UgqKCv0F0/hqdefault.jpg"
+    }
+  ]
 }
