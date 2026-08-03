@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-03T22:00:25.919Z",
+  "updated": "2026-08-03T22:15:19.581Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "🟢 AO VIVO VENDENDO VIDEOGAMES (PS3, PS4, XBOX, NINTENDO)",
       "videoUrl": "https://www.youtube.com/watch?v=K3UgqKCv0F0",
       "thumbnail": "https://i.ytimg.com/vi/K3UgqKCv0F0/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc raiders Solo pve / DuoTrio pvp mosquetao",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
