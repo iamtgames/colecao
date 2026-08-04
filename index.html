@@ -856,11 +856,18 @@
   }
   .live-panel-hint.show{ display:block; }
 
-  /* MINI-PAINEIS 3D (Ferramentas / Estatisticas) - mesmo efeito do painel de live */
+  /* MINI-PAINEIS 3D (Ferramentas / Estatisticas) - mesmo efeito do painel de live.
+     Antes o overlay cobria a tela inteira com fundo escuro+borrado (modal),
+     escondendo a area de trabalho e na pratica so deixando ver uma janela
+     por vez. Agora o overlay eh so o "espaco" onde a janela mora: sem tingir
+     nem borrar o fundo, e com pointer-events:none nele (a janela em si volta
+     a aceitar clique via pointer-events:auto) -- assim os icones do desktop
+     continuam clicaveis por baixo e da pra ter varias janelas abertas ao
+     mesmo tempo, como um desktop de verdade. */
   .mini-panel-overlay{
     position: fixed; inset:0; z-index: 70; display:none;
     align-items:flex-start; justify-content:center;
-    background: rgba(0,0,0,0.5); backdrop-filter: blur(3px);
+    background: transparent; pointer-events:none;
     padding: 70px 16px 40px; overflow-y:auto;
   }
   .mini-panel-overlay.aberto{ display:flex; }
@@ -868,7 +875,7 @@
     width: min(420px, 92vw); perspective: 900px;
     background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.12);
     border-radius: 18px; overflow:hidden; box-shadow: 0 30px 70px rgba(0,0,0,0.6);
-    transform-origin: top center;
+    transform-origin: top center; pointer-events:auto;
     animation: painelAbrir3D .45s cubic-bezier(.2,.9,.3,1.3) forwards;
   }
   .mini-panel.mini-panel-wide{ width: min(760px, 94vw); }
@@ -4245,14 +4252,40 @@ function fecharTodosLivePaineis(){
 })();
 
 // ---- MINI-PAINEIS 3D genericos (Ferramentas / Estatisticas) ----
+// Cada janela pode ficar aberta independente das outras agora (o overlay nao
+// bloqueia mais o fundo -- ver CSS de .mini-panel-overlay). Pra isso parecer
+// mesmo um desktop, duas coisas a mais: (1) janela nova abre com uma cascata
+// leve, pra nao nascer exatamente em cima de outra ja aberta; (2) a ultima
+// janela clicada/aberta sobe de camada (z-index), como clicar pra "focar"
+// uma janela no Windows.
+let miniPanelZTopo = 70;
 function abrirMiniPanel(id){
   const ov = document.getElementById(id);
-  if(ov) ov.classList.add('aberto');
+  if(!ov) return;
+  const jaAberto = ov.classList.contains('aberto');
+  ov.classList.add('aberto');
+  ov.style.zIndex = ++miniPanelZTopo;
+  if(!jaAberto){
+    const abertos = document.querySelectorAll('.mini-panel-overlay.aberto').length;
+    const painel = ov.querySelector('.mini-panel');
+    if(painel){
+      const passo = ((abertos - 1) % 6) * 26;
+      painel.style.marginTop = passo + 'px';
+      painel.style.marginLeft = passo + 'px';
+    }
+  }
 }
 function fecharMiniPanel(id){
   const ov = document.getElementById(id);
   if(ov) ov.classList.remove('aberto');
 }
+// Clicar em qualquer janela aberta traz ela pra frente das outras.
+document.addEventListener('pointerdown', function(e){
+  const painel = e.target.closest('.mini-panel');
+  if(!painel) return;
+  const ov = painel.closest('.mini-panel-overlay');
+  if(ov) ov.style.zIndex = ++miniPanelZTopo;
+});
 // ---- Jogos DOS via js-dos, carregados sob demanda ----
 // So baixamos o motor js-dos (CSS+JS) e o bundle de cada jogo (.jsdos) quando
 // a pessoa realmente abre a janela correspondente, pra nao pesar o
