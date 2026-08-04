@@ -2261,6 +2261,7 @@
     <button data-y2k-action="cartao">🎁 Cartão Resumo</button>
     <hr>
     <button data-y2k-action="canais">🛒 Vendedores, Lives e Leilões</button>
+    <button data-y2k-action="vendedores">🛍️ Sites de Vendedores</button>
     <button data-y2k-action="wishlist">🎯 Radar de Caça</button>
     <button data-y2k-action="aovivo">📰 Notícias Gamer e Jogos Grátis</button>
     <hr>
@@ -2319,6 +2320,9 @@
     </button>
     <button class="y2k-icon" data-y2k-action="canais" title="Vendedores, Lives e Leilões">
       <span class="y2k-icon-glyph">📺</span><span class="y2k-icon-label">Vendedores &amp; Lives</span>
+    </button>
+    <button class="y2k-icon" data-y2k-action="vendedores" title="Sites de Vendedores">
+      <span class="y2k-icon-glyph">🛍️</span><span class="y2k-icon-label">Sites de Vendedores</span>
     </button>
     <button class="y2k-icon" data-y2k-action="wishlist" title="Radar de Caça">
       <span class="y2k-icon-glyph">🎯</span><span class="y2k-icon-label">radar.txt</span>
@@ -2380,6 +2384,17 @@
         <span id="canaisPlayerBarTxt">vendedores_player.exe</span>
       </div>
       <div class="grid" id="gridCanais"></div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-panel-overlay" id="vendedoresPanelOverlay">
+  <div class="mini-panel mini-panel-xwide">
+    <div class="win-titlebar">lojas_vendedores.exe</div>
+    <div class="mini-panel-head"><h3 id="vendedoresTituloEl">🛍️ Sites de Vendedores</h3><button class="mini-panel-close" id="vendedoresPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body">
+      <p id="vendedoresSubEl" style="font-size:12.5px; color:var(--ink-dim); margin:0 0 14px;">Lojas online de confiança pra comprar jogos físicos — raridades, exclusivos e preços justos.</p>
+      <div class="grid" id="gridVendedores"></div>
     </div>
   </div>
 </div>
@@ -3372,13 +3387,22 @@ const canais = [
   { id:7, n:"Sigchap", plat:"youtube", link:"https://www.youtube.com/@sigchap", horario:"📅 Lives, leilões e vendas", dias:[], nota:"Foco: raridades e itens exclusivos. Já comprei." },
   { id:8, n:"D Games Brasil", plat:"instagram", link:"https://www.instagram.com/dgames_brasil/", avatarUrlOverride:"https://yt3.googleusercontent.com/iDwuVPfYmdQPI18ub68Ukq75T-tQawSnN2N96UjXUsgLhLNsNgJlx87bFCp80F_na8dAyYdOGQ=s900-c-k-c0x00ffffff-no-rj", horario:"📅 Lives todas as quintas", dias:[4], nota:"Foco: games repro. Já comprei." },
   { id:9, n:"Rodrigo Retro Games", plat:"youtube", link:"https://www.youtube.com/@RodrigoRetroGames", horario:"📅 Lives às terças-feiras", dias:[2], nota:"Foco: variedade de jogos. Preços bons, com lives especiais de R$30. Já comprei." },
-  { id:10, n:"Maicon Games", plat:"loja", link:"https://www.maicongames.com.br/", instagram:"https://www.instagram.com/loja_maicon_games/", avatarUrlOverride:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnVqWl7Qh2y9WnWSHo0SPuCNoRJBlGWWwmA_UjRdB2JuZmhMtC", horario:"🌐 Loja online", dias:[], nota:"Foco: loja de jogos e consoles diversos." },
-  { id:11, n:"Silvio Play Games", plat:"loja", link:"https://silvioplay-games.lojaintegrada.com.br/ps4", instagram:"https://www.instagram.com/silvioinnocenzi/", avatarUrlOverride:"https://yt3.googleusercontent.com/ytc/AIdro_mfsadq9lN0bbGoU8nrCuJNiQjeZ3OSEArw_HahY2XYgA=s900-c-k-c0x00ffffff-no-rj", horario:"🌐 Loja online", dias:[], nota:"Foco: loja especializada em jogos de PS4." },
   { id:12, n:"VG Invest", plat:"youtube", link:"https://www.youtube.com/@vginvest", horario:"📺 Lives de empreendedorismo em games", dias:[], nota:"Foco: empreendedorismo e investimento no mercado de games." },
   { id:13, n:"PELEHZADA", plat:"twitch", link:"https://www.twitch.tv/pelehzada", avatarHandle:"pelehzada", avatarUrlOverride:"https://static-cdn.jtvnw.net/jtv_user_pictures/7d3bc0f0-8bcc-49c7-b6d2-ccc7a60e1575-profile_image-300x300.png", horario:"📅 Lives todos os dias após 18h", dias:[], nota:"Foco: gameplay FPS em terceira pessoa, GTA RP." },
   { id:14, n:"tofogames10", plat:"twitch", link:"https://www.twitch.tv/tofogames10", avatarHandle:"tofogames10", avatarUrlOverride:"https://static-cdn.jtvnw.net/jtv_user_pictures/9eb762bf-4b85-42e3-9843-f500bce2dacd-profile_image-300x300.png", horario:"📅 Lives de vendas", dias:[], nota:"Foco: live de vendas, talk shows e podcasts." },
   { id:15, n:"corvofps", plat:"twitch", link:"https://www.twitch.tv/corvofps", avatarHandle:"corvofps", avatarUrlOverride:"https://static-cdn.jtvnw.net/jtv_user_pictures/5c62e0f0-e202-4527-a691-349c65fcaace-profile_image-300x300.png", horario:"📅 Lives frequentes", dias:[], nota:"Foco: gameplay FPS e bate-papo." },
   { id:16, n:"gianzao", plat:"twitch", link:"https://www.twitch.tv/gianzao", avatarHandle:"gianzao", avatarUrlOverride:"https://static-cdn.jtvnw.net/jtv_user_pictures/ccfe6ad1-58e1-473a-988e-8bf754d3323c-profile_image-300x300.png", horario:"📅 Lives frequentes", dias:[], nota:"Foco: bate-papo, músicas e vibes." },
+];
+
+// Sites de Vendedores: lojas online de jogos fisicos (sem live, so catalogo
+// pra comprar direto) -- moradas antes dentro de "canais" (plat:"loja"),
+// agora tem janela propria, ja que loja e coisa diferente de canal de live.
+// Reaproveita o mesmo card visual (.canal-card / badge "loja") do outro painel.
+const vendedores = [
+  { id:1, n:"Maicon Games", link:"https://www.maicongames.com.br/", instagram:"https://www.instagram.com/loja_maicon_games/", avatarUrlOverride:"https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRnVqWl7Qh2y9WnWSHo0SPuCNoRJBlGWWwmA_UjRdB2JuZmhMtC", nota:"Foco: loja de jogos e consoles diversos." },
+  { id:2, n:"Silvio Play Games", link:"https://silvioplay-games.lojaintegrada.com.br/ps4", instagram:"https://www.instagram.com/silvioinnocenzi/", avatarUrlOverride:"https://yt3.googleusercontent.com/ytc/AIdro_mfsadq9lN0bbGoU8nrCuJNiQjeZ3OSEArw_HahY2XYgA=s900-c-k-c0x00ffffff-no-rj", nota:"Foco: loja especializada em jogos de PS4." },
+  { id:3, n:"LunnaGames", link:"https://lunnagames.com.br/", instagram:"https://instagram.com/lunna.games.store", avatarUrlOverride:"https://acdn-us.mitiendanube.com/stores/007/038/868/themes/common/logo-2021867878-1767658584-06661843526282ecfc959e229f13f75b1767658584-480-0.webp", nota:"Foco: produtos exclusivos e ultra raridades de PS4 e PS5." },
+  { id:4, n:"Arena Games", link:"https://lojaarenagames.com.br/", instagram:"https://www.instagram.com/lojaarenagames/", avatarUrlOverride:"https://lojaarenagames.com.br/wp-content/uploads/2022/05/cropped-logo-arena-games-mobile-otimizado.jpg", nota:"Foco: excelentes preços, jogos raros a preços populares." },
 ];
 
 let canaisLiveAtual = [];
@@ -3415,6 +3439,7 @@ const I18N = {
     apresentacaoPlay: '▶️ Modo apresentação', apresentacaoStop: '⏸️ Parar apresentação',
     canaisTitulo: 'Vendedores, Lives e Leilões', canaisSub: (n) => `${n} canais indicados — clique pra ver`,
     ordenarDia: '📅 Ordenar por dia da semana',
+    vendedoresTitulo: 'Sites de Vendedores', vendedoresSub: 'Lojas online de confiança pra comprar jogos físicos — raridades, exclusivos e preços justos.',
     radarTitulo: 'Radar de Caça', radarSubDefault: 'Jogos que ainda não tenho, mas estou de olho',
     buscarPlaceholder: 'Buscar jogo...',
     ordenarPor: 'Ordenar por...', nomeAZ: 'Nome (A-Z)', nomeZA: 'Nome (Z-A)',
@@ -3478,6 +3503,7 @@ const I18N = {
     apresentacaoPlay: '▶️ Slideshow mode', apresentacaoStop: '⏸️ Stop slideshow',
     canaisTitulo: 'Sellers, Streams & Auctions', canaisSub: (n) => `${n} channels recommended — click to see`,
     ordenarDia: '📅 Sort by day of week',
+    vendedoresTitulo: 'Seller Websites', vendedoresSub: 'Trusted online stores for physical games — rarities, exclusives and fair prices.',
     radarTitulo: 'Wishlist Radar', radarSubDefault: "Games I don't have yet, but I'm watching",
     buscarPlaceholder: 'Search game...',
     ordenarPor: 'Sort by...', nomeAZ: 'Name (A-Z)', nomeZA: 'Name (Z-A)',
@@ -3823,6 +3849,44 @@ function renderCanais(){
           <div class="canal-info">${escapeHtml(c.nota)}</div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
             <div class="canal-cta">Abrir →</div>
+            ${instaLink}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  grid.innerHTML = html;
+  grid.querySelectorAll('.canal-card').forEach(card=>{
+    card.addEventListener('click', function(){
+      window.open(this.dataset.link, '_blank', 'noopener,noreferrer');
+    });
+  });
+}
+
+// Sites de Vendedores: mesma logica visual do renderCanais, so que mais simples
+// (sem selo AO VIVO, sem ordenar por dia -- loja nao tem horario de live).
+function renderVendedores(){
+  const grid = document.getElementById('gridVendedores');
+  if(!grid) return;
+  let html = '';
+  for(const v of vendedores){
+    const nomeSeguro = escapeHtml(v.n);
+    const inicial = escapeHtml(v.n.charAt(0).toUpperCase());
+    const avatar = escapeHtml(v.avatarUrlOverride || '');
+    const instaLink = v.instagram
+      ? `<a href="${escapeHtml(v.instagram)}" target="_blank" rel="noopener noreferrer" class="canal-insta-link" onclick="event.stopPropagation()">📸 Instagram</a>`
+      : '';
+    html += `
+      <div class="canal-card" data-link="${escapeHtml(v.link)}">
+        <div class="canal-top">
+          <span class="canal-plat-badge loja">Loja Online</span>
+          <img src="${avatar}" alt="${nomeSeguro}" loading="lazy" decoding="async" onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'ini',textContent:'${inicial}'}))">
+        </div>
+        <div class="canal-body">
+          <h3>${nomeSeguro}</h3>
+          <div class="canal-info">${escapeHtml(v.nota)}</div>
+          <div style="display:flex; justify-content:space-between; align-items:center; margin-top:2px;">
+            <div class="canal-cta">Visitar loja →</div>
             ${instaLink}
           </div>
         </div>
@@ -5690,6 +5754,7 @@ setInterval(atualizarRelogioY2k, 15000);
     vitrine: () => document.getElementById('vitrineBtn') && document.getElementById('vitrineBtn').click(),
     cartao: () => document.getElementById('cartaoResumoBtn') && document.getElementById('cartaoResumoBtn').click(),
     canais: () => typeof abrirCanaisPanel === 'function' && abrirCanaisPanel(),
+    vendedores: () => typeof abrirVendedoresPanel === 'function' && abrirVendedoresPanel(),
     wishlist: () => typeof abrirWishlistPanel === 'function' && abrirWishlistPanel(),
     aovivo: () => typeof abrirAovivoPanel === 'function' && abrirAovivoPanel(),
     visitas: () => typeof abrirVisitasPanel === 'function' && abrirVisitasPanel(),
@@ -6388,6 +6453,16 @@ document.getElementById('canaisPanelOverlay').addEventListener('click', function
   if(e.target === this) fecharMiniPanel('canaisPanelOverlay');
 });
 
+// Sites de Vendedores: janela separada de lojas online (sem live/leilao).
+function abrirVendedoresPanel(){
+  abrirMiniPanel('vendedoresPanelOverlay');
+  requestAnimationFrame(renderVendedores);
+}
+document.getElementById('vendedoresPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('vendedoresPanelOverlay'));
+document.getElementById('vendedoresPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharMiniPanel('vendedoresPanelOverlay');
+});
+
 document.getElementById('ordenarDiaBtn').addEventListener('click', function(){
   ordenarPorDia = !ordenarPorDia;
   this.classList.toggle('active', ordenarPorDia);
@@ -6700,6 +6775,8 @@ function aplicarIdiomaUI(){
   if(byId('apresentacaoBtn')) byId('apresentacaoBtn').textContent = apresentacaoInterval ? t('apresentacaoStop') : t('apresentacaoPlay');
   if(byId('canaisTituloEl')) byId('canaisTituloEl').textContent = t('canaisTitulo');
   if(byId('canaisSubEl')) byId('canaisSubEl').textContent = I18N[idioma].canaisSub(canais.length);
+  if(byId('vendedoresTituloEl')) byId('vendedoresTituloEl').textContent = t('vendedoresTitulo');
+  if(byId('vendedoresSubEl')) byId('vendedoresSubEl').textContent = t('vendedoresSub');
   if(byId('ordenarDiaBtn')) byId('ordenarDiaBtn').textContent = t('ordenarDia');
   if(byId('radarTituloEl')) byId('radarTituloEl').textContent = t('radarTitulo');
   if(byId('searchInput')) byId('searchInput').placeholder = t('buscarPlaceholder');
