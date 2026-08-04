@@ -909,7 +909,7 @@
      notas, apresentacao. Fica sempre como primeiro filho do .mini-panel. */
   .win-titlebar{
     display:flex; align-items:center; gap:8px;
-    height:24px; padding:0 10px;
+    height:24px; padding:0 10px; cursor:grab; user-select:none;
     font-family:'Tahoma','Segoe UI',sans-serif; font-size:10.5px; font-weight:700; color:#fff;
     text-shadow:0 1px 1px rgba(0,0,0,.4);
     background-image:
@@ -921,6 +921,11 @@
     background-position: calc(100% - 12px) 50%, calc(100% - 26px) 50%, calc(100% - 40px) 50%, 0 0;
     background-repeat:no-repeat;
   }
+  /* Janelas sem win-titlebar (ex: Estatisticas) usam o proprio cabecalho
+     (h3 + botao fechar) como alca de arraste. */
+  .mini-panel-head{ cursor:grab; user-select:none; }
+  .mini-panel-head .mini-panel-close{ cursor:pointer; }
+  .win-titlebar.arrastando, .mini-panel-head.arrastando{ cursor:grabbing; }
   .win-titlebar.notepad{
     background-image: linear-gradient(180deg, #4f9df0 0%, #1e5fc4 45%, #123f8f 100%);
   }
@@ -4277,7 +4282,20 @@ function abrirMiniPanel(id){
 }
 function fecharMiniPanel(id){
   const ov = document.getElementById(id);
-  if(ov) ov.classList.remove('aberto');
+  if(!ov) return;
+  ov.classList.remove('aberto');
+  // Limpa qualquer posicao/cascata que a janela tenha ganhado (arrastada ou
+  // deslocada), pra ela nascer de novo no lugar padrao da proxima vez que
+  // for aberta -- sem isso a posicao ficaria acumulando de forma esquisita.
+  const painel = ov.querySelector('.mini-panel');
+  if(painel){
+    painel.style.position = '';
+    painel.style.left = '';
+    painel.style.top = '';
+    painel.style.right = '';
+    painel.style.bottom = '';
+    painel.style.margin = '';
+  }
 }
 // Clicar em qualquer janela aberta traz ela pra frente das outras.
 document.addEventListener('pointerdown', function(e){
@@ -4286,6 +4304,54 @@ document.addEventListener('pointerdown', function(e){
   const ov = painel.closest('.mini-panel-overlay');
   if(ov) ov.style.zIndex = ++miniPanelZTopo;
 });
+
+// ---- Janelas (mini-panel) tambem podem ser arrastadas pelo cabecalho ----
+// Igual qualquer sistema operacional de verdade: segura no titulo (ou no
+// cabecalho, nas janelas que nao tem a barrinha estilo Windows) e arrasta
+// pra qualquer lugar da tela. Util agora que da pra ter varias janelas
+// abertas ao mesmo tempo e uma pode acabar em cima da outra.
+(function(){
+  let arrastandoPainel = null;
+  let offXPainel = 0, offYPainel = 0;
+
+  function aoMoverPainel(e){
+    if(!arrastandoPainel) return;
+    const largura = arrastandoPainel.offsetWidth;
+    const altura = arrastandoPainel.offsetHeight;
+    let novoLeft = e.clientX - offXPainel;
+    let novoTop = e.clientY - offYPainel;
+    novoLeft = Math.max(0, Math.min(novoLeft, window.innerWidth - largura));
+    novoTop = Math.max(0, Math.min(novoTop, window.innerHeight - altura));
+    arrastandoPainel.style.position = 'fixed';
+    arrastandoPainel.style.left = novoLeft + 'px';
+    arrastandoPainel.style.top = novoTop + 'px';
+    arrastandoPainel.style.right = 'auto';
+    arrastandoPainel.style.bottom = 'auto';
+    arrastandoPainel.style.margin = '0';
+  }
+  function aoSoltarPainel(){
+    if(!arrastandoPainel) return;
+    const cabecalho = arrastandoPainel.querySelector('.win-titlebar, .mini-panel-head');
+    if(cabecalho) cabecalho.classList.remove('arrastando');
+    arrastandoPainel = null;
+    document.removeEventListener('pointermove', aoMoverPainel);
+    document.removeEventListener('pointerup', aoSoltarPainel);
+  }
+  document.addEventListener('pointerdown', function(e){
+    if(e.target.closest('.mini-panel-close')) return; // clique no X nao inicia arraste
+    const cabecalho = e.target.closest('.win-titlebar, .mini-panel-head');
+    if(!cabecalho) return;
+    const painel = cabecalho.closest('.mini-panel');
+    if(!painel) return;
+    const rect = painel.getBoundingClientRect();
+    offXPainel = e.clientX - rect.left;
+    offYPainel = e.clientY - rect.top;
+    arrastandoPainel = painel;
+    cabecalho.classList.add('arrastando');
+    document.addEventListener('pointermove', aoMoverPainel);
+    document.addEventListener('pointerup', aoSoltarPainel);
+  });
+})();
 // ---- Jogos DOS via js-dos, carregados sob demanda ----
 // So baixamos o motor js-dos (CSS+JS) e o bundle de cada jogo (.jsdos) quando
 // a pessoa realmente abre a janela correspondente, pra nao pesar o
