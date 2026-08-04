@@ -872,19 +872,34 @@
   }
   .mini-panel-overlay.aberto{ display:flex; }
   .mini-panel{
-    width: min(420px, 92vw); perspective: 900px;
+    width: min(420px, 92vw); perspective: 900px; position:relative;
     background: var(--bg-panel); border: 1px solid rgba(255,255,255,0.12);
     border-radius: 18px; overflow:hidden; box-shadow: 0 30px 70px rgba(0,0,0,0.6);
     transform-origin: top center; pointer-events:auto;
     animation: painelAbrir3D .45s cubic-bezier(.2,.9,.3,1.3) forwards;
+    /* Coluna vertical (titulo / cabecalho / corpo) pra que o corpo consiga
+       esticar e preencher o espaco extra quando a janela e redimensionada
+       manualmente puxando o canto -- ver alca .mini-panel-resize-handle. */
+    display:flex; flex-direction:column;
   }
   .mini-panel.mini-panel-wide{ width: min(760px, 94vw); }
   /* Janelas que precisam de bem mais espaco horizontal (grade de jogos,
      grade de canais/radar, colunas de noticias) -- Coleção, Vendedores,
      Radar de Caça e Notícias usam essa variante mais larga. */
   .mini-panel.mini-panel-xwide{ width: min(1180px, 96vw); }
+  /* Alca de redimensionar no canto inferior direito, estilo grip classico
+     de janela -- puxar daqui ajusta largura/altura pelo JS. */
+  .mini-panel-resize-handle{
+    position:absolute; right:0; bottom:0; width:16px; height:16px;
+    cursor:nwse-resize; z-index:3;
+    background-image: linear-gradient(135deg,
+      transparent 0 38%, rgba(255,255,255,0.4) 38% 46%,
+      transparent 46% 60%, rgba(255,255,255,0.4) 60% 68%,
+      transparent 68% 82%, rgba(255,255,255,0.4) 82% 90%, transparent 90%);
+  }
+  .mini-panel-resize-handle:hover{ background-color: rgba(255,255,255,0.08); }
   .mini-panel-head{
-    display:flex; align-items:center; justify-content:space-between; gap:8px;
+    display:flex; align-items:center; justify-content:space-between; gap:8px; flex-shrink:0;
     padding: 14px 18px; background: rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.06);
   }
   .mini-panel-head h3{
@@ -899,6 +914,7 @@
   .mini-panel-body{
     padding:18px; display:flex; flex-direction:column; gap:10px;
     max-height:74vh; overflow-y:auto;
+    flex:1 1 auto; min-height:0;
   }
   .mini-panel-body .toggle-venda{ width:100%; text-align:left; }
 
@@ -908,7 +924,7 @@
      virar uma "janela" de verdade -- pasta, painel de controle, bloco de
      notas, apresentacao. Fica sempre como primeiro filho do .mini-panel. */
   .win-titlebar{
-    display:flex; align-items:center; gap:8px;
+    display:flex; align-items:center; gap:8px; flex-shrink:0;
     height:24px; padding:0 10px; cursor:grab; user-select:none;
     font-family:'Tahoma','Segoe UI',sans-serif; font-size:10.5px; font-weight:700; color:#fff;
     text-shadow:0 1px 1px rgba(0,0,0,.4);
@@ -4295,6 +4311,10 @@ function fecharMiniPanel(id){
     painel.style.right = '';
     painel.style.bottom = '';
     painel.style.margin = '';
+    painel.style.width = '';
+    painel.style.height = '';
+    const corpo = painel.querySelector('.mini-panel-body, .notepad-body');
+    if(corpo) corpo.style.maxHeight = '';
   }
 }
 // Clicar em qualquer janela aberta traz ela pra frente das outras.
@@ -4350,6 +4370,71 @@ document.addEventListener('pointerdown', function(e){
     cabecalho.classList.add('arrastando');
     document.addEventListener('pointermove', aoMoverPainel);
     document.addEventListener('pointerup', aoSoltarPainel);
+  });
+})();
+
+// ---- Redimensionar janelas (mini-panel) puxando o canto inferior direito ----
+// Complementa o arrastar: agora tambem da pra ajustar largura/altura de cada
+// janela, util quando o conteudo (tabela, grade de jogos, etc.) precisa de
+// mais espaco. O corpo (.mini-panel-body) vira flex:1 e passa a esticar
+// junto (ver CSS), entao redimensionar a janela redimensiona a area de
+// conteudo tambem, nao so a moldura.
+(function(){
+  // Injeta a alca de redimensionar em toda janela que ainda nao tem uma.
+  document.querySelectorAll('.mini-panel-overlay .mini-panel').forEach(function(painel){
+    if(painel.querySelector('.mini-panel-resize-handle')) return;
+    const alca = document.createElement('div');
+    alca.className = 'mini-panel-resize-handle';
+    alca.setAttribute('aria-hidden', 'true');
+    painel.appendChild(alca);
+  });
+
+  let redimensionando = null;
+  let larguraInicial = 0, alturaInicial = 0, xInicial = 0, yInicial = 0;
+
+  function aoMoverRedimensionar(e){
+    if(!redimensionando) return;
+    const deltaX = e.clientX - xInicial;
+    const deltaY = e.clientY - yInicial;
+    const rect = redimensionando.getBoundingClientRect();
+    const larguraMax = window.innerWidth - rect.left - 8;
+    const alturaMax = window.innerHeight - rect.top - 8;
+    const novaLargura = Math.max(300, Math.min(larguraInicial + deltaX, larguraMax));
+    const novaAltura = Math.max(180, Math.min(alturaInicial + deltaY, alturaMax));
+    redimensionando.style.width = novaLargura + 'px';
+    redimensionando.style.height = novaAltura + 'px';
+    const corpo = redimensionando.querySelector('.mini-panel-body, .notepad-body');
+    if(corpo) corpo.style.maxHeight = 'none';
+  }
+  function aoSoltarRedimensionar(){
+    redimensionando = null;
+    document.removeEventListener('pointermove', aoMoverRedimensionar);
+    document.removeEventListener('pointerup', aoSoltarRedimensionar);
+  }
+  document.addEventListener('pointerdown', function(e){
+    const alca = e.target.closest('.mini-panel-resize-handle');
+    if(!alca) return;
+    const painel = alca.closest('.mini-panel');
+    if(!painel) return;
+    const rect = painel.getBoundingClientRect();
+    // Trava a posicao atual (tira do fluxo centralizado do overlay) antes de
+    // redimensionar -- senao o "justify-content:center" do overlay ficaria
+    // recentralizando a janela a cada pixel de largura nova, e o canto
+    // arrastado perderia sincronia com o cursor.
+    painel.style.position = 'fixed';
+    painel.style.left = rect.left + 'px';
+    painel.style.top = rect.top + 'px';
+    painel.style.right = 'auto';
+    painel.style.bottom = 'auto';
+    painel.style.margin = '0';
+    larguraInicial = rect.width;
+    alturaInicial = rect.height;
+    xInicial = e.clientX;
+    yInicial = e.clientY;
+    redimensionando = painel;
+    e.preventDefault();
+    document.addEventListener('pointermove', aoMoverRedimensionar);
+    document.addEventListener('pointerup', aoSoltarRedimensionar);
   });
 })();
 // ---- Jogos DOS via js-dos, carregados sob demanda ----
