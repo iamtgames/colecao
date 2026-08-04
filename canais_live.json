@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-04T03:30:21.651Z",
+  "updated": "2026-08-04T03:45:16.719Z",
   "live": [
     {
       "id": 7,
@@ -11,15 +11,6 @@
       "thumbnail": "https://i.ytimg.com/vi/K3UgqKCv0F0/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc raiders Solo pve / DuoTrio pvp mosquetao",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 15,
       "n": "corvofps",
       "plat": "twitch",
@@ -27,6 +18,15 @@
       "videoTitle": "🟢 +18 CS NA MADRUGA!   !Historia1 !historia2 !historia3",
       "videoUrl": "https://www.twitch.tv/corvofps",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_corvofps-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc raiders Solo pve / DuoTrio pvp mosquetao",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
