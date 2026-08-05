@@ -24,7 +24,7 @@
      de dominios variados (TheGamesDB, lojas, RAWG, YouTube, etc.) que mudam
      conforme jogos/canais sao adicionados. script/frame/connect ficam restritos
      aos servicos que o site realmente usa. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://giscus.app https://unpkg.com https://v8.js-dos.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://v8.js-dos.com; font-src https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io https://v8.js-dos.com; worker-src 'self' blob:; frame-src https://www.youtube.com https://giscus.app https://player.twitch.tv; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://giscus.app https://unpkg.com https://v8.js-dos.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://v8.js-dos.com; font-src https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io https://v8.js-dos.com; worker-src 'self' blob:; frame-src https://www.youtube.com https://giscus.app https://player.twitch.tv https://www.twitch.tv; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230b0b0c'/%3E%3Ctext x='50' y='66' font-size='55' font-family='Arial' font-weight='900' fill='white' text-anchor='middle'%3EiT%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.json">
 <title>Controle Coleção iamT</title>
@@ -850,6 +850,15 @@
     width:26px; height:26px; border-radius:50%; font-size:14px; line-height:1; flex-shrink:0;
   }
   .live-panel-close:hover{ background: rgba(255,255,255,0.18); }
+  /* Botao que abre/fecha o chat oficial da Twitch/YouTube embutido embaixo
+     do video -- mesmo visual do botao de fechar, so que fica "aceso" quando
+     o chat esta aberto. */
+  .live-panel-chat-toggle{
+    background: rgba(255,255,255,0.08); border:none; color:#fff; cursor:pointer;
+    width:26px; height:26px; border-radius:50%; font-size:12.5px; line-height:1; flex-shrink:0;
+  }
+  .live-panel-chat-toggle:hover{ background: rgba(255,255,255,0.18); }
+  .live-panel-chat-toggle.ativo{ background: rgba(255,255,255,0.32); }
   .live-panel-video{ position:relative; width:100%; aspect-ratio:16/9; background:#000; }
   .live-panel-video iframe, .live-panel-video > div{ position:absolute; inset:0; width:100%; height:100%; }
   .live-panel-fallback{
@@ -867,6 +876,14 @@
     text-align:center; background:rgba(226,18,18,0.1);
   }
   .live-panel-hint.show{ display:block; }
+  /* Chat oficial embutido (embed real da Twitch/YouTube) -- fica escondido
+     ate a pessoa clicar no botao 💬, pra nao carregar iframe extra a toa.
+     Altura fixa com scroll proprio, independente do redimensionar do balao
+     (que so afeta a largura/altura do video). */
+  .live-panel-chat{ display:none; height:320px; border-top:1px solid rgba(255,60,60,0.25); background:#0d0606; }
+  .live-panel-chat.aberto{ display:block; }
+  .live-panel-chat iframe{ width:100%; height:100%; display:block; }
+  .live-panel.twitch .live-panel-chat{ border-top-color: rgba(145,70,255,0.25); }
 
   /* MINI-PAINEIS 3D (Ferramentas / Estatisticas) - mesmo efeito do painel de live.
      Antes o overlay cobria a tela inteira com fundo escuro+borrado (modal),
@@ -4134,6 +4151,7 @@ function criarPainelLiveDOM(c){
     <div class="live-panel-head">
       <div class="live-panel-title"><span class="dot"></span><span id="livePanelTitleTxt-${c.id}">${escapeHtml(c.n)} — ${t('estaAoVivo')}</span></div>
       <div class="canais-eq live-eq"><span></span><span></span><span></span><span></span></div>
+      <button class="live-panel-chat-toggle" aria-label="Abrir chat ao vivo" title="Chat ao vivo">💬</button>
       <button class="live-panel-close" aria-label="Fechar" title="Fechar">✕</button>
     </div>
     <div class="live-panel-video">
@@ -4142,6 +4160,9 @@ function criarPainelLiveDOM(c){
       <div class="live-panel-fallback" id="livePanelFallback-${c.id}"></div>
     </div>
     <div class="live-panel-hint" id="livePanelHint-${c.id}">🔇 Vídeo iniciou sem áudio — clique nele pra ativar o som</div>
+    <div class="live-panel-chat" id="livePanelChat-${c.id}">
+      <iframe id="livePanelChatIframe-${c.id}" src="" loading="lazy" frameborder="0" title="Chat ao vivo"></iframe>
+    </div>
     <div class="live-panel-resize-handle" aria-hidden="true"></div>
   `;
   return div;
@@ -4234,6 +4255,34 @@ function fecharTodosLivePaineis(){
   Array.from(paineisLiveAbertos.keys()).forEach(fecharLivePanel);
 }
 
+// Chat ao vivo embutido: usa o embed OFICIAL de cada plataforma (o mesmo
+// widget de chat que a Twitch/YouTube usam em qualquer site que incorpora
+// uma live), entao mandar mensagem funciona de verdade -- so exige que a
+// pessoa ja esteja logada na conta dela da Twitch/Google nesse navegador
+// (o proprio iframe mostra um botao de login se nao estiver, igual em
+// qualquer outro site que embute esse chat). O src so e definido na
+// primeira vez que o chat e aberto, pra nao carregar iframe extra a toa.
+function alternarChatLive(id){
+  const info = paineisLiveAbertos.get(id);
+  if(!info) return;
+  const c = info.canal;
+  const wrap = document.getElementById(`livePanelChat-${id}`);
+  const btn = document.querySelector(`#livePanel-${id} .live-panel-chat-toggle`);
+  if(!wrap) return;
+  const abrindo = !wrap.classList.contains('aberto');
+  wrap.classList.toggle('aberto', abrindo);
+  if(btn) btn.classList.toggle('ativo', abrindo);
+  if(!abrindo) return;
+  const fr = document.getElementById(`livePanelChatIframe-${id}`);
+  if(!fr || fr.src) return; // ja carregado
+  const dominio = 'iamtgames.github.io';
+  if(c.plat === 'twitch' && c.login){
+    fr.src = `https://www.twitch.tv/embed/${encodeURIComponent(c.login)}/chat?parent=${dominio}&darkpopout`;
+  }else if(c.videoId){
+    fr.src = `https://www.youtube.com/live_chat?v=${encodeURIComponent(c.videoId)}&embed_domain=${dominio}&dark_theme=1`;
+  }
+}
+
 // Delegacao de eventos no container (em vez de um listener por painel): assim
 // cobre automaticamente os cards criados dinamicamente depois.
 (function(){
@@ -4241,6 +4290,12 @@ function fecharTodosLivePaineis(){
   if(!container) return;
 
   container.addEventListener('click', function(e){
+    const chatBtn = e.target.closest('.live-panel-chat-toggle');
+    if(chatBtn){
+      const painel = chatBtn.closest('.live-panel');
+      if(painel) alternarChatLive(parseInt(painel.dataset.canalId, 10));
+      return;
+    }
     const btn = e.target.closest('.live-panel-close');
     if(!btn) return;
     const painel = btn.closest('.live-panel');
@@ -4287,6 +4342,7 @@ function fecharTodosLivePaineis(){
   }
   container.addEventListener('pointerdown', function(e){
     if(e.target.closest('.live-panel-close')) return; // clique no X nao inicia arraste
+    if(e.target.closest('.live-panel-chat-toggle')) return; // clique no botao de chat nao inicia arraste
     const head = e.target.closest('.live-panel-head');
     if(!head) return;
     const painel = head.closest('.live-panel');
