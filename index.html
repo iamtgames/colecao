@@ -24,7 +24,7 @@
      de dominios variados (TheGamesDB, lojas, RAWG, YouTube, etc.) que mudam
      conforme jogos/canais sao adicionados. script/frame/connect ficam restritos
      aos servicos que o site realmente usa. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://giscus.app https://unpkg.com https://v8.js-dos.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://v8.js-dos.com; font-src https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io https://v8.js-dos.com; worker-src 'self' blob:; frame-src https://www.youtube.com https://giscus.app https://player.twitch.tv https://www.twitch.tv; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://giscus.app https://unpkg.com https://v8.js-dos.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://v8.js-dos.com; font-src https://fonts.gstatic.com; img-src 'self' https: data: blob:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io https://v8.js-dos.com https://*.workers.dev; worker-src 'self' blob:; frame-src https://www.youtube.com https://giscus.app https://player.twitch.tv https://www.twitch.tv; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230b0b0c'/%3E%3Ctext x='50' y='66' font-size='55' font-family='Arial' font-weight='900' fill='white' text-anchor='middle'%3EiT%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.json">
 <title>Controle Coleção iamT</title>
@@ -927,6 +927,21 @@
       transparent 69% 82%, rgba(255,255,255,0.4) 82% 88%, transparent 88%);
   }
   .mini-panel-resize-handle:hover{ background-color: rgba(255,255,255,0.08); }
+  .busca-preco-tabela{ display:flex; flex-direction:column; gap:4px; }
+  .busca-preco-linha{
+    display:grid; grid-template-columns: 2.2fr 1fr 1.2fr 0.9fr; gap:10px; align-items:center;
+    padding:9px 10px; border-radius:8px; background:rgba(255,255,255,0.03);
+    text-decoration:none; color:inherit; font-size:12.5px;
+  }
+  .busca-preco-linha:not(.busca-preco-cabecalho):hover{ background:rgba(255,255,255,0.08); }
+  .busca-preco-cabecalho{ font-weight:700; color:var(--ink-dim); font-size:11px; text-transform:uppercase; letter-spacing:.03em; background:transparent; }
+  .busca-preco-jogo{ font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .busca-preco-site{ opacity:.85; }
+  .busca-preco-valor{ font-weight:800; color:#8fe38f; text-align:right; }
+  @media (max-width: 640px){
+    .busca-preco-linha{ grid-template-columns: 1.6fr 0.9fr 0.9fr; }
+    .busca-preco-linha .busca-preco-site{ display:none; }
+  }
   .mini-panel-head{
     display:flex; align-items:center; justify-content:space-between; gap:8px; flex-shrink:0;
     padding: 14px 18px; background: rgba(255,255,255,0.04); border-bottom:1px solid rgba(255,255,255,0.06);
@@ -2320,6 +2335,7 @@
     <button data-y2k-action="canais">🛒 Vendedores, Lives e Leilões</button>
     <button data-y2k-action="vendedores">🛍️ Sites de Vendedores</button>
     <button data-y2k-action="wishlist">🎯 Radar de Caça</button>
+    <button data-y2k-action="buscapreco">💰 Buscador de Preços</button>
     <button data-y2k-action="aovivo">📰 Notícias Gamer e Jogos Grátis</button>
     <hr>
     <div class="y2k-start-menu-title">Redes e contato</div>
@@ -2383,6 +2399,9 @@
     </button>
     <button class="y2k-icon" data-y2k-action="wishlist" title="Radar de Caça">
       <span class="y2k-icon-glyph">🎯</span><span class="y2k-icon-label">radar.txt</span>
+    </button>
+    <button class="y2k-icon" data-y2k-action="buscapreco" title="Buscador de Preços">
+      <span class="y2k-icon-glyph">💰</span><span class="y2k-icon-label">buscapreco.exe</span>
     </button>
     <button class="y2k-icon" data-y2k-action="aovivo" title="Notícias Gamer e Jogos Grátis">
       <span class="y2k-icon-glyph">📰</span><span class="y2k-icon-label">noticias.txt</span>
@@ -2468,6 +2487,22 @@
         <span id="wishlistPageInfo" style="font-size:13px; color:#9a9a9e; font-weight:700;"></span>
         <button class="toggle-venda" id="wishlistNextBtn" aria-label="Próxima página do radar de caça">Próxima ▶</button>
       </div>
+    </div>
+  </div>
+</div>
+
+<div class="mini-panel-overlay" id="buscaPrecoPanelOverlay">
+  <div class="mini-panel mini-panel-xwide">
+    <div class="win-titlebar">buscapreco.exe</div>
+    <div class="mini-panel-head"><h3>💰 Buscador de Preços</h3><button class="mini-panel-close" id="buscaPrecoPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body">
+      <p style="font-size:12.5px; color:var(--ink-dim); margin:0 0 12px;">Digite o nome de um jogo e veja anúncios em tempo real na Loja Arena Games, em 8 outras lojas parceiras, no Mercado Livre e na OLX — do mais caro pro mais barato.</p>
+      <form id="buscaPrecoForm" style="display:flex; gap:8px; margin-bottom:14px;">
+        <input type="text" id="buscaPrecoInput" placeholder="Ex.: God of War Ragnarök" autocomplete="off" style="flex:1; min-width:0; padding:9px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.18); background:rgba(0,0,0,0.35); color:#fff; font-size:13.5px;">
+        <button type="submit" class="toggle-venda" id="buscaPrecoBtn">🔍 Buscar</button>
+      </form>
+      <div id="buscaPrecoStatus" style="font-size:12.5px; color:var(--ink-dim); margin:0 0 10px; display:none;"></div>
+      <div id="buscaPrecoResultados"></div>
     </div>
   </div>
 </div>
@@ -6077,6 +6112,7 @@ setInterval(atualizarRelogioY2k, 15000);
     canais: () => typeof abrirCanaisPanel === 'function' && abrirCanaisPanel(),
     vendedores: () => typeof abrirVendedoresPanel === 'function' && abrirVendedoresPanel(),
     wishlist: () => typeof abrirWishlistPanel === 'function' && abrirWishlistPanel(),
+    buscapreco: () => typeof abrirBuscaPrecoPanel === 'function' && abrirBuscaPrecoPanel(),
     aovivo: () => typeof abrirAovivoPanel === 'function' && abrirAovivoPanel(),
     visitas: () => typeof abrirVisitasPanel === 'function' && abrirVisitasPanel(),
     destaques: () => typeof abrirDestaquesPanel === 'function' && abrirDestaquesPanel(),
@@ -6824,6 +6860,89 @@ document.getElementById('wishlistPanelCloseBtn').addEventListener('click', () =>
 document.getElementById('wishlistPanelOverlay').addEventListener('click', function(e){
   if(e.target === this) fecharMiniPanel('wishlistPanelOverlay');
 });
+// BUSCADOR DE PRECOS -- consulta ao vivo o Worker que centraliza a busca
+// (Arena Games + 9 lojas parceiras + Mercado Livre/OLX via Google). O Worker
+// existe porque a chave da API do Google precisa ficar em segredo, longe do
+// codigo-fonte publico do site -- ver worker-buscar-precos.js.
+//
+// IMPORTANTE: troque a URL abaixo pela URL real do seu Worker assim que ele
+// estiver publicado no Cloudflare (algo como
+// "https://buscador-precos.SEU-USUARIO.workers.dev").
+const BUSCA_PRECO_WORKER_URL = 'https://buscador-precos.SEU-USUARIO.workers.dev';
+
+let buscaPrecoEmAndamento = false;
+
+function formatarPrecoBRL(valor){
+  return valor.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
+}
+
+function renderBuscaPrecoResultados(resultados){
+  const wrap = document.getElementById('buscaPrecoResultados');
+  if(!resultados.length){
+    wrap.innerHTML = '<p style="font-size:12.5px; color:var(--ink-dim); margin:8px 0;">Nenhum anúncio encontrado com preço identificável pra esse termo. Tente um nome mais simples (ex.: só o título do jogo, sem "edição" ou plataforma).</p>';
+    return;
+  }
+  const linhas = resultados.map(r => `
+    <a class="busca-preco-linha" href="${escapeHtml(r.url)}" target="_blank" rel="noopener noreferrer">
+      <span class="busca-preco-jogo">${escapeHtml(r.jogo)}</span>
+      <span class="busca-preco-cond">${escapeHtml(r.condicao)}</span>
+      <span class="busca-preco-site">${escapeHtml(r.site)}</span>
+      <span class="busca-preco-valor">${formatarPrecoBRL(r.preco)}</span>
+    </a>
+  `).join('');
+  wrap.innerHTML = `
+    <div class="busca-preco-tabela">
+      <div class="busca-preco-linha busca-preco-cabecalho">
+        <span>Jogo</span><span>Condição</span><span>Site</span><span>Preço</span>
+      </div>
+      ${linhas}
+    </div>
+  `;
+}
+
+async function executarBuscaPreco(termo){
+  if(buscaPrecoEmAndamento) return;
+  buscaPrecoEmAndamento = true;
+  const status = document.getElementById('buscaPrecoStatus');
+  const wrap = document.getElementById('buscaPrecoResultados');
+  const btn = document.getElementById('buscaPrecoBtn');
+  status.style.display = 'block';
+  status.textContent = `🔎 Buscando "${termo}" ao vivo nas lojas, Mercado Livre e OLX... pode levar alguns segundos.`;
+  wrap.innerHTML = '';
+  btn.disabled = true;
+  try{
+    const url = `${BUSCA_PRECO_WORKER_URL}/?jogo=${encodeURIComponent(termo)}`;
+    const res = await fetch(url);
+    if(!res.ok) throw new Error(`HTTP ${res.status}`);
+    const dados = await res.json();
+    status.textContent = dados.total
+      ? `${dados.total} anúncio(s) encontrado(s) — atualizado agora, do mais caro pro mais barato.`
+      : 'Busca concluída, mas nada foi encontrado com preço identificável.';
+    renderBuscaPrecoResultados(dados.resultados || []);
+  }catch(err){
+    status.textContent = '⚠️ Não consegui buscar agora. Se isso persistir, o Buscador de Preços ainda pode estar sendo configurado (veja o console pra detalhes).';
+    console.warn('Falha na busca de precos:', err);
+  }finally{
+    btn.disabled = false;
+    buscaPrecoEmAndamento = false;
+  }
+}
+
+function abrirBuscaPrecoPanel(){
+  abrirMiniPanel('buscaPrecoPanelOverlay');
+  requestAnimationFrame(() => document.getElementById('buscaPrecoInput').focus());
+}
+document.getElementById('buscaPrecoPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('buscaPrecoPanelOverlay'));
+document.getElementById('buscaPrecoPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharMiniPanel('buscaPrecoPanelOverlay');
+});
+document.getElementById('buscaPrecoForm').addEventListener('submit', function(e){
+  e.preventDefault();
+  const termo = document.getElementById('buscaPrecoInput').value.trim();
+  if(termo.length < 2) return;
+  executarBuscaPreco(termo);
+});
+
 document.getElementById('wishlistPrevBtn').addEventListener('click', function(){
   wishlistPage--;
   renderWishlist();
