@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05T21:00:24.924Z",
+  "updated": "2026-08-05T21:15:17.292Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "🟢 AO VIVO - FECHANDO PEDIDOS E ENVIOS",
       "videoUrl": "https://www.youtube.com/watch?v=HYp7VtP3F-U",
       "thumbnail": "https://i.ytimg.com/vi/HYp7VtP3F-U/hqdefault.jpg"
+    },
+    {
+      "id": 12,
+      "n": "VG Invest",
+      "plat": "youtube",
+      "videoId": "FfCpyiqn8WE",
+      "videoTitle": "Live 21 – Quando a Paixão por Games Vira Negócio",
+      "videoUrl": "https://www.youtube.com/watch?v=FfCpyiqn8WE",
+      "thumbnail": "https://i.ytimg.com/vi/FfCpyiqn8WE/hqdefault.jpg"
     }
   ]
 }
