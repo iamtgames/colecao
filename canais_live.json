@@ -1,4 +1,14 @@
 {
-  "updated": "2026-08-05T17:00:25.853Z",
-  "live": []
+  "updated": "2026-08-05T17:15:18.368Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "HYp7VtP3F-U",
+      "videoTitle": "🟢 AO VIVO - FECHANDO PEDIDOS E ENVIOS",
+      "videoUrl": "https://www.youtube.com/watch?v=HYp7VtP3F-U",
+      "thumbnail": "https://i.ytimg.com/vi/HYp7VtP3F-U/hqdefault.jpg"
+    }
+  ]
 }
