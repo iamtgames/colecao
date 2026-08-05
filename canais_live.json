@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05T21:45:16.731Z",
+  "updated": "2026-08-05T22:00:23.730Z",
   "live": [
     {
       "id": 7,
@@ -18,6 +18,15 @@
       "videoTitle": "Live 21 – Quando a Paixão por Games Vira Negócio",
       "videoUrl": "https://www.youtube.com/watch?v=FfCpyiqn8WE",
       "thumbnail": "https://i.ytimg.com/vi/FfCpyiqn8WE/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc raiders Solo pve / DuoTrio pvp mosquetao",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
