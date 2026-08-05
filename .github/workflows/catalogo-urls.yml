@@ -1,0 +1,32 @@
+name: Indexar catalogo de precos (URLs das lojas parceiras)
+
+on:
+  schedule:
+    - cron: '0 7 * * *' # 1x por dia (04:00 no horario de Brasilia)
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  indexar-catalogo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configurar Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Indexar URLs de produto das lojas parceiras
+        run: node scripts/build-catalogo-urls.js
+
+      - name: Commitar mudancas (se houver)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add catalogo_urls.json
+          git diff --staged --quiet || git commit -m "Atualiza indice do catalogo de precos (automatico)"
+          git push
