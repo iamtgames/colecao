@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05T22:45:17.539Z",
+  "updated": "2026-08-05T23:00:32.455Z",
   "live": [
     {
       "id": 2,
@@ -9,6 +9,15 @@
       "videoTitle": "LIVE DE VENDAS GEEK 3D E MAIS",
       "videoUrl": "https://www.youtube.com/watch?v=b4AtZf8hCa4",
       "thumbnail": "https://i.ytimg.com/vi/b4AtZf8hCa4/hqdefault.jpg"
+    },
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "IY26e10xydg",
+      "videoTitle": "🟢 AO VIVO - MAIOR COLEÇÃO DE STAR WARS",
+      "videoUrl": "https://www.youtube.com/watch?v=IY26e10xydg",
+      "thumbnail": "https://i.ytimg.com/vi/IY26e10xydg/hqdefault.jpg"
     },
     {
       "id": 9,
@@ -27,6 +36,15 @@
       "videoTitle": "Arc raiders Solo pve / DuoTrio pvp mosquetao",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 14,
+      "n": "tofogames10",
+      "plat": "twitch",
+      "login": "tofogames10",
+      "videoTitle": "Live de Vendas",
+      "videoUrl": "https://www.twitch.tv/tofogames10",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
     }
   ]
 }
