@@ -803,13 +803,25 @@
   #livePanelsContainer::-webkit-scrollbar{ width:6px; }
   #livePanelsContainer::-webkit-scrollbar-thumb{ background: rgba(255,255,255,0.25); border-radius:4px; }
   .live-panel{
-    pointer-events:auto;
+    pointer-events:auto; position:relative;
     width: min(408px, 92vw); perspective: 900px;
     background: rgba(18,10,10,0.97); border: 1px solid rgba(255,60,60,0.45);
     border-radius: 18px; overflow:hidden; box-shadow: 0 20px 50px rgba(0,0,0,0.55);
     transform-origin: bottom right; flex-shrink:0;
     animation: painelAbrir3D .4s cubic-bezier(.2,.9,.3,1.3) forwards;
   }
+  /* Alca de redimensionar no canto inferior direito do balao de live -- so
+     ajusta a largura (a altura do video acompanha sozinha via aspect-ratio
+     16:9 logo abaixo), entao o balao so cresce/encolhe de forma proporcional. */
+  .live-panel-resize-handle{
+    position:absolute; right:0; bottom:0; width:22px; height:22px;
+    cursor:nwse-resize; z-index:3;
+    background-image: linear-gradient(135deg,
+      transparent 0 44%, rgba(255,255,255,0.45) 44% 50%,
+      transparent 50% 63%, rgba(255,255,255,0.45) 63% 69%,
+      transparent 69% 82%, rgba(255,255,255,0.45) 82% 88%, transparent 88%);
+  }
+  .live-panel-resize-handle:hover{ background-color: rgba(255,255,255,0.1); }
   /* Twitch: painel embutido roxo em vez de vermelho, pra combinar com a marca do canal */
   .live-panel.twitch{ background: rgba(14,8,24,0.97); border-color: rgba(145,70,255,0.45); }
   .live-panel.twitch .live-panel-head{ background: rgba(145,70,255,0.16); }
@@ -4130,6 +4142,7 @@ function criarPainelLiveDOM(c){
       <div class="live-panel-fallback" id="livePanelFallback-${c.id}"></div>
     </div>
     <div class="live-panel-hint" id="livePanelHint-${c.id}">🔇 Vídeo iniciou sem áudio — clique nele pra ativar o som</div>
+    <div class="live-panel-resize-handle" aria-hidden="true"></div>
   `;
   return div;
 }
@@ -4140,8 +4153,19 @@ function criarPainelLiveDOM(c){
 function aplicarPosicaoSalva(id, el){
   try{
     const salvo = JSON.parse(localStorage.getItem('livePanelPos-' + id) || 'null');
-    if(salvo && salvo.left && salvo.top){
-      const largura = 408, altura = 260; // painel 20% maior (era 340x200)
+    if(!salvo) return;
+    // Restaura a largura que o usuario deixou arrastando a alcinha de
+    // redimensionar (a altura do video acompanha sozinha via aspect-ratio).
+    if(salvo.width){
+      const larguraMax = window.innerWidth - 8;
+      const largura = Math.max(260, Math.min(parseFloat(salvo.width) || 408, larguraMax));
+      el.style.width = largura + 'px';
+    }
+    if(salvo.left && salvo.top){
+      // Usa o tamanho real (ja considerando a largura restaurada acima) em
+      // vez de um valor fixo, senao o clamp de posicao ficaria errado pra
+      // paineis que o usuario deixou maiores ou menores que o padrao.
+      const largura = el.offsetWidth || 408, altura = el.offsetHeight || 260;
       const left = Math.max(4, Math.min(parseFloat(salvo.left) || 0, window.innerWidth - largura - 4));
       const top = Math.max(4, Math.min(parseFloat(salvo.top) || 0, window.innerHeight - altura - 4));
       el.style.left = left + 'px';
@@ -4252,7 +4276,13 @@ function fecharTodosLivePaineis(){
     document.removeEventListener('pointermove', aoMoverPonteiro);
     document.removeEventListener('pointerup', aoSoltarPonteiro);
     try{
-      localStorage.setItem('livePanelPos-' + id, JSON.stringify({ left: painel.style.left, top: painel.style.top }));
+      // Mescla com o que ja estava salvo (ex: largura de um redimensionamento
+      // anterior) em vez de sobrescrever tudo, senao um arrasto depois de um
+      // resize apagaria o tamanho customizado.
+      const salvo = JSON.parse(localStorage.getItem('livePanelPos-' + id) || '{}');
+      salvo.left = painel.style.left;
+      salvo.top = painel.style.top;
+      localStorage.setItem('livePanelPos-' + id, JSON.stringify(salvo));
     }catch(err){}
   }
   container.addEventListener('pointerdown', function(e){
@@ -4269,6 +4299,53 @@ function fecharTodosLivePaineis(){
     document.addEventListener('pointermove', aoMoverPonteiro);
     document.addEventListener('pointerup', aoSoltarPonteiro);
     e.preventDefault();
+  });
+
+  // ---- Redimensionar o balao de live pelo canto inferior direito ----
+  // So a largura muda com o arraste -- a altura do video acompanha sozinha
+  // via aspect-ratio 16:9 (ver .live-panel-video), entao o balao so
+  // cresce/encolhe de forma proporcional, sem sobrar espaco vazio.
+  let redimensionandoLive = null;
+  let larguraInicialLive = 0, xInicialLive = 0, yInicialLive = 0;
+
+  function aoMoverRedimensionarLive(e){
+    if(!redimensionandoLive) return;
+    const deltaX = e.clientX - xInicialLive;
+    const deltaY = e.clientY - yInicialLive;
+    // Usa a maior variacao (horizontal ou vertical) como direcao do arraste,
+    // pra funcionar bem tanto puxando reto quanto na diagonal do canto.
+    const delta = Math.abs(deltaX) >= Math.abs(deltaY) ? deltaX : deltaY;
+    const rect = redimensionandoLive.getBoundingClientRect();
+    const larguraMax = window.innerWidth - rect.left - 8;
+    const novaLargura = Math.max(260, Math.min(larguraInicialLive + delta, larguraMax));
+    redimensionandoLive.style.width = novaLargura + 'px';
+  }
+  function aoSoltarRedimensionarLive(){
+    if(!redimensionandoLive) return;
+    const painel = redimensionandoLive;
+    const id = parseInt(painel.dataset.canalId, 10);
+    redimensionandoLive = null;
+    document.removeEventListener('pointermove', aoMoverRedimensionarLive);
+    document.removeEventListener('pointerup', aoSoltarRedimensionarLive);
+    try{
+      const salvo = JSON.parse(localStorage.getItem('livePanelPos-' + id) || '{}');
+      salvo.width = painel.style.width;
+      localStorage.setItem('livePanelPos-' + id, JSON.stringify(salvo));
+    }catch(err){}
+  }
+  container.addEventListener('pointerdown', function(e){
+    const alca = e.target.closest('.live-panel-resize-handle');
+    if(!alca) return;
+    const painel = alca.closest('.live-panel');
+    if(!painel) return;
+    const rect = painel.getBoundingClientRect();
+    larguraInicialLive = rect.width;
+    xInicialLive = e.clientX;
+    yInicialLive = e.clientY;
+    redimensionandoLive = painel;
+    e.preventDefault();
+    document.addEventListener('pointermove', aoMoverRedimensionarLive);
+    document.addEventListener('pointerup', aoSoltarRedimensionarLive);
   });
 })();
 
