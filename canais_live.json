@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05T23:00:32.455Z",
+  "updated": "2026-08-05T23:15:22.637Z",
   "live": [
     {
       "id": 2,
@@ -29,15 +29,6 @@
       "thumbnail": "https://i.ytimg.com/vi/vODeSEH17gg/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc raiders Solo pve / DuoTrio pvp mosquetao",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 14,
       "n": "tofogames10",
       "plat": "twitch",
@@ -45,6 +36,15 @@
       "videoTitle": "Live de Vendas",
       "videoUrl": "https://www.twitch.tv/tofogames10",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc raiders Solo pve / DuoTrio pvp mosquetao",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
