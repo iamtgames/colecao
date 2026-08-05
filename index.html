@@ -961,6 +961,7 @@
     flex:1 1 auto; min-height:0;
   }
   .mini-panel-body .toggle-venda{ width:100%; text-align:left; }
+  #buscaPrecoBtn{ width:auto; text-align:center; white-space:nowrap; flex:0 0 auto; }
 
   /* ===================================================================
      METAFORA DE DESKTOP: barrinha de titulo generica (mesmo estilo do
@@ -2496,9 +2497,17 @@
     <div class="win-titlebar">buscapreco.exe</div>
     <div class="mini-panel-head"><h3>💰 Buscador de Preços</h3><button class="mini-panel-close" id="buscaPrecoPanelCloseBtn" aria-label="Fechar">✕</button></div>
     <div class="mini-panel-body">
-      <p style="font-size:12.5px; color:var(--ink-dim); margin:0 0 12px;">Digite o nome de um jogo e veja anúncios em tempo real na Loja Arena Games, em 8 outras lojas parceiras, no Mercado Livre e na OLX — do mais caro pro mais barato.</p>
-      <form id="buscaPrecoForm" style="display:flex; gap:8px; margin-bottom:14px;">
-        <input type="text" id="buscaPrecoInput" placeholder="Ex.: God of War Ragnarök" autocomplete="off" style="flex:1; min-width:0; padding:9px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.18); background:rgba(0,0,0,0.35); color:#fff; font-size:13.5px;">
+      <p style="font-size:12.5px; color:var(--ink-dim); margin:0 0 12px;">Digite o nome de um jogo e veja os anúncios encontrados em tempo real.</p>
+      <form id="buscaPrecoForm" style="display:flex; gap:8px; margin-bottom:14px; flex-wrap:wrap;">
+        <input type="text" id="buscaPrecoInput" placeholder="Ex.: God of War Ragnarök" autocomplete="off" style="flex:1 1 220px; min-width:0; padding:9px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.18); background:rgba(0,0,0,0.35); color:#fff; font-size:13.5px;">
+        <select id="buscaPrecoPlataforma" class="sort-select" style="flex:0 0 auto;">
+          <option value="">Qualquer plataforma</option>
+          <option value="ps3">PS3</option>
+          <option value="ps4">PS4</option>
+          <option value="ps5">PS5</option>
+          <option value="xbox">Xbox</option>
+          <option value="nintendo">Nintendo</option>
+        </select>
         <button type="submit" class="toggle-venda" id="buscaPrecoBtn">🔍 Buscar</button>
       </form>
       <div id="buscaPrecoStatus" style="font-size:12.5px; color:var(--ink-dim); margin:0 0 10px; display:none;"></div>
@@ -6900,18 +6909,21 @@ function renderBuscaPrecoResultados(resultados){
   `;
 }
 
-async function executarBuscaPreco(termo){
+const NOMES_PLATAFORMA = { ps3: 'PS3', ps4: 'PS4', ps5: 'PS5', xbox: 'Xbox', nintendo: 'Nintendo' };
+
+async function executarBuscaPreco(termo, plataforma){
   if(buscaPrecoEmAndamento) return;
   buscaPrecoEmAndamento = true;
   const status = document.getElementById('buscaPrecoStatus');
   const wrap = document.getElementById('buscaPrecoResultados');
   const btn = document.getElementById('buscaPrecoBtn');
+  const termoCompleto = plataforma ? `${termo} ${NOMES_PLATAFORMA[plataforma] || plataforma}` : termo;
   status.style.display = 'block';
-  status.textContent = `🔎 Buscando "${termo}" ao vivo nas lojas, Mercado Livre e OLX... pode levar alguns segundos.`;
+  status.textContent = `🔎 Buscando "${termoCompleto}" ao vivo... pode levar alguns segundos.`;
   wrap.innerHTML = '';
   btn.disabled = true;
   try{
-    const url = `${BUSCA_PRECO_WORKER_URL}/?jogo=${encodeURIComponent(termo)}`;
+    const url = `${BUSCA_PRECO_WORKER_URL}/?jogo=${encodeURIComponent(termoCompleto)}`;
     const res = await fetch(url);
     if(!res.ok) throw new Error(`HTTP ${res.status}`);
     const dados = await res.json();
@@ -6939,8 +6951,9 @@ document.getElementById('buscaPrecoPanelOverlay').addEventListener('click', func
 document.getElementById('buscaPrecoForm').addEventListener('submit', function(e){
   e.preventDefault();
   const termo = document.getElementById('buscaPrecoInput').value.trim();
+  const plataforma = document.getElementById('buscaPrecoPlataforma').value;
   if(termo.length < 2) return;
-  executarBuscaPreco(termo);
+  executarBuscaPreco(termo, plataforma);
 });
 
 document.getElementById('wishlistPrevBtn').addEventListener('click', function(){
