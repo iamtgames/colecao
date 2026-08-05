@@ -1,0 +1,4 @@
+Contact: mailto:ocultobadguy@gmail.com
+Preferred-Languages: pt-BR, en
+Canonical: https://iamtgames.github.io/colecao/.well-known/security.txt
+Expires: 2027-08-05T00:00:00.000Z
