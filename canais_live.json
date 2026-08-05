@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-05T22:15:19.595Z",
+  "updated": "2026-08-05T22:30:21.010Z",
   "live": [
     {
       "id": 2,
@@ -15,9 +15,18 @@
       "n": "Sigchap",
       "plat": "youtube",
       "videoId": "HYp7VtP3F-U",
-      "videoTitle": "🟢 AO VIVO - FECHANDO PEDIDOS E ENVIOS",
+      "videoTitle": "🟢 AO VIVO MAIOR COLEÇÃO DE STAR WARS",
       "videoUrl": "https://www.youtube.com/watch?v=HYp7VtP3F-U",
       "thumbnail": "https://i.ytimg.com/vi/HYp7VtP3F-U/hqdefault.jpg"
+    },
+    {
+      "id": 9,
+      "n": "Rodrigo Retro Games",
+      "plat": "youtube",
+      "videoId": "vODeSEH17gg",
+      "videoTitle": "LIVE DE VENDAS! (Rodrigo Games) LIVE DO 30TÃO !!! 05/08",
+      "videoUrl": "https://www.youtube.com/watch?v=vODeSEH17gg",
+      "thumbnail": "https://i.ytimg.com/vi/vODeSEH17gg/hqdefault.jpg"
     },
     {
       "id": 12,
