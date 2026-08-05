@@ -4274,7 +4274,11 @@ function alternarChatLive(id){
   if(btn) btn.classList.toggle('ativo', abrindo);
   if(!abrindo) return;
   const fr = document.getElementById(`livePanelChatIframe-${id}`);
-  if(!fr || fr.src) return; // ja carregado
+  // Usa getAttribute em vez de .src: com o atributo vazio (src=""), a
+  // propriedade .src resolve pra URL da propria pagina (nao pra string
+  // vazia), o que faria esse "ja carregado" disparar sempre e o chat nunca
+  // seria carregado de verdade.
+  if(!fr || fr.getAttribute('src')) return; // ja carregado
   const dominio = 'iamtgames.github.io';
   if(c.plat === 'twitch' && c.login){
     fr.src = `https://www.twitch.tv/embed/${encodeURIComponent(c.login)}/chat?parent=${dominio}&darkpopout`;
