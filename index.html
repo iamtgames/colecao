@@ -2197,17 +2197,18 @@ uma Sala Secreta se abre com curiosidades reais da colecao.
 // pro total da coleção — não é preço de mercado em tempo real, é uma média
 // manual. Sempre que revisar os preços, atualize também a constante
 // PRECOS_ATUALIZADOS_EM logo abaixo, pra o site mostrar a data certa.
-const PRECOS_ATUALIZADOS_EM = '23/07/2026';
+const PRECOS_ATUALIZADOS_EM = '06/08/2026';
 
 // CODIGOS DE BARRAS (campo "upc") pro scanner "ja tenho esse jogo?":
 // pesquisados e verificados em fontes reais (PriceCharting, eBay, Walmart,
 // upcitemdb, etc.) em 23/07/2026 — nunca inventados. Cobrem a edicao padrao
 // americana (NTSC-U/M) de cada jogo, exceto o item 202 (End of Eternity),
 // que e edicao japonesa e usa o codigo JAN correspondente.
-// 4 jogos ficaram sem "upc" porque a edicao especifica so existe como
+// 5 jogos ficaram sem "upc" porque a edicao especifica so existe como
 // import PAL/Europa ou como parte de uma colecao/bundle, nao como disco
 // solo NTSC-U/M: Heavy Rain (145), Uncharted 2 Remastered (211),
-// Uncharted 3 Remastered (173), Uncharted: Drake's Fortune Remastered (212).
+// Uncharted 3 Remastered (173), Uncharted: Drake's Fortune Remastered (212),
+// Harvest Moon: Mad Dash (227 - so achei o codigo de barras da edicao PAL/Europa).
 // Se descobrir o codigo certo de algum desses (ou de qualquer jogo futuro),
 // so adicionar upc:"XXXXXXXXXXXX" no objeto do jogo correspondente.
 
@@ -2286,7 +2287,13 @@ const jogos = [
   { id:204, n:"Tales of Xillia", cat:"raro", col:240, loj:190, bar:145, caro:380, rar:"raro", v:true, plat:"PS3" , upc:"722674111041" },
   { id:205, n:"White Knight Chronicles", cat:"aaa", col:140, loj:110, bar:80, caro:210, rar:"pouco", v:true, plat:"PS3" , upc:"711719814627" },
   { id:206, n:"Yakuza: Dead Souls", cat:"survival", col:220, loj:175, bar:130, caro:350, rar:"raro", v:false, plat:"PS3" , upc:"010086690590" },
-  { id:224, n:"TAPE: Unveil the Memories", cat:"survival", col:110, loj:100, bar:90, caro:150, rar:"raro", v:true, plat:"PS5" , upc:"8437024411031" }
+  { id:224, n:"TAPE: Unveil the Memories", cat:"survival", col:110, loj:100, bar:90, caro:150, rar:"raro", v:true, plat:"PS5" , upc:"8437024411031" },
+     { id:225, n:"Nioh", cat:"aaa", col:90, loj:65, bar:40, caro:130, rar:"comum", v:true, plat:"PS4" , upc:"711719508700" },
+{ id:226, n:"Watch Dogs: Legion", cat:"aaa", col:95, loj:75, bar:55, caro:140, rar:"comum", v:true, plat:"PS4" , upc:"887256090630" },
+{ id:227, n:"Harvest Moon: Mad Dash", cat:"infantil", col:40, loj:30, bar:20, caro:76, rar:"pouco", v:true, plat:"PS4" },
+{ id:228, n:"Metal Gear: Survive", cat:"survival", col:75, loj:55, bar:40, caro:130, rar:"comum", v:true, plat:"PS4" , upc:"083717203285" },
+{ id:229, n:"Street Fighter 6", cat:"aaa", col:240, loj:210, bar:180, caro:290, rar:"comum", v:true, plat:"PS5" , upc:"013388580095" },
+{ id:230, n:"Lords of the Fallen", cat:"aaa", col:200, loj:165, bar:120, caro:290, rar:"comum", v:true, plat:"PS5" , upc:"816293018109" },
 
 ];
 
@@ -2366,7 +2373,13 @@ const capas = {
   221: "https://images.igdb.com/igdb/image/upload/t_cover_big/co20mh.jpg",
   222: "https://images.igdb.com/igdb/image/upload/t_cover_big/cobkt6.jpg",
   223: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2ats.jpg",
-  224: "tape-ps5-capa.jpg"
+  224: "tape-ps5-capa.jpg",
+     225: "https://images.igdb.com/igdb/image/upload/t_cover_big/co20xg.jpg",
+     226: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2oyq.jpg",
+     227: "https://images.igdb.com/igdb/image/upload/t_cover_big/co2gk7.jpg",
+     228: "https://images.igdb.com/igdb/image/upload/t_cover_big/co27m5.jpg",
+     229: "https://images.igdb.com/igdb/image/upload/t_cover_big/co9wxo.jpg",
+     230: "https://images.igdb.com/igdb/image/upload/t_cover_big/co72u9.jpg"
 };
 
 const capasVerso = {
