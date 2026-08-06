@@ -1,4 +1,23 @@
 {
-  "updated": "2026-08-06T15:33:41.851Z",
-  "live": []
+  "updated": "2026-08-06T23:03:31.582Z",
+  "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "GxDDfTgDWbc",
+      "videoTitle": "LIVE VENDAS  ANTEC RETRO!!!",
+      "videoUrl": "https://www.youtube.com/watch?v=GxDDfTgDWbc",
+      "thumbnail": "https://i.ytimg.com/vi/GxDDfTgDWbc/hqdefault.jpg"
+    },
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "nvIQejkLLvc",
+      "videoTitle": "LIVE DE VENDAS AO VIVO... MUITOS JOGOS, BRINQUEDOS, ACESSÓRIOS E CONSOLES.",
+      "videoUrl": "https://www.youtube.com/watch?v=nvIQejkLLvc",
+      "thumbnail": "https://i.ytimg.com/vi/nvIQejkLLvc/hqdefault.jpg"
+    }
+  ]
 }
