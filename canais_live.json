@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-07T22:15:19.697Z",
+  "updated": "2026-08-07T22:30:26.791Z",
   "live": [
     {
       "id": 1,
@@ -9,6 +9,15 @@
       "videoTitle": "LIVE DE VENDAS !!!",
       "videoUrl": "https://www.youtube.com/watch?v=4PAJSmzF4Jw",
       "thumbnail": "https://i.ytimg.com/vi/4PAJSmzF4Jw/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc raiders Solo pve / DuoTrio pvp mosquetao",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
