@@ -1,15 +1,6 @@
 {
-  "updated": "2026-08-07T04:15:19.320Z",
+  "updated": "2026-08-07T04:30:18.568Z",
   "live": [
-    {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 PASSANDO RAIVA COM O CORINGÃO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
     {
       "id": 15,
       "n": "corvofps",
@@ -18,6 +9,15 @@
       "videoTitle": "🟢 +18 ANALISANDO MEU PROXIMO CANDIDATO!   !Historia1 !historia2 !historia3",
       "videoUrl": "https://www.twitch.tv/corvofps",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_corvofps-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 PASSANDO RAIVA COM O CORINGÃO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
