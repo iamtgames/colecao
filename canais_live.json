@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-07T02:00:22.551Z",
+  "updated": "2026-08-07T02:15:18.562Z",
   "live": [
     {
       "id": 4,
@@ -9,6 +9,15 @@
       "videoTitle": "LIVE DE VENDAS AO VIVO... MUITOS JOGOS, BRINQUEDOS, ACESSÓRIOS E CONSOLES.",
       "videoUrl": "https://www.youtube.com/watch?v=nvIQejkLLvc",
       "thumbnail": "https://i.ytimg.com/vi/nvIQejkLLvc/hqdefault.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 PASSANDO RAIVA COM O CORINGÃO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
