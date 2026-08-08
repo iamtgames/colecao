@@ -7,6 +7,27 @@
 <meta name="keywords" content="coleção de jogos PS4, coleção de jogos PS3, coleção de jogos PS5, catálogo de jogos físicos, colecionador de jogos, coleção iamT">
 <meta name="robots" content="index, follow">
 <meta name="author" content="iamT">
+     <script>
+          // MODO LEVE -- deteccao antecipada (roda antes do resto da pagina, pra nao
+          // piscar efeitos pesados e depois some-los). Le preferencia manual salva pelo
+          // usuario (botao na bandeja do sistema); se nao houver preferencia, tenta
+          // adivinhar por sinais de hardware/rede fracos. Um segundo teste (FPS real,
+          // mais pra frente no arquivo) cobre navegadores que nao expoe esses sinais.
+          (function(){
+                 try{
+                          var pref = localStorage.getItem('modoLeve_ps4');
+                          if(pref === 'on'){ document.documentElement.classList.add('modo-leve'); return; }
+                                   if(pref === 'off'){ return; }
+                                            var fraco = false;
+                          if(navigator.deviceMemory && navigator.deviceMemory <= 2) fraco = true;
+                                   if(navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 2) fraco = true;
+                                            var c = navigator.connection;
+                          if(c && (c.saveData || (c.effectiveType && /2g|3g/.test(c.effectiveType)))) fraco = true;
+                                   if(window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches) fraco = true;
+                                            if(fraco) document.documentElement.classList.add('modo-leve');
+                 }catch(e){}
+          })();
+     </script>
 <meta name="referrer" content="strict-origin-when-cross-origin">
 <link rel="canonical" href="https://iamtgames.github.io/colecao/">
 <meta property="og:type" content="website">
@@ -1557,6 +1578,19 @@
     .y2k-taskbar-clock{ font-size:10px; padding:5px 7px; }
   }
 
+  /* MODO LEVE -- desliga tudo que e caro pro navegador renderizar (blur,
+     animacoes continuas, transicoes) quando a pagina detecta um dispositivo
+     fraco (ou o usuario liga manualmente pelo icone da bandeja). Regra ampla
+     de proposito: cobre qualquer selecao que use essas propriedades, mesmo
+     as que forem adicionadas depois sem precisar lembrar de atualizar aqui.
+     O site continua 100% funcional -- so perde os efeitos decorativos. */
+  .modo-leve *{
+           backdrop-filter: none !important;
+           -webkit-backdrop-filter: none !important;
+           animation: none !important;
+           transition: none !important;
+  }
+  .modo-leve #crtOverlay{ display:none !important; }
 </style>
 </head>
 <body>
@@ -1601,6 +1635,7 @@
     <button class="y2k-tray-icon" id="y2kTrayCalendario" title="Calendário de Lançamentos">📅</button>
     <button class="y2k-tray-icon" id="y2kTraySom" title="Efeitos sonoros">🔇</button>
     <button class="y2k-tray-icon" id="y2kTrayCrt" title="Filtro CRT">📺</button>
+           <button class="y2k-tray-icon" id="y2kTrayLeve" title="Modo leve (reduz efeitos visuais em PCs fracos)">🪶</button>
     <button class="y2k-tray-icon" id="y2kTrayLive" title="Nenhum canal ao vivo agora">📡<span class="y2k-tray-dot" id="y2kTrayLiveDot"></span></button>
     <button class="y2k-tray-icon" id="y2kTrayAlinhar" title="Alinhar ícones da área de trabalho">▦</button>
     <button class="y2k-tray-icon" id="idiomaBtn" title="Switch to English" aria-label="Switch language">🇧🇷</button>
@@ -3928,6 +3963,10 @@ function carregarJsDosMotor(aoPronto){
   document.head.appendChild(script);
 }
 function abrirJogoDos(overlayId, containerId, loadingId, bundleUrl, nomeAmigavel){
+       if(document.documentElement.classList.contains('modo-leve')){
+                const prosseguir = confirm('Modo leve esta ligado (dispositivo detectado como mais fraco). Carregar ' + nomeAmigavel + ' mesmo assim? Isso pode deixar a pagina mais lenta.');
+                if(!prosseguir) return;
+       }
   abrirMiniPanel(overlayId);
   const container = document.getElementById(containerId);
   if(container.dataset.iniciado) return;
@@ -5710,6 +5749,50 @@ if(crtBtn) crtBtn.addEventListener('click', function(){
   aplicarCrt(ligado);
 });
 
+     // MODO LEVE -- a deteccao inicial (por deviceMemory/hardwareConcurrency/rede)
+     // ja rodou no <head>, antes de qualquer coisa pintar na tela. Aqui a gente so
+     // sincroniza o icone da bandeja com o resultado e liga o botao manual. Quem
+     // clicar sempre grava uma preferencia explicita ('on'/'off'), que passa a
+     // mandar mais que a deteccao automatica nas proximas visitas.
+     const leveBtn = document.getElementById('y2kTrayLeve');
+     function aplicarModoLeve(ligado){
+            document.documentElement.classList.toggle('modo-leve', ligado);
+            if(leveBtn){
+                     leveBtn.classList.toggle('on', ligado);
+                     leveBtn.title = ligado
+                       ? 'Modo leve: ligado (efeitos visuais reduzidos) — clique para desligar'
+                                : 'Modo leve: desligado — clique para ligar (reduz efeitos em PCs fracos)';
+            }
+     }
+     (function(){
+            const prefLeve = localStorage.getItem('modoLeve_ps4');
+            aplicarModoLeve(document.documentElement.classList.contains('modo-leve'));
+            if(prefLeve === 'on' || prefLeve === 'off') return;
+            window.addEventListener('load', function(){
+                     if(document.documentElement.classList.contains('modo-leve')) return;
+                     let frames = 0;
+                     const inicio = performance.now();
+                     function medir(t){
+                                frames++;
+                                if(t - inicio < 1200){
+                                             requestAnimationFrame(medir);
+                                } else {
+                                             const fps = frames / ((t - inicio) / 1000);
+                                             if(fps < 40){
+                                                            localStorage.setItem('modoLeve_ps4', 'on');
+                                                            aplicarModoLeve(true);
+                                             }
+                                }
+                     }
+                     requestAnimationFrame(medir);
+            });
+     })();
+     if(leveBtn) leveBtn.addEventListener('click', function(){
+            const ligarAgora = !document.documentElement.classList.contains('modo-leve');
+            localStorage.setItem('modoLeve_ps4', ligarAgora ? 'on' : 'off');
+            aplicarModoLeve(ligarAgora);
+     });
+
 // EFEITOS SONOROS OPCIONAIS (sintetizados na hora via Web Audio, sem arquivo de audio --
 // assim nao depende de nenhum asset externo). Desligado por padrao, pra nao incomodar
 // quem nao pediu; fica salvo no localStorage depois que a pessoa liga.
@@ -5755,7 +5838,8 @@ if(somBtn) somBtn.addEventListener('click', function(){
 if(window.matchMedia('(hover: hover) and (pointer: fine)').matches){
   let capaAtivaTilt = null;
   document.addEventListener('mousemove', function(e){
-    const el = e.target.closest('.cover-wrap');
+    if(document.documentElement.classList.contains('modo-leve')) return;
+           const el = e.target.closest('.cover-wrap');
     if(el){
       if(capaAtivaTilt && capaAtivaTilt !== el) capaAtivaTilt.style.transform = '';
       capaAtivaTilt = el;
