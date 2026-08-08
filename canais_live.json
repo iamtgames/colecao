@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-08T03:30:18.540Z",
+  "updated": "2026-08-08T03:45:22.576Z",
   "live": [
     {
       "id": 7,
@@ -9,15 +9,6 @@
       "videoTitle": "🟢 LIVE - LEILÃO DA MADRUGADA",
       "videoUrl": "https://www.youtube.com/watch?v=DLwN12hDn14",
       "thumbnail": "https://i.ytimg.com/vi/DLwN12hDn14/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc raiders Solo pve / DuoTrio pvp mosquetao",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
