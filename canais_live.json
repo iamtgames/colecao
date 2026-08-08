@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-08T00:00:29.252Z",
+  "updated": "2026-08-08T00:15:20.241Z",
   "live": [
     {
       "id": 1,
@@ -9,6 +9,15 @@
       "videoTitle": "LIVE DE VENDAS !!!",
       "videoUrl": "https://www.youtube.com/watch?v=4PAJSmzF4Jw",
       "thumbnail": "https://i.ytimg.com/vi/4PAJSmzF4Jw/hqdefault.jpg"
+    },
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "ZXG-8EkMqAo",
+      "videoTitle": "🟢 LIVE VENDENDO DE JOGOS E VIDEOGAMES",
+      "videoUrl": "https://www.youtube.com/watch?v=ZXG-8EkMqAo",
+      "thumbnail": "https://i.ytimg.com/vi/ZXG-8EkMqAo/hqdefault.jpg"
     },
     {
       "id": 13,
