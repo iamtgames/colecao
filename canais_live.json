@@ -1,4 +1,14 @@
 {
-  "updated": "2026-08-08T19:45:44.661Z",
-  "live": []
+  "updated": "2026-08-08T20:00:25.187Z",
+  "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "arc raiders",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
