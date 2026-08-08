@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-08T00:15:20.241Z",
+  "updated": "2026-08-08T00:30:19.930Z",
   "live": [
     {
       "id": 1,
@@ -11,13 +11,22 @@
       "thumbnail": "https://i.ytimg.com/vi/4PAJSmzF4Jw/hqdefault.jpg"
     },
     {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "zwlAwgBYRsc",
+      "videoTitle": "🕹️GAME PLAY GTA 5 #12 🏆 ANTEC GAMES 👾",
+      "videoUrl": "https://www.youtube.com/watch?v=zwlAwgBYRsc",
+      "thumbnail": "https://i.ytimg.com/vi/zwlAwgBYRsc/hqdefault.jpg"
+    },
+    {
       "id": 7,
       "n": "Sigchap",
       "plat": "youtube",
-      "videoId": "ZXG-8EkMqAo",
-      "videoTitle": "🟢 LIVE VENDENDO DE JOGOS E VIDEOGAMES",
-      "videoUrl": "https://www.youtube.com/watch?v=ZXG-8EkMqAo",
-      "thumbnail": "https://i.ytimg.com/vi/ZXG-8EkMqAo/hqdefault.jpg"
+      "videoId": "DLwN12hDn14",
+      "videoTitle": "🟢 LIVE - MADRUGRADA VENDENDO JOGOS E VIDEOGAMES",
+      "videoUrl": "https://www.youtube.com/watch?v=DLwN12hDn14",
+      "thumbnail": "https://i.ytimg.com/vi/DLwN12hDn14/hqdefault.jpg"
     },
     {
       "id": 13,
