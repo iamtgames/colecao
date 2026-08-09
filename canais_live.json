@@ -1,4 +1,14 @@
 {
-  "updated": "2026-08-09T21:15:17.699Z",
-  "live": []
+  "updated": "2026-08-09T21:17:01.778Z",
+  "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "arc raiders solo pve/duo trio pvp snap hook",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
