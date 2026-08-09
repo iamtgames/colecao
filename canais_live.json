@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-09T05:00:23.041Z",
+  "updated": "2026-08-09T05:15:17.876Z",
   "live": [
     {
       "id": 7,
@@ -9,15 +9,6 @@
       "videoTitle": "🟢 LIVE - MAIOR LEILÃO DE VIDEOGAMES E JOGOS",
       "videoUrl": "https://www.youtube.com/watch?v=GbFuk6ZcCcs",
       "thumbnail": "https://i.ytimg.com/vi/GbFuk6ZcCcs/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "arc raiders",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
