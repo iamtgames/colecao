@@ -1,6 +1,15 @@
 {
-  "updated": "2026-08-10T22:30:27.879Z",
+  "updated": "2026-08-10T22:45:17.141Z",
   "live": [
+    {
+      "id": 3,
+      "n": "Garimpo dos Games",
+      "plat": "youtube",
+      "videoId": "2JhCcgwSLTg",
+      "videoTitle": "Garimpo dos games  está ao vivo!",
+      "videoUrl": "https://www.youtube.com/watch?v=2JhCcgwSLTg",
+      "thumbnail": "https://i.ytimg.com/vi/2JhCcgwSLTg/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
@@ -15,7 +24,7 @@
       "n": "PELEHZADA",
       "plat": "twitch",
       "login": "pelehzada",
-      "videoTitle": "Tibão depois arc raiders solo pve/duo trio pvp snap hook",
+      "videoTitle": "arc raiders solo pve/duo trio pvp snap hook",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     },
