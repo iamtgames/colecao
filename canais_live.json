@@ -1,4 +1,14 @@
 {
-  "updated": "2026-08-10T12:30:20.035Z",
-  "live": []
+  "updated": "2026-08-10T12:45:17.895Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "mIS0lSfbcRg",
+      "videoTitle": "🟢 LIVE - LEILÃO DE GAMES, BRIGAMOS MAS VOLTAMOS",
+      "videoUrl": "https://www.youtube.com/watch?v=mIS0lSfbcRg",
+      "thumbnail": "https://i.ytimg.com/vi/mIS0lSfbcRg/hqdefault.jpg"
+    }
+  ]
 }
