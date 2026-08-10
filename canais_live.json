@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-10T21:45:16.489Z",
+  "updated": "2026-08-10T22:00:25.163Z",
   "live": [
     {
       "id": 7,
@@ -11,15 +11,6 @@
       "thumbnail": "https://i.ytimg.com/vi/LcCnSQL7Sjk/hqdefault.jpg"
     },
     {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 ALMOÇO E ANIME, DEPOIS GAMEPLAYZINHA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
-    {
       "id": 13,
       "n": "PELEHZADA",
       "plat": "twitch",
@@ -27,6 +18,15 @@
       "videoTitle": "Tibão depois arc raiders solo pve/duo trio pvp snap hook",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 ALMOÇO E ANIME, DEPOIS GAMEPLAYZINHA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
