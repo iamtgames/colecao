@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-10T03:15:17.225Z",
+  "updated": "2026-08-10T03:30:19.817Z",
   "live": [
     {
       "id": 7,
@@ -9,15 +9,6 @@
       "videoTitle": "🟢 LIVE - LEILÃO DE GAMES PARA OS PAIS",
       "videoUrl": "https://www.youtube.com/watch?v=0jz6woWAG3Q",
       "thumbnail": "https://i.ytimg.com/vi/0jz6woWAG3Q/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "arc raiders solo pve/duo trio pvp snap hook",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
