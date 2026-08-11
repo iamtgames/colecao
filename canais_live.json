@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-11T00:30:24.914Z",
+  "updated": "2026-08-11T00:45:19.003Z",
   "live": [
     {
       "id": 3,
@@ -20,15 +20,6 @@
       "thumbnail": "https://i.ytimg.com/vi/LcCnSQL7Sjk/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "arc raiders solo pve/duo trio pvp snap hook",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -36,6 +27,15 @@
       "videoTitle": "+18 ALMOÇO E ANIME, DEPOIS GAMEPLAYZINHA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "arc raiders solo pve/duo trio pvp snap hook",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
