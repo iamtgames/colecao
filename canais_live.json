@@ -1,23 +1,14 @@
 {
-  "updated": "2026-08-13T06:45:18.706Z",
+  "updated": "2026-08-13T07:00:25.219Z",
   "live": [
     {
       "id": 7,
       "n": "Sigchap",
       "plat": "youtube",
       "videoId": "kGIStzweMio",
-      "videoTitle": "🟢 LIVE - TENTANDO JOGAR PELA PRIMEIRA VEZ",
+      "videoTitle": "🟢 LIVE - ZERANDO GTA SA",
       "videoUrl": "https://www.youtube.com/watch?v=kGIStzweMio",
       "thumbnail": "https://i.ytimg.com/vi/kGIStzweMio/hqdefault.jpg"
-    },
-    {
-      "id": 16,
-      "n": "gianzao",
-      "plat": "twitch",
-      "login": "gianzao",
-      "videoTitle": "rerun de uma live nada interessante",
-      "videoUrl": "https://www.twitch.tv/gianzao",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_gianzao-440x248.jpg"
     },
     {
       "id": 17,
