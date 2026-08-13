@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-13T00:45:19.396Z",
+  "updated": "2026-08-13T01:00:24.419Z",
   "live": [
     {
       "id": 2,
@@ -9,15 +9,6 @@
       "videoTitle": "🎃LIVE GEEK 3D E MAIS 🕹️ #55 LIVE DE VENDAS - 12/08/2026",
       "videoUrl": "https://www.youtube.com/watch?v=jDyNMLpQcWg",
       "thumbnail": "https://i.ytimg.com/vi/jDyNMLpQcWg/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "arc raiders solo pve/trio pvp snap hook",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     },
     {
       "id": 17,
