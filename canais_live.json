@@ -1,6 +1,15 @@
 {
-  "updated": "2026-08-13T22:15:19.132Z",
+  "updated": "2026-08-13T22:30:21.258Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "HKNDDu68iNM",
+      "videoTitle": "🏆ANTEC RETRO GAMES LIVE 🕹️ #59 LIVE DE VENDAS - 13/08/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=HKNDDu68iNM",
+      "thumbnail": "https://i.ytimg.com/vi/HKNDDu68iNM/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
