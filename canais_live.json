@@ -1,6 +1,15 @@
 {
-  "updated": "2026-08-13T03:30:21.644Z",
+  "updated": "2026-08-13T03:45:17.955Z",
   "live": [
+    {
+      "id": 16,
+      "n": "gianzao",
+      "plat": "twitch",
+      "login": "gianzao",
+      "videoTitle": "rerun de uma live nada interessante",
+      "videoUrl": "https://www.twitch.tv/gianzao",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_gianzao-440x248.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
