@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-14T23:15:23.244Z",
+  "updated": "2026-08-14T23:30:21.098Z",
   "live": [
     {
       "id": 1,
@@ -9,6 +9,15 @@
       "videoTitle": "JOGOS DE SNES / N64 / PLAY 3 / PLAY 4 E PLAY 5 !!!",
       "videoUrl": "https://www.youtube.com/watch?v=x0P4kPzCP7g",
       "thumbnail": "https://i.ytimg.com/vi/x0P4kPzCP7g/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "arc raiders solo pve/trio pvp snap hook",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     },
     {
       "id": 17,
