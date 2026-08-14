@@ -1,15 +1,6 @@
 {
-  "updated": "2026-08-14T00:30:24.053Z",
+  "updated": "2026-08-14T00:45:23.508Z",
   "live": [
-    {
-      "id": 2,
-      "n": "Antec.r",
-      "plat": "youtube",
-      "videoId": "HKNDDu68iNM",
-      "videoTitle": "🏆ANTEC RETRO GAMES LIVE 🕹️ #59 LIVE DE VENDAS - 13/08/2026",
-      "videoUrl": "https://www.youtube.com/watch?v=HKNDDu68iNM",
-      "thumbnail": "https://i.ytimg.com/vi/HKNDDu68iNM/hqdefault.jpg"
-    },
     {
       "id": 7,
       "n": "Sigchap",
@@ -20,15 +11,6 @@
       "thumbnail": "https://i.ytimg.com/vi/Xc8L5f5e1wM/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "arc raiders solo pve/trio pvp snap hook",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -36,6 +18,15 @@
       "videoTitle": "+18 GTAZINHO PRA DISTRAIR!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "arc raiders solo pve/trio pvp snap hook",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
