@@ -1,6 +1,15 @@
 {
-  "updated": "2026-08-14T22:00:22.725Z",
+  "updated": "2026-08-14T22:15:16.447Z",
   "live": [
+    {
+      "id": 1,
+      "n": "Diego Sheth",
+      "plat": "youtube",
+      "videoId": "x0P4kPzCP7g",
+      "videoTitle": "JOGOS DE SNES / N64 / PLAY 3 / PLAY 4 E PLAY 5 !!!",
+      "videoUrl": "https://www.youtube.com/watch?v=x0P4kPzCP7g",
+      "thumbnail": "https://i.ytimg.com/vi/x0P4kPzCP7g/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
