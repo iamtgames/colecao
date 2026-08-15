@@ -1,15 +1,6 @@
 {
-  "updated": "2026-08-15T21:40:14.379Z",
+  "updated": "2026-08-15T21:45:16.810Z",
   "live": [
-    {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 GTAZINHO DA PAZ!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
     {
       "id": 13,
       "n": "PELEHZADA",
@@ -18,6 +9,15 @@
       "videoTitle": "arc raiders solo pve/trio pvp snap hook",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 TENTA A SORTE NO CSZIN!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
