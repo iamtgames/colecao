@@ -1,14 +1,14 @@
 {
-  "updated": "2026-08-16T21:15:17.910Z",
+  "updated": "2026-08-16T21:30:19.303Z",
   "live": [
     {
-      "id": 6,
-      "n": "Jotape Arcade",
-      "plat": "youtube",
-      "videoId": "UcOtAIkh2qE",
-      "videoTitle": "Live de vendas!",
-      "videoUrl": "https://www.youtube.com/watch?v=UcOtAIkh2qE",
-      "thumbnail": "https://i.ytimg.com/vi/UcOtAIkh2qE/hqdefault.jpg"
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "HACK RAIDERS solo pve/trio pvp snap hook",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
