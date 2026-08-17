@@ -1,6 +1,15 @@
 {
-  "updated": "2026-08-17T23:00:25.652Z",
+  "updated": "2026-08-17T23:15:19.843Z",
   "live": [
+    {
+      "id": 3,
+      "n": "Garimpo dos Games",
+      "plat": "youtube",
+      "videoId": "knrTmN_KaKk",
+      "videoTitle": "Garimpo dos games  está ao vivo!",
+      "videoUrl": "https://www.youtube.com/watch?v=knrTmN_KaKk",
+      "thumbnail": "https://i.ytimg.com/vi/knrTmN_KaKk/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
