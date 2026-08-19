@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-19T21:00:33.887Z",
+  "updated": "2026-08-19T21:12:01.903Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "🟢 JOGANDO COM O CHAT - VALENDO $$$",
       "videoUrl": "https://www.youtube.com/watch?v=kjdzAZw0bT0",
       "thumbnail": "https://i.ytimg.com/vi/kjdzAZw0bT0/hqdefault.jpg"
+    },
+    {
+      "id": 12,
+      "n": "VG Invest",
+      "plat": "youtube",
+      "videoId": "JQUp4uTQ1U4",
+      "videoTitle": "LIVE #22 — Nintendo, Zelda e Pokémon Coleção ou Investimento?",
+      "videoUrl": "https://www.youtube.com/watch?v=JQUp4uTQ1U4",
+      "thumbnail": "https://i.ytimg.com/vi/JQUp4uTQ1U4/hqdefault.jpg"
     }
   ]
 }
