@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-19T22:45:18.716Z",
+  "updated": "2026-08-19T23:00:24.804Z",
   "live": [
     {
       "id": 2,
@@ -18,6 +18,15 @@
       "videoTitle": "🟢 JOGANDO COM O CHAT - VALENDO $$$",
       "videoUrl": "https://www.youtube.com/watch?v=kjdzAZw0bT0",
       "thumbnail": "https://i.ytimg.com/vi/kjdzAZw0bT0/hqdefault.jpg"
+    },
+    {
+      "id": 14,
+      "n": "tofogames10",
+      "plat": "twitch",
+      "login": "tofogames10",
+      "videoTitle": "Live de Vendas",
+      "videoUrl": "https://www.twitch.tv/tofogames10",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
     }
   ]
 }
