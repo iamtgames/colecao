@@ -1,6 +1,15 @@
 {
-  "updated": "2026-08-19T03:00:28.260Z",
+  "updated": "2026-08-19T03:15:16.875Z",
   "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "ufsQ6s6PLus",
+      "videoTitle": "🟢 ZERANDO GTA #2 - SIG CHAP",
+      "videoUrl": "https://www.youtube.com/watch?v=ufsQ6s6PLus",
+      "thumbnail": "https://i.ytimg.com/vi/ufsQ6s6PLus/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
