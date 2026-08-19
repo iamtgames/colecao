@@ -1,6 +1,15 @@
 {
-  "updated": "2026-08-19T17:45:19.149Z",
+  "updated": "2026-08-19T17:54:07.799Z",
   "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "kjdzAZw0bT0",
+      "videoTitle": "🟢 JOGANDO NEED FOR SPEED UNDEGROUND 2 - AO VIVO - SIG CHAO",
+      "videoUrl": "https://www.youtube.com/watch?v=kjdzAZw0bT0",
+      "thumbnail": "https://i.ytimg.com/vi/kjdzAZw0bT0/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
