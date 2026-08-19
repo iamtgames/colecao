@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-19T00:00:25.097Z",
+  "updated": "2026-08-19T00:15:17.986Z",
   "live": [
     {
       "id": 5,
@@ -9,15 +9,6 @@
       "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 18/08/2026",
       "videoUrl": "https://www.youtube.com/watch?v=t4OpcWNGEug",
       "thumbnail": "https://i.ytimg.com/vi/t4OpcWNGEug/hqdefault.jpg"
-    },
-    {
-      "id": 9,
-      "n": "Rodrigo Retro Games",
-      "plat": "youtube",
-      "videoId": "2__JRDEqOOo",
-      "videoTitle": "LIVE DE VENDAS! (Rodrigo Games) 18/08",
-      "videoUrl": "https://www.youtube.com/watch?v=2__JRDEqOOo",
-      "thumbnail": "https://i.ytimg.com/vi/2__JRDEqOOo/hqdefault.jpg"
     }
   ]
 }
