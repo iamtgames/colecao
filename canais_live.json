@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-20T23:00:23.928Z",
+  "updated": "2026-08-20T23:14:20.872Z",
   "live": [
     {
       "id": 2,
@@ -9,6 +9,15 @@
       "videoTitle": "🏆ANTEC RETRO GAMES LIVE 🕹️ #63 LIVE DE VENDAS - 20/08/2026",
       "videoUrl": "https://www.youtube.com/watch?v=f52f-NoYTmM",
       "thumbnail": "https://i.ytimg.com/vi/f52f-NoYTmM/hqdefault.jpg"
+    },
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "WJBq2F9Nfjs",
+      "videoTitle": "LIVE DE VENDAS  AO VIVO 20/08/26 as 20:00 !",
+      "videoUrl": "https://www.youtube.com/watch?v=WJBq2F9Nfjs",
+      "thumbnail": "https://i.ytimg.com/vi/WJBq2F9Nfjs/hqdefault.jpg"
     },
     {
       "id": 7,
