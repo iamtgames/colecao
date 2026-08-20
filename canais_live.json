@@ -1,4 +1,14 @@
 {
-  "updated": "2026-08-20T04:30:20.711Z",
-  "live": []
+  "updated": "2026-08-20T04:45:18.698Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "4KProRwfLzw",
+      "videoTitle": "🟢 AO VIVO LOJA VENDENDO VIDEOGAMES ANTIGOS",
+      "videoUrl": "https://www.youtube.com/watch?v=4KProRwfLzw",
+      "thumbnail": "https://i.ytimg.com/vi/4KProRwfLzw/hqdefault.jpg"
+    }
+  ]
 }
