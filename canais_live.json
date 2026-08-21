@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-21T03:16:01.890Z",
+  "updated": "2026-08-21T03:30:20.618Z",
   "live": [
     {
       "id": 2,
@@ -27,15 +27,6 @@
       "videoTitle": "🟢 AO VIVO LOJA VENDENDO VIDEOGAMES ANTIGOS",
       "videoUrl": "https://www.youtube.com/watch?v=Y-SuMsQgZOw",
       "thumbnail": "https://i.ytimg.com/vi/Y-SuMsQgZOw/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "eai",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
