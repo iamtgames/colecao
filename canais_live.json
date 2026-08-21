@@ -1,6 +1,15 @@
 {
-  "updated": "2026-08-21T22:00:24.065Z",
+  "updated": "2026-08-21T22:15:16.950Z",
   "live": [
+    {
+      "id": 1,
+      "n": "Diego Sheth",
+      "plat": "youtube",
+      "videoId": "NlKZEa0qf7c",
+      "videoTitle": "VEM QUE HOJE TEM COISA BOA !!!",
+      "videoUrl": "https://www.youtube.com/watch?v=NlKZEa0qf7c",
+      "thumbnail": "https://i.ytimg.com/vi/NlKZEa0qf7c/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
