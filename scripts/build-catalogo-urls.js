@@ -31,7 +31,7 @@ const LOJAS = [
   { id: 'silvioplay', nome: 'Silvio Play Games', dominio: 'https://silvioplay-games.lojaintegrada.com.br', plataforma: 'lojaintegrada' },
   { id: 'fitagames', nome: 'Fita Games', dominio: 'https://www.fitagames.com.br', plataforma: 'lojaintegrada' },
   { id: 'lunnagames', nome: 'Lunna Games', dominio: 'https://lunnagames.com.br', plataforma: 'nuvemshop' },
-  { id: 'playgorila', nome: 'Play Gorila', dominio: 'https://www.playgorila.com', plataforma: 'nuvemshop' }
+  { id: 'playgorila', nome: 'Play Gorila', dominio: 'https://www.playgorila.com', plataforma: 'nuvemshop' },
   { id: 'gamegames', nome: 'Game Games', dominio: 'https://www.gamegames.com.br', plataforma: 'lojaintegrada' },
 ];
 
