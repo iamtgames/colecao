@@ -1,4 +1,4 @@
-Page_DownPage_Down// Verifica se algum canal de YouTube ou Twitch da lista esta transmitindo AO VIVO agora.
+// Verifica se algum canal de YouTube ou Twitch da lista esta transmitindo AO VIVO agora.
 // Roda via GitHub Actions em DUAS rotinas separadas (motivo explicado abaixo):
 // - .github/workflows/check-live.yml       -> Twitch, a cada 10 minutos.
 // - .github/workflows/check-live-youtube.yml -> YouTube, a cada ~3 horas.
@@ -10,7 +10,7 @@ Page_DownPage_Down// Verifica se algum canal de YouTube ou Twitch da lista esta 
 // tentamos antes raspar https://www.youtube.com/@handle/live direto, mas o YouTube
 // bloqueia requisicoes vindas de IPs de datacenter (como os runners do GitHub Actions)
 // com um erro "LOGIN_REQUIRED" especificamente em alguns canais/lives, mesmo quando
-// a transmissao esta genuinamente ao vivo (confirmado manualmePage_Downnte via navegador).
+// a transmissao esta genuinamente ao vivo (confirmado manualmente via navegador).
 // A API oficial nao sofre esse bloqueio e da a resposta correta sempre.
 //
 // HISTORICO (23/07/2026): a primeira versao usava o feed RSS publico e gratuito
