@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-22T20:15:18.959Z",
+  "updated": "2026-08-22T20:27:33.872Z",
   "live": [
     {
       "id": 7,
@@ -18,15 +18,6 @@
       "videoTitle": "Tibia",
       "videoUrl": "https://www.youtube.com/watch?v=rlBR3YvUZws",
       "thumbnail": "https://i.ytimg.com/vi/rlBR3YvUZws/hqdefault.jpg"
-    },
-    {
-      "id": 19,
-      "n": "cowboynanoo",
-      "plat": "twitch",
-      "login": "cowboynanoo",
-      "videoTitle": "+18  [CPX GG-XP] 01 DARASHIA | TIBIAZIN!!",
-      "videoUrl": "https://www.twitch.tv/cowboynanoo",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
     }
   ]
 }
