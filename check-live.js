@@ -1,34 +1,47 @@
-// Verifica se algum canal de YouTube da lista "canais" esta transmitindo AO VIVO agora.
-// Roda via GitHub Actions (.github/workflows/check-live.yml).
+Page_DownPage_Down// Verifica se algum canal de YouTube ou Twitch da lista esta transmitindo AO VIVO agora.
+// Roda via GitHub Actions em DUAS rotinas separadas (motivo explicado abaixo):
+// - .github/workflows/check-live.yml       -> Twitch, a cada 10 minutos.
+// - .github/workflows/check-live-youtube.yml -> YouTube, a cada ~3 horas.
 //
-// Usa a API oficial do YouTube Data API v3 (chave em process.env.YOUTUBE_API_KEY,
-// guardada como secret do GitHub Actions — nunca aparece no codigo nem no site).
+// Usa as APIs oficiais (YOUTUBE_API_KEY, TWITCH_CLIENT_ID, TWITCH_CLIENT_SECRET,
+// guardadas como secrets do GitHub Actions -- nunca aparecem no codigo nem no site).
 //
 // Por que trocamos a raspagem de HTML por essa abordagem:
 // tentamos antes raspar https://www.youtube.com/@handle/live direto, mas o YouTube
 // bloqueia requisicoes vindas de IPs de datacenter (como os runners do GitHub Actions)
 // com um erro "LOGIN_REQUIRED" especificamente em alguns canais/lives, mesmo quando
-// a transmissao esta genuinamente ao vivo (confirmado manualmente via navegador).
+// a transmissao esta genuinamente ao vivo (confirmado manualmePage_Downnte via navegador).
 // A API oficial nao sofre esse bloqueio e da a resposta correta sempre.
 //
 // HISTORICO (23/07/2026): a primeira versao usava o feed RSS publico e gratuito
 // (https://www.youtube.com/feeds/videos.xml?channel_id=...) pra achar videos
 // candidatos sem gastar cota. Esse feed passou a retornar 404/500 de forma
 // inconsistente pra todos os canais simultaneamente (confirmado em 2 execucoes
-// reais do workflow, mesmo enviando User-Agent de navegador) — ou seja, parou
-// de ser confiavel vindo de IPs de datacenter do GitHub Actions. Trocamos pela
-// abordagem abaixo, que usa so a API oficial (nao depende de scraping):
+// reais do workflow, mesmo enviando User-Agent de navegador) -- ou seja, parou
+// de ser confiavel vindo de IPs de datacenter do GitHub Actions.
 //
-// Estrategia pra gastar pouca cota (limite gratuito: 10.000 unidades/dia):
-// 1) Cada canal tem uma "uploads playlist" oficial cujo ID e sempre o
-//    channelId com o prefixo "UC" trocado por "UU" (regra estavel e documentada
-//    da API do YouTube). Buscamos os 3 videos mais recentes dessa playlist via
-//    playlistItems.list (part=snippet), que custa so 1 unidade por chamada —
-//    9 canais = 9 unidades por execucao, nada perto do limite diario.
-// 2) Junta os ids de video de TODOS os canais numa unica chamada videos.list
-//    (part=snippet), que custa so ~1 unidade no total, nao importa quantos ids
-//    (ate 50).
-// 3) Filtra quem tem snippet.liveBroadcastContent === 'live'.
+// HISTORICO (22/08/2026): a segunda versao buscava os 3 videos mais recentes da
+// "uploads playlist" de cada canal (playlistItems.list, quase de graca) e filtrava
+// por snippet.liveBroadcastContent === 'live'. Descobrimos (testando com o canal
+// Sigchap, que ficou +30h ao vivo sem ser detectado) que uma transmissao AO VIVO
+// EM ANDAMENTO nao entra na "uploads playlist" do canal enquanto esta no ar --
+// ela so aparece la depois de encerrar e virar um video comum. Ou seja, esse
+// metodo NUNCA detecta uma live em andamento, so detecta depois que ela acaba.
+// Trocamos pelo metodo abaixo (search.list com eventType=live), que e a forma
+// oficialmente documentada pelo Google pra achar a transmissao atual de um canal,
+// e funciona mesmo com a live ainda no ar.
+//
+// Custo de cota: search.list custa 100 unidades por canal verificado. Com 9
+// canais de YouTube = 900 unidades por execucao. O limite gratuito e 10.000
+// unidades/dia, entao essa checagem so pode rodar ~11x/dia no maximo. Por isso
+// ela roda numa rotina separada (check-live-youtube.yml) a cada ~3 horas
+// (8x/dia = 7.200 unidades/dia, com folga), enquanto a Twitch (que nao tem
+// esse limite) continua sendo checada a cada 10 minutos na rotina principal.
+//
+// Cada execucao pode pular uma das duas plataformas via as variaveis de
+// ambiente SKIP_YOUTUBE=1 / SKIP_TWITCH=1 (setadas pelos respectivos workflows).
+// Quando uma plataforma e pulada (ou falha), mantemos o ultimo estado conhecido
+// dela em vez de apagar por engano -- so atualizamos o que realmente rodou.
 
 const fs = require('fs');
 
@@ -71,35 +84,34 @@ const CANAIS_YOUTUBE = [
   { id: 12, n: 'VG Invest', channelId: 'UCEHV0ePP26xJVcPEoCLxfSQ' },
 ];
 
-const MAX_VIDEOS_POR_CANAL = 3;
-
-function uploadsPlaylistId(channelId) {
-  // Regra oficial da API: a "uploads playlist" de qualquer canal e o mesmo
-  // channelId trocando o prefixo "UC" por "UU".
-  return channelId.startsWith('UC') ? `UU${channelId.slice(2)}` : null;
-}
-
-async function pegarVideosRecentes(canal) {
-  const playlistId = uploadsPlaylistId(canal.channelId);
-  if (!playlistId) {
-    console.warn(`Aviso: channelId de ${canal.n} nao comeca com "UC" — nao da pra derivar a uploads playlist.`);
-    return [];
-  }
+async function checarLiveDoCanalYoutube(canal) {
   try {
-    const url = `https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&playlistId=${playlistId}&maxResults=${MAX_VIDEOS_POR_CANAL}&key=${API_KEY}`;
+    // search.list com eventType=live e a forma oficial de achar a transmissao
+    // ATUAL de um canal -- ao contrario da uploads playlist, funciona mesmo
+    // com a live ainda em andamento (ver historico de 22/08/2026 no topo do
+    // arquivo). Custa 100 unidades de cota por chamada.
+    const url = `https://www.googleapis.com/youtube/v3/search?part=snippet&channelId=${canal.channelId}&eventType=live&type=video&key=${API_KEY}`;
     const res = await fetch(url);
     const data = await res.json();
     if (data.error) {
-      console.warn(`Aviso: playlistItems falhou pra ${canal.n}: ${data.error.message}`);
-      return [];
+      console.warn(`Aviso: search.list falhou pra ${canal.n}: ${data.error.message}`);
+      return null;
     }
-    const ids = (data.items || [])
-      .map(it => it.snippet && it.snippet.resourceId && it.snippet.resourceId.videoId)
-      .filter(Boolean);
-    return ids.map(videoId => ({ videoId, canal }));
+    const item = (data.items || [])[0];
+    const videoId = item && item.id && item.id.videoId;
+    if (!videoId) return null;
+    return {
+      id: canal.id,
+      n: canal.n,
+      plat: 'youtube',
+      videoId,
+      videoTitle: item.snippet.title,
+      videoUrl: `https://www.youtube.com/watch?v=${videoId}`,
+      thumbnail: `https://i.ytimg.com/vi/${videoId}/hqdefault.jpg`
+    };
   } catch (e) {
-    console.error(`Erro buscando uploads de ${canal.n}:`, e.message);
-    return [];
+    console.error(`Erro checando live de ${canal.n}:`, e.message);
+    return null;
   }
 }
 
@@ -122,43 +134,14 @@ async function checarYoutubeLive() {
     console.warn('Aviso: YOUTUBE_API_KEY nao configurada -- pulando checagem do YouTube.');
     return null;
   }
+  if (process.env.SKIP_YOUTUBE === '1') {
+    console.log('YouTube: checagem pulada nesta execucao (SKIP_YOUTUBE=1) -- mantendo estado anterior.');
+    return null;
+  }
   try {
-    const listasPorCanal = await Promise.all(CANAIS_YOUTUBE.map(pegarVideosRecentes));
-    const candidatos = listasPorCanal.flat();
-
-    if (!candidatos.length) {
-      console.warn('Aviso: nenhum video encontrado via playlistItems pra nenhum canal do YouTube -- mantendo estado anterior desses canais.');
-      return null;
-    }
-
-    const idParaCanal = {};
-    candidatos.forEach(c => { idParaCanal[c.videoId] = c.canal; });
-    const idsUnicos = Object.keys(idParaCanal);
-
-    const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${idsUnicos.join(',')}&key=${API_KEY}`;
-    const res = await fetch(url);
-    const data = await res.json();
-
-    if (data.error) {
-      console.warn(`Aviso: erro da API do YouTube: ${data.error.message} -- mantendo estado anterior desses canais.`);
-      return null;
-    }
-
-    const live = (data.items || [])
-      .filter(v => v.snippet.liveBroadcastContent === 'live')
-      .map(v => {
-        const canal = idParaCanal[v.id];
-        return {
-          id: canal.id,
-          n: canal.n,
-          plat: 'youtube',
-          videoId: v.id,
-          videoTitle: v.snippet.title,
-          videoUrl: `https://www.youtube.com/watch?v=${v.id}`,
-          thumbnail: `https://i.ytimg.com/vi/${v.id}/hqdefault.jpg`
-        };
-      });
-    console.log(`YouTube: ${idsUnicos.length} videos checados via API, ${live.length} canal(is) ao vivo agora.`);
+    const resultados = await Promise.all(CANAIS_YOUTUBE.map(checarLiveDoCanalYoutube));
+    const live = resultados.filter(Boolean);
+    console.log(`YouTube: ${CANAIS_YOUTUBE.length} canal(is) checado(s) via search.list, ${live.length} ao vivo agora.`);
     return live;
   } catch (e) {
     console.warn(`Aviso: falha checando o YouTube: ${e.message} -- mantendo estado anterior desses canais.`);
@@ -179,6 +162,10 @@ async function pegarTokenTwitch() {
 async function checarTwitchLive() {
   if (!TWITCH_CLIENT_ID || !TWITCH_CLIENT_SECRET) {
     console.warn('Aviso: TWITCH_CLIENT_ID/TWITCH_CLIENT_SECRET nao configurados -- pulando checagem da Twitch.');
+    return null;
+  }
+  if (process.env.SKIP_TWITCH === '1') {
+    console.log('Twitch: checagem pulada nesta execucao (SKIP_TWITCH=1) -- mantendo estado anterior.');
     return null;
   }
   try {
