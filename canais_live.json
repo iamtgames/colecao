@@ -1,14 +1,23 @@
 {
-  "updated": "2026-08-22T18:00:50.443Z",
+  "updated": "2026-08-22T18:01:08.698Z",
   "live": [
     {
       "id": 7,
       "n": "Sigchap",
       "plat": "youtube",
       "videoId": "Y-SuMsQgZOw",
-      "videoTitle": "🟢 AO VIVO - VENDENDO RARIDADES E COLECIONAVEIS (+40 HORAS)",
+      "videoTitle": "🟢 AO VIVO - resenha (+40 HORAS)",
       "videoUrl": "https://www.youtube.com/watch?v=Y-SuMsQgZOw",
       "thumbnail": "https://i.ytimg.com/vi/Y-SuMsQgZOw/hqdefault.jpg"
+    },
+    {
+      "id": 18,
+      "n": "Gilson Barbosa",
+      "plat": "youtube",
+      "videoId": "rlBR3YvUZws",
+      "videoTitle": "Tibia",
+      "videoUrl": "https://www.youtube.com/watch?v=rlBR3YvUZws",
+      "thumbnail": "https://i.ytimg.com/vi/rlBR3YvUZws/hqdefault.jpg"
     },
     {
       "id": 19,
