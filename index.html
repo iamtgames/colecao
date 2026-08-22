@@ -816,12 +816,15 @@
   .live-panel-chat.aberto{ display:block; }
   .live-panel-chat iframe{ width:100%; height:100%; display:block; }
   a.live-panel.twitch .live-panel-chat{ border-top-color: rgba(145,70,255,0.25); } .media-player-wrap{ position:relative; width:100%; aspect-ratio:16/9; background:#000; border-radius:6px; overflow:hidden; } .media-player-wrap iframe, .media-player-wrap video{ position:absolute; inset:0; width:100%; height:100%; border:0; display:block; } .media-player-empty{ display:flex; align-items:center; justify-content:center; height:100%; padding:16px; text-align:center; color:#fff; font-size:12.5px; opacity:.75; }
-.media-player-anime-list{ max-height:280px; overflow-y:auto; border-top:1px solid rgba(255,255,255,0.15); margin-top:10px; padding:10px 12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; }
-.media-anime-group{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:8px; overflow:hidden; transition:transform .15s ease, box-shadow .15s ease, background .15s ease; }
+.media-player-wrap{ flex-shrink:0; }
+.media-player-anime-list{ max-height:280px; overflow-y:auto; flex-shrink:0; border-top:1px solid rgba(255,255,255,0.15); margin-top:10px; padding:10px 12px; display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:10px; align-content:start; }
+.media-anime-group{ background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.12); border-radius:8px; overflow:hidden; transition:transform .15s ease, box-shadow .15s ease, background .15s ease; align-self:start; }
 .media-anime-group:hover{ background:rgba(255,255,255,0.09); transform:translateY(-2px); box-shadow:0 4px 14px rgba(0,0,0,0.35); }
-.media-anime-thumb{ width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:#111; }
-.media-anime-group-title{ font-weight:700; font-size:12px; padding:6px 8px 2px; opacity:.92; line-height:1.25; }
-.media-anime-episodes{ display:flex; flex-wrap:wrap; gap:5px; padding:0 8px 8px; }
+.media-anime-thumb{ width:100%; aspect-ratio:16/9; object-fit:cover; display:block; background:#111; cursor:pointer; }
+.media-anime-group-title{ font-weight:700; font-size:12px; padding:6px 8px 2px; opacity:.92; line-height:1.25; cursor:pointer; display:flex; align-items:center; justify-content:space-between; gap:6px; }
+.media-anime-group-hint{ font-weight:400; font-size:10px; opacity:.6; white-space:nowrap; }
+.media-anime-episodes{ display:none; flex-wrap:wrap; gap:5px; padding:6px 8px 8px; }
+.media-anime-group.aberto .media-anime-episodes{ display:flex; }
 .media-episode-btn{ display:inline-flex; align-items:center; justify-content:center; min-width:34px; padding:4px 8px; font-size:11.5px; font-weight:600; background:rgba(255,255,255,0.09); border:1px solid rgba(255,255,255,0.22); border-radius:20px; cursor:pointer; color:inherit; transition:background .15s ease, border-color .15s ease, transform .1s ease; }
 .media-episode-btn:hover{ background:rgba(255,255,255,0.2); transform:scale(1.06); }
 .media-episode-btn.ativo{ background:#3ddc84; border-color:#3ddc84; color:#0b0b0c; font-weight:800; }
@@ -2713,7 +2716,13 @@ const filmeDaSemana = {
     grupo.appendChild(thumb);
     var titulo = document.createElement('div');
     titulo.className = 'media-anime-group-title';
-    titulo.textContent = nome;
+    var tituloTexto = document.createElement('span');
+    tituloTexto.textContent = nome;
+    titulo.appendChild(tituloTexto);
+    var dica = document.createElement('span');
+    dica.className = 'media-anime-group-hint';
+    dica.textContent = 'ver episodios';
+    titulo.appendChild(dica);
     grupo.appendChild(titulo);
     var eps = document.createElement('div');
     eps.className = 'media-anime-episodes';
@@ -2721,7 +2730,8 @@ const filmeDaSemana = {
       var btn = document.createElement('button');
       btn.className = 'media-episode-btn';
       btn.textContent = 'Ep. ' + e.ep;
-      btn.addEventListener('click', function(){
+      btn.addEventListener('click', function(evt){
+        evt.stopPropagation();
         tocarEpisodio(e.id, nome + ' - Episodio ' + e.ep);
         cont.querySelectorAll('.media-episode-btn.ativo').forEach(function(b){ b.classList.remove('ativo'); });
         btn.classList.add('ativo');
@@ -2729,6 +2739,24 @@ const filmeDaSemana = {
       eps.appendChild(btn);
     });
     grupo.appendChild(eps);
+    // So mostra os episodios quando a pessoa clica na imagem/titulo do anime
+    // -- antes ficavam todos abertos ao mesmo tempo, o que deixava a lista
+    // gigante e fazia os botoes de episodio sumirem (ficarem espremidos fora
+    // da area visivel) sempre que a janela do media player era redimensionada.
+    function alternarAberto(){
+      var estavaAberto = grupo.classList.contains('aberto');
+      cont.querySelectorAll('.media-anime-group.aberto').forEach(function(g){
+        if(g !== grupo){
+          g.classList.remove('aberto');
+          var h = g.querySelector('.media-anime-group-hint');
+          if(h) h.textContent = 'ver episodios';
+        }
+      });
+      grupo.classList.toggle('aberto', !estavaAberto);
+      dica.textContent = !estavaAberto ? 'fechar' : 'ver episodios';
+    }
+    thumb.addEventListener('click', alternarAberto);
+    titulo.addEventListener('click', alternarAberto);
     cont.appendChild(grupo);
   });
 }
