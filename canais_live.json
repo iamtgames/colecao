@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-22T21:00:22.389Z",
+  "updated": "2026-08-22T21:24:16.772Z",
   "live": [
     {
       "id": 7,
@@ -9,15 +9,6 @@
       "videoTitle": "🟢 AO VIVO - resenha (+40 HORAS)",
       "videoUrl": "https://www.youtube.com/watch?v=Y-SuMsQgZOw",
       "thumbnail": "https://i.ytimg.com/vi/Y-SuMsQgZOw/hqdefault.jpg"
-    },
-    {
-      "id": 18,
-      "n": "Gilson Barbosa",
-      "plat": "youtube",
-      "videoId": "rlBR3YvUZws",
-      "videoTitle": "Tibia",
-      "videoUrl": "https://www.youtube.com/watch?v=rlBR3YvUZws",
-      "thumbnail": "https://i.ytimg.com/vi/rlBR3YvUZws/hqdefault.jpg"
     }
   ]
 }
