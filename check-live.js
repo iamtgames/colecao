@@ -66,6 +66,7 @@ const CANAIS_TWITCH = [
   { id: 15, n: 'corvofps', login: 'corvofps' },
   { id: 16, n: 'gianzao', login: 'gianzao' },
   { id: 17, n: 'joaodobife', login: 'joaodobife' },
+  { id: 19, n: 'cowboynanoo', login: 'cowboynanoo' },
 ];
 
 // Mesmos ids/nomes do array "canais" no index.html — mantenha em sincronia
@@ -78,10 +79,10 @@ const CANAIS_YOUTUBE = [
   { id: 3, n: 'Garimpo dos Games', channelId: 'UCkDTuzfIG3s_Z-JSoHw3IZQ' },
   { id: 4, n: 'Cara de Barata', channelId: 'UCefKgYBOrc3yff2gkhgslcQ' },
   { id: 5, n: 'DJ Games Retro', channelId: 'UC1yok96pYoUNtNnyN7zzWPQ' },
-  { id: 6, n: 'Jotape Arcade', channelId: 'UCDoeapAROOAnkBwd178MpUQ' },
   { id: 7, n: 'Sigchap', channelId: 'UCpTyn0RRvTmjgNi7YYzUstA' },
   { id: 9, n: 'Rodrigo Retro Games', channelId: 'UChKgfyQRLATKl7dl-z6tolg' },
   { id: 12, n: 'VG Invest', channelId: 'UCEHV0ePP26xJVcPEoCLxfSQ' },
+  { id: 18, n: 'Gilson Barbosa', channelId: 'UCZD4UEQy5SIvTo5eVQ3Ea7Q' },
 ];
 
 async function checarLiveDoCanalYoutube(canal) {
