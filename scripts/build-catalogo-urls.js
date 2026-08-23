@@ -33,6 +33,7 @@ const LOJAS = [
   { id: 'lunnagames', nome: 'Lunna Games', dominio: 'https://lunnagames.com.br', plataforma: 'nuvemshop' },
   { id: 'playgorila', nome: 'Play Gorila', dominio: 'https://www.playgorila.com', plataforma: 'nuvemshop' },
   { id: 'gamegames', nome: 'Game Games', dominio: 'https://www.gamegames.com.br', plataforma: 'lojaintegrada' },
+{ id: 'rodrigogames', nome: 'Rodrigo Games', dominio: 'https://www.rodrigogames.com.br', plataforma: 'lojaintegrada' },
 ];
 
 const CABECALHO = {
