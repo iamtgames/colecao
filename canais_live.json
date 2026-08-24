@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-24T03:55:55.755Z",
+  "updated": "2026-08-24T04:00:22.961Z",
   "live": [
     {
       "id": 7,
@@ -9,15 +9,6 @@
       "videoTitle": "🟢 LOJA - HORÁRIO DE ALMOÇO RETORNO ALGUM MOMENTO.",
       "videoUrl": "https://www.youtube.com/watch?v=Y-SuMsQgZOw",
       "thumbnail": "https://i.ytimg.com/vi/Y-SuMsQgZOw/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc Raiders",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
