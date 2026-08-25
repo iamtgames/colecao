@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-25T21:45:19.443Z",
+  "updated": "2026-08-25T22:00:26.724Z",
   "live": [
     {
       "id": 5,
@@ -9,6 +9,15 @@
       "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 25/08/2026",
       "videoUrl": "https://www.youtube.com/watch?v=Cs-_WnRqzkM",
       "thumbnail": "https://i.ytimg.com/vi/Cs-_WnRqzkM/hqdefault.jpg"
+    },
+    {
+      "id": 19,
+      "n": "cowboynanoo",
+      "plat": "twitch",
+      "login": "cowboynanoo",
+      "videoTitle": "+18  [CPX GG-XP] 01 DARASHIA | Terçooou!!",
+      "videoUrl": "https://www.twitch.tv/cowboynanoo",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
     }
   ]
 }
