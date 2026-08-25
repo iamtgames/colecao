@@ -4407,7 +4407,7 @@ function pcRenderizar(){
   for(let col=0; col<7; col++){
     const colEl = document.getElementById('pcCol'+col);
     colEl.innerHTML = '';
-    const chValPc = parseFloat(getComputedStyle(colEl).getPropertyValue('--pc-ch')) || 70;
+    const chValPc = (document.getElementById('pcStock').getBoundingClientRect().height) || 70;
     pcEstado.tableau[col].forEach(function(carta, idx){
       const cartaEl = pcCriarCartaEl(carta, carta.faceUp);
       cartaEl.style.top = (idx*chValPc*0.314) + 'px';
