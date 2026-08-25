@@ -34,6 +34,7 @@ const LOJAS = [
   { id: 'playgorila', nome: 'Play Gorila', dominio: 'https://www.playgorila.com', plataforma: 'nuvemshop' },
   { id: 'gamegames', nome: 'Game Games', dominio: 'https://www.gamegames.com.br', plataforma: 'lojaintegrada' },
 { id: 'rodrigogames', nome: 'Rodrigo Games', dominio: 'https://www.rodrigogames.com.br', plataforma: 'lojaintegrada' },
+{ id: 'legacygames', nome: 'Legacy Games Brasil', dominio: 'https://legacygamesbrasil.com/legacy', plataforma: 'opencart', categorias: ['acessorios', 'acessorios/carregadores', 'acessorios/controles', 'acessorios/kontrolfreek', 'acessorios/microfone', 'action-figure', 'edicao-de-colecionador', 'headsets', 'nintendo', 'nintendo/nintendo-acessorios', 'placa-de-captura', 'playstation-4', 'xbox-one'] },
 ];
 
 const CABECALHO = {
@@ -133,6 +134,53 @@ async function indexarNuvemshop(loja) {
   return produtos;
 }
 
+// Legacy Games Brasil roda em OpenCart, e o host bloqueia qualquer arquivo
+// .xml com um 403 generico de WAF (confirmado testando ate um .xml que nao
+// existe) -- entao nao da pra usar sitemap.xml como nas outras lojas. Em vez
+// disso navegamos pelas paginas de categoria listadas em loja.categorias,
+// seguindo a paginacao (?page=N, padrao OpenCart), e coletamos os links de
+// produto que aparecem nelas. E uma loja pequena (poucas dezenas de produtos
+// por categoria), entao o total de paginas buscadas fica bem baixo.
+async function indexarOpenCart(loja) {
+  const produtos = [];
+  const vistos = new Set();
+  const categoriasConhecidas = new Set(loja.categorias);
+  for (const caminhoCategoria of loja.categorias) {
+    let pagina = 1;
+    let totalPaginas = 1;
+    do {
+      const url = `${loja.dominio}/${caminhoCategoria}${pagina > 1 ? '?page=' + pagina : ''}`;
+      let html;
+      try {
+        html = await buscarTexto(url);
+      } catch (e) {
+        console.warn(`Aviso: falha ao ler ${url}: ${e.message}`);
+        break;
+      }
+      const regexHref = /href="([^"]+)"/g;
+      let m;
+      while ((m = regexHref.exec(html)) !== null) {
+        const link = m[1];
+        if (!link.startsWith(loja.dominio + '/')) continue;
+        if (link.indexOf('?') !== -1 || link.indexOf('#') !== -1) continue;
+        const caminho = link.slice(loja.dominio.length + 1);
+        if (categoriasConhecidas.has(caminho)) continue; // e' categoria, nao produto
+        if (caminho.indexOf('/') === -1) continue; // pagina estatica de rodape ou atalho de categoria sem path aninhado
+        if (/^(image|catalog)\//.test(caminho)) continue; // asset (imagem, css, js)
+        if (/\.(png|jpe?g|gif|svg|ico|css|js|webp)$/i.test(caminho)) continue;
+        if (vistos.has(link)) continue;
+        vistos.add(link);
+        produtos.push({ loja: loja.id, url: link, texto: slugParaTexto(link) });
+      }
+      const paginasEncontradas = [...html.matchAll(/[?&]page=(\d+)/g)].map(x => parseInt(x[1], 10));
+      totalPaginas = paginasEncontradas.length ? Math.max(...paginasEncontradas) : 1;
+      pagina++;
+      await pausar(400);
+    } while (pagina <= totalPaginas);
+  }
+  return produtos;
+}
+
 async function main() {
   const todosProdutos = [];
   for (const loja of LOJAS) {
@@ -140,6 +188,8 @@ async function main() {
     try {
       const produtos = loja.plataforma === 'nuvemshop'
         ? await indexarNuvemshop(loja)
+        : loja.plataforma === 'opencart'
+        ? await indexarOpenCart(loja)
         : await indexarLojaIntegrada(loja);
       console.log(`  -> ${produtos.length} produtos encontrados`);
       todosProdutos.push(...produtos);
