@@ -45,7 +45,7 @@
      de dominios variados (TheGamesDB, lojas, RAWG, YouTube, etc.) que mudam
      conforme jogos/canais sao adicionados. script/frame/connect ficam restritos
      aos servicos que o site realmente usa. -->
-<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://giscus.app https://unpkg.com https://v8.js-dos.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://v8.js-dos.com; font-src https://fonts.gstatic.com; img-src 'self' https: data: blob:; media-src 'self' https: blob:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io https://v8.js-dos.com https://*.workers.dev; worker-src 'self' blob:; frame-src https://www.youtube.com https://player.vimeo.com https://giscus.app https://player.twitch.tv https://www.twitch.tv; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' 'wasm-unsafe-eval' https://giscus.app https://unpkg.com; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' https: data: blob:; media-src 'self' https: blob:; connect-src 'self' https://api.github.com https://api.rawg.io https://www.gamerpower.com https://www.youtube.com https://formspree.io https://*.workers.dev; worker-src 'self' blob:; frame-src https://www.youtube.com https://player.vimeo.com https://giscus.app https://player.twitch.tv https://www.twitch.tv; object-src 'none'; base-uri 'self'; form-action 'self' https://formspree.io; frame-ancestors 'self';">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230b0b0c'/%3E%3Ctext x='50' y='66' font-size='55' font-family='Arial' font-weight='900' fill='white' text-anchor='middle'%3EiT%3C/text%3E%3C/svg%3E">
 <link rel="manifest" href="manifest.json">
 <title>Controle Coleção iamT</title>
@@ -972,7 +972,7 @@
     width:34px; height:34px; display:flex; align-items:center; justify-content:center;
     font-size:22px; filter: drop-shadow(0 2px 3px rgba(0,0,0,.5));
   }
-  /* Icones que usam <img> (ICQ, DOOM.EXE, DIGGER.EXE) senao ficam "arrastaveis"
+  /* Icones que usam <img> (ICQ) senao ficam "arrastaveis"
      pelo proprio navegador (drag nativo de imagem), o que brigava com o
      arrastar-e-soltar por pointer events feito em JS e travava o cursor no
      meio do movimento. pointer-events:none joga o evento sempre pro botao pai. */
@@ -1729,11 +1729,11 @@
     <button class="y2k-icon" data-y2k-action="resumoXlsx" title="Resumo Rápido">
       <span class="y2k-icon-glyph">📗</span><span class="y2k-icon-label">resumo.xlsx</span>
     </button>
-    <button class="y2k-icon" data-y2k-action="doom" title="DOOM (shareware oficial, id Software)">
-      <span class="y2k-icon-glyph"><img src="doom-icon.png?v=3" alt="" width="34" height="34" decoding="async" style="width:100%;height:100%;object-fit:contain;"></span><span class="y2k-icon-label">DOOM.EXE</span>
+    <button class="y2k-icon" data-y2k-action="campoMinado" title="Campo Minado (clássico)">
+      <span class="y2k-icon-glyph">💣</span><span class="y2k-icon-label">MINAS.EXE</span>
     </button>
-    <button class="y2k-icon" data-y2k-action="digger" title="Digger (1983, domínio público)">
-      <span class="y2k-icon-glyph"><img src="digger-icon.png?v=3" alt="" width="34" height="34" decoding="async" style="width:100%;height:100%;object-fit:contain;"></span><span class="y2k-icon-label">DIGGER.EXE</span>
+    <button class="y2k-icon" data-y2k-action="paciencia" title="Paciência (Solitaire clássico)">
+      <span class="y2k-icon-glyph">🂡</span><span class="y2k-icon-label">PACIENCIA.EXE</span>
     </button>
   </div>
 
@@ -1965,39 +1965,107 @@
   </div>
 </div>
 
-<!-- DOOM: shareware oficial (episodio 1, liberado de graca pela id Software
-     desde os anos 90) rodando via js-dos (DOSBox em WebAssembly, projeto
-     open-source). O script do js-dos e o bundle do jogo (uns poucos MB) so
-     sao baixados quando o usuario realmente abre essa janela -- ver
-     abrirDoomPanel() -- pra nao pesar o carregamento normal do site pra quem
-     nunca abre o Doom. Janela pequena de proposito (mini-panel-wide, nao
-     xwide), pra nao tomar a tela toda. -->
-<div class="mini-panel-overlay" id="doomPanelOverlay">
+<style>
+  .cm-board{ display:grid; gap:2px; background:#7a7a7a; padding:6px; border:3px inset #bbb; width:max-content; max-width:100%; overflow:auto; margin:0 auto; }
+  .cm-cell{ width:24px; height:24px; padding:0; font:bold 12px 'Courier New',monospace; display:flex; align-items:center; justify-content:center; background:#c0c0c0; border:2px outset #fff; cursor:pointer; user-select:none; }
+  .cm-cell.cm-revelada{ border:1px solid #999; background:#d8d8d8; cursor:default; }
+  .cm-cell.cm-mina{ background:#ff6b6b; }
+  .cm-cell[data-n="1"]{ color:#0000ff; }
+  .cm-cell[data-n="2"]{ color:#008000; }
+  .cm-cell[data-n="3"]{ color:#ff0000; }
+  .cm-cell[data-n="4"]{ color:#000080; }
+  .cm-cell[data-n="5"]{ color:#800000; }
+  .cm-cell[data-n="6"]{ color:#008080; }
+  .cm-cell[data-n="7"]{ color:#000; }
+  .cm-cell[data-n="8"]{ color:#808080; }
+  .pc-table{ display:flex; flex-direction:column; gap:14px; overflow-x:auto; }
+  .pc-row-top{ display:flex; gap:10px; flex-wrap:nowrap; }
+  .pc-spacer{ flex:1 1 auto; min-width:16px; }
+  .pc-row-tableau{ display:flex; gap:10px; }
+  .pc-pile{ width:52px; height:74px; border:2px dashed #999; border-radius:4px; position:relative; background:rgba(255,255,255,.25); cursor:pointer; flex:0 0 auto; }
+  .pc-pile.pc-pile-vazia{ display:flex; align-items:center; justify-content:center; }
+  .pc-foundation{ display:flex; align-items:center; justify-content:center; }
+  .pc-fundacao-placeholder{ font-size:24px; opacity:.35; }
+  .pc-column{ width:52px; min-height:74px; position:relative; flex:0 0 auto; }
+  .pc-card{ width:50px; height:70px; border-radius:4px; position:absolute; top:0; left:0; box-shadow:0 1px 3px rgba(0,0,0,.35); }
+  .pc-card-back{ background:repeating-linear-gradient(45deg,#2255aa,#2255aa 4px,#1a4488 4px,#1a4488 8px); border:1px solid #0d2c5c; }
+  .pc-card-face{ background:#fff; border:1px solid #999; display:flex; flex-direction:column; justify-content:space-between; padding:4px; font:bold 13px Arial, sans-serif; }
+  .pc-card-face.pc-red{ color:#c0392b; }
+  .pc-card-face.pc-black{ color:#1a1a1a; }
+  .pc-card .pc-naipe{ font-size:18px; align-self:center; }
+  .pc-selecionada{ outline:3px solid #ffcc00; outline-offset:-2px; z-index:5; }
+</style>
+
+<!-- Campo Minado (Minesweeper): implementacao propria em JS puro, sem
+     nenhuma dependencia externa -- substitui o DOOM (que rodava via js-dos/
+     DOSBox em WebAssembly). Sons sintetizados via Web Audio API, com botao
+     de mutar (estado compartilhado com a Paciencia: jogosSomMutado). -->
+<div class="mini-panel-overlay" id="campoMinadoPanelOverlay">
   <div class="mini-panel mini-panel-wide">
-    <div class="win-titlebar">DOOM.EXE</div>
-    <div class="mini-panel-head"><h3>🔫 DOOM (shareware oficial)</h3><button class="mini-panel-close" id="doomPanelCloseBtn" aria-label="Fechar">✕</button></div>
-    <div class="mini-panel-body" style="padding:0;">
-      <div id="doomDosLoading" style="padding:30px 18px; text-align:center; font-size:13px; opacity:.75;">Carregando DOOM (shareware)...</div>
-      <div id="doomDosContainer" style="width:100%; aspect-ratio:4/3; background:#000;"></div>
+    <div class="win-titlebar">MINAS.EXE</div>
+    <div class="mini-panel-head"><h3>💣 Campo Minado</h3><button class="mini-panel-close" id="campoMinadoPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body" style="padding:14px;">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:10px; flex-wrap:wrap;">
+        <div style="display:flex; gap:8px; align-items:center;">
+          <span id="cmMinesLeft" style="font:bold 14px 'Courier New',monospace; background:#000; color:#f00; padding:3px 8px; border:2px inset #888; min-width:36px; text-align:center;">010</span>
+          <button id="cmResetBtn" type="button" title="Novo jogo" style="font-size:18px; padding:2px 8px; cursor:pointer;">🙂</button>
+          <span id="cmTimer" style="font:bold 14px 'Courier New',monospace; background:#000; color:#f00; padding:3px 8px; border:2px inset #888; min-width:36px; text-align:center;">000</span>
+        </div>
+        <div style="display:flex; gap:6px; align-items:center;">
+          <select id="cmDificuldade" style="font-size:12px; padding:3px;">
+            <option value="facil">Fácil 9×9</option>
+            <option value="medio" selected>Médio 16×16</option>
+            <option value="dificil">Difícil 16×30</option>
+          </select>
+          <button class="jogos-mute-btn" id="cmMuteBtn" type="button" title="Mutar sons" style="font-size:16px; padding:3px 8px; cursor:pointer;">🔊</button>
+        </div>
+      </div>
+      <div id="cmBoard" class="cm-board"></div>
+      <p style="font-size:11.5px; color:var(--ink-dim); margin:10px 0 0;">Clique esquerdo revela, clique direito marca uma bandeira. Limpe o campo sem tocar nas minas!</p>
     </div>
   </div>
 </div>
 
-<!-- Digger (1983): a versao de demo disk da Windmill Software foi liberada
-     em dominio publico pela propria desenvolvedora, e e o mesmo bundle
-     oficial que a equipe do js-dos hospeda como demo publica (mesmo esquema
-     de carregamento sob demanda do DOOM). -->
-<div class="mini-panel-overlay" id="diggerPanelOverlay">
-  <div class="mini-panel mini-panel-wide">
-    <div class="win-titlebar">DIGGER.EXE</div>
-    <div class="mini-panel-head"><h3>⛏️ Digger (1983)</h3><button class="mini-panel-close" id="diggerPanelCloseBtn" aria-label="Fechar">✕</button></div>
-    <div class="mini-panel-body" style="padding:0;">
-      <div id="diggerDosLoading" style="padding:30px 18px; text-align:center; font-size:13px; opacity:.75;">Carregando Digger...</div>
-      <div id="diggerDosContainer" style="width:100%; aspect-ratio:4/3; background:#000;"></div>
+<!-- Paciencia (Klondike Solitaire): implementacao propria em JS puro,
+     interacao por clique (seleciona uma carta/sequencia, clique no destino
+     pra mover). Compartilha o mesmo som sintetico e mute do Campo Minado. -->
+<div class="mini-panel-overlay" id="pacienciaPanelOverlay">
+  <div class="mini-panel mini-panel-xwide">
+    <div class="win-titlebar">PACIENCIA.EXE</div>
+    <div class="mini-panel-head"><h3>🂡 Paciência</h3><button class="mini-panel-close" id="pacienciaPanelCloseBtn" aria-label="Fechar">✕</button></div>
+    <div class="mini-panel-body">
+      <div style="display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:12px; flex-wrap:wrap;">
+        <button id="pcNovoBtn" type="button" style="font-size:12px; padding:5px 10px; cursor:pointer;">🔄 Novo Jogo</button>
+        <div style="display:flex; gap:10px; align-items:center;">
+          <span id="pcMoves" style="font-size:12px; color:var(--ink-dim);">Movimentos: 0</span>
+          <button class="jogos-mute-btn" id="pcMuteBtn" type="button" title="Mutar sons" style="font-size:16px; padding:3px 8px; cursor:pointer;">🔊</button>
+        </div>
+      </div>
+      <div class="pc-table">
+        <div class="pc-row-top">
+          <div class="pc-pile" id="pcStock" title="Monte (clique pra comprar)"></div>
+          <div class="pc-pile" id="pcWaste" title="Descarte"></div>
+          <div class="pc-spacer"></div>
+          <div class="pc-pile pc-foundation" id="pcF0" title="Fundação de Copas"></div>
+          <div class="pc-pile pc-foundation" id="pcF1" title="Fundação de Ouros"></div>
+          <div class="pc-pile pc-foundation" id="pcF2" title="Fundação de Paus"></div>
+          <div class="pc-pile pc-foundation" id="pcF3" title="Fundação de Espadas"></div>
+        </div>
+        <div class="pc-row-tableau">
+          <div class="pc-column" id="pcCol0"></div>
+          <div class="pc-column" id="pcCol1"></div>
+          <div class="pc-column" id="pcCol2"></div>
+          <div class="pc-column" id="pcCol3"></div>
+          <div class="pc-column" id="pcCol4"></div>
+          <div class="pc-column" id="pcCol5"></div>
+          <div class="pc-column" id="pcCol6"></div>
+        </div>
+      </div>
+      <p id="pcMsg" style="font-size:12px; color:var(--ink-dim); margin:12px 0 0; min-height:16px;"></p>
+      <p style="font-size:11.5px; color:var(--ink-dim); margin:4px 0 0;">Clique numa carta pra selecionar, depois clique no destino pra mover. Duplo clique manda direto pra fundação.</p>
     </div>
   </div>
 </div>
-
 <div class="mini-panel-overlay" id="toolsPanelOverlay">
   <div class="mini-panel">
     <div class="win-titlebar">painel_de_controle.exe</div>
@@ -4047,64 +4115,502 @@ document.addEventListener('pointerdown', function(e){
     document.addEventListener('pointerup', aoSoltarRedimensionar);
   });
 })();
-// ---- Jogos DOS via js-dos, carregados sob demanda ----
-// So baixamos o motor js-dos (CSS+JS) e o bundle de cada jogo (.jsdos) quando
-// a pessoa realmente abre a janela correspondente, pra nao pesar o
-// carregamento normal do site pra quem nunca clica nesses icones. O motor
-// (CSS+JS) e compartilhado entre todos os jogos DOS e so baixa uma vez.
-let jsDosMotorCarregado = false;
-let jsDosMotorCarregando = false;
-const jsDosFilaEspera = [];
-function carregarJsDosMotor(aoPronto){
-  if(jsDosMotorCarregado){ aoPronto(); return; }
-  jsDosFilaEspera.push(aoPronto);
-  if(jsDosMotorCarregando) return;
-  jsDosMotorCarregando = true;
-  const link = document.createElement('link');
-  link.rel = 'stylesheet';
-  link.href = 'https://v8.js-dos.com/latest/js-dos.css';
-  document.head.appendChild(link);
-  const script = document.createElement('script');
-  script.src = 'https://v8.js-dos.com/latest/js-dos.js';
-  script.onload = function(){
-    jsDosMotorCarregado = true;
-    jsDosFilaEspera.splice(0).forEach(fn => fn());
-  };
-  script.onerror = function(){
-    jsDosMotorCarregando = false;
-    jsDosFilaEspera.splice(0).forEach(fn => fn('erro'));
-  };
-  document.head.appendChild(script);
+// ---- Jogos classicos: Campo Minado e Paciencia (100% JS proprio, sem
+// dependencia externa) -- substituem o antigo DOOM/Digger via js-dos, que
+// baixava um motor DOSBox em WebAssembly de terceiros so pra rodar 2 jogos.
+// Sons sintetizados na hora via Web Audio API (nenhum arquivo de audio pra
+// hospedar), e os dois jogos compartilham o mesmo botao/estado de mute.
+let jogosSomMutado = false;
+let jogosAudioCtx = null;
+function jogosGetAudioCtx(){
+  if(!jogosAudioCtx){
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if(!AC) return null;
+    jogosAudioCtx = new AC();
+  }
+  return jogosAudioCtx;
 }
-function abrirJogoDos(overlayId, containerId, loadingId, bundleUrl, nomeAmigavel){
-       if(document.documentElement.classList.contains('modo-leve')){
-                const prosseguir = confirm('Modo leve esta ligado (dispositivo detectado como mais fraco). Carregar ' + nomeAmigavel + ' mesmo assim? Isso pode deixar a pagina mais lenta.');
-                if(!prosseguir) return;
-       }
-  abrirMiniPanel(overlayId);
-  const container = document.getElementById(containerId);
-  if(container.dataset.iniciado) return;
-  container.dataset.iniciado = '1';
-  carregarJsDosMotor(function(erro){
-    const loading = document.getElementById(loadingId);
-    if(erro){
-      if(loading){ loading.textContent = 'Nao foi possivel carregar ' + nomeAmigavel + ' agora. Tente novamente mais tarde.'; }
+function jogosBeep(freq, duracaoMs, tipo){
+  if(jogosSomMutado) return;
+  const ctx = jogosGetAudioCtx();
+  if(!ctx) return;
+  try{
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.type = tipo || 'square';
+    osc.frequency.value = freq;
+    gain.gain.value = 0.05;
+    osc.connect(gain); gain.connect(ctx.destination);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duracaoMs / 1000);
+    osc.stop(ctx.currentTime + duracaoMs / 1000);
+  }catch(e){}
+}
+function jogosAlternarMute(){
+  jogosSomMutado = !jogosSomMutado;
+  document.querySelectorAll('.jogos-mute-btn').forEach(function(b){ b.textContent = jogosSomMutado ? '🔇' : '🔊'; });
+}
+
+// ---- Campo Minado ----
+const cmEstado = { linhas:16, colunas:16, minas:40, celulas:[], reveladas:0, bandeiras:0, iniciado:false, terminado:false, timerId:null, segundos:0 };
+const cmNiveis = { facil:{linhas:9,colunas:9,minas:10}, medio:{linhas:16,colunas:16,minas:40}, dificil:{linhas:16,colunas:30,minas:99} };
+
+function cmNovoJogo(){
+  clearInterval(cmEstado.timerId);
+  const nivel = cmNiveis[document.getElementById('cmDificuldade').value] || cmNiveis.medio;
+  cmEstado.linhas = nivel.linhas; cmEstado.colunas = nivel.colunas; cmEstado.minas = nivel.minas;
+  cmEstado.celulas = []; cmEstado.reveladas = 0; cmEstado.bandeiras = 0; cmEstado.iniciado = false; cmEstado.terminado = false; cmEstado.segundos = 0;
+  document.getElementById('cmTimer').textContent = '000';
+  document.getElementById('cmMinesLeft').textContent = String(cmEstado.minas).padStart(3,'0');
+  document.getElementById('cmResetBtn').textContent = '🙂';
+  const board = document.getElementById('cmBoard');
+  board.style.gridTemplateColumns = 'repeat(' + cmEstado.colunas + ', 24px)';
+  board.innerHTML = '';
+  for(let l=0; l<cmEstado.linhas; l++){
+    const linha = [];
+    for(let c=0; c<cmEstado.colunas; c++){
+      const celula = { mina:false, vizinhas:0, revelada:false, bandeira:false, l:l, c:c };
+      const btn = document.createElement('button');
+      btn.className = 'cm-cell';
+      btn.type = 'button';
+      btn.addEventListener('click', (function(ll,cc){ return function(){ cmRevelar(ll,cc); }; })(l,c));
+      btn.addEventListener('contextmenu', (function(ll,cc){ return function(e){ e.preventDefault(); cmAlternarBandeira(ll,cc); }; })(l,c));
+      board.appendChild(btn);
+      celula.el = btn;
+      linha.push(celula);
+    }
+    cmEstado.celulas.push(linha);
+  }
+}
+
+function cmContarVizinhas(l,c){
+  let n = 0;
+  for(let dl=-1; dl<=1; dl++){
+    for(let dc=-1; dc<=1; dc++){
+      if(dl===0 && dc===0) continue;
+      const nl=l+dl, nc=c+dc;
+      if(nl>=0 && nl<cmEstado.linhas && nc>=0 && nc<cmEstado.colunas && cmEstado.celulas[nl][nc].mina) n++;
+    }
+  }
+  return n;
+}
+
+function cmColocarMinas(lEvitar, cEvitar){
+  let colocadas = 0;
+  while(colocadas < cmEstado.minas){
+    const l = Math.floor(Math.random()*cmEstado.linhas);
+    const c = Math.floor(Math.random()*cmEstado.colunas);
+    const celula = cmEstado.celulas[l][c];
+    if(celula.mina) continue;
+    if(Math.abs(l-lEvitar)<=1 && Math.abs(c-cEvitar)<=1) continue;
+    celula.mina = true;
+    colocadas++;
+  }
+  for(let l=0; l<cmEstado.linhas; l++){
+    for(let c=0; c<cmEstado.colunas; c++){
+      cmEstado.celulas[l][c].vizinhas = cmContarVizinhas(l,c);
+    }
+  }
+}
+
+function cmIniciarTimer(){
+  cmEstado.timerId = setInterval(function(){
+    cmEstado.segundos = Math.min(999, cmEstado.segundos+1);
+    document.getElementById('cmTimer').textContent = String(cmEstado.segundos).padStart(3,'0');
+  }, 1000);
+}
+
+function cmRevelarEmCadeia(l,c){
+  const celula = cmEstado.celulas[l][c];
+  if(celula.revelada || celula.bandeira) return;
+  celula.revelada = true;
+  cmEstado.reveladas++;
+  celula.el.classList.add('cm-revelada');
+  celula.el.disabled = true;
+  if(celula.vizinhas>0){
+    celula.el.textContent = celula.vizinhas;
+    celula.el.dataset.n = celula.vizinhas;
+  } else {
+    for(let dl=-1; dl<=1; dl++){
+      for(let dc=-1; dc<=1; dc++){
+        if(dl===0 && dc===0) continue;
+        const nl=l+dl, nc=c+dc;
+        if(nl>=0 && nl<cmEstado.linhas && nc>=0 && nc<cmEstado.colunas) cmRevelarEmCadeia(nl,nc);
+      }
+    }
+  }
+}
+
+function cmChecarVitoria(){
+  const totalCelulas = cmEstado.linhas * cmEstado.colunas;
+  if(cmEstado.reveladas === totalCelulas - cmEstado.minas){
+    cmEstado.terminado = true;
+    clearInterval(cmEstado.timerId);
+    document.getElementById('cmResetBtn').textContent = '😎';
+    jogosBeep(660, 120);
+    setTimeout(function(){ jogosBeep(880,180); }, 130);
+  }
+}
+
+function cmPerder(celulaClicada){
+  cmEstado.terminado = true;
+  clearInterval(cmEstado.timerId);
+  document.getElementById('cmResetBtn').textContent = '😵';
+  jogosBeep(120, 400, 'sawtooth');
+  for(let l=0; l<cmEstado.linhas; l++){
+    for(let c=0; c<cmEstado.colunas; c++){
+      const celula = cmEstado.celulas[l][c];
+      if(celula.mina){
+        celula.el.textContent = celula === celulaClicada ? '💥' : '💣';
+        celula.el.classList.add('cm-mina');
+      }
+    }
+  }
+}
+
+function cmRevelar(l,c){
+  if(cmEstado.terminado) return;
+  const celula = cmEstado.celulas[l][c];
+  if(celula.revelada || celula.bandeira) return;
+  if(!cmEstado.iniciado){
+    cmColocarMinas(l,c);
+    cmEstado.iniciado = true;
+    cmIniciarTimer();
+  }
+  if(celula.mina){
+    cmPerder(celula);
+    return;
+  }
+  cmRevelarEmCadeia(l,c);
+  jogosBeep(320, 40, 'square');
+  cmChecarVitoria();
+}
+
+function cmAlternarBandeira(l,c){
+  if(cmEstado.terminado) return;
+  const celula = cmEstado.celulas[l][c];
+  if(celula.revelada) return;
+  celula.bandeira = !celula.bandeira;
+  cmEstado.bandeiras += celula.bandeira ? 1 : -1;
+  celula.el.textContent = celula.bandeira ? '🚩' : '';
+  celula.el.classList.toggle('cm-bandeira', celula.bandeira);
+  document.getElementById('cmMinesLeft').textContent = String(cmEstado.minas - cmEstado.bandeiras).padStart(3,'0');
+  jogosBeep(500, 30, 'triangle');
+}
+
+function abrirCampoMinadoPanel(){
+  abrirMiniPanel('campoMinadoPanelOverlay');
+  if(!cmEstado.celulas.length) cmNovoJogo();
+}
+
+document.getElementById('cmResetBtn').addEventListener('click', cmNovoJogo);
+document.getElementById('cmDificuldade').addEventListener('change', cmNovoJogo);
+document.getElementById('cmMuteBtn').addEventListener('click', jogosAlternarMute);
+// ---- Paciencia (Klondike) ----
+const pcEstado = { stock:[], waste:[], foundations:[[],[],[],[]], tableau:[[],[],[],[],[],[],[]], selecionado:null, movimentos:0 };
+
+function pcCriarBaralho(){
+  const naipes = ['copas','ouros','paus','espadas'];
+  const baralho = [];
+  for(let i=0;i<naipes.length;i++){
+    for(let rank=1; rank<=13; rank++){
+      baralho.push({ naipe:naipes[i], rank:rank, faceUp:false });
+    }
+  }
+  for(let i=baralho.length-1; i>0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    const tmp = baralho[i]; baralho[i] = baralho[j]; baralho[j] = tmp;
+  }
+  return baralho;
+}
+
+function pcSimbolo(naipe){ return { copas:'♥', ouros:'♦', paus:'♣', espadas:'♠' }[naipe]; }
+function pcCor(naipe){ return (naipe==='copas'||naipe==='ouros') ? 'red' : 'black'; }
+function pcRotulo(rank){ return ({1:'A',11:'J',12:'Q',13:'K'})[rank] || String(rank); }
+
+function pcNovoJogo(){
+  const baralho = pcCriarBaralho();
+  pcEstado.tableau = [[],[],[],[],[],[],[]];
+  for(let col=0; col<7; col++){
+    for(let i=0; i<=col; i++){
+      const carta = baralho.pop();
+      carta.faceUp = (i===col);
+      pcEstado.tableau[col].push(carta);
+    }
+  }
+  pcEstado.stock = baralho;
+  pcEstado.waste = [];
+  pcEstado.foundations = [[],[],[],[]];
+  pcEstado.selecionado = null;
+  pcEstado.movimentos = 0;
+  document.getElementById('pcMoves').textContent = 'Movimentos: 0';
+  document.getElementById('pcMsg').textContent = '';
+  pcRenderizar();
+}
+
+function pcCriarCartaEl(carta, faceUp){
+  const el = document.createElement('div');
+  if(!faceUp){
+    el.className = 'pc-card pc-card-back';
+    return el;
+  }
+  el.className = 'pc-card pc-card-face pc-' + pcCor(carta.naipe);
+  const rankEl = document.createElement('span');
+  rankEl.className = 'pc-rank';
+  rankEl.textContent = pcRotulo(carta.rank);
+  const naipeEl = document.createElement('span');
+  naipeEl.className = 'pc-naipe';
+  naipeEl.textContent = pcSimbolo(carta.naipe);
+  el.appendChild(rankEl);
+  el.appendChild(naipeEl);
+  return el;
+}
+
+function pcRenderizar(){
+  const stockEl = document.getElementById('pcStock');
+  stockEl.innerHTML = '';
+  stockEl.classList.toggle('pc-pile-vazia', pcEstado.stock.length===0);
+  if(pcEstado.stock.length) stockEl.appendChild(pcCriarCartaEl(null, false));
+
+  const wasteEl = document.getElementById('pcWaste');
+  wasteEl.innerHTML = '';
+  if(pcEstado.waste.length){
+    const topo = pcEstado.waste[pcEstado.waste.length-1];
+    const cartaEl = pcCriarCartaEl(topo, true);
+    if(pcEstado.selecionado && pcEstado.selecionado.origem==='waste') cartaEl.classList.add('pc-selecionada');
+    wasteEl.appendChild(cartaEl);
+  }
+
+  const naipesOrdem = ['copas','ouros','paus','espadas'];
+  for(let i=0;i<4;i++){
+    const fEl = document.getElementById('pcF'+i);
+    fEl.innerHTML = '';
+    const pilha = pcEstado.foundations[i];
+    if(pilha.length){
+      fEl.appendChild(pcCriarCartaEl(pilha[pilha.length-1], true));
+    } else {
+      const ph = document.createElement('span');
+      ph.className = 'pc-fundacao-placeholder';
+      ph.textContent = pcSimbolo(naipesOrdem[i]);
+      fEl.appendChild(ph);
+    }
+  }
+
+  for(let col=0; col<7; col++){
+    const colEl = document.getElementById('pcCol'+col);
+    colEl.innerHTML = '';
+    pcEstado.tableau[col].forEach(function(carta, idx){
+      const cartaEl = pcCriarCartaEl(carta, carta.faceUp);
+      cartaEl.style.top = (idx*22) + 'px';
+      cartaEl.dataset.idx = idx;
+      if(pcEstado.selecionado && pcEstado.selecionado.origem==='tableau' && pcEstado.selecionado.col===col && idx>=pcEstado.selecionado.idx) cartaEl.classList.add('pc-selecionada');
+      colEl.appendChild(cartaEl);
+    });
+  }
+}
+
+function pcSequenciaValida(col, idx){
+  const pilha = pcEstado.tableau[col];
+  for(let i=idx; i<pilha.length-1; i++){
+    const atual = pilha[i], proximo = pilha[i+1];
+    if(!atual.faceUp || !proximo.faceUp) return false;
+    if(pcCor(atual.naipe)===pcCor(proximo.naipe)) return false;
+    if(atual.rank !== proximo.rank+1) return false;
+  }
+  return true;
+}
+
+function pcPodeColocarEmTableau(carta, col){
+  const pilha = pcEstado.tableau[col];
+  if(!pilha.length) return carta.rank === 13;
+  const topo = pilha[pilha.length-1];
+  if(!topo.faceUp) return false;
+  return pcCor(topo.naipe) !== pcCor(carta.naipe) && topo.rank === carta.rank+1;
+}
+
+function pcPodeColocarEmFundacao(carta, idxF){
+  const naipesOrdem = ['copas','ouros','paus','espadas'];
+  const pilha = pcEstado.foundations[idxF];
+  if(carta.naipe !== naipesOrdem[idxF]) return false;
+  if(!pilha.length) return carta.rank === 1;
+  return pilha[pilha.length-1].rank === carta.rank - 1;
+}
+
+function pcPegarCartas(origemInfo){
+  if(origemInfo.origem === 'waste'){
+    return pcEstado.waste.length ? [pcEstado.waste[pcEstado.waste.length-1]] : [];
+  }
+  return pcEstado.tableau[origemInfo.col].slice(origemInfo.idx);
+}
+
+function pcRemoverOrigem(origemInfo, quantidade){
+  if(origemInfo.origem === 'waste'){
+    pcEstado.waste.splice(pcEstado.waste.length-quantidade, quantidade);
+  } else {
+    const pilha = pcEstado.tableau[origemInfo.col];
+    pilha.splice(pilha.length-quantidade, quantidade);
+    if(pilha.length && !pilha[pilha.length-1].faceUp) pilha[pilha.length-1].faceUp = true;
+  }
+}
+
+function pcLimparSelecao(){ pcEstado.selecionado = null; pcRenderizar(); }
+
+function pcClicarMonte(){
+  if(pcEstado.stock.length){
+    const carta = pcEstado.stock.pop();
+    carta.faceUp = true;
+    pcEstado.waste.push(carta);
+    jogosBeep(280,40);
+  } else if(pcEstado.waste.length){
+    pcEstado.waste.reverse().forEach(function(c){ c.faceUp = false; });
+    pcEstado.stock = pcEstado.waste;
+    pcEstado.waste = [];
+    jogosBeep(200,60);
+  }
+  pcEstado.selecionado = null;
+  pcRenderizar();
+}
+
+function pcAtualizarMovimentos(){
+  document.getElementById('pcMoves').textContent = 'Movimentos: ' + pcEstado.movimentos;
+}
+
+function pcChecarVitoria(){
+  const total = pcEstado.foundations.reduce(function(soma,p){ return soma+p.length; }, 0);
+  if(total === 52){
+    document.getElementById('pcMsg').textContent = '🎉 Você venceu em ' + pcEstado.movimentos + ' movimentos!';
+    jogosBeep(660,120);
+    setTimeout(function(){ jogosBeep(880,180); }, 130);
+    setTimeout(function(){ jogosBeep(990,220); }, 320);
+  }
+}
+
+function pcClicarCarta(origem, col, idx){
+  if(origem === 'waste' && !pcEstado.waste.length) return;
+  if(origem === 'tableau'){
+    const carta = pcEstado.tableau[col][idx];
+    if(!carta || !carta.faceUp) return;
+  }
+  if(!pcEstado.selecionado){
+    if(origem === 'tableau' && !pcSequenciaValida(col, idx)) return;
+    pcEstado.selecionado = { origem:origem, col:col, idx:idx };
+    pcRenderizar();
+    return;
+  }
+  const sel = pcEstado.selecionado;
+  if(sel.origem===origem && sel.col===col && sel.idx===idx){
+    pcLimparSelecao();
+    return;
+  }
+  const cartas = pcPegarCartas(sel);
+  if(!cartas.length){ pcLimparSelecao(); return; }
+  if(origem === 'tableau'){
+    if(pcPodeColocarEmTableau(cartas[0], col)){
+      pcRemoverOrigem(sel, cartas.length);
+      for(let i=0;i<cartas.length;i++) pcEstado.tableau[col].push(cartas[i]);
+      pcEstado.movimentos++;
+      pcAtualizarMovimentos();
+      jogosBeep(440,60);
+      pcEstado.selecionado = null;
+      pcRenderizar();
+      pcChecarVitoria();
       return;
     }
-    if(loading) loading.style.display = 'none';
-    try{
-      Dos(container, { url: bundleUrl });
-    }catch(e){
-      if(loading){ loading.style.display=''; loading.textContent = 'Nao foi possivel carregar ' + nomeAmigavel + ' agora. Tente novamente mais tarde.'; }
+  }
+  pcEstado.selecionado = null;
+  pcClicarCarta(origem, col, idx);
+}
+
+function pcClicarFundacao(idxF){
+  if(!pcEstado.selecionado) return;
+  const sel = pcEstado.selecionado;
+  const cartas = pcPegarCartas(sel);
+  if(cartas.length !== 1){ pcLimparSelecao(); return; }
+  if(pcPodeColocarEmFundacao(cartas[0], idxF)){
+    pcRemoverOrigem(sel, 1);
+    pcEstado.foundations[idxF].push(cartas[0]);
+    pcEstado.movimentos++;
+    pcAtualizarMovimentos();
+    jogosBeep(660,80);
+    pcEstado.selecionado = null;
+    pcRenderizar();
+    pcChecarVitoria();
+  } else {
+    pcLimparSelecao();
+  }
+}
+
+function pcTentarMoverParaFundacao(carta, origemInfo){
+  for(let i=0;i<4;i++){
+    if(pcPodeColocarEmFundacao(carta,i)){
+      pcRemoverOrigem(origemInfo, 1);
+      pcEstado.foundations[i].push(carta);
+      pcEstado.movimentos++;
+      pcAtualizarMovimentos();
+      jogosBeep(660,80);
+      return true;
     }
-  });
+  }
+  return false;
 }
-function abrirDoomPanel(){
-  abrirJogoDos('doomPanelOverlay', 'doomDosContainer', 'doomDosLoading', 'https://v8.js-dos.com/bundles/doom.jsdos', 'o DOOM');
+
+function pcDuploCliqueCarta(origem, col, idx){
+  let carta, origemInfo;
+  if(origem==='waste'){
+    if(!pcEstado.waste.length) return;
+    carta = pcEstado.waste[pcEstado.waste.length-1];
+    origemInfo = { origem:'waste' };
+  } else {
+    const pilha = pcEstado.tableau[col];
+    if(idx !== pilha.length-1) return;
+    carta = pilha[idx];
+    origemInfo = { origem:'tableau', col:col };
+  }
+  if(pcTentarMoverParaFundacao(carta, origemInfo)){
+    pcEstado.selecionado = null;
+    pcRenderizar();
+    pcChecarVitoria();
+  }
 }
-function abrirDiggerPanel(){
-  abrirJogoDos('diggerPanelOverlay', 'diggerDosContainer', 'diggerDosLoading', 'https://v8.js-dos.com/bundles/digger.jsdos', 'o Digger');
+
+let pcEventosLigados = false;
+function pcLigarEventos(){
+  if(pcEventosLigados) return;
+  pcEventosLigados = true;
+  document.getElementById('pcStock').addEventListener('click', pcClicarMonte);
+  document.getElementById('pcWaste').addEventListener('click', function(){ pcClicarCarta('waste', null, pcEstado.waste.length-1); });
+  document.getElementById('pcWaste').addEventListener('dblclick', function(){ pcDuploCliqueCarta('waste', null, pcEstado.waste.length-1); });
+  for(let i=0;i<4;i++){
+    (function(idxF){
+      document.getElementById('pcF'+idxF).addEventListener('click', function(){ pcClicarFundacao(idxF); });
+    })(i);
+  }
+  for(let col=0; col<7; col++){
+    (function(colAtual){
+      const colEl = document.getElementById('pcCol'+colAtual);
+      colEl.addEventListener('click', function(e){
+        const cartaEl = e.target.closest('.pc-card');
+        const idx = cartaEl ? parseInt(cartaEl.dataset.idx,10) : pcEstado.tableau[colAtual].length-1;
+        if(idx < 0) return;
+        pcClicarCarta('tableau', colAtual, idx);
+      });
+      colEl.addEventListener('dblclick', function(e){
+        const cartaEl = e.target.closest('.pc-card');
+        if(!cartaEl) return;
+        pcDuploCliqueCarta('tableau', colAtual, parseInt(cartaEl.dataset.idx,10));
+      });
+    })(col);
+  }
 }
+
+function abrirPacienciaPanel(){
+  abrirMiniPanel('pacienciaPanelOverlay');
+  pcLigarEventos();
+  if(!pcEstado.tableau.some(function(c){ return c.length; })) pcNovoJogo();
+}
+
+document.getElementById('pcNovoBtn').addEventListener('click', pcNovoJogo);
+document.getElementById('pcMuteBtn').addEventListener('click', jogosAlternarMute);
 // ---- Scanner de codigo de barras: "ja tenho esse jogo?" ----
 // Nao usa nenhuma API externa de busca por codigo de barras (testamos o
 // UPCitemdb e o servidor deles bloqueia chamada direta do navegador via CORS,
@@ -5563,8 +6069,8 @@ setInterval(atualizarRelogioY2k, 15000);
     visitas: () => typeof abrirVisitasPanel === 'function' && abrirVisitasPanel(),
     destaques: () => typeof abrirDestaquesPanel === 'function' && abrirDestaquesPanel(),
     resumoXlsx: () => typeof abrirResumoXlsxPanel === 'function' && abrirResumoXlsxPanel(),
-    doom: () => typeof abrirDoomPanel === 'function' && abrirDoomPanel(),
-    digger: () => typeof abrirDiggerPanel === 'function' && abrirDiggerPanel(),
+    campoMinado: () => typeof abrirCampoMinadoPanel === 'function' && abrirCampoMinadoPanel(),
+    paciencia: () => typeof abrirPacienciaPanel === 'function' && abrirPacienciaPanel(),
     instaPessoal: () => window.open('https://www.instagram.com/marioturbino/', '_blank', 'noopener,noreferrer'),
     instaColecao: () => window.open('https://www.instagram.com/iamtgames/', '_blank', 'noopener,noreferrer'),
     contato: () => document.getElementById('contatoBtn') && document.getElementById('contatoBtn').click(),
@@ -6490,14 +6996,14 @@ document.getElementById('resumoXlsxPanelOverlay').addEventListener('click', func
   if(e.target === this) fecharMiniPanel('resumoXlsxPanelOverlay');
 });
 
-document.getElementById('doomPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('doomPanelOverlay'));
-document.getElementById('doomPanelOverlay').addEventListener('click', function(e){
-  if(e.target === this) fecharMiniPanel('doomPanelOverlay');
+document.getElementById('campoMinadoPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('campoMinadoPanelOverlay'));
+document.getElementById('campoMinadoPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharMiniPanel('campoMinadoPanelOverlay');
 });
 
-document.getElementById('diggerPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('diggerPanelOverlay'));
-document.getElementById('diggerPanelOverlay').addEventListener('click', function(e){
-  if(e.target === this) fecharMiniPanel('diggerPanelOverlay');
+document.getElementById('pacienciaPanelCloseBtn').addEventListener('click', () => fecharMiniPanel('pacienciaPanelOverlay'));
+document.getElementById('pacienciaPanelOverlay').addEventListener('click', function(e){
+  if(e.target === this) fecharMiniPanel('pacienciaPanelOverlay');
 });
 
 async function carregarJogosGratis(){
