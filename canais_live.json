@@ -1,15 +1,6 @@
 {
-  "updated": "2026-08-26T23:00:25.407Z",
+  "updated": "2026-08-26T23:15:18.553Z",
   "live": [
-    {
-      "id": 19,
-      "n": "cowboynanoo",
-      "plat": "twitch",
-      "login": "cowboynanoo",
-      "videoTitle": "+18  [CPX GG-XP] 01 DARASHIA | Terçooou!!",
-      "videoUrl": "https://www.twitch.tv/cowboynanoo",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
-    },
     {
       "id": 14,
       "n": "tofogames10",
@@ -18,6 +9,15 @@
       "videoTitle": "Live de Vendas",
       "videoUrl": "https://www.twitch.tv/tofogames10",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
+    },
+    {
+      "id": 19,
+      "n": "cowboynanoo",
+      "plat": "twitch",
+      "login": "cowboynanoo",
+      "videoTitle": "+18  [CPX GG-XP] 01 DARASHIA | Terçooou!!",
+      "videoUrl": "https://www.twitch.tv/cowboynanoo",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
     }
   ]
 }
