@@ -1978,30 +1978,60 @@
   .cm-cell[data-n="6"]{ color:#008080; }
   .cm-cell[data-n="7"]{ color:#000; }
   .cm-cell[data-n="8"]{ color:#808080; }
-  .pc-table{ display:flex; flex-direction:column; gap:10px; overflow-x:auto; width:100%; --pc-ch: min(70px, 8vh, 11vw); --pc-cw: calc(var(--pc-ch) * 5 / 7); }
+  .pc-table{
+    display:flex; flex-direction:column; gap:10px;
+    flex:1 1 auto; min-height:0; width:100%; overflow:hidden;
+    container-type:size; container-name:pcgame;
+    background: radial-gradient(ellipse at 50% 0%, #1d7a44 0%, #0d4525 70%, #0a3a1f 100%);
+    border-radius:12px; padding:10px;
+    box-shadow: inset 0 2px 12px rgba(0,0,0,.5), inset 0 0 0 1px rgba(255,255,255,.08);
+    --pc-ch: min(120px, calc((100cqh - 34px) / 3.884), calc((100cqw - 80px) / 5));
+    --pc-cw: calc(var(--pc-ch) * 5 / 7);
+  }
   .pc-row-top{ display:flex; gap:8px; flex-wrap:nowrap; }
   .pc-spacer{ flex:1 1 0; min-width:16px; }
   .pc-row-tableau{ display:flex; gap:8px; }
-  .pc-pile{ width:var(--pc-cw); height:var(--pc-ch); border:2px dashed #999; border-radius:4px; position:relative; background:rgba(255,255,255,.25); cursor:pointer; flex:0 0 auto; }
+  .pc-pile{ width:var(--pc-cw); height:var(--pc-ch); border:2px dashed rgba(255,255,255,.4); border-radius:6px; position:relative; background:rgba(255,255,255,.08); cursor:pointer; flex:0 0 auto; transition:background .15s; }
+  .pc-pile:hover{ background:rgba(255,255,255,.16); }
   .pc-pile.pc-pile-vazia{ display:flex; align-items:center; justify-content:center; }
   .pc-foundation{ display:flex; align-items:center; justify-content:center; }
-  .pc-fundacao-placeholder{ font-size:calc(var(--pc-ch) * 0.32); opacity:.35; }
+  .pc-fundacao-placeholder{ font-size:calc(var(--pc-ch) * 0.32); opacity:.4; color:#fff; }
   .pc-column{ width:var(--pc-cw); min-height:var(--pc-ch); position:relative; flex:0 0 auto; }
-  .pc-card{ width:var(--pc-cw); height:var(--pc-ch); border-radius:4px; position:absolute; top:0; left:0; box-shadow:0 1px 3px rgba(0,0,0,.35); }
-  .pc-card-back{ background:repeating-linear-gradient(45deg,#2255aa,#2255aa 4px,#1a4488 4px,#1a4488 8px); border:1px solid #0d2c5c; }
-  .pc-card-face{ background:#fff; border:1px solid #999; display:flex; flex-direction:column; justify-content:space-between; padding:4px; font-family:Arial, sans-serif; font-weight:bold; font-size:calc(var(--pc-ch) * 0.185); }
-  .pc-card-face.pc-red{ color:#c0392b; }
+  .pc-card{
+    width:var(--pc-cw); height:var(--pc-ch); border-radius:6px; position:absolute; top:0; left:0;
+    box-shadow:0 2px 5px rgba(0,0,0,.5);
+    transition: box-shadow .15s, transform .15s;
+  }
+  .pc-card:hover{ box-shadow:0 4px 10px rgba(0,0,0,.6); transform:translateY(-2px); z-index:4; }
+  .pc-card-back{
+    background:
+      repeating-linear-gradient(45deg, rgba(255,255,255,.08) 0 4px, transparent 4px 8px),
+      linear-gradient(135deg, #2f6fd6, #17356f);
+    border:1px solid #0d2c5c;
+    box-shadow: inset 0 0 0 2px rgba(255,255,255,.15);
+  }
+  .pc-card-face{
+    background:linear-gradient(160deg, #fff, #f2f2f2);
+    border:1px solid #ccc; display:flex; flex-direction:column; justify-content:space-between; padding:4px;
+    font-family:Georgia, 'Times New Roman', serif; font-weight:bold;
+    font-size:calc(var(--pc-ch) * 0.19);
+  }
+  .pc-card-face.pc-red{ color:#c0182b; }
   .pc-card-face.pc-black{ color:#1a1a1a; }
-  .pc-card .pc-naipe{ font-size:calc(var(--pc-ch) * 0.26); align-self:center; }
-  .pc-selecionada{ outline:3px solid #ffcc00; outline-offset:-2px; z-index:5; }
-  /* Paciencia responsiva: --pc-ch/--pc-cw encolhem automaticamente conforme
-     a altura (8vh) ou a largura (11vw) da janela, com teto de 70px -- assim
-     o jogo inteiro sempre cabe no corpo do mini-panel sem precisar de barra
-     de rolagem vertical, mesmo em telas mais baixas ou com a janela
-     redimensionada manualmente. A alca de redimensionar fica desligada
-     aqui pois nao faz sentido pra um tabuleiro que ja se adapta sozinho. */
-  #pacienciaPanelOverlay .mini-panel-body{ padding:14px; gap:8px; max-height:94vh; overflow-x:hidden; }
-  #pacienciaPanelOverlay .mini-panel-resize-handle{ display:none; }
+  .pc-card .pc-naipe{ font-size:calc(var(--pc-ch) * 0.3); align-self:center; text-shadow:0 1px 1px rgba(0,0,0,.15); }
+  .pc-card .pc-rank{ line-height:1; letter-spacing:.5px; }
+  .pc-selecionada{ outline:3px solid #ffd54a; outline-offset:-2px; box-shadow:0 0 12px 2px rgba(255,213,74,.8); z-index:5; }
+  /* Paciencia: janela grande e redimensionavel, cartas 100% adaptativas via
+     Container Queries (cqw/cqh) -- o tamanho da carta e calculado a partir
+     do espaco real que .pc-table recebe (nao so da viewport), entao tanto
+     redimensionar a janela pelo canto quanto abrir em telas diferentes
+     sempre deixa o jogo inteiro visivel, sem NUNCA precisar de barra de
+     rolagem. */
+  #pacienciaPanelOverlay .mini-panel{
+    width:min(1500px, 92vw); height:min(860px, 88vh);
+    min-width:480px; min-height:420px;
+  }
+  #pacienciaPanelOverlay .mini-panel-body{ padding:14px; gap:8px; overflow:hidden; }
 </style>
 
 <!-- Campo Minado (Minesweeper): implementacao propria em JS puro, sem
@@ -4630,6 +4660,21 @@ window.addEventListener('resize', function(){
   const overlayPaciencia = document.getElementById('pacienciaPanelOverlay');
   if(overlayPaciencia && overlayPaciencia.classList.contains('aberto')) pcRenderizar();
 });
+
+// ResizeObserver: cobre o caso da alca de redimensionar manual (arrastar
+// o canto da janela nao dispara 'resize' do window, so muda o tamanho do
+// elemento) -- qualquer mudanca de tamanho do painel (arrasto manual ou
+// janela do navegador) recalcula o fan das cartas via pcRenderizar().
+if(typeof ResizeObserver !== 'undefined'){
+  var pcPanelParaObservar = document.querySelector('#pacienciaPanelOverlay .mini-panel');
+  if(pcPanelParaObservar){
+    var pcResizeObserver = new ResizeObserver(function(){
+      var overlayPacienciaRO = document.getElementById('pacienciaPanelOverlay');
+      if(overlayPacienciaRO && overlayPacienciaRO.classList.contains('aberto')) pcRenderizar();
+    });
+    pcResizeObserver.observe(pcPanelParaObservar);
+  }
+}
 // ---- Scanner de codigo de barras: "ja tenho esse jogo?" ----
 // Nao usa nenhuma API externa de busca por codigo de barras (testamos o
 // UPCitemdb e o servidor deles bloqueia chamada direta do navegador via CORS,
