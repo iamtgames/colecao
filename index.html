@@ -1978,9 +1978,9 @@
   .cm-cell[data-n="6"]{ color:#008080; }
   .cm-cell[data-n="7"]{ color:#000; }
   .cm-cell[data-n="8"]{ color:#808080; }
-  .pc-table{ display:flex; flex-direction:column; gap:10px; overflow-x:auto; --pc-ch: min(70px, 8vh, 11vw); --pc-cw: calc(var(--pc-ch) * 5 / 7); }
+  .pc-table{ display:flex; flex-direction:column; gap:10px; overflow-x:auto; width:100%; --pc-ch: min(70px, 8vh, 11vw); --pc-cw: calc(var(--pc-ch) * 5 / 7); }
   .pc-row-top{ display:flex; gap:8px; flex-wrap:nowrap; }
-  .pc-spacer{ flex:1 1 auto; min-width:16px; }
+  .pc-spacer{ flex:1 1 0; min-width:16px; }
   .pc-row-tableau{ display:flex; gap:8px; }
   .pc-pile{ width:var(--pc-cw); height:var(--pc-ch); border:2px dashed #999; border-radius:4px; position:relative; background:rgba(255,255,255,.25); cursor:pointer; flex:0 0 auto; }
   .pc-pile.pc-pile-vazia{ display:flex; align-items:center; justify-content:center; }
@@ -2000,7 +2000,7 @@
      de rolagem vertical, mesmo em telas mais baixas ou com a janela
      redimensionada manualmente. A alca de redimensionar fica desligada
      aqui pois nao faz sentido pra um tabuleiro que ja se adapta sozinho. */
-  #pacienciaPanelOverlay .mini-panel-body{ padding:14px; gap:8px; max-height:94vh; }
+  #pacienciaPanelOverlay .mini-panel-body{ padding:14px; gap:8px; max-height:94vh; overflow-x:hidden; }
   #pacienciaPanelOverlay .mini-panel-resize-handle{ display:none; }
 </style>
 
