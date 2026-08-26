@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-26T01:30:20.592Z",
+  "updated": "2026-08-26T01:45:18.375Z",
   "live": [
     {
       "id": 5,
@@ -18,6 +18,15 @@
       "videoTitle": "+18 ZERANDO O MELHOR JOGO DO MUNDO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "2 dias jogando cs (ultima vez q joguei 2019)",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
