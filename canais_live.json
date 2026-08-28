@@ -1,6 +1,24 @@
 {
-  "updated": "2026-08-28T00:15:17.043Z",
+  "updated": "2026-08-28T00:17:13.403Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "3jlJuZqWJhg",
+      "videoTitle": "🏆ANTEC RETRO GAMES LIVE 🕹️ #65 LIVE DE VENDAS - 27/08/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=3jlJuZqWJhg",
+      "thumbnail": "https://i.ytimg.com/vi/3jlJuZqWJhg/hqdefault.jpg"
+    },
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "espN6B9RTuI",
+      "videoTitle": "LIVE AO VIVO DE VENDAS DE GAMES 27-08",
+      "videoUrl": "https://www.youtube.com/watch?v=espN6B9RTuI",
+      "thumbnail": "https://i.ytimg.com/vi/espN6B9RTuI/hqdefault.jpg"
+    },
     {
       "id": 19,
       "n": "cowboynanoo",
