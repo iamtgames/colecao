@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-29T02:15:16.374Z",
+  "updated": "2026-08-29T02:30:21.684Z",
   "live": [
     {
       "id": 2,
@@ -11,15 +11,6 @@
       "thumbnail": "https://i.ytimg.com/vi/CL-1L6zjEUk/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "5 dias jogando cs (parei em 2019)",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -27,6 +18,24 @@
       "videoTitle": "+18 ARAM DE CARTINHA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 19,
+      "n": "cowboynanoo",
+      "plat": "twitch",
+      "login": "cowboynanoo",
+      "videoTitle": "+18  [CPX GG-XP] [GENTEBRA]  01 DARASHIA | do 0 ao 1000 dia 21",
+      "videoUrl": "https://www.twitch.tv/cowboynanoo",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "5 dias jogando cs (parei em 2019)",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
