@@ -1,4 +1,14 @@
 {
-  "updated": "2026-08-29T23:00:25.283Z",
-  "live": []
+  "updated": "2026-08-29T23:03:56.681Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "l86Lt_OOKwg",
+      "videoTitle": "🟢 BATALHA DA ALDEIA 10 ANOS - REACT AO VIVO",
+      "videoUrl": "https://www.youtube.com/watch?v=l86Lt_OOKwg",
+      "thumbnail": "https://i.ytimg.com/vi/l86Lt_OOKwg/hqdefault.jpg"
+    }
+  ]
 }
