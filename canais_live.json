@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-30T13:00:27.447Z",
+  "updated": "2026-08-30T13:15:19.320Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "🟢 AO VIVO - JOGANDO CSGO ATÉ O FALLEN APARECER",
       "videoUrl": "https://www.youtube.com/watch?v=QeDmfBaxwRM",
       "thumbnail": "https://i.ytimg.com/vi/QeDmfBaxwRM/hqdefault.jpg"
+    },
+    {
+      "id": 19,
+      "n": "cowboynanoo",
+      "plat": "twitch",
+      "login": "cowboynanoo",
+      "videoTitle": "+18  [CPX GG-XP] [GENTEBRA]  01 DARASHIA | do 0 ao 1000 dia 23",
+      "videoUrl": "https://www.twitch.tv/cowboynanoo",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
     },
     {
       "id": 17,
