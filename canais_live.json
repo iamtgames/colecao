@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-30T00:45:19.563Z",
+  "updated": "2026-08-30T01:00:29.254Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "🟢 BATALHA DA ALDEIA 10 ANOS - REACT AO VIVO",
       "videoUrl": "https://www.youtube.com/watch?v=l86Lt_OOKwg",
       "thumbnail": "https://i.ytimg.com/vi/l86Lt_OOKwg/hqdefault.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 SÓ PRA VOCÊS SABEREM QUE AINDA TO VIVO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
