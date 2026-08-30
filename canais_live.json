@@ -1,5 +1,5 @@
 {
-  "updated": "2026-08-30T04:45:18.122Z",
+  "updated": "2026-08-30T05:00:22.102Z",
   "live": [
     {
       "id": 7,
@@ -9,15 +9,6 @@
       "videoTitle": "🟢 BATALHA DA ALDEIA 10 ANOS - REACT AO VIVO",
       "videoUrl": "https://www.youtube.com/watch?v=l86Lt_OOKwg",
       "thumbnail": "https://i.ytimg.com/vi/l86Lt_OOKwg/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Jogando varios jogos",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     },
     {
       "id": 17,
