@@ -4630,7 +4630,6 @@ function pcLigarEventos(){
       colEl.addEventListener('click', function(e){
         const cartaEl = e.target.closest('.pc-card');
         const idx = cartaEl ? parseInt(cartaEl.dataset.idx,10) : pcEstado.tableau[colAtual].length-1;
-        if(idx < 0) return;
         pcClicarCarta('tableau', colAtual, idx);
       });
       colEl.addEventListener('dblclick', function(e){
