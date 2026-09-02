@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-02T02:30:21.254Z",
+  "updated": "2026-09-02T02:45:18.495Z",
   "live": [
     {
       "id": 5,
@@ -11,13 +11,13 @@
       "thumbnail": "https://i.ytimg.com/vi/_knM_7JRy6k/hqdefault.jpg"
     },
     {
-      "id": 19,
-      "n": "cowboynanoo",
+      "id": 17,
+      "n": "joaodobife",
       "plat": "twitch",
-      "login": "cowboynanoo",
-      "videoTitle": "+18  [CPX GG-XP]  01 DARASHIA | Oque temos pra hj?",
-      "videoUrl": "https://www.twitch.tv/cowboynanoo",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+      "login": "joaodobife",
+      "videoTitle": "+18 TENTANDO MAIS UM DIA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     },
     {
       "id": 13,
@@ -27,15 +27,6 @@
       "videoTitle": "6 dias para a expedição",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 TENTANDO MAIS UM DIA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
