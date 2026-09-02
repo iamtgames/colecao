@@ -4526,12 +4526,12 @@ function pcChecarVitoria(){
 
 function pcClicarCarta(origem, col, idx){
   if(origem === 'waste' && !pcEstado.waste.length) return;
-  if(origem === 'tableau'){
-    const carta = pcEstado.tableau[col][idx];
-    if(!carta || !carta.faceUp) return;
-  }
   if(!pcEstado.selecionado){
-    if(origem === 'tableau' && !pcSequenciaValida(col, idx)) return;
+    if(origem === 'tableau'){
+      const carta = pcEstado.tableau[col][idx];
+      if(!carta || !carta.faceUp) return;
+      if(!pcSequenciaValida(col, idx)) return;
+    }
     pcEstado.selecionado = { origem:origem, col:col, idx:idx };
     pcRenderizar();
     return;
