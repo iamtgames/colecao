@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-03T01:00:24.226Z",
+  "updated": "2026-09-03T01:15:17.384Z",
   "live": [
     {
       "id": 2,
@@ -18,15 +18,6 @@
       "videoTitle": "LIVE DE VENDAS! (Rodrigo Games) 02/09",
       "videoUrl": "https://www.youtube.com/watch?v=HCqkFUdpSn0",
       "thumbnail": "https://i.ytimg.com/vi/HCqkFUdpSn0/hqdefault.jpg"
-    },
-    {
-      "id": 14,
-      "n": "tofogames10",
-      "plat": "twitch",
-      "login": "tofogames10",
-      "videoTitle": "Live de Vendas",
-      "videoUrl": "https://www.twitch.tv/tofogames10",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
     },
     {
       "id": 19,
