@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-03T01:45:15.943Z",
+  "updated": "2026-09-03T02:00:24.280Z",
   "live": [
     {
       "id": 2,
@@ -36,6 +36,15 @@
       "videoTitle": "5 dias para a expedição",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 VAMOS PRA LUTA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
