@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-04T02:30:20.621Z",
+  "updated": "2026-09-04T02:45:20.256Z",
   "live": [
     {
       "id": 4,
@@ -11,15 +11,6 @@
       "thumbnail": "https://i.ytimg.com/vi/aB1M_WhUHnU/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "4 dias para a expedição",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -27,6 +18,15 @@
       "videoTitle": "+18 VAMOS PRA LUTA MAIS UM DIA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "4 dias para a expedição",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
