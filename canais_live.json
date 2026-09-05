@@ -1,6 +1,15 @@
 {
-  "updated": "2026-09-05T20:15:15.503Z",
+  "updated": "2026-09-05T20:17:41.118Z",
   "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "-IXiCHCQzoM",
+      "videoTitle": "LIVE - MAIOR LIVE DE JOGOS DE PS1 e PS2 ORIGINAIS",
+      "videoUrl": "https://www.youtube.com/watch?v=-IXiCHCQzoM",
+      "thumbnail": "https://i.ytimg.com/vi/-IXiCHCQzoM/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
