@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-05T13:15:17.392Z",
+  "updated": "2026-09-05T13:30:55.601Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "AO VIVO - JOGANDO FIFA COM OS INSCRITOS",
       "videoUrl": "https://www.youtube.com/watch?v=HpgrEQipqTs",
       "thumbnail": "https://i.ytimg.com/vi/HpgrEQipqTs/hqdefault.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 ESTAMOS DE VOLTA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
