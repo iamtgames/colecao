@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-06T06:15:16.740Z",
+  "updated": "2026-09-06T06:30:19.390Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "LIVE MADRUGADA - VENDENDO TODA A LOJA DE VIDEOGAMES",
       "videoUrl": "https://www.youtube.com/watch?v=eRO4YmCkjj8",
       "thumbnail": "https://i.ytimg.com/vi/eRO4YmCkjj8/hqdefault.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 ENQUANTO ELA NAO VOLTA EU VOLTO PRO APEX!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
