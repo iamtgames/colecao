@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-06T16:30:19.935Z",
+  "updated": "2026-09-06T16:45:19.906Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "domingueira vendendo edição (loja de videogames retros)",
       "videoUrl": "https://www.youtube.com/watch?v=KChA66fEaJE",
       "thumbnail": "https://i.ytimg.com/vi/KChA66fEaJE/hqdefault.jpg"
+    },
+    {
+      "id": 19,
+      "n": "cowboynanoo",
+      "plat": "twitch",
+      "login": "cowboynanoo",
+      "videoTitle": "+18  [CPX GG-XP]  01 DARASHIA | RECOMEÇO DARASHIA?",
+      "videoUrl": "https://www.twitch.tv/cowboynanoo",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
     },
     {
       "id": 17,
