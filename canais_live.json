@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-07T05:45:16.531Z",
+  "updated": "2026-09-07T06:00:24.774Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "LIVE - VENDENDO VIDEOGAME ATÉ DORMIR",
       "videoUrl": "https://www.youtube.com/watch?v=TKnkyXvZF-g",
       "thumbnail": "https://i.ytimg.com/vi/TKnkyXvZF-g/hqdefault.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 SOFRENDO MAIS UM DIA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
