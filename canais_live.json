@@ -1,6 +1,15 @@
 {
-  "updated": "2026-09-07T23:15:19.786Z",
+  "updated": "2026-09-07T23:28:43.346Z",
   "live": [
+    {
+      "id": 3,
+      "n": "Garimpo dos Games",
+      "plat": "youtube",
+      "videoId": "3-014vgEuZY",
+      "videoTitle": "Garimpo dos games  está ao vivo!",
+      "videoUrl": "https://www.youtube.com/watch?v=3-014vgEuZY",
+      "thumbnail": "https://i.ytimg.com/vi/3-014vgEuZY/hqdefault.jpg"
+    },
     {
       "id": 19,
       "n": "cowboynanoo",
