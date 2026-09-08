@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-08T03:15:19.862Z",
+  "updated": "2026-09-08T03:30:18.136Z",
   "live": [
     {
       "id": 3,
@@ -9,15 +9,6 @@
       "videoTitle": "Garimpo dos games  está ao vivo!",
       "videoUrl": "https://www.youtube.com/watch?v=3-014vgEuZY",
       "thumbnail": "https://i.ytimg.com/vi/3-014vgEuZY/hqdefault.jpg"
-    },
-    {
-      "id": 19,
-      "n": "cowboynanoo",
-      "plat": "twitch",
-      "login": "cowboynanoo",
-      "videoTitle": "+18  [CPX GG-XP]  01 DARASHIA | Sei la!",
-      "videoUrl": "https://www.twitch.tv/cowboynanoo",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
     }
   ]
 }
