@@ -1,6 +1,33 @@
 {
-  "updated": "2026-09-08T23:16:26.146Z",
+  "updated": "2026-09-08T23:22:15.390Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "PobHQApzSH4",
+      "videoTitle": "🕹️GAME PLAY GTA 5 #17 🏆 ANTEC GAMES 👾",
+      "videoUrl": "https://www.youtube.com/watch?v=PobHQApzSH4",
+      "thumbnail": "https://i.ytimg.com/vi/PobHQApzSH4/hqdefault.jpg"
+    },
+    {
+      "id": 5,
+      "n": "DJ Games Retro",
+      "plat": "youtube",
+      "videoId": "NRAG0dY0Jj0",
+      "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 08/09/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=NRAG0dY0Jj0",
+      "thumbnail": "https://i.ytimg.com/vi/NRAG0dY0Jj0/hqdefault.jpg"
+    },
+    {
+      "id": 9,
+      "n": "Rodrigo Retro Games",
+      "plat": "youtube",
+      "videoId": "qHH9TvLAW9Q",
+      "videoTitle": "LIVE D0 30TÃO (Rodrigo Games) 08/09",
+      "videoUrl": "https://www.youtube.com/watch?v=qHH9TvLAW9Q",
+      "thumbnail": "https://i.ytimg.com/vi/qHH9TvLAW9Q/hqdefault.jpg"
+    },
     {
       "id": 19,
       "n": "cowboynanoo",
