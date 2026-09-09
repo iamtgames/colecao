@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-09T19:45:17.051Z",
+  "updated": "2026-09-09T20:00:25.232Z",
   "live": [
     {
       "id": 19,
@@ -9,6 +9,15 @@
       "videoTitle": "+18  [CPX GG-XP]  01 DARASHIA | Dia de Maldade!!",
       "videoUrl": "https://www.twitch.tv/cowboynanoo",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "ARC RAIDERS do sabote",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
