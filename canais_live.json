@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-09T03:00:24.500Z",
+  "updated": "2026-09-09T03:15:18.755Z",
   "live": [
     {
       "id": 2,
@@ -29,15 +29,6 @@
       "thumbnail": "https://i.ytimg.com/vi/qHH9TvLAW9Q/hqdefault.jpg"
     },
     {
-      "id": 19,
-      "n": "cowboynanoo",
-      "plat": "twitch",
-      "login": "cowboynanoo",
-      "videoTitle": "+18  [CPX GG-XP]  01 DARASHIA | Leilãozinho!!!",
-      "videoUrl": "https://www.twitch.tv/cowboynanoo",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -45,15 +36,6 @@
       "videoTitle": "+18 0 ANIMO, MAS TAMO AI!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "ARC RAIDERS do sabote",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
