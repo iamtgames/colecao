@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-10T01:15:17.010Z",
+  "updated": "2026-09-10T01:19:59.326Z",
   "live": [
     {
       "id": 2,
@@ -11,15 +11,6 @@
       "thumbnail": "https://i.ytimg.com/vi/mjqNhfRKNqc/hqdefault.jpg"
     },
     {
-      "id": 14,
-      "n": "tofogames10",
-      "plat": "twitch",
-      "login": "tofogames10",
-      "videoTitle": "Live de Vendas",
-      "videoUrl": "https://www.twitch.tv/tofogames10",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
-    },
-    {
       "id": 19,
       "n": "cowboynanoo",
       "plat": "twitch",
@@ -27,6 +18,15 @@
       "videoTitle": "+18  [CPX GG-XP]  01 DARASHIA | Dia de Maldade!!",
       "videoUrl": "https://www.twitch.tv/cowboynanoo",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+    },
+    {
+      "id": 14,
+      "n": "tofogames10",
+      "plat": "twitch",
+      "login": "tofogames10",
+      "videoTitle": "Live de Vendas",
+      "videoUrl": "https://www.twitch.tv/tofogames10",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
     },
     {
       "id": 13,
