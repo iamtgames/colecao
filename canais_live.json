@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-10T02:45:16.989Z",
+  "updated": "2026-09-10T03:00:22.558Z",
   "live": [
     {
       "id": 2,
@@ -9,15 +9,6 @@
       "videoTitle": "🎃LIVE GEEK 3D E MAIS 🕹️ #69 LIVE DE VENDAS - 09/09/2026",
       "videoUrl": "https://www.youtube.com/watch?v=mjqNhfRKNqc",
       "thumbnail": "https://i.ytimg.com/vi/mjqNhfRKNqc/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "ARC RAIDERS do sabote",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
