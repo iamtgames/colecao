@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-11T17:45:18.276Z",
+  "updated": "2026-09-11T18:00:24.985Z",
   "live": [
     {
       "id": 7,
@@ -9,6 +9,15 @@
       "videoTitle": "🟢 AO VIVO - JOGANDO FIFA",
       "videoUrl": "https://www.youtube.com/watch?v=p6C3xfeZuoM",
       "thumbnail": "https://i.ytimg.com/vi/p6C3xfeZuoM/hqdefault.jpg"
+    },
+    {
+      "id": 19,
+      "n": "cowboynanoo",
+      "plat": "twitch",
+      "login": "cowboynanoo",
+      "videoTitle": "+18  [CPX GG-XP]  Qual sera nosso Rumo?  | !discord",
+      "videoUrl": "https://www.twitch.tv/cowboynanoo",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
     },
     {
       "id": 17,
