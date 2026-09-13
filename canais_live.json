@@ -1,15 +1,6 @@
 {
-  "updated": "2026-09-13T03:30:21.373Z",
+  "updated": "2026-09-13T03:45:17.513Z",
   "live": [
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc Raiders da sabotagem",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
     {
       "id": 19,
       "n": "cowboynanoo",
@@ -18,6 +9,15 @@
       "videoTitle": "+18  [CPX GG-XP]  SABADOOOUUU  | !discord",
       "videoUrl": "https://www.twitch.tv/cowboynanoo",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc Raiders da sabotagem",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     },
     {
       "id": 17,
