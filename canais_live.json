@@ -1,12 +1,21 @@
 {
-  "updated": "2026-09-13T22:21:58.746Z",
+  "updated": "2026-09-13T22:22:24.734Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "azN_8MzWcJQ",
+      "videoTitle": "🏆ANTEC LIVE ESP. PLAY 🕹️ #71 LIVE DE VENDAS - 10/09/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=azN_8MzWcJQ",
+      "thumbnail": "https://i.ytimg.com/vi/azN_8MzWcJQ/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
       "plat": "youtube",
       "videoId": "ezKI-7lcvgM",
-      "videoTitle": "AO VIVO | [LEILÃO &amp; VENDAS] - DOMINGÃO DE GAMES - SIG CHAP #182",
+      "videoTitle": "AO VIVO | [LEILÃO &amp; VENDAS] - CADA GOL DO TIMÃO = DESCONTO | COR x FLA - SIG CHAP #182",
       "videoUrl": "https://www.youtube.com/watch?v=ezKI-7lcvgM",
       "thumbnail": "https://i.ytimg.com/vi/ezKI-7lcvgM/hqdefault.jpg"
     },
