@@ -1,6 +1,15 @@
 {
-  "updated": "2026-09-13T01:00:23.448Z",
+  "updated": "2026-09-13T01:15:16.127Z",
   "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc Raiders da sabotagem",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
