@@ -1,6 +1,24 @@
 {
-  "updated": "2026-09-16T22:52:55.590Z",
+  "updated": "2026-09-16T22:53:26.991Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "iS0PmxHW-HY",
+      "videoTitle": "🎃LIVE GEEK 3D E MAIS 🕹️ #72 LIVE DE VENDAS - 16/09/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=iS0PmxHW-HY",
+      "thumbnail": "https://i.ytimg.com/vi/iS0PmxHW-HY/hqdefault.jpg"
+    },
+    {
+      "id": 12,
+      "n": "VG Invest",
+      "plat": "youtube",
+      "videoId": "h6Sime7999M",
+      "videoTitle": "Live #26 – Como Criar um Evento de Games? Os Bastidores da Expo Games ABC",
+      "videoUrl": "https://www.youtube.com/watch?v=h6Sime7999M",
+      "thumbnail": "https://i.ytimg.com/vi/h6Sime7999M/hqdefault.jpg"
+    },
     {
       "id": 13,
       "n": "PELEHZADA",
