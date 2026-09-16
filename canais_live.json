@@ -1,4 +1,14 @@
 {
-  "updated": "2026-09-16T22:03:58.756Z",
-  "live": []
+  "updated": "2026-09-16T22:15:53.293Z",
+  "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "wardogs vamos ver como é",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
