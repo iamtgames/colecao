@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-16T22:53:26.991Z",
+  "updated": "2026-09-16T23:00:23.914Z",
   "live": [
     {
       "id": 2,
@@ -20,13 +20,13 @@
       "thumbnail": "https://i.ytimg.com/vi/h6Sime7999M/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
+      "id": 14,
+      "n": "tofogames10",
       "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "wardogs vamos ver como é",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+      "login": "tofogames10",
+      "videoTitle": "Live de Vendas",
+      "videoUrl": "https://www.twitch.tv/tofogames10",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
     },
     {
       "id": 17,
@@ -36,6 +36,15 @@
       "videoTitle": "+18 THATS MY WAY, AND I GO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "wardogs vamos ver como é",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
