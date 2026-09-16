@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-16T01:21:48.329Z",
+  "updated": "2026-09-16T01:30:19.338Z",
   "live": [
     {
       "id": 5,
@@ -11,15 +11,6 @@
       "thumbnail": "https://i.ytimg.com/vi/yHAGGqoFL0o/hqdefault.jpg"
     },
     {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 PC CRASHOU, THATS MY WAY, AND I GO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
-    {
       "id": 13,
       "n": "PELEHZADA",
       "plat": "twitch",
@@ -27,6 +18,15 @@
       "videoTitle": "No man's depois Arc Raiders?",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 PC CRASHOU, THATS MY WAY, AND I GO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
