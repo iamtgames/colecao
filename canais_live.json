@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-17T22:05:24.454Z",
+  "updated": "2026-09-17T22:15:18.797Z",
   "live": [
     {
       "id": 19,
@@ -9,6 +9,15 @@
       "videoTitle": "+18  [VILLA RP] | COWBOY | DARASHIA  !discord",
       "videoUrl": "https://www.twitch.tv/cowboynanoo",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc Raiders, Wardogs ou No man's sky?",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
