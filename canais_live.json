@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-17T02:30:20.708Z",
+  "updated": "2026-09-17T02:45:15.428Z",
   "live": [
     {
       "id": 12,
@@ -9,15 +9,6 @@
       "videoTitle": "Live #26 – Como Criar um Evento de Games? Os Bastidores da Expo Games ABC",
       "videoUrl": "https://www.youtube.com/watch?v=h6Sime7999M",
       "thumbnail": "https://i.ytimg.com/vi/h6Sime7999M/hqdefault.jpg"
-    },
-    {
-      "id": 14,
-      "n": "tofogames10",
-      "plat": "twitch",
-      "login": "tofogames10",
-      "videoTitle": "Live de Vendas",
-      "videoUrl": "https://www.twitch.tv/tofogames10",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
     },
     {
       "id": 17,
