@@ -1,14 +1,14 @@
 {
-  "updated": "2026-09-18T02:30:18.635Z",
+  "updated": "2026-09-18T02:45:17.881Z",
   "live": [
     {
-      "id": 19,
-      "n": "cowboynanoo",
+      "id": 13,
+      "n": "PELEHZADA",
       "plat": "twitch",
-      "login": "cowboynanoo",
-      "videoTitle": "+18  [VILLA RP] | COWBOY | DARASHIA  !discord",
-      "videoUrl": "https://www.twitch.tv/cowboynanoo",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+      "login": "pelehzada",
+      "videoTitle": "Jogatina de cada dia",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     },
     {
       "id": 17,
@@ -18,15 +18,6 @@
       "videoTitle": "+18 AMANHÃ É FOLGA, ESTAMOS ONLINE HJ!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Jogatina de cada dia",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
