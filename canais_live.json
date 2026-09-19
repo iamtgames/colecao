@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-19T03:30:21.028Z",
+  "updated": "2026-09-19T03:45:17.481Z",
   "live": [
     {
       "id": 1,
@@ -36,15 +36,6 @@
       "videoTitle": "AO VIVO | NOITE DO PREÇO BOM - OFERTA ATRÁS DE OFERTA A NOITE TODA - SIG CHAP #182",
       "videoUrl": "https://www.youtube.com/watch?v=cu16JDGc3Ps",
       "thumbnail": "https://i.ytimg.com/vi/cu16JDGc3Ps/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Fazendo expedição no Arc Raiders e no No Man's sky",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     },
     {
       "id": 17,
