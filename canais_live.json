@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-19T01:15:16.028Z",
+  "updated": "2026-09-19T01:30:21.153Z",
   "live": [
     {
       "id": 1,
@@ -47,15 +47,6 @@
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Fazendo expedição no Arc Raiders e no No Man's sky",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -63,6 +54,15 @@
       "videoTitle": "+18 BOM DIA FOLGA SUA LINDA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Fazendo expedição no Arc Raiders e no No Man's sky",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
