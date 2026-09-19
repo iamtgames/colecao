@@ -1,6 +1,42 @@
 {
-  "updated": "2026-09-19T01:00:21.770Z",
+  "updated": "2026-09-19T01:08:02.777Z",
   "live": [
+    {
+      "id": 1,
+      "n": "Diego Sheth",
+      "plat": "youtube",
+      "videoId": "zyTwndkH6ko",
+      "videoTitle": "VEM PRA LIVE DE VENDAS !!!",
+      "videoUrl": "https://www.youtube.com/watch?v=zyTwndkH6ko",
+      "thumbnail": "https://i.ytimg.com/vi/zyTwndkH6ko/hqdefault.jpg"
+    },
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "e6Wd0f33ZjY",
+      "videoTitle": "🕹️GAME PLAY GTA 5 #19 🏆 ANTEC GAMES 👾",
+      "videoUrl": "https://www.youtube.com/watch?v=e6Wd0f33ZjY",
+      "thumbnail": "https://i.ytimg.com/vi/e6Wd0f33ZjY/hqdefault.jpg"
+    },
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "Gzakn5OgdAI",
+      "videoTitle": "SEXTOOOOOUUU LIVE DE VENDAS... MUITOS GAMES E CONSOLES !",
+      "videoUrl": "https://www.youtube.com/watch?v=Gzakn5OgdAI",
+      "thumbnail": "https://i.ytimg.com/vi/Gzakn5OgdAI/hqdefault.jpg"
+    },
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "cu16JDGc3Ps",
+      "videoTitle": "AO VIVO | NOITE DO PREÇO BOM - OFERTA ATRÁS DE OFERTA A NOITE TODA - SIG CHAP #182",
+      "videoUrl": "https://www.youtube.com/watch?v=cu16JDGc3Ps",
+      "thumbnail": "https://i.ytimg.com/vi/cu16JDGc3Ps/hqdefault.jpg"
+    },
     {
       "id": 19,
       "n": "cowboynanoo",
