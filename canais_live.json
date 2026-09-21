@@ -1,6 +1,15 @@
 {
-  "updated": "2026-09-21T23:00:25.315Z",
+  "updated": "2026-09-21T23:13:25.287Z",
   "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Hack Raiders do crashante",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
