@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-20T23:45:16.115Z",
+  "updated": "2026-09-21T00:00:25.411Z",
   "live": [
     {
       "id": 2,
@@ -9,6 +9,15 @@
       "videoTitle": "🏆ANTEC RETRO GAMES LIVE 🕹️ #73 LIVE DE VENDAS - 20/09/2026",
       "videoUrl": "https://www.youtube.com/watch?v=4tx2soRadog",
       "thumbnail": "https://i.ytimg.com/vi/4tx2soRadog/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc raiders do crashante",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
