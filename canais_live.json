@@ -1,4 +1,14 @@
 {
-  "updated": "2026-09-25T22:30:22.389Z",
-  "live": []
+  "updated": "2026-09-25T22:45:16.979Z",
+  "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilo - Arc Raiders",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
