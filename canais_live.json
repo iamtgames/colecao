@@ -1,4 +1,14 @@
 {
-  "updated": "2026-09-28T20:15:17.890Z",
-  "live": []
+  "updated": "2026-09-28T20:30:20.063Z",
+  "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilo",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
