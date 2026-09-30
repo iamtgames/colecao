@@ -1,14 +1,14 @@
 {
-  "updated": "2026-09-30T22:45:18.614Z",
+  "updated": "2026-09-30T23:00:26.485Z",
   "live": [
     {
-      "id": 17,
-      "n": "joaodobife",
+      "id": 14,
+      "n": "tofogames10",
       "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 LIVE MEIO BOROCOXO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+      "login": "tofogames10",
+      "videoTitle": "Live de Vendas",
+      "videoUrl": "https://www.twitch.tv/tofogames10",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
     },
     {
       "id": 13,
@@ -18,6 +18,15 @@
       "videoTitle": "Expedição - upando as bancadas de novo",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 LIVE MEIO BOROCOXO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
