@@ -1609,7 +1609,7 @@
      continuas (nao desliga a abertura de janelas nem transicoes de hover, que
      carregam feedback de estado util). */
   @media (prefers-reduced-motion: reduce){
-    .canal-live-badge, .live-balloon .dot, #crtOverlay::before, .scanner-line, .xp-clouds .cloud, .y2k-start::after, .y2k-desktop .y2k-icon{
+    .canal-live-badge, .live-balloon .dot, #crtOverlay::before, .scanner-line, .xp-clouds .cloud, .y2k-start::after, .y2k-desktop .y2k-icon, .mini-panel-head::after, .y2k-clock-colon{
       animation: none !important;
     }
   }
@@ -1644,6 +1644,24 @@
   .y2k-desktop .y2k-icon:nth-child(5n){ animation-delay:-3.4s; }
   .y2k-desktop .y2k-icon.arrastando{ animation:none; }
   @keyframes y2kIconBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
+
+  /* Brilho de abertura nas janelas (um unico passe, nao em loop -- toca
+     junto com a animacao de abrir que ja existe, painelAbrir3D). */
+  .mini-panel-head{ position:relative; overflow:hidden; }
+  .mini-panel-head::after{
+    content:""; position:absolute; top:0; bottom:0; left:-60%; width:40%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.14), transparent);
+    animation: panelHeadShine .7s ease-out .15s both; pointer-events:none;
+  }
+  @keyframes panelHeadShine{ from{left:-60%} to{left:140%} }
+
+  /* Icones da bandeja ganham um leve "pulo" de escala no hover (a transicao
+     ja existia declarada, so faltava o estado de destino). */
+  .y2k-tray-icon:hover{ transform:scale(1.14); }
+
+  /* Dois-pontos do relogio piscando a cada segundo, como um relogio digital de verdade. */
+  .y2k-clock-colon{ animation: y2kColonBlink 1s step-end infinite; }
+  @keyframes y2kColonBlink{ 50%{ opacity:0; } }
 </style>
 </head>
 <body>
@@ -6135,7 +6153,7 @@ function atualizarRelogioY2k(){
   const agora = new Date();
   const hh = String(agora.getHours()).padStart(2,'0');
   const mm = String(agora.getMinutes()).padStart(2,'0');
-  el.textContent = `${hh}:${mm}`;
+  el.innerHTML = `${hh}<span class="y2k-clock-colon">:</span>${mm}`;
 }
 atualizarRelogioY2k();
 setInterval(atualizarRelogioY2k, 15000);
