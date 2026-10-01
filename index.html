@@ -1215,14 +1215,7 @@
     .cmdk-box{ max-height:88vh; }
   }
 
-  .canais-toggle-card{
-    background: var(--card-glass); backdrop-filter: blur(18px) saturate(140%);
-    border:1px solid rgba(255,255,255,0.08); border-radius: 18px;
-    padding: 16px 20px; margin-bottom: 20px;
-    display:flex; align-items:center; justify-content:space-between;
-    cursor:pointer; transition: border-color .2s, transform .15s;
-  }
-  .canais-toggle-card:hover{border-color: rgba(255,255,255,0.35);}
+  
   .canais-toggle-left{display:flex; align-items:center; gap:14px;}
   .canais-toggle-icon{font-size:28px;}
   .canais-toggle-left h3{font-size:15.5px; font-weight:400; color:var(--white); font-family:'Russo One','Space Grotesk','Segoe UI',sans-serif; letter-spacing:.2px;}
@@ -1611,6 +1604,15 @@
            transition: none !important;
   }
   .modo-leve #crtOverlay{ display:none !important; }
+
+  /* Suporte a prefers-reduced-motion: desliga apenas as animacoes decorativas
+     continuas (nao desliga a abertura de janelas nem transicoes de hover, que
+     carregam feedback de estado util). */
+  @media (prefers-reduced-motion: reduce){
+    .canal-live-badge, .live-balloon .dot, #crtOverlay::before, .scanner-line{
+      animation: none !important;
+    }
+  }
 </style>
 </head>
 <body>
@@ -1748,7 +1750,7 @@
 <!-- Estas quatro "janelas" ficam totalmente fora do fluxo da pagina inicial --
      so existem quando abertas pelo icone correspondente na area de trabalho
      (ou pelo menu Iniciar), igual qualquer outro mini-panel do site. -->
-<div class="mini-panel-overlay" id="canaisPanelOverlay">
+<div class="mini-panel-overlay" id="canaisPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-xwide">
     <div class="win-titlebar">vendedores_player.exe</div>
     <div class="mini-panel-head"><h3 id="canaisTituloEl">📺 Vendedores, Lives e Leilões</h3><button class="mini-panel-close" id="canaisPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -1766,7 +1768,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="vendedoresPanelOverlay">
+<div class="mini-panel-overlay" id="vendedoresPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-xwide">
     <div class="win-titlebar">lojas_vendedores.exe</div>
     <div class="mini-panel-head"><h3 id="vendedoresTituloEl">🛍️ Sites de Vendedores</h3><button class="mini-panel-close" id="vendedoresPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -1777,7 +1779,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="wishlistPanelOverlay">
+<div class="mini-panel-overlay" id="wishlistPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-xwide">
     <div class="win-titlebar">radar.exe</div>
     <div class="mini-panel-head"><h3 id="radarTituloEl">🎯 Radar de Caça</h3><button class="mini-panel-close" id="wishlistPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -1793,7 +1795,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="buscaPrecoPanelOverlay">
+<div class="mini-panel-overlay" id="buscaPrecoPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-xwide">
     <div class="win-titlebar">buscapreco.exe</div>
     <div class="mini-panel-head"><h3>💰 Buscador de Preços</h3><button class="mini-panel-close" id="buscaPrecoPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -1817,7 +1819,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="mediaPlayerPanelOverlay">
+<div class="mini-panel-overlay" id="mediaPlayerPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-xwide">
     <div class="win-titlebar">mediaplayer.exe</div>
     <div class="mini-panel-head"><h3 id="mediaPlayerTituloEl">🎬 Animes Variados</h3><button class="mini-panel-close" id="mediaPlayerPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -1827,7 +1829,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="aovivoPanelOverlay">
+<div class="mini-panel-overlay" id="aovivoPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-xwide">
     <div class="win-titlebar">noticias.exe</div>
     <div class="mini-panel-head"><h3 id="aovivoTituloEl">📰 Notícias Gamer, Jogos Grátis e Dica de Jogos</h3><button class="mini-panel-close" id="aovivoPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -1854,7 +1856,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="colecaoGridPanelOverlay">
+<div class="mini-panel-overlay" id="colecaoGridPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-xwide">
     <div class="win-titlebar" id="colecaoGridTitlebar">colecao.exe</div>
     <div class="mini-panel-head"><h3 id="colecaoGridTitulo">📁 Coleção</h3><button class="mini-panel-close" id="colecaoGridPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -1910,7 +1912,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="visitasPanelOverlay">
+<div class="mini-panel-overlay" id="visitasPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-wide">
     <div class="win-titlebar">livro_visitas.exe</div>
     <div class="mini-panel-head"><h3>💬 Livro de visitas</h3><button class="mini-panel-close" id="visitasPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -1922,7 +1924,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="destaquesPanelOverlay">
+<div class="mini-panel-overlay" id="destaquesPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-wide">
     <div class="win-titlebar">destaques.pptx</div>
     <div class="mini-panel-head"><h3>📽️ Destaque da Coleção</h3><button class="mini-panel-close" id="destaquesPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -1947,7 +1949,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="resumoXlsxPanelOverlay">
+<div class="mini-panel-overlay" id="resumoXlsxPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel">
     <div class="win-titlebar">resumo.xlsx</div>
     <div class="mini-panel-head"><h3>📗 Resumo Rápido</h3><button class="mini-panel-close" id="resumoXlsxPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -2038,7 +2040,7 @@
      nenhuma dependencia externa -- substitui o DOOM (que rodava via js-dos/
      DOSBox em WebAssembly). Sons sintetizados via Web Audio API, com botao
      de mutar (estado compartilhado com a Paciencia: jogosSomMutado). -->
-<div class="mini-panel-overlay" id="campoMinadoPanelOverlay">
+<div class="mini-panel-overlay" id="campoMinadoPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-wide">
     <div class="win-titlebar">MINAS.EXE</div>
     <div class="mini-panel-head"><h3>💣 Campo Minado</h3><button class="mini-panel-close" id="campoMinadoPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -2067,7 +2069,7 @@
 <!-- Paciencia (Klondike Solitaire): implementacao propria em JS puro,
      interacao por clique (seleciona uma carta/sequencia, clique no destino
      pra mover). Compartilha o mesmo som sintetico e mute do Campo Minado. -->
-<div class="mini-panel-overlay" id="pacienciaPanelOverlay">
+<div class="mini-panel-overlay" id="pacienciaPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-xwide">
     <div class="win-titlebar">PACIENCIA.EXE</div>
     <div class="mini-panel-head"><h3>🂡 Paciência</h3><button class="mini-panel-close" id="pacienciaPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -2104,7 +2106,7 @@
     </div>
   </div>
 </div>
-<div class="mini-panel-overlay" id="toolsPanelOverlay">
+<div class="mini-panel-overlay" id="toolsPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel">
     <div class="win-titlebar">painel_de_controle.exe</div>
     <div class="mini-panel-head"><h3>🛠️ Ferramentas</h3><button class="mini-panel-close" id="toolsPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -2120,7 +2122,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="colecaoPanelOverlay">
+<div class="mini-panel-overlay" id="colecaoPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel">
     <div class="win-titlebar">colecao.exe</div>
     <div class="mini-panel-head"><h3>📁 Coleção</h3><button class="mini-panel-close" id="colecaoPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -2141,7 +2143,7 @@
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="segredoPanelOverlay">
+<div class="mini-panel-overlay" id="segredoPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel">
     <div class="win-titlebar notepad">codigos_secretos.txt — Bloco de Notas</div>
     <div class="mini-panel-head"><h3>📝 codigos_secretos.txt</h3><button class="mini-panel-close" id="segredoPanelCloseBtn" aria-label="Fechar">✕</button></div>
@@ -2158,7 +2160,7 @@ uma Sala Secreta se abre com curiosidades reais da colecao.
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="statsPanelOverlay">
+<div class="mini-panel-overlay" id="statsPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel mini-panel-wide">
     <div class="mini-panel-head"><h3>📊 Estatísticas da coleção</h3><button class="mini-panel-close" id="statsPanelCloseBtn" aria-label="Fechar">✕</button></div>
     <div class="mini-panel-body">
@@ -2176,7 +2178,7 @@ uma Sala Secreta se abre com curiosidades reais da colecao.
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="calendarioPanelOverlay">
+<div class="mini-panel-overlay" id="calendarioPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel">
     <div class="mini-panel-head"><h3 id="calendarioTituloEl">📆 Calendário de Lançamentos</h3><button class="mini-panel-close" id="calendarioPanelCloseBtn" aria-label="Fechar">✕</button></div>
     <div class="mini-panel-body calendario-mini-body">
@@ -2197,7 +2199,7 @@ uma Sala Secreta se abre com curiosidades reais da colecao.
   </div>
 </div>
 
-<div class="mini-panel-overlay" id="scannerPanelOverlay">
+<div class="mini-panel-overlay" id="scannerPanelOverlay" role="dialog" aria-modal="true">
   <div class="mini-panel">
     <div class="mini-panel-head"><h3 id="scannerPanelTitulo">📷 Já tenho esse jogo?</h3><button class="mini-panel-close" id="scannerPanelCloseBtn" aria-label="Fechar">✕</button></div>
     <div class="mini-panel-body">
