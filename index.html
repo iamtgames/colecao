@@ -1609,14 +1609,46 @@
      continuas (nao desliga a abertura de janelas nem transicoes de hover, que
      carregam feedback de estado util). */
   @media (prefers-reduced-motion: reduce){
-    .canal-live-badge, .live-balloon .dot, #crtOverlay::before, .scanner-line{
+    .canal-live-badge, .live-balloon .dot, #crtOverlay::before, .scanner-line, .xp-clouds .cloud, .y2k-start::after, .y2k-desktop .y2k-icon{
       animation: none !important;
     }
   }
+
+  /* Nuvens flutuando sobre o wallpaper Bliss -- camada decorativa continua,
+     sutil, atras dos icones/janelas (z-index 0). Desligada automaticamente
+     no modo leve e com prefers-reduced-motion (ver blocos mais abaixo). */
+  .xp-clouds{ position:fixed; inset:0; z-index:0; pointer-events:none; overflow:hidden; }
+  .xp-clouds .cloud{
+    position:absolute; background:#fff; border-radius:50px; opacity:.55; filter:blur(.5px);
+    box-shadow:40px 6px 0 -4px #fff, 80px 0 0 -8px #fff, -36px 8px 0 -6px #fff;
+  }
+  .xp-clouds .c1{ width:140px; height:38px; top:8%; left:-15%; animation:xpCloudDrift 48s linear infinite; }
+  .xp-clouds .c2{ width:100px; height:28px; top:16%; left:-30%; animation:xpCloudDrift 64s linear infinite; animation-delay:-20s; }
+  .xp-clouds .c3{ width:170px; height:44px; top:4%; left:-45%; animation:xpCloudDrift 80s linear infinite; animation-delay:-40s; }
+  @keyframes xpCloudDrift{ from{transform:translateX(0)} to{transform:translateX(135vw)} }
+
+  /* Botao Iniciar com um brilho passando por cima periodicamente. */
+  .y2k-start{ position:relative; overflow:hidden; }
+  .y2k-start::after{
+    content:""; position:absolute; top:0; bottom:0; left:-60%; width:35%;
+    background:linear-gradient(100deg, transparent, rgba(255,255,255,.55), transparent);
+    animation: y2kStartSheen 5s ease-in-out infinite; pointer-events:none;
+  }
+  @keyframes y2kStartSheen{ 0%,55%{left:-60%} 100%{left:140%} }
+
+  /* Respiracao bem sutil nos icones da area de trabalho -- quase
+     imperceptivel, so tira o "congelado" de longe. Para durante o arrasto. */
+  .y2k-desktop .y2k-icon{ animation: y2kIconBob 4.6s ease-in-out infinite; }
+  .y2k-desktop .y2k-icon:nth-child(2n){ animation-delay:-1.3s; }
+  .y2k-desktop .y2k-icon:nth-child(3n){ animation-delay:-2.6s; }
+  .y2k-desktop .y2k-icon:nth-child(5n){ animation-delay:-3.4s; }
+  .y2k-desktop .y2k-icon.arrastando{ animation:none; }
+  @keyframes y2kIconBob{ 0%,100%{transform:translateY(0)} 50%{transform:translateY(-2px)} }
 </style>
 </head>
 <body>
 <div id="crtOverlay"></div>
+<div class="xp-clouds" aria-hidden="true"><span class="cloud c1"></span><span class="cloud c2"></span><span class="cloud c3"></span></div>
 <!-- Gatilhos escondidos: nao aparecem mais soltos na tela, sao acionados
      pelos itens do menu Iniciar da barra de tarefas Y2K la embaixo. -->
 <button id="contatoBtn" style="display:none;" aria-hidden="true" tabindex="-1"></button>
