@@ -1,6 +1,15 @@
 {
-  "updated": "2026-10-04T00:15:16.396Z",
+  "updated": "2026-10-04T00:30:19.109Z",
   "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Expedição - upando as bancadas de novo",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
