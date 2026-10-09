@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-09T04:15:18.139Z",
+  "updated": "2026-10-09T04:30:57.749Z",
   "live": [
     {
       "id": 2,
@@ -9,15 +9,6 @@
       "videoTitle": "🏆ANTEC RETRO GAMES LIVE  🕹️ #79 LIVE DE VENDAS - 08/10/2026 EU QUEROOO CAFEEE!!!!",
       "videoUrl": "https://www.youtube.com/watch?v=Ov7d6nhy0qs",
       "thumbnail": "https://i.ytimg.com/vi/Ov7d6nhy0qs/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc raiders - ATUALIZAÇÃO",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
