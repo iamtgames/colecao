@@ -24,12 +24,14 @@ jobs:
         with:
           node-version: '20'
 
+      # Twitch toda execucao. O YouTube tambem e checado por este mesmo script, mas o
+      # proprio check-live.js limita a frequencia (intervalo minimo de 150 min, para
+      # caber na cota gratuita) e reconfere as lives ativas a cada execucao.
       - name: Checar canais ao vivo e gerar canais_live.json
         env:
           YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
           TWITCH_CLIENT_ID: ${{ secrets.TWITCH_CLIENT_ID }}
           TWITCH_CLIENT_SECRET: ${{ secrets.TWITCH_CLIENT_SECRET }}
-          SKIP_YOUTUBE: '1'
         run: node check-live.js
 
       - name: Commitar mudancas (se houver)
@@ -37,6 +39,19 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add canais_live.json
-          git diff --staged --quiet || git commit -m "Atualiza status de lives (automatico)"
-          git pull --rebase origin main
-          git push
+          if git diff --staged --quiet; then
+            echo "Sem mudancas pra commitar."
+            exit 0
+          fi
+          git commit -m "Atualiza status de lives (automatico)"
+          for i in 1 2 3 4 5; do
+            # -X theirs: num conflito, vale o nosso canais_live.json recem-gerado.
+            if git pull --rebase -X theirs origin main && git push; then
+              exit 0
+            fi
+            echo "Push falhou (tentativa $i) -- tentando de novo."
+            git rebase --abort 2>/dev/null || true
+            sleep $((i * 4))
+          done
+          echo "Nao foi possivel enviar o commit depois de 5 tentativas."
+          exit 1
