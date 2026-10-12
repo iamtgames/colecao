@@ -1,16 +1,7 @@
 {
-  "updated": "2026-10-12T14:15:17.418Z",
+  "updated": "2026-10-12T14:30:21.530Z",
   "youtubeCheckedAt": "2026-10-12T13:45:21.606Z",
   "live": [
-    {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 SU1C1DIO É A SOLUÇÃO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
     {
       "id": 19,
       "n": "cowboynanoo",
@@ -19,6 +10,15 @@
       "videoTitle": "+18  [TRAVESSIA] Buxinha ProMAX",
       "videoUrl": "https://www.twitch.tv/cowboynanoo",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 SU1C1DIO É A SOLUÇÃO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
