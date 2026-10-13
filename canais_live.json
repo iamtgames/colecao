@@ -1,5 +1,24 @@
 {
-  "updated": "2026-10-13T15:45:18.383Z",
+  "updated": "2026-10-13T16:00:27.791Z",
   "youtubeCheckedAt": "2026-10-13T14:45:21.667Z",
-  "live": []
+  "live": [
+    {
+      "id": 19,
+      "n": "cowboynanoo",
+      "plat": "twitch",
+      "login": "cowboynanoo",
+      "videoTitle": "+18  [TRAVESSIA] COWBOY DOS BRIKE",
+      "videoUrl": "https://www.twitch.tv/cowboynanoo",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 LIVE CURTA DURANTE O ALMOÇO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    }
+  ]
 }
