@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-13T22:45:16.842Z",
+  "updated": "2026-10-13T23:00:22.621Z",
   "youtubeCheckedAt": "2026-10-13T22:15:16.976Z",
   "live": [
     {
@@ -10,6 +10,15 @@
       "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 13/10/2026",
       "videoUrl": "https://www.youtube.com/watch?v=vPA4NiBa1rA",
       "thumbnail": "https://i.ytimg.com/vi/vPA4NiBa1rA/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc raiders - MODO PVE???",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
