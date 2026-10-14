@@ -1,16 +1,7 @@
 {
-  "updated": "2026-10-14T01:15:16.873Z",
+  "updated": "2026-10-14T01:30:18.945Z",
   "youtubeCheckedAt": "2026-10-14T00:45:15.997Z",
   "live": [
-    {
-      "id": 2,
-      "n": "Antec.r",
-      "plat": "youtube",
-      "videoId": "O6gjJhiQUHg",
-      "videoTitle": "🕹️GAME PLAY GTA 5 #22 🏆 ANTEC GAMES 👾",
-      "videoUrl": "https://www.youtube.com/watch?v=O6gjJhiQUHg",
-      "thumbnail": "https://i.ytimg.com/vi/O6gjJhiQUHg/hqdefault.jpg"
-    },
     {
       "id": 5,
       "n": "DJ Games Retro",
@@ -21,15 +12,6 @@
       "thumbnail": "https://i.ytimg.com/vi/vPA4NiBa1rA/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc raiders - MODO PVE???",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -37,6 +19,15 @@
       "videoTitle": "+18 LIVE CURTA PQ AMANHÃ ENTRO MAIS CEDO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc raiders - MODO PVE???",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
