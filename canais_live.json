@@ -1,15 +1,5 @@
 {
-  "updated": "2026-10-14T10:45:17.751Z",
+  "updated": "2026-10-14T11:00:26.907Z",
   "youtubeCheckedAt": "2026-10-14T10:45:17.751Z",
-  "live": [
-    {
-      "id": 9,
-      "n": "Rodrigo Retro Games",
-      "plat": "youtube",
-      "videoId": "CokPvIFI2BE",
-      "videoTitle": "LIVE DE VENDAS! (Rodrigo Games) 13/10",
-      "videoUrl": "https://www.youtube.com/watch?v=CokPvIFI2BE",
-      "thumbnail": "https://i.ytimg.com/vi/CokPvIFI2BE/hqdefault.jpg"
-    }
-  ]
+  "live": []
 }
