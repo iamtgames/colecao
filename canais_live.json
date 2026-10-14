@@ -1,7 +1,16 @@
 {
-  "updated": "2026-10-14T23:09:41.359Z",
-  "youtubeCheckedAt": "2026-10-14T20:45:17.967Z",
+  "updated": "2026-10-14T23:15:18.511Z",
+  "youtubeCheckedAt": "2026-10-14T23:15:18.511Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "YHJmIprPpVM",
+      "videoTitle": "🎃LIVE GEEK 3D E MAIS 🕹️ #81 LIVE DE VENDAS - 14/10/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=YHJmIprPpVM",
+      "thumbnail": "https://i.ytimg.com/vi/YHJmIprPpVM/hqdefault.jpg"
+    },
     {
       "id": 14,
       "n": "tofogames10",
@@ -10,15 +19,6 @@
       "videoTitle": "Live de Vendas",
       "videoUrl": "https://www.twitch.tv/tofogames10",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
-    },
-    {
-      "id": 19,
-      "n": "cowboynanoo",
-      "plat": "twitch",
-      "login": "cowboynanoo",
-      "videoTitle": "+18  [TRAVESSIA] COWBOY DOS BRIKE",
-      "videoUrl": "https://www.twitch.tv/cowboynanoo",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
     }
   ]
 }
