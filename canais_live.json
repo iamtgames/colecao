@@ -1,7 +1,16 @@
 {
-  "updated": "2026-10-14T03:00:27.801Z",
-  "youtubeCheckedAt": "2026-10-14T00:45:15.997Z",
+  "updated": "2026-10-14T03:15:15.622Z",
+  "youtubeCheckedAt": "2026-10-14T03:15:15.622Z",
   "live": [
+    {
+      "id": 9,
+      "n": "Rodrigo Retro Games",
+      "plat": "youtube",
+      "videoId": "CokPvIFI2BE",
+      "videoTitle": "LIVE DE VENDAS! (Rodrigo Games) 13/10",
+      "videoUrl": "https://www.youtube.com/watch?v=CokPvIFI2BE",
+      "thumbnail": "https://i.ytimg.com/vi/CokPvIFI2BE/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
