@@ -1,7 +1,16 @@
 {
-  "updated": "2026-10-14T00:30:20.401Z",
-  "youtubeCheckedAt": "2026-10-13T22:15:16.976Z",
+  "updated": "2026-10-14T00:45:15.997Z",
+  "youtubeCheckedAt": "2026-10-14T00:45:15.997Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "O6gjJhiQUHg",
+      "videoTitle": "🕹️GAME PLAY GTA 5 #22 🏆 ANTEC GAMES 👾",
+      "videoUrl": "https://www.youtube.com/watch?v=O6gjJhiQUHg",
+      "thumbnail": "https://i.ytimg.com/vi/O6gjJhiQUHg/hqdefault.jpg"
+    },
     {
       "id": 5,
       "n": "DJ Games Retro",
@@ -10,6 +19,15 @@
       "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 13/10/2026",
       "videoUrl": "https://www.youtube.com/watch?v=vPA4NiBa1rA",
       "thumbnail": "https://i.ytimg.com/vi/vPA4NiBa1rA/hqdefault.jpg"
+    },
+    {
+      "id": 9,
+      "n": "Rodrigo Retro Games",
+      "plat": "youtube",
+      "videoId": "CokPvIFI2BE",
+      "videoTitle": "LIVE DE VENDAS! (Rodrigo Games) 13/10",
+      "videoUrl": "https://www.youtube.com/watch?v=CokPvIFI2BE",
+      "thumbnail": "https://i.ytimg.com/vi/CokPvIFI2BE/hqdefault.jpg"
     },
     {
       "id": 17,
