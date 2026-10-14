@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-14T00:45:15.997Z",
+  "updated": "2026-10-14T01:00:22.684Z",
   "youtubeCheckedAt": "2026-10-14T00:45:15.997Z",
   "live": [
     {
@@ -21,13 +21,13 @@
       "thumbnail": "https://i.ytimg.com/vi/vPA4NiBa1rA/hqdefault.jpg"
     },
     {
-      "id": 9,
-      "n": "Rodrigo Retro Games",
-      "plat": "youtube",
-      "videoId": "CokPvIFI2BE",
-      "videoTitle": "LIVE DE VENDAS! (Rodrigo Games) 13/10",
-      "videoUrl": "https://www.youtube.com/watch?v=CokPvIFI2BE",
-      "thumbnail": "https://i.ytimg.com/vi/CokPvIFI2BE/hqdefault.jpg"
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc raiders - MODO PVE???",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     },
     {
       "id": 17,
@@ -37,15 +37,6 @@
       "videoTitle": "+18 LIVE CURTA PQ AMANHÃ ENTRO MAIS CEDO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc raiders - MODO PVE???",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
