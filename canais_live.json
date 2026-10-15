@@ -1,16 +1,7 @@
 {
-  "updated": "2026-10-15T16:00:26.509Z",
+  "updated": "2026-10-15T16:15:19.354Z",
   "youtubeCheckedAt": "2026-10-15T14:15:18.458Z",
   "live": [
-    {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 LIVEZINHA CURTA DURANTE O ALMOÇO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
     {
       "id": 19,
       "n": "cowboynanoo",
@@ -19,6 +10,15 @@
       "videoTitle": "+18  [TRAVESSIA] FOCO NO MONEY",
       "videoUrl": "https://www.twitch.tv/cowboynanoo",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 LIVEZINHA CURTA DURANTE O ALMOÇO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
