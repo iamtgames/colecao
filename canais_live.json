@@ -1,15 +1,5 @@
 {
-  "updated": "2026-10-15T04:30:19.591Z",
+  "updated": "2026-10-15T04:45:17.120Z",
   "youtubeCheckedAt": "2026-10-15T04:15:17.181Z",
-  "live": [
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc raiders - MODO PVE???",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    }
-  ]
+  "live": []
 }
