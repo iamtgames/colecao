@@ -1,7 +1,16 @@
 {
-  "updated": "2026-10-16T22:30:21.982Z",
-  "youtubeCheckedAt": "2026-10-16T20:15:16.388Z",
+  "updated": "2026-10-16T22:45:15.849Z",
+  "youtubeCheckedAt": "2026-10-16T22:45:15.849Z",
   "live": [
+    {
+      "id": 1,
+      "n": "Diego Sheth",
+      "plat": "youtube",
+      "videoId": "UW_WNDsTZa0",
+      "videoTitle": "LIVE DE VENDAS !!!",
+      "videoUrl": "https://www.youtube.com/watch?v=UW_WNDsTZa0",
+      "thumbnail": "https://i.ytimg.com/vi/UW_WNDsTZa0/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
