@@ -1,7 +1,25 @@
 {
-  "updated": "2026-10-16T00:00:23.535Z",
-  "youtubeCheckedAt": "2026-10-15T21:45:17.624Z",
+  "updated": "2026-10-16T00:15:18.210Z",
+  "youtubeCheckedAt": "2026-10-16T00:15:18.211Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "hstPYpfMJwg",
+      "videoTitle": "🏆ANTEC RETRO GAMES LIVE 🕹️ #82 LIVE DE VENDAS - 15/10/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=hstPYpfMJwg",
+      "thumbnail": "https://i.ytimg.com/vi/hstPYpfMJwg/hqdefault.jpg"
+    },
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "hS9dzWKgS94",
+      "videoTitle": "SUPER LIVE DE VENDAS.. GAMES, CONSOLES E ACESSÓRIOS !",
+      "videoUrl": "https://www.youtube.com/watch?v=hS9dzWKgS94",
+      "thumbnail": "https://i.ytimg.com/vi/hS9dzWKgS94/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
