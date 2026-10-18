@@ -1,5 +1,15 @@
 {
-  "updated": "2026-10-18T00:30:17.905Z",
+  "updated": "2026-10-18T00:45:16.476Z",
   "youtubeCheckedAt": "2026-10-17T23:45:16.868Z",
-  "live": []
+  "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Jogo reliquia kkkkk",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
