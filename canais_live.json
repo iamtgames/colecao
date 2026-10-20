@@ -1,7 +1,16 @@
 {
-  "updated": "2026-10-20T21:45:15.989Z",
-  "youtubeCheckedAt": "2026-10-20T19:30:22.136Z",
+  "updated": "2026-10-20T22:00:24.926Z",
+  "youtubeCheckedAt": "2026-10-20T22:00:24.926Z",
   "live": [
+    {
+      "id": 5,
+      "n": "DJ Games Retro",
+      "plat": "youtube",
+      "videoId": "OsoYnbJBTwQ",
+      "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 20/10/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=OsoYnbJBTwQ",
+      "thumbnail": "https://i.ytimg.com/vi/OsoYnbJBTwQ/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
