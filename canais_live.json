@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-21T00:30:20.901Z",
+  "updated": "2026-10-21T00:45:16.931Z",
   "youtubeCheckedAt": "2026-10-21T00:30:20.901Z",
   "live": [
     {
@@ -21,15 +21,6 @@
       "thumbnail": "https://i.ytimg.com/vi/OsoYnbJBTwQ/hqdefault.jpg"
     },
     {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 PC CRASHOU!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
-    {
       "id": 13,
       "n": "PELEHZADA",
       "plat": "twitch",
@@ -37,6 +28,15 @@
       "videoTitle": "Jogo reliquia kkkkk",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 PC CRASHOU!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
