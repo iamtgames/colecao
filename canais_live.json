@@ -1,15 +1,5 @@
 {
-  "updated": "2026-10-21T04:00:25.417Z",
+  "updated": "2026-10-21T04:15:15.823Z",
   "youtubeCheckedAt": "2026-10-21T03:00:23.551Z",
-  "live": [
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc Raiders - Frozen Trail",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    }
-  ]
+  "live": []
 }
