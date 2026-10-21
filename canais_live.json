@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-21T23:00:24.988Z",
+  "updated": "2026-10-21T23:13:36.361Z",
   "youtubeCheckedAt": "2026-10-21T23:00:24.989Z",
   "live": [
     {
@@ -19,6 +19,15 @@
       "videoTitle": "Live de Vendas",
       "videoUrl": "https://www.twitch.tv/tofogames10",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 TO MORRENDO!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
