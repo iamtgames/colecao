@@ -1,15 +1,15 @@
 {
-  "updated": "2026-10-24T18:15:18.573Z",
-  "youtubeCheckedAt": "2026-10-24T16:00:24.049Z",
+  "updated": "2026-10-24T18:30:18.743Z",
+  "youtubeCheckedAt": "2026-10-24T18:30:18.744Z",
   "live": [
     {
-      "id": 7,
-      "n": "Sigchap",
-      "plat": "youtube",
-      "videoId": "20ki1PMtyNI",
-      "videoTitle": "JOGANDO POKEMON + MUSICA (AO VIVO)",
-      "videoUrl": "https://www.youtube.com/watch?v=20ki1PMtyNI",
-      "thumbnail": "https://i.ytimg.com/vi/20ki1PMtyNI/hqdefault.jpg"
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc Raiders - Frozen Trail",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
