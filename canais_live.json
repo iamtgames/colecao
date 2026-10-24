@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-24T16:00:24.049Z",
+  "updated": "2026-10-24T16:15:18.420Z",
   "youtubeCheckedAt": "2026-10-24T16:00:24.049Z",
   "live": [
     {
@@ -10,6 +10,15 @@
       "videoTitle": "JOGANDO POKEMON + MUSICA (AO VIVO)",
       "videoUrl": "https://www.youtube.com/watch?v=20ki1PMtyNI",
       "thumbnail": "https://i.ytimg.com/vi/20ki1PMtyNI/hqdefault.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 LIVE CURTA DE LEI!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
