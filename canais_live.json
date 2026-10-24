@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-24T00:30:19.551Z",
+  "updated": "2026-10-24T00:45:21.691Z",
   "youtubeCheckedAt": "2026-10-23T22:30:18.860Z",
   "live": [
     {
@@ -10,6 +10,15 @@
       "videoTitle": "LIVE DE VENDAS !!!",
       "videoUrl": "https://www.youtube.com/watch?v=GqupLytYdNY",
       "thumbnail": "https://i.ytimg.com/vi/GqupLytYdNY/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc Raiders - Frozen Trail",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     },
     {
       "id": 17,
