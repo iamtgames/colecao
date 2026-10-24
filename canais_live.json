@@ -1,15 +1,5 @@
 {
-  "updated": "2026-10-24T12:00:23.509Z",
+  "updated": "2026-10-24T12:15:18.801Z",
   "youtubeCheckedAt": "2026-10-24T11:00:24.135Z",
-  "live": [
-    {
-      "id": 7,
-      "n": "Sigchap",
-      "plat": "youtube",
-      "videoId": "eUIYfu5MhDw",
-      "videoTitle": "JOGANDO POKÉMON 🔴 AO VIVO",
-      "videoUrl": "https://www.youtube.com/watch?v=eUIYfu5MhDw",
-      "thumbnail": "https://i.ytimg.com/vi/eUIYfu5MhDw/hqdefault.jpg"
-    }
-  ]
+  "live": []
 }
