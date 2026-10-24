@@ -1,6 +1,6 @@
 {
-  "updated": "2026-10-24T00:45:21.691Z",
-  "youtubeCheckedAt": "2026-10-23T22:30:18.860Z",
+  "updated": "2026-10-24T01:00:22.623Z",
+  "youtubeCheckedAt": "2026-10-24T01:00:22.623Z",
   "live": [
     {
       "id": 1,
@@ -10,6 +10,24 @@
       "videoTitle": "LIVE DE VENDAS !!!",
       "videoUrl": "https://www.youtube.com/watch?v=GqupLytYdNY",
       "thumbnail": "https://i.ytimg.com/vi/GqupLytYdNY/hqdefault.jpg"
+    },
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "aJamFJ_XvA4",
+      "videoTitle": "🕹️GAME PLAY GTA 5 #25 🏆 ANTEC GAMES 👾",
+      "videoUrl": "https://www.youtube.com/watch?v=aJamFJ_XvA4",
+      "thumbnail": "https://i.ytimg.com/vi/aJamFJ_XvA4/hqdefault.jpg"
+    },
+    {
+      "id": 3,
+      "n": "Garimpo dos Games",
+      "plat": "youtube",
+      "videoId": "hNw5h4ZVynU",
+      "videoTitle": "Garimpo dos games  está ao vivo!",
+      "videoUrl": "https://www.youtube.com/watch?v=hNw5h4ZVynU",
+      "thumbnail": "https://i.ytimg.com/vi/hNw5h4ZVynU/hqdefault.jpg"
     },
     {
       "id": 13,
