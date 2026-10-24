@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-24T04:00:24.679Z",
+  "updated": "2026-10-24T04:15:15.069Z",
   "youtubeCheckedAt": "2026-10-24T03:30:20.494Z",
   "live": [
     {
@@ -10,15 +10,6 @@
       "videoTitle": "TO DE VOLTA? VENDENDO JOGO DE SUPER NINTENDO (AO VIVO)",
       "videoUrl": "https://www.youtube.com/watch?v=eUIYfu5MhDw",
       "thumbnail": "https://i.ytimg.com/vi/eUIYfu5MhDw/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc Raiders - Frozen Trail",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
