@@ -1,15 +1,15 @@
 {
-  "updated": "2026-10-27T01:15:17.122Z",
-  "youtubeCheckedAt": "2026-10-26T23:00:25.755Z",
+  "updated": "2026-10-27T01:30:20.701Z",
+  "youtubeCheckedAt": "2026-10-27T01:30:20.701Z",
   "live": [
     {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 ESTAMOS DE VOLTA EM RITMO DE FESTA AINDA!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+      "id": 3,
+      "n": "Garimpo dos Games",
+      "plat": "youtube",
+      "videoId": "tHN0g30V_EU",
+      "videoTitle": "Garimpo dos games  está ao vivo!",
+      "videoUrl": "https://www.youtube.com/watch?v=tHN0g30V_EU",
+      "thumbnail": "https://i.ytimg.com/vi/tHN0g30V_EU/hqdefault.jpg"
     },
     {
       "id": 13,
@@ -19,6 +19,15 @@
       "videoTitle": "Arc Raiders - Frozen Trail",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 ESTAMOS DE VOLTA EM RITMO DE FESTA AINDA!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
