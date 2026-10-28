@@ -1,5 +1,24 @@
 {
-  "updated": "2026-10-28T22:15:17.216Z",
-  "youtubeCheckedAt": "2026-10-28T20:00:27.313Z",
-  "live": []
+  "updated": "2026-10-28T22:30:21.451Z",
+  "youtubeCheckedAt": "2026-10-28T22:30:21.451Z",
+  "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "qUrptqRaN7I",
+      "videoTitle": "TODOS OS SEGREDOS   LIVE TEST PARA BLACK",
+      "videoUrl": "https://www.youtube.com/watch?v=qUrptqRaN7I",
+      "thumbnail": "https://i.ytimg.com/vi/qUrptqRaN7I/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc Raiders - Bancada de pesquisa",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
