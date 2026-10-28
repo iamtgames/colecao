@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-28T00:30:19.881Z",
+  "updated": "2026-10-28T00:45:17.667Z",
   "youtubeCheckedAt": "2026-10-28T00:00:32.571Z",
   "live": [
     {
@@ -12,15 +12,6 @@
       "thumbnail": "https://i.ytimg.com/vi/Nv09k_ISyiM/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc Raiders - Frozen Trail",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -28,6 +19,15 @@
       "videoTitle": "+18 SÓ DEUS SABE COMO TA A MENTE DO PALHAÇO!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Arc Raiders - Frozen Trail",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
