@@ -1,15 +1,15 @@
 {
-  "updated": "2026-10-28T22:45:15.276Z",
+  "updated": "2026-10-28T23:00:26.062Z",
   "youtubeCheckedAt": "2026-10-28T22:30:21.451Z",
   "live": [
     {
-      "id": 2,
-      "n": "Antec.r",
-      "plat": "youtube",
-      "videoId": "qUrptqRaN7I",
-      "videoTitle": "TODOS OS SEGREDOS   LIVE TEST PARA BLACK",
-      "videoUrl": "https://www.youtube.com/watch?v=qUrptqRaN7I",
-      "thumbnail": "https://i.ytimg.com/vi/qUrptqRaN7I/hqdefault.jpg"
+      "id": 14,
+      "n": "tofogames10",
+      "plat": "twitch",
+      "login": "tofogames10",
+      "videoTitle": "Live de Vendas",
+      "videoUrl": "https://www.twitch.tv/tofogames10",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
     },
     {
       "id": 13,
