@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-29T23:30:19.565Z",
+  "updated": "2026-10-29T23:45:15.834Z",
   "youtubeCheckedAt": "2026-10-29T23:30:19.565Z",
   "live": [
     {
@@ -12,15 +12,6 @@
       "thumbnail": "https://i.ytimg.com/vi/WrFqIs0P8eM/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Wu kong depois Arc Raiders",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -28,6 +19,15 @@
       "videoTitle": "+18 VOU TENTAR DORMIR MAIS CEDO HJ!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Wu kong depois Arc Raiders",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
