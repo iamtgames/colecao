@@ -1,16 +1,7 @@
 {
-  "updated": "2026-10-29T01:15:17.113Z",
+  "updated": "2026-10-29T01:30:19.970Z",
   "youtubeCheckedAt": "2026-10-29T01:00:23.598Z",
   "live": [
-    {
-      "id": 14,
-      "n": "tofogames10",
-      "plat": "twitch",
-      "login": "tofogames10",
-      "videoTitle": "Live de Vendas",
-      "videoUrl": "https://www.twitch.tv/tofogames10",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
-    },
     {
       "id": 17,
       "n": "joaodobife",
@@ -19,15 +10,6 @@
       "videoTitle": "+18 LIVE CURTINHA!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc Raiders - Bancada de pesquisa",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
