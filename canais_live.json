@@ -1,15 +1,5 @@
 {
-  "updated": "2026-10-30T05:45:17.491Z",
+  "updated": "2026-10-30T06:00:23.451Z",
   "youtubeCheckedAt": "2026-10-30T04:30:19.816Z",
-  "live": [
-    {
-      "id": 2,
-      "n": "Antec.r",
-      "plat": "youtube",
-      "videoId": "WrFqIs0P8eM",
-      "videoTitle": "🏆ANTEC RETRO GAMES LIVE 🕹️ #84 LIVE DE VENDAS - 29/10/2026",
-      "videoUrl": "https://www.youtube.com/watch?v=WrFqIs0P8eM",
-      "thumbnail": "https://i.ytimg.com/vi/WrFqIs0P8eM/hqdefault.jpg"
-    }
-  ]
+  "live": []
 }
