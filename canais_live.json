@@ -1,5 +1,15 @@
 {
-  "updated": "2026-10-30T20:45:16.786Z",
+  "updated": "2026-10-30T21:00:23.673Z",
   "youtubeCheckedAt": "2026-10-30T19:30:20.758Z",
-  "live": []
+  "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Wu kong depois Arc Raiders",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
