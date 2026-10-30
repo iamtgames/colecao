@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-30T03:45:17.216Z",
+  "updated": "2026-10-30T04:00:23.311Z",
   "youtubeCheckedAt": "2026-10-30T02:00:22.066Z",
   "live": [
     {
@@ -10,24 +10,6 @@
       "videoTitle": "🏆ANTEC RETRO GAMES LIVE 🕹️ #84 LIVE DE VENDAS - 29/10/2026",
       "videoUrl": "https://www.youtube.com/watch?v=WrFqIs0P8eM",
       "thumbnail": "https://i.ytimg.com/vi/WrFqIs0P8eM/hqdefault.jpg"
-    },
-    {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 VOU TENTAR DORMIR MAIS CEDO HJ!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Wu kong depois Arc Raiders",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
