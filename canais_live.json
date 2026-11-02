@@ -1,7 +1,16 @@
 {
-  "updated": "2026-11-01T23:45:18.480Z",
-  "youtubeCheckedAt": "2026-11-01T21:30:19.016Z",
+  "updated": "2026-11-02T00:00:22.783Z",
+  "youtubeCheckedAt": "2026-11-02T00:00:22.783Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "tIEOchKx8w8",
+      "videoTitle": "🏆LIVE BLACK FRIDAY ANTEC #2 🕹️ #85 LIVE DE VENDAS - 01/10/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=tIEOchKx8w8",
+      "thumbnail": "https://i.ytimg.com/vi/tIEOchKx8w8/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
