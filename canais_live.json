@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-05T23:15:17.960Z",
+  "updated": "2026-11-05T23:30:21.716Z",
   "youtubeCheckedAt": "2026-11-05T23:00:25.571Z",
   "live": [
     {
@@ -10,6 +10,15 @@
       "videoTitle": "LIVE DE VENDAS !!!",
       "videoUrl": "https://www.youtube.com/watch?v=gg4atccgktQ",
       "thumbnail": "https://i.ytimg.com/vi/gg4atccgktQ/hqdefault.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 PUMBA LA PUMBA, É O IMPACTO DO MEU SC BATENDO NA SUA BD!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
