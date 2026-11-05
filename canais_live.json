@@ -1,5 +1,15 @@
 {
-  "updated": "2026-11-05T22:45:16.799Z",
-  "youtubeCheckedAt": "2026-11-05T20:30:22.370Z",
-  "live": []
+  "updated": "2026-11-05T23:00:25.571Z",
+  "youtubeCheckedAt": "2026-11-05T23:00:25.571Z",
+  "live": [
+    {
+      "id": 1,
+      "n": "Diego Sheth",
+      "plat": "youtube",
+      "videoId": "gg4atccgktQ",
+      "videoTitle": "LIVE DE VENDAS !!!",
+      "videoUrl": "https://www.youtube.com/watch?v=gg4atccgktQ",
+      "thumbnail": "https://i.ytimg.com/vi/gg4atccgktQ/hqdefault.jpg"
+    }
+  ]
 }
