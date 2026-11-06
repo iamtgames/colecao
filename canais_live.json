@@ -1,15 +1,24 @@
 {
-  "updated": "2026-11-06T01:15:18.853Z",
-  "youtubeCheckedAt": "2026-11-05T23:00:25.571Z",
+  "updated": "2026-11-06T01:30:21.413Z",
+  "youtubeCheckedAt": "2026-11-06T01:30:21.413Z",
   "live": [
     {
-      "id": 1,
-      "n": "Diego Sheth",
+      "id": 2,
+      "n": "Antec.r",
       "plat": "youtube",
-      "videoId": "gg4atccgktQ",
-      "videoTitle": "LIVE DE VENDAS !!!",
-      "videoUrl": "https://www.youtube.com/watch?v=gg4atccgktQ",
-      "thumbnail": "https://i.ytimg.com/vi/gg4atccgktQ/hqdefault.jpg"
+      "videoId": "rbS8QRzqBPg",
+      "videoTitle": "🕹️GAME PLAY GTA 5 #27 🏆 ANTEC GAMES 👾",
+      "videoUrl": "https://www.youtube.com/watch?v=rbS8QRzqBPg",
+      "thumbnail": "https://i.ytimg.com/vi/rbS8QRzqBPg/hqdefault.jpg"
+    },
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "ml7-q44x7FI",
+      "videoTitle": "LIVE DE VENDAS AO VIVO !!! AS 20:00 05-11",
+      "videoUrl": "https://www.youtube.com/watch?v=ml7-q44x7FI",
+      "thumbnail": "https://i.ytimg.com/vi/ml7-q44x7FI/hqdefault.jpg"
     },
     {
       "id": 17,
