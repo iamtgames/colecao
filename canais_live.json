@@ -1,5 +1,15 @@
 {
-  "updated": "2026-11-07T19:45:16.290Z",
-  "youtubeCheckedAt": "2026-11-07T17:30:20.470Z",
-  "live": []
+  "updated": "2026-11-07T20:00:23.009Z",
+  "youtubeCheckedAt": "2026-11-07T20:00:23.009Z",
+  "live": [
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "pU5FZQMbphM",
+      "videoTitle": "LIVE JOGANDO UM CLÁSSICO DO PS2 BLACK !!!",
+      "videoUrl": "https://www.youtube.com/watch?v=pU5FZQMbphM",
+      "thumbnail": "https://i.ytimg.com/vi/pU5FZQMbphM/hqdefault.jpg"
+    }
+  ]
 }
