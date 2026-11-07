@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-07T21:00:24.545Z",
+  "updated": "2026-11-07T21:15:17.678Z",
   "youtubeCheckedAt": "2026-11-07T20:00:23.009Z",
   "live": [
     {
@@ -10,6 +10,15 @@
       "videoTitle": "LIVE JOGANDO UM CLÁSSICO DO PS2 BLACK !!!",
       "videoUrl": "https://www.youtube.com/watch?v=pU5FZQMbphM",
       "thumbnail": "https://i.ytimg.com/vi/pU5FZQMbphM/hqdefault.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 SE NADA DER CERTO, HJ É DIA DE FILMINHO!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
