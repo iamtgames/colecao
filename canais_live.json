@@ -1,5 +1,15 @@
 {
-  "updated": "2026-11-08T20:45:17.110Z",
-  "youtubeCheckedAt": "2026-11-08T18:30:20.963Z",
-  "live": []
+  "updated": "2026-11-08T21:00:23.119Z",
+  "youtubeCheckedAt": "2026-11-08T21:00:23.119Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "OpLcfaZ2ioU",
+      "videoTitle": "black friday jogos&amp;retros- LIVE de vendas",
+      "videoUrl": "https://www.youtube.com/watch?v=OpLcfaZ2ioU",
+      "thumbnail": "https://i.ytimg.com/vi/OpLcfaZ2ioU/hqdefault.jpg"
+    }
+  ]
 }
