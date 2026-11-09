@@ -1,5 +1,15 @@
 {
-  "updated": "2026-11-09T21:30:23.231Z",
+  "updated": "2026-11-09T21:45:17.083Z",
   "youtubeCheckedAt": "2026-11-09T19:30:22.019Z",
-  "live": []
+  "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Joguinho novo de zumbi",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
