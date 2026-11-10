@@ -1,7 +1,25 @@
 {
-  "updated": "2026-11-10T00:15:17.782Z",
-  "youtubeCheckedAt": "2026-11-09T22:00:24.682Z",
+  "updated": "2026-11-10T00:30:21.317Z",
+  "youtubeCheckedAt": "2026-11-10T00:30:21.317Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "i4FPQf0SqV0",
+      "videoTitle": "🕹️GAME PLAY GTA 5 #28 🏆 ANTEC GAMES 👾",
+      "videoUrl": "https://www.youtube.com/watch?v=i4FPQf0SqV0",
+      "thumbnail": "https://i.ytimg.com/vi/i4FPQf0SqV0/hqdefault.jpg"
+    },
+    {
+      "id": 3,
+      "n": "Garimpo dos Games",
+      "plat": "youtube",
+      "videoId": "JCF8HWLkGg4",
+      "videoTitle": "Garimpo dos games  está ao vivo!",
+      "videoUrl": "https://www.youtube.com/watch?v=JCF8HWLkGg4",
+      "thumbnail": "https://i.ytimg.com/vi/JCF8HWLkGg4/hqdefault.jpg"
+    },
     {
       "id": 13,
       "n": "PELEHZADA",
