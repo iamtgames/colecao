@@ -1,5 +1,15 @@
 {
-  "updated": "2026-11-11T19:15:16.823Z",
+  "updated": "2026-11-11T19:30:21.473Z",
   "youtubeCheckedAt": "2026-11-11T19:15:16.823Z",
-  "live": []
+  "live": [
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilo",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
