@@ -1,16 +1,7 @@
 {
-  "updated": "2026-11-11T03:45:16.059Z",
-  "youtubeCheckedAt": "2026-11-11T01:30:20.068Z",
+  "updated": "2026-11-11T04:00:23.003Z",
+  "youtubeCheckedAt": "2026-11-11T04:00:23.003Z",
   "live": [
-    {
-      "id": 5,
-      "n": "DJ Games Retro",
-      "plat": "youtube",
-      "videoId": "st-DR92mwsk",
-      "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 10/11/2026",
-      "videoUrl": "https://www.youtube.com/watch?v=st-DR92mwsk",
-      "thumbnail": "https://i.ytimg.com/vi/st-DR92mwsk/hqdefault.jpg"
-    },
     {
       "id": 17,
       "n": "joaodobife",
@@ -19,15 +10,6 @@
       "videoTitle": "+18 FINALMENTE FOLGAAA!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Arc Raiders",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
