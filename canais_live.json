@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-11T00:30:21.327Z",
+  "updated": "2026-11-11T00:35:43.521Z",
   "youtubeCheckedAt": "2026-11-10T23:00:24.597Z",
   "live": [
     {
@@ -12,15 +12,6 @@
       "thumbnail": "https://i.ytimg.com/vi/st-DR92mwsk/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Rob Run Alerta de resenha",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -28,6 +19,15 @@
       "videoTitle": "+18 FINALMENTE FOLGAAA!!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Rob Run Alerta de resenha",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
