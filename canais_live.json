@@ -1,7 +1,16 @@
 {
-  "updated": "2026-11-13T18:30:24.637Z",
-  "youtubeCheckedAt": "2026-11-13T16:15:18.443Z",
+  "updated": "2026-11-13T18:45:16.765Z",
+  "youtubeCheckedAt": "2026-11-13T18:45:16.765Z",
   "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "KqExmQ1BpYE",
+      "videoTitle": "LIVE DE VENDAS - SIGCHAP (VIDEOGAMES RETROS)",
+      "videoUrl": "https://www.youtube.com/watch?v=KqExmQ1BpYE",
+      "thumbnail": "https://i.ytimg.com/vi/KqExmQ1BpYE/hqdefault.jpg"
+    },
     {
       "id": 13,
       "n": "PELEHZADA",
