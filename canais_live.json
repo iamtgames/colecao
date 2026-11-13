@@ -1,15 +1,15 @@
 {
-  "updated": "2026-11-13T23:30:21.239Z",
-  "youtubeCheckedAt": "2026-11-13T21:15:18.201Z",
+  "updated": "2026-11-13T23:45:16.941Z",
+  "youtubeCheckedAt": "2026-11-13T23:45:16.941Z",
   "live": [
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Vem tranquilo",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "JfbTBJ9iw1c",
+      "videoTitle": "GTA VICE CITY:ROLE COM TOMMY VERCETTI!! *AQUECIMENTO GTA6 (PARTE 1)",
+      "videoUrl": "https://www.youtube.com/watch?v=JfbTBJ9iw1c",
+      "thumbnail": "https://i.ytimg.com/vi/JfbTBJ9iw1c/hqdefault.jpg"
     },
     {
       "id": 17,
@@ -19,6 +19,15 @@
       "videoTitle": "+18 LIVEZINHA ARRUMANDO AS COISAS!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilo",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
