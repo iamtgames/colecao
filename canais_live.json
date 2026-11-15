@@ -1,15 +1,15 @@
 {
-  "updated": "2026-11-15T00:30:20.206Z",
-  "youtubeCheckedAt": "2026-11-14T22:15:16.656Z",
+  "updated": "2026-11-15T00:45:18.107Z",
+  "youtubeCheckedAt": "2026-11-15T00:45:18.107Z",
   "live": [
     {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 HOJE EU VIRO POWER RANGER!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "A0wP9cFqU3Q",
+      "videoTitle": "GTA 3 : MAIS UM CLASSICO *AQUECIMENTO GTA6 (PARTE 1)",
+      "videoUrl": "https://www.youtube.com/watch?v=A0wP9cFqU3Q",
+      "thumbnail": "https://i.ytimg.com/vi/A0wP9cFqU3Q/hqdefault.jpg"
     },
     {
       "id": 13,
@@ -19,6 +19,15 @@
       "videoTitle": "Vem tranquilo",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 HOJE EU VIRO POWER RANGER!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
