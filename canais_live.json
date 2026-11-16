@@ -1,15 +1,15 @@
 {
-  "updated": "2026-11-16T01:30:20.074Z",
-  "youtubeCheckedAt": "2026-11-15T23:15:17.196Z",
+  "updated": "2026-11-16T01:45:19.609Z",
+  "youtubeCheckedAt": "2026-11-16T01:45:19.609Z",
   "live": [
     {
-      "id": 17,
-      "n": "joaodobife",
-      "plat": "twitch",
-      "login": "joaodobife",
-      "videoTitle": "+18 FOLGAMOS NA PAZ DE JAH!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
-      "videoUrl": "https://www.twitch.tv/joaodobife",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "VTWpTTveuIg",
+      "videoTitle": "🏆ANTEC RETRO GAMES LIVE 🕹️ #86 LIVE DE VENDAS BLACK FINAL - 15/11/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=VTWpTTveuIg",
+      "thumbnail": "https://i.ytimg.com/vi/VTWpTTveuIg/hqdefault.jpg"
     },
     {
       "id": 13,
@@ -19,6 +19,15 @@
       "videoTitle": "Vem tranquilo",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 FOLGAMOS NA PAZ DE JAH!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
