@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-17T23:15:17.523Z",
+  "updated": "2026-11-17T23:30:20.323Z",
   "youtubeCheckedAt": "2026-11-17T22:45:16.908Z",
   "live": [
     {
@@ -10,6 +10,15 @@
       "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 17/11/2026",
       "videoUrl": "https://www.youtube.com/watch?v=dlM534Ko-4s",
       "thumbnail": "https://i.ytimg.com/vi/dlM534Ko-4s/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Dia 1 cidade Rob Run",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
