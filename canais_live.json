@@ -1,5 +1,15 @@
 {
-  "updated": "2026-11-17T22:30:19.373Z",
-  "youtubeCheckedAt": "2026-11-17T20:15:20.621Z",
-  "live": []
+  "updated": "2026-11-17T22:45:16.908Z",
+  "youtubeCheckedAt": "2026-11-17T22:45:16.908Z",
+  "live": [
+    {
+      "id": 5,
+      "n": "DJ Games Retro",
+      "plat": "youtube",
+      "videoId": "dlM534Ko-4s",
+      "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 17/11/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=dlM534Ko-4s",
+      "thumbnail": "https://i.ytimg.com/vi/dlM534Ko-4s/hqdefault.jpg"
+    }
+  ]
 }
