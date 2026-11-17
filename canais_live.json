@@ -1,7 +1,25 @@
 {
-  "updated": "2026-11-17T00:00:23.540Z",
-  "youtubeCheckedAt": "2026-11-16T21:45:21.230Z",
+  "updated": "2026-11-17T00:15:17.924Z",
+  "youtubeCheckedAt": "2026-11-17T00:15:17.924Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "_w0RqFwK1Dc",
+      "videoTitle": "GTA SAN ANDREAS : ULTIMO ROLEI!! *AQUECIMENTO GTA6 (PARTE 2)",
+      "videoUrl": "https://www.youtube.com/watch?v=_w0RqFwK1Dc",
+      "thumbnail": "https://i.ytimg.com/vi/_w0RqFwK1Dc/hqdefault.jpg"
+    },
+    {
+      "id": 3,
+      "n": "Garimpo dos Games",
+      "plat": "youtube",
+      "videoId": "CjBpEffXhYk",
+      "videoTitle": "Garimpo dos games  está ao vivo!",
+      "videoUrl": "https://www.youtube.com/watch?v=CjBpEffXhYk",
+      "thumbnail": "https://i.ytimg.com/vi/CjBpEffXhYk/hqdefault.jpg"
+    },
     {
       "id": 13,
       "n": "PELEHZADA",
@@ -10,6 +28,15 @@
       "videoTitle": "Dia 1 cidade Rob Run",
       "videoUrl": "https://www.twitch.tv/pelehzada",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 LIVE MEIO CURTA PQ CAPOTEI DPS DO TRAMPO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
