@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-17T01:45:16.046Z",
+  "updated": "2026-11-17T02:00:23.070Z",
   "youtubeCheckedAt": "2026-11-17T00:15:17.924Z",
   "live": [
     {
@@ -19,6 +19,15 @@
       "videoTitle": "Garimpo dos games  está ao vivo!",
       "videoUrl": "https://www.youtube.com/watch?v=CjBpEffXhYk",
       "thumbnail": "https://i.ytimg.com/vi/CjBpEffXhYk/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Dia 1 cidade Rob Run",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
