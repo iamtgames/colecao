@@ -1,15 +1,5 @@
 {
-  "updated": "2026-11-17T04:30:20.183Z",
+  "updated": "2026-11-17T04:45:23.606Z",
   "youtubeCheckedAt": "2026-11-17T02:45:15.351Z",
-  "live": [
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Dia 1 cidade Rob Run",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    }
-  ]
+  "live": []
 }
