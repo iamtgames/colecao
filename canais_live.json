@@ -1,15 +1,24 @@
 {
-  "updated": "2026-11-18T16:00:25.968Z",
-  "youtubeCheckedAt": "2026-11-18T13:45:17.723Z",
+  "updated": "2026-11-18T16:15:29.117Z",
+  "youtubeCheckedAt": "2026-11-18T16:15:29.117Z",
   "live": [
     {
       "id": 7,
       "n": "Sigchap",
       "plat": "youtube",
       "videoId": "Woyjp4p8QAo",
-      "videoTitle": "TENTANDO JOGAR GTA 6 NO SUPER NINTENDO (AO VIVO)",
+      "videoTitle": "BLACK FRIDAY ATE ZERAR GTA 6 (AO VIVO)",
       "videoUrl": "https://www.youtube.com/watch?v=Woyjp4p8QAo",
       "thumbnail": "https://i.ytimg.com/vi/Woyjp4p8QAo/hqdefault.jpg"
+    },
+    {
+      "id": 19,
+      "n": "cowboynanoo",
+      "plat": "twitch",
+      "login": "cowboynanoo",
+      "videoTitle": "+18 [GTAVI] [TRAVESSIA RP] LANÇAMENTO GTA6",
+      "videoUrl": "https://www.twitch.tv/cowboynanoo",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
     }
   ]
 }
