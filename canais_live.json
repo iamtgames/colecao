@@ -1,7 +1,16 @@
 {
-  "updated": "2026-11-19T17:00:26.437Z",
-  "youtubeCheckedAt": "2026-11-19T14:45:15.757Z",
+  "updated": "2026-11-19T17:15:21.413Z",
+  "youtubeCheckedAt": "2026-11-19T17:15:21.413Z",
   "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "bDr9N-bda0M",
+      "videoTitle": "JOGOS SWITCH BLACK FRIDAY - (LIVE)",
+      "videoUrl": "https://www.youtube.com/watch?v=bDr9N-bda0M",
+      "thumbnail": "https://i.ytimg.com/vi/bDr9N-bda0M/hqdefault.jpg"
+    },
     {
       "id": 19,
       "n": "cowboynanoo",
