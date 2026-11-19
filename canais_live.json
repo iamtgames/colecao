@@ -1,5 +1,15 @@
 {
-  "updated": "2026-11-19T09:30:21.722Z",
-  "youtubeCheckedAt": "2026-11-19T07:15:15.844Z",
-  "live": []
+  "updated": "2026-11-19T09:45:17.649Z",
+  "youtubeCheckedAt": "2026-11-19T09:45:17.649Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "3gaC-wZf3oY",
+      "videoTitle": "LIVE ATÉ DIA 27 - BLACK FRIDAY - AUUUUUUUUUUUUUUU",
+      "videoUrl": "https://www.youtube.com/watch?v=3gaC-wZf3oY",
+      "thumbnail": "https://i.ytimg.com/vi/3gaC-wZf3oY/hqdefault.jpg"
+    }
+  ]
 }
