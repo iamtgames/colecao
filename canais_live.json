@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T01:04:36.483Z",
+  "updated": "2026-11-19T01:15:16.454Z",
   "youtubeCheckedAt": "2026-11-18T23:45:16.876Z",
   "live": [
     {
@@ -10,15 +10,6 @@
       "videoTitle": "BLACK FRIDAY ATE ZERAR GTA 6 (AO VIVO)",
       "videoUrl": "https://www.youtube.com/watch?v=Woyjp4p8QAo",
       "thumbnail": "https://i.ytimg.com/vi/Woyjp4p8QAo/hqdefault.jpg"
-    },
-    {
-      "id": 14,
-      "n": "tofogames10",
-      "plat": "twitch",
-      "login": "tofogames10",
-      "videoTitle": "Live de Vendas",
-      "videoUrl": "https://www.twitch.tv/tofogames10",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
     }
   ]
 }
