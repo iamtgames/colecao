@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T21:15:17.765Z",
+  "updated": "2026-11-19T21:30:20.418Z",
   "youtubeCheckedAt": "2026-11-19T19:45:17.294Z",
   "live": [
     {
@@ -12,15 +12,6 @@
       "thumbnail": "https://i.ytimg.com/vi/bDr9N-bda0M/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Rob run",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 19,
       "n": "cowboynanoo",
       "plat": "twitch",
@@ -28,6 +19,15 @@
       "videoTitle": "+18 [GTAVI] [TRAVESSIA RP] LANÇAMENTO GTA6",
       "videoUrl": "https://www.twitch.tv/cowboynanoo",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_cowboynanoo-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Rob run",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
