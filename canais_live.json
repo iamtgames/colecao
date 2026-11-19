@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-19T20:30:21.349Z",
+  "updated": "2026-11-19T20:45:18.503Z",
   "youtubeCheckedAt": "2026-11-19T19:45:17.294Z",
   "live": [
     {
@@ -10,6 +10,15 @@
       "videoTitle": "JOGOS SWITCH BLACK FRIDAY - (LIVE)",
       "videoUrl": "https://www.youtube.com/watch?v=bDr9N-bda0M",
       "thumbnail": "https://i.ytimg.com/vi/bDr9N-bda0M/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Rob run",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
