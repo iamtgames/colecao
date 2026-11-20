@@ -1,13 +1,31 @@
 {
-  "updated": "2026-11-20T00:30:20.971Z",
-  "youtubeCheckedAt": "2026-11-19T22:15:16.216Z",
+  "updated": "2026-11-20T00:45:16.928Z",
+  "youtubeCheckedAt": "2026-11-20T00:45:16.928Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "gQybdzKuc_Q",
+      "videoTitle": "GTA 6 : LIVE A NOITE É NOSSA !!! SEM HORA PARA TERMINAR !!!",
+      "videoUrl": "https://www.youtube.com/watch?v=gQybdzKuc_Q",
+      "thumbnail": "https://i.ytimg.com/vi/gQybdzKuc_Q/hqdefault.jpg"
+    },
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "eWMB-9IcGs0",
+      "videoTitle": "LIVE DE VENDAS 19-11 - AO VIVO",
+      "videoUrl": "https://www.youtube.com/watch?v=eWMB-9IcGs0",
+      "thumbnail": "https://i.ytimg.com/vi/eWMB-9IcGs0/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
       "plat": "youtube",
       "videoId": "bDr9N-bda0M",
-      "videoTitle": "JOGOS SWITCH BLACK FRIDAY - (LIVE)",
+      "videoTitle": "BLACK FRIDAY JOGOS E GAMES - (LIVE)",
       "videoUrl": "https://www.youtube.com/watch?v=bDr9N-bda0M",
       "thumbnail": "https://i.ytimg.com/vi/bDr9N-bda0M/hqdefault.jpg"
     },
