@@ -1,7 +1,16 @@
 {
-  "updated": "2026-11-21T19:00:24.402Z",
-  "youtubeCheckedAt": "2026-11-21T16:45:20.130Z",
+  "updated": "2026-11-21T19:15:18.325Z",
+  "youtubeCheckedAt": "2026-11-21T19:15:18.325Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "Gk8mcvhH33k",
+      "videoTitle": "🌴GTA 6 : 🔴LIVE VAMOS EXPLORAR TUDO EM VICE CITY!!!",
+      "videoUrl": "https://www.youtube.com/watch?v=Gk8mcvhH33k",
+      "thumbnail": "https://i.ytimg.com/vi/Gk8mcvhH33k/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
