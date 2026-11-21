@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-21T02:30:22.176Z",
+  "updated": "2026-11-21T02:45:18.177Z",
   "youtubeCheckedAt": "2026-11-21T01:45:17.479Z",
   "live": [
     {
@@ -19,6 +19,15 @@
       "videoTitle": "3 DIA VENDENDO VIDEOGAME POR CAUSA DO GTA 6 (AO VIVO)",
       "videoUrl": "https://www.youtube.com/watch?v=bDr9N-bda0M",
       "thumbnail": "https://i.ytimg.com/vi/bDr9N-bda0M/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Rob run",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
