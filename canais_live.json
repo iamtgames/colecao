@@ -1,7 +1,16 @@
 {
-  "updated": "2026-11-22T20:00:31.381Z",
-  "youtubeCheckedAt": "2026-11-22T17:45:18.498Z",
+  "updated": "2026-11-22T20:15:18.343Z",
+  "youtubeCheckedAt": "2026-11-22T20:15:18.343Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "T_iCx6NkfQs",
+      "videoTitle": "🌴GTA 6 : 🔴LIVE  BUSCAR O ECLIPSE DO BRAIN, VELOZES E FURIOSOS!!!",
+      "videoUrl": "https://www.youtube.com/watch?v=T_iCx6NkfQs",
+      "thumbnail": "https://i.ytimg.com/vi/T_iCx6NkfQs/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
