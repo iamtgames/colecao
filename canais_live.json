@@ -1,7 +1,25 @@
 {
-  "updated": "2026-11-22T00:00:23.826Z",
-  "youtubeCheckedAt": "2026-11-21T21:45:19.262Z",
+  "updated": "2026-11-22T00:15:18.622Z",
+  "youtubeCheckedAt": "2026-11-22T00:15:18.622Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "FtWUmyWeWi4",
+      "videoTitle": "🌴GTA 6 : 🔴LIVE #2 VAMOS EXPLORAR TUDO EM VICE CITY!!!",
+      "videoUrl": "https://www.youtube.com/watch?v=FtWUmyWeWi4",
+      "thumbnail": "https://i.ytimg.com/vi/FtWUmyWeWi4/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Rob run",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
