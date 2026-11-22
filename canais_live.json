@@ -1,5 +1,15 @@
 {
-  "updated": "2026-11-22T17:30:25.817Z",
-  "youtubeCheckedAt": "2026-11-22T15:15:18.441Z",
-  "live": []
+  "updated": "2026-11-22T17:45:18.497Z",
+  "youtubeCheckedAt": "2026-11-22T17:45:18.498Z",
+  "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "YTvSdURsQP4",
+      "videoTitle": "🌴GTA 6 : 🔴LIVE  EXPLORAÇAO BUSCAR O SKYLINE!!!",
+      "videoUrl": "https://www.youtube.com/watch?v=YTvSdURsQP4",
+      "thumbnail": "https://i.ytimg.com/vi/YTvSdURsQP4/hqdefault.jpg"
+    }
+  ]
 }
