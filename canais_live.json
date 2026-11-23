@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-23T21:00:31.425Z",
+  "updated": "2026-11-23T21:13:25.728Z",
   "youtubeCheckedAt": "2026-11-23T18:45:20.771Z",
   "live": [
     {
@@ -10,6 +10,15 @@
       "videoTitle": "ao vivo - GAMES &amp; RESENHA - DIA 5",
       "videoUrl": "https://www.youtube.com/watch?v=HY95vDnPv6E",
       "thumbnail": "https://i.ytimg.com/vi/HY95vDnPv6E/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilonn",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
