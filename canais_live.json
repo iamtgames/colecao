@@ -1,7 +1,16 @@
 {
-  "updated": "2026-11-23T23:30:22.768Z",
-  "youtubeCheckedAt": "2026-11-23T21:15:19.938Z",
+  "updated": "2026-11-23T23:45:18.166Z",
+  "youtubeCheckedAt": "2026-11-23T23:45:18.166Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "TdOqnz46rgE",
+      "videoTitle": "🌴GTA 6 : 🔴LIVE  A HISTORIA CONT. VICE CITY!!",
+      "videoUrl": "https://www.youtube.com/watch?v=TdOqnz46rgE",
+      "thumbnail": "https://i.ytimg.com/vi/TdOqnz46rgE/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
