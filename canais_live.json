@@ -1,7 +1,16 @@
 {
-  "updated": "2026-11-23T01:00:24.621Z",
-  "youtubeCheckedAt": "2026-11-22T22:45:18.894Z",
+  "updated": "2026-11-23T01:15:17.704Z",
+  "youtubeCheckedAt": "2026-11-23T01:15:17.704Z",
   "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "HY95vDnPv6E",
+      "videoTitle": "ao vivo - GAMES &amp; RESENHA - DIA 5",
+      "videoUrl": "https://www.youtube.com/watch?v=HY95vDnPv6E",
+      "thumbnail": "https://i.ytimg.com/vi/HY95vDnPv6E/hqdefault.jpg"
+    },
     {
       "id": 17,
       "n": "joaodobife",
@@ -10,15 +19,6 @@
       "videoTitle": "+18 DOMINGAO DE FOLGA NA PAZ DE JAH!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Rob run",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
