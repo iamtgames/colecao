@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-24T15:45:19.690Z",
+  "updated": "2026-11-24T16:00:26.987Z",
   "youtubeCheckedAt": "2026-11-24T14:45:18.387Z",
   "live": [
     {
@@ -10,6 +10,15 @@
       "videoTitle": "AUSTISTA x INTELIGENCIA ARTIFICIAL - AO VIVO",
       "videoUrl": "https://www.youtube.com/watch?v=HY95vDnPv6E",
       "thumbnail": "https://i.ytimg.com/vi/HY95vDnPv6E/hqdefault.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 VOU MUÇA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
