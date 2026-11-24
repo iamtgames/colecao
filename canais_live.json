@@ -1,7 +1,16 @@
 {
-  "updated": "2026-11-24T22:00:35.137Z",
-  "youtubeCheckedAt": "2026-11-24T19:45:18.779Z",
+  "updated": "2026-11-24T22:15:18.138Z",
+  "youtubeCheckedAt": "2026-11-24T22:15:18.138Z",
   "live": [
+    {
+      "id": 5,
+      "n": "DJ Games Retro",
+      "plat": "youtube",
+      "videoId": "QlDy0yeb0Yg",
+      "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 24/11/2026",
+      "videoUrl": "https://www.youtube.com/watch?v=QlDy0yeb0Yg",
+      "thumbnail": "https://i.ytimg.com/vi/QlDy0yeb0Yg/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
