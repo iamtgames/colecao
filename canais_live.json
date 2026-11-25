@@ -1,5 +1,24 @@
 {
-  "updated": "2026-11-25T23:00:25.670Z",
-  "youtubeCheckedAt": "2026-11-25T20:45:19.123Z",
-  "live": []
+  "updated": "2026-11-25T23:15:19.670Z",
+  "youtubeCheckedAt": "2026-11-25T23:15:19.670Z",
+  "live": [
+    {
+      "id": 14,
+      "n": "tofogames10",
+      "plat": "twitch",
+      "login": "tofogames10",
+      "videoTitle": "Live de Vendas",
+      "videoUrl": "https://www.twitch.tv/tofogames10",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_tofogames10-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilonn",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
+    }
+  ]
 }
