@@ -1,16 +1,7 @@
 {
-  "updated": "2026-11-25T03:00:29.291Z",
-  "youtubeCheckedAt": "2026-11-25T00:45:19.075Z",
+  "updated": "2026-11-25T03:15:18.558Z",
+  "youtubeCheckedAt": "2026-11-25T03:15:18.558Z",
   "live": [
-    {
-      "id": 5,
-      "n": "DJ Games Retro",
-      "plat": "youtube",
-      "videoId": "QlDy0yeb0Yg",
-      "videoTitle": "🚀 Live de Vendas - DJ Games Retro AO VIVO | 24/11/2026",
-      "videoUrl": "https://www.youtube.com/watch?v=QlDy0yeb0Yg",
-      "thumbnail": "https://i.ytimg.com/vi/QlDy0yeb0Yg/hqdefault.jpg"
-    },
     {
       "id": 7,
       "n": "Sigchap",
@@ -19,6 +10,15 @@
       "videoTitle": "AUSTISTA x INTELIGENCIA ARTIFICIAL - AO VIVO",
       "videoUrl": "https://www.youtube.com/watch?v=HY95vDnPv6E",
       "thumbnail": "https://i.ytimg.com/vi/HY95vDnPv6E/hqdefault.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilonn",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
