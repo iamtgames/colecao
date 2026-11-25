@@ -1,6 +1,6 @@
 {
-  "updated": "2026-11-25T18:00:26.852Z",
-  "youtubeCheckedAt": "2026-11-25T15:45:24.988Z",
+  "updated": "2026-11-25T18:15:20.907Z",
+  "youtubeCheckedAt": "2026-11-25T18:15:20.907Z",
   "live": [
     {
       "id": 7,
@@ -19,6 +19,15 @@
       "videoTitle": "+18 LIVEZINHA DE ALMOÇO, MAS HJ TEM COCHILO!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilonn",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
