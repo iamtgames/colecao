@@ -1,7 +1,16 @@
 {
-  "updated": "2026-11-25T00:15:23.735Z",
-  "youtubeCheckedAt": "2026-11-24T22:15:18.138Z",
+  "updated": "2026-11-25T00:45:19.075Z",
+  "youtubeCheckedAt": "2026-11-25T00:45:19.075Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "iSCSjEBNfc0",
+      "videoTitle": "🌴GTA 6 : 🔴LIVE  MAPA LIBERADO !! CONT. HISTORIA",
+      "videoUrl": "https://www.youtube.com/watch?v=iSCSjEBNfc0",
+      "thumbnail": "https://i.ytimg.com/vi/iSCSjEBNfc0/hqdefault.jpg"
+    },
     {
       "id": 5,
       "n": "DJ Games Retro",
