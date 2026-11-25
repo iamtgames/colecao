@@ -1,16 +1,7 @@
 {
-  "updated": "2026-11-25T02:30:20.674Z",
+  "updated": "2026-11-25T02:45:17.623Z",
   "youtubeCheckedAt": "2026-11-25T00:45:19.075Z",
   "live": [
-    {
-      "id": 2,
-      "n": "Antec.r",
-      "plat": "youtube",
-      "videoId": "iSCSjEBNfc0",
-      "videoTitle": "🌴GTA 6 : 🔴LIVE  MAPA LIBERADO !! CONT. HISTORIA",
-      "videoUrl": "https://www.youtube.com/watch?v=iSCSjEBNfc0",
-      "thumbnail": "https://i.ytimg.com/vi/iSCSjEBNfc0/hqdefault.jpg"
-    },
     {
       "id": 5,
       "n": "DJ Games Retro",
@@ -28,6 +19,15 @@
       "videoTitle": "AUSTISTA x INTELIGENCIA ARTIFICIAL - AO VIVO",
       "videoUrl": "https://www.youtube.com/watch?v=HY95vDnPv6E",
       "thumbnail": "https://i.ytimg.com/vi/HY95vDnPv6E/hqdefault.jpg"
+    },
+    {
+      "id": 17,
+      "n": "joaodobife",
+      "plat": "twitch",
+      "login": "joaodobife",
+      "videoTitle": "+18 DECIDI VOLTAR, VOU JANTAR!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
+      "videoUrl": "https://www.twitch.tv/joaodobife",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
     }
   ]
 }
