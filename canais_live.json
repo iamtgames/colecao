@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-25T04:15:20.121Z",
+  "updated": "2026-11-25T04:30:23.691Z",
   "youtubeCheckedAt": "2026-11-25T03:15:18.558Z",
   "live": [
     {
@@ -10,15 +10,6 @@
       "videoTitle": "AUSTISTA x INTELIGENCIA ARTIFICIAL - AO VIVO",
       "videoUrl": "https://www.youtube.com/watch?v=HY95vDnPv6E",
       "thumbnail": "https://i.ytimg.com/vi/HY95vDnPv6E/hqdefault.jpg"
-    },
-    {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Vem tranquilonn",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
