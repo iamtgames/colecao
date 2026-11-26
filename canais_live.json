@@ -1,5 +1,15 @@
 {
-  "updated": "2026-11-26T14:00:29.031Z",
-  "youtubeCheckedAt": "2026-11-26T11:45:18.430Z",
-  "live": []
+  "updated": "2026-11-26T14:15:18.955Z",
+  "youtubeCheckedAt": "2026-11-26T14:15:18.955Z",
+  "live": [
+    {
+      "id": 7,
+      "n": "Sigchap",
+      "plat": "youtube",
+      "videoId": "MpLyXqe8QM4",
+      "videoTitle": "BLACK FRIDAY INFINITA: precinnn (RETRO E ATUAIS)  - AO VIVO",
+      "videoUrl": "https://www.youtube.com/watch?v=MpLyXqe8QM4",
+      "thumbnail": "https://i.ytimg.com/vi/MpLyXqe8QM4/hqdefault.jpg"
+    }
+  ]
 }
