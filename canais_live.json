@@ -1,7 +1,25 @@
 {
-  "updated": "2026-11-27T00:00:26.098Z",
-  "youtubeCheckedAt": "2026-11-26T21:45:18.197Z",
+  "updated": "2026-11-27T00:15:21.211Z",
+  "youtubeCheckedAt": "2026-11-27T00:15:21.211Z",
   "live": [
+    {
+      "id": 2,
+      "n": "Antec.r",
+      "plat": "youtube",
+      "videoId": "V0K2p53qVj8",
+      "videoTitle": "🌴GTA 6 : 🔴LIVE  VICE CIDADE DOS LOUCOS!!!!",
+      "videoUrl": "https://www.youtube.com/watch?v=V0K2p53qVj8",
+      "thumbnail": "https://i.ytimg.com/vi/V0K2p53qVj8/hqdefault.jpg"
+    },
+    {
+      "id": 4,
+      "n": "Cara de Barata",
+      "plat": "youtube",
+      "videoId": "VvGoyvjcfDU",
+      "videoTitle": "LIVE DE VENDAS... JOGOS DE WII, PS3, PS4, XBOX ONE, CONTROLES E MUITO MAIS..",
+      "videoUrl": "https://www.youtube.com/watch?v=VvGoyvjcfDU",
+      "thumbnail": "https://i.ytimg.com/vi/VvGoyvjcfDU/hqdefault.jpg"
+    },
     {
       "id": 7,
       "n": "Sigchap",
