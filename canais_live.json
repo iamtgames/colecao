@@ -1,7 +1,16 @@
 {
-  "updated": "2026-11-27T22:30:22.779Z",
-  "youtubeCheckedAt": "2026-11-27T20:15:20.315Z",
+  "updated": "2026-11-27T22:45:19.067Z",
+  "youtubeCheckedAt": "2026-11-27T22:45:19.067Z",
   "live": [
+    {
+      "id": 1,
+      "n": "Diego Sheth",
+      "plat": "youtube",
+      "videoId": "hrbkMMO5Ey8",
+      "videoTitle": "BLACK FRIDAY - LIVE DE VENDAS !!!",
+      "videoUrl": "https://www.youtube.com/watch?v=hrbkMMO5Ey8",
+      "thumbnail": "https://i.ytimg.com/vi/hrbkMMO5Ey8/hqdefault.jpg"
+    },
     {
       "id": 13,
       "n": "PELEHZADA",
