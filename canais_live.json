@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-27T01:00:25.054Z",
+  "updated": "2026-11-27T01:15:19.349Z",
   "youtubeCheckedAt": "2026-11-27T00:15:21.211Z",
   "live": [
     {
@@ -12,15 +12,6 @@
       "thumbnail": "https://i.ytimg.com/vi/V0K2p53qVj8/hqdefault.jpg"
     },
     {
-      "id": 4,
-      "n": "Cara de Barata",
-      "plat": "youtube",
-      "videoId": "VvGoyvjcfDU",
-      "videoTitle": "LIVE DE VENDAS... JOGOS DE WII, PS3, PS4, XBOX ONE, CONTROLES E MUITO MAIS..",
-      "videoUrl": "https://www.youtube.com/watch?v=VvGoyvjcfDU",
-      "thumbnail": "https://i.ytimg.com/vi/VvGoyvjcfDU/hqdefault.jpg"
-    },
-    {
       "id": 7,
       "n": "Sigchap",
       "plat": "youtube",
@@ -30,15 +21,6 @@
       "thumbnail": "https://i.ytimg.com/vi/MpLyXqe8QM4/hqdefault.jpg"
     },
     {
-      "id": 13,
-      "n": "PELEHZADA",
-      "plat": "twitch",
-      "login": "pelehzada",
-      "videoTitle": "Vem tranquilonn",
-      "videoUrl": "https://www.twitch.tv/pelehzada",
-      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
-    },
-    {
       "id": 17,
       "n": "joaodobife",
       "plat": "twitch",
@@ -46,6 +28,15 @@
       "videoTitle": "+18 AMÉM AMÉM, FELIZ POR MAIS UM DIA!! MES VIROU E O PRIME RENOVOU, ESCORREGA O SUB PA NÓS PUFAVO<3",
       "videoUrl": "https://www.twitch.tv/joaodobife",
       "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_joaodobife-440x248.jpg"
+    },
+    {
+      "id": 13,
+      "n": "PELEHZADA",
+      "plat": "twitch",
+      "login": "pelehzada",
+      "videoTitle": "Vem tranquilonn",
+      "videoUrl": "https://www.twitch.tv/pelehzada",
+      "thumbnail": "https://static-cdn.jtvnw.net/previews-ttv/live_user_pelehzada-440x248.jpg"
     }
   ]
 }
